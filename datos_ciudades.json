@@ -1,0 +1,118 @@
+{
+  "villamaria": {
+    "nombre": "Villa María - Villa Nueva",
+    "lat": -32.415,
+    "lon": -63.24,
+    "zoom": 13,
+    "area": 49.6,
+    "poblacion": 120000,
+    "arboles": 8.2,
+    "pastizales": 14.2,
+    "cultivos": 23.9,
+    "edificado": 50.6,
+    "suelo_desnudo": 1.6,
+    "agua": 1.3,
+    "acceso": 100.0,
+    "dist_prom": 48,
+    "m2_hab": 93.2,
+    "r_0_100": 91.1,
+    "r_100_300": 8.9,
+    "r_300_500": 0.0,
+    "r_500_mas": 0.0,
+    "calificacion": "A - Excelente",
+    "puntaje": 7,
+    "coords_area": [
+      [
+        -63.28,
+        -32.39
+      ],
+      [
+        -63.2,
+        -32.39
+      ],
+      [
+        -63.2,
+        -32.44
+      ],
+      [
+        -63.28,
+        -32.44
+      ]
+    ],
+    "coords_rio": [
+      [
+        -63.255,
+        -32.39
+      ],
+      [
+        -63.25,
+        -32.44
+      ]
+    ],
+    "fortalezas": [
+      "Accesibilidad universal (100% <300m)",
+      "Distribución homogénea entre zonas",
+      "Buena cobertura arbórea (8.2%)",
+      "Corredor del río Ctalamochita"
+    ],
+    "debilidades": [
+      "Cultivos en área urbana (23.9%)",
+      "Verde no necesariamente público",
+      "Falta de datos catastrales integrados"
+    ]
+  },
+  "sanfrancisco": {
+    "nombre": "San Francisco",
+    "lat": -31.428,
+    "lon": -62.083,
+    "zoom": 13,
+    "area": 23.7,
+    "poblacion": 62000,
+    "arboles": 1.6,
+    "pastizales": 16.4,
+    "cultivos": 24.3,
+    "edificado": 56.8,
+    "suelo_desnudo": 0.9,
+    "agua": 0.0,
+    "acceso": 100.0,
+    "dist_prom": 50,
+    "m2_hab": 68.8,
+    "r_0_100": 91.0,
+    "r_100_300": 9.0,
+    "r_300_500": 0.0,
+    "r_500_mas": 0.0,
+    "calificacion": "B - Muy Bueno",
+    "puntaje": 6,
+    "coords_area": [
+      [
+        -62.105,
+        -31.405
+      ],
+      [
+        -62.055,
+        -31.405
+      ],
+      [
+        -62.055,
+        -31.45
+      ],
+      [
+        -62.105,
+        -31.45
+      ]
+    ],
+    "coords_rio": null,
+    "fortalezas": [
+      "Accesibilidad universal (100% <300m)",
+      "Ciudad compacta y bien definida",
+      "Buena distribución del verde",
+      "Trazado en damero facilita planificación"
+    ],
+    "debilidades": [
+      "Cobertura arbórea muy baja (1.6%)",
+      "Verde mayormente pastizales",
+      "Sin corredor verde estructurante",
+      "Falta de datos catastrales"
+    ]
+  }
+}
