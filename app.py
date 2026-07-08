@@ -18,6 +18,7 @@ from streamlit_folium import st_folium
 from modulo_temperatura import cargar_lst, render_temperatura
 from modulo_osm         import cargar_osm, render_osm
 from modulo_censo       import render_censo
+from modulo_ayuda       import ayuda_cobertura, ayuda_accesibilidad, ayuda_temperatura, ayuda_osm, ayuda_censo, ayuda_comparativa, ayuda_diagnostico
 
 # ============================================================
 # CONFIGURACIÓN DE PÁGINA
@@ -341,6 +342,7 @@ elif "Área" in seccion:
 elif "Cobertura" in seccion:
     st.title(f"🌾 Cobertura del suelo · {ciudad['nombre']}")
     st.caption("Fuente: ESA WorldCover 2020 · resolución 10m")
+    ayuda_cobertura()
     st.markdown("---")
 
     cob = ciudad['cobertura']
@@ -372,6 +374,7 @@ elif "Cobertura" in seccion:
 elif "Accesibilidad" in seccion:
     st.title(f"📏 Accesibilidad a espacios verdes · {ciudad['nombre']}")
     st.caption("Fuente: ESA WorldCover + Google Earth Engine · cálculo de distancia euclidiana")
+    ayuda_accesibilidad()
     st.markdown("---")
 
     c1, c2, c3 = st.columns(3)
@@ -436,6 +439,7 @@ elif "Temperatura" in seccion:
 
     lst = ciudad['lst']
 
+    ayuda_temperatura()
     st.warning(
         "⚠️ **LST ≠ temperatura del aire.** Mide el calor emitido por suelo y asfalto. "
         "En verano puede superar 40°C mientras el termómetro marca 32°C. "
@@ -504,6 +508,7 @@ elif "OSM" in seccion:
     st.caption("Fuente: OpenStreetMap · API Overpass · datos colaborativos")
     st.markdown("---")
 
+    ayuda_osm()
     st.markdown("""
     **¿Por qué OSM además del satélite?**
     El satélite detecta todo el verde (patios privados, baldíos, cultivos).
@@ -537,6 +542,7 @@ elif "OSM" in seccion:
 # ============================================================
 elif "Censo" in seccion:
     st.title(f"👥 Censo 2022 · {ciudad['nombre']}")
+    ayuda_censo()
     st.markdown("---")
     render_censo(ciudad_key)
 
@@ -545,6 +551,7 @@ elif "Censo" in seccion:
 # ============================================================
 elif "Comparativa" in seccion:
     st.title("📊 Comparativa entre ciudades")
+    ayuda_comparativa()
     st.markdown("---")
 
     vm = CIUDADES['villamaria']
@@ -597,6 +604,7 @@ elif "Comparativa" in seccion:
 # ============================================================
 elif "Diagnóstico" in seccion:
     st.title(f"📝 Diagnóstico · {ciudad['nombre']}")
+    ayuda_diagnostico()
     st.markdown("---")
 
     # Calificación
