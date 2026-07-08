@@ -118,6 +118,22 @@ def _cargar_ciudades():
 
         ciudades[key] = {**cfg, **datos}
 
+    # Aliases de acceso directo para compatibilidad con el resto de la app
+    for key, c in ciudades.items():
+        c['acceso_pct']  = c['acceso']['acceso']
+        c['dist_prom']   = c['acceso']['dist_prom']
+        c['m2_hab_sat']  = c['acceso']['m2_hab_sat'] or 0
+        c['r_0_100']     = c['acceso']['r_0_100']
+        c['r_100_300']   = c['acceso']['r_100_300']
+        c['r_300_500']   = c['acceso']['r_300_500']
+        c['r_500_mas']   = c['acceso']['r_500_mas']
+        # cobertura con clave minúscula
+        cob = c['cobertura']
+        c['arb_pct']     = cob.get('arboles', 0)
+        c['past_pct']    = cob.get('pastizales', 0)
+        c['cult_pct']    = cob.get('cultivos', 0)
+        c['edif_pct']    = cob.get('edificado', 0)
+        c['agua_pct']    = cob.get('agua', 0)
     return ciudades
 
 CIUDADES = _cargar_ciudades()
@@ -242,13 +258,13 @@ if "Inicio" in seccion:
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric("Acceso <300m", f"{ciudad['acceso']:.0f}%", "Meta OMS: 100%")
+        st.metric("Acceso <300m", f"{ciudad['acceso_pct']:.0f}%", "Meta OMS: 100%")
     with col2:
         st.metric("Distancia promedio", f"{ciudad['dist_prom']} m")
     with col3:
         st.metric("Verde público / hab", f"{ciudad['osm']['m2Hab']} m²", "OMS: 9-15 m²")
     with col4:
-        st.metric("Isla de calor (ΔT)", f"+{ciudad['lst']['deltaUHI']}°C",
+        st.metric("Isla de calor (ΔT)", f"+{ciudad['lst']['deltaUHI'] or 0}°C",
                   "vs zona verde", delta_color="inverse")
 
     st.markdown("---")
@@ -259,7 +275,7 @@ if "Inicio" in seccion:
         - **Población:** {ciudad['poblacion']:,} hab
         - **Área analizada:** {ciudad['area_km2']} km²
         - **Calificación:** {ciudad['calificacion']}
-        - **Arbolado:** {ciudad['cobertura']['Árboles']}%
+        - **Arbolado:** {ciudad['arb_pct']}%
         """)
     with col_b:
         st.markdown("""
@@ -319,18 +335,18 @@ elif "Cobertura" in seccion:
     ayuda_cobertura()
     st.markdown("---")
 
-    cob = ciudad['cobertura']
+    cob_display = {'Árboles': ciudad['arb_pct'], 'Pastizales': ciudad['past_pct'], 'Cultivos': ciudad['cult_pct'], 'Edificado': ciudad['edif_pct'], 'Agua': ciudad['agua_pct']}
     col1, col2 = st.columns([1, 2])
     with col1:
-        for nombre, pct in cob.items():
+        for nombre, pct in cob_display.items():
             st.metric(nombre, f"{pct:.1f}%")
     with col2:
-        st.bar_chart(cob)
+        st.bar_chart(cob_display)
 
     st.markdown("---")
-    arb = cob['Árboles']
-    edif = cob['Edificado']
-    cult = cob['Cultivos']
+    arb = ciudad['arb_pct']
+    edif = ciudad['edif_pct']
+    cult = ciudad['cult_pct']
 
     if arb < 3:
         st.error(f"⚠️ Cobertura arbórea crítica: {arb}% — muy por debajo del promedio urbano recomendado (10-15%)")
@@ -353,7 +369,7 @@ elif "Accesibilidad" in seccion:
 
     c1, c2, c3 = st.columns(3)
     with c1:
-        st.metric("Acceso <300m", f"{ciudad['acceso']:.0f}%", "Meta OMS: 100%")
+        st.metric("Acceso <300m", f"{ciudad['acceso_pct']:.0f}%", "Meta OMS: 100%")
     with c2:
         st.metric("Distancia promedio", f"{ciudad['dist_prom']} m")
     with c3:
@@ -379,9 +395,9 @@ elif "Accesibilidad" in seccion:
                 </div>""", unsafe_allow_html=True)
         with col_v: st.markdown(f"**{pct:.1f}%**")
 
-    if ciudad['acceso'] >= 100:
+    if ciudad['acceso_pct'] >= 100:
         st.success("✅ Cumple el estándar OMS: toda la población tiene verde a menos de 300m")
-    elif ciudad['acceso'] >= 80:
+    elif ciudad['acceso_pct'] >= 80:
         st.warning("⚠️ Buena cobertura pero hay sectores sin acceso cercano")
     else:
         st.error("❌ Cobertura insuficiente — muchos vecinos sin verde accesible")
