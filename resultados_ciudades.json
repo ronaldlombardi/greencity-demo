@@ -1,0 +1,800 @@
+{
+  "cordoba_centro": {
+    "nombre": "Córdoba — Centro histórico",
+    "dept": "Capital",
+    "poblacion": 420000,
+    "area_km2": 18.0,
+    "cobertura": {
+      "arboles": 3.7,
+      "arbustos": 0.9,
+      "pastizales": 3.6,
+      "cultivos": 0.5,
+      "edificado": 88.7,
+      "suelo": 2.5,
+      "agua": 0.2
+    },
+    "acceso": {
+      "acceso": 98.9,
+      "dist_prom": 88.0,
+      "m2_hab_sat": 3.5,
+      "r_0_100": 65.1,
+      "r_100_300": 33.8,
+      "r_300_500": 1.1,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 384908.9215686237
+    },
+    "lst": {
+      "imagenes": 5,
+      "tMedia": 40.32,
+      "tUrbano": 40.37,
+      "tVerde": 39.74,
+      "tP95": 42.31,
+      "tP5": null,
+      "deltaUHI": 0.63,
+      "tNdviAlto": 39.39,
+      "tNdviBajo": 40.37,
+      "enfriamiento": 0.98,
+      "zonas": []
+    }
+  },
+  "cordoba_circunvalacion": {
+    "nombre": "Córdoba — Área de Circunvalación",
+    "dept": "Capital",
+    "poblacion": 1100000,
+    "area_km2": 150.0,
+    "cobertura": {
+      "arboles": 7.9,
+      "arbustos": 2.0,
+      "pastizales": 18.1,
+      "cultivos": 34.4,
+      "edificado": 33.2,
+      "suelo": 4.2,
+      "agua": 0.3
+    },
+    "acceso": {
+      "acceso": 99.8,
+      "dist_prom": 57.0,
+      "m2_hab_sat": 38.2,
+      "r_0_100": 83.9,
+      "r_100_300": 15.9,
+      "r_300_500": 0.2,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 2664007.584313727
+    },
+    "lst": {
+      "imagenes": 5,
+      "tMedia": 39.2,
+      "tUrbano": 39.79,
+      "tVerde": 38.35,
+      "tP95": 43.19,
+      "tP5": null,
+      "deltaUHI": 1.44,
+      "tNdviAlto": 36.23,
+      "tNdviBajo": 40.27,
+      "enfriamiento": 4.04,
+      "zonas": []
+    }
+  },
+  "riocuarto": {
+    "nombre": "Río Cuarto",
+    "dept": "Río Cuarto",
+    "poblacion": 180756,
+    "area_km2": 68.0,
+    "cobertura": {
+      "arboles": 5.4,
+      "arbustos": 0.3,
+      "pastizales": 19.7,
+      "cultivos": 33.9,
+      "edificado": 37.7,
+      "suelo": 2.1,
+      "agua": 0.9
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 41.0,
+      "m2_hab_sat": 95.6,
+      "r_0_100": 94.1,
+      "r_100_300": 5.9,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 410826.8352941171
+    },
+    "lst": {
+      "imagenes": 5,
+      "tMedia": 35.91,
+      "tUrbano": 35.21,
+      "tVerde": 35.92,
+      "tP95": 39.06,
+      "tP5": null,
+      "deltaUHI": -0.71,
+      "tNdviAlto": 35.16,
+      "tNdviBajo": 35.43,
+      "enfriamiento": 0.27,
+      "zonas": []
+    }
+  },
+  "villamaria": {
+    "nombre": "Villa María - Villa Nueva",
+    "dept": "General San Martín",
+    "poblacion": 120000,
+    "area_km2": 49.6,
+    "cobertura": {
+      "arboles": 8.2,
+      "arbustos": 0.2,
+      "pastizales": 14.2,
+      "cultivos": 23.9,
+      "edificado": 50.7,
+      "suelo": 1.6,
+      "agua": 1.3
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 48.0,
+      "m2_hab_sat": 93.4,
+      "r_0_100": 91.1,
+      "r_100_300": 8.9,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 251065.035294117
+    },
+    "lst": {
+      "imagenes": 13,
+      "tMedia": 39.97,
+      "tUrbano": 39.51,
+      "tVerde": 39.34,
+      "tP95": 44.56,
+      "tP5": null,
+      "deltaUHI": 0.17,
+      "tNdviAlto": 38.21,
+      "tNdviBajo": 39.88,
+      "enfriamiento": 1.67,
+      "zonas": []
+    }
+  },
+  "villacarlospaz": {
+    "nombre": "Villa Carlos Paz",
+    "dept": "Punilla",
+    "poblacion": 71274,
+    "area_km2": 40.0,
+    "cobertura": {
+      "arboles": 25.4,
+      "arbustos": 18.0,
+      "pastizales": 24.2,
+      "cultivos": 0.2,
+      "edificado": 26.4,
+      "suelo": 1.2,
+      "agua": 4.6
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 29.0,
+      "m2_hab_sat": 379.4,
+      "r_0_100": 97.8,
+      "r_100_300": 2.2,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 205795.803921569
+    },
+    "lst": {
+      "imagenes": 5,
+      "tMedia": 38.96,
+      "tUrbano": 39.36,
+      "tVerde": 38.98,
+      "tP95": 47.19,
+      "tP5": null,
+      "deltaUHI": 0.38,
+      "tNdviAlto": 35.24,
+      "tNdviBajo": 38.65,
+      "enfriamiento": 3.41,
+      "zonas": []
+    }
+  },
+  "sanfrancisco": {
+    "nombre": "San Francisco",
+    "dept": "San Justo",
+    "poblacion": 69047,
+    "area_km2": 23.7,
+    "cobertura": {
+      "arboles": 1.6,
+      "arbustos": 0.0,
+      "pastizales": 16.4,
+      "cultivos": 24.3,
+      "edificado": 56.7,
+      "suelo": 0.9,
+      "agua": 0.0
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 50.0,
+      "m2_hab_sat": 61.8,
+      "r_0_100": 91.0,
+      "r_100_300": 9.0,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 158112.99607843187
+    },
+    "lst": {
+      "imagenes": 6,
+      "tMedia": 39.87,
+      "tUrbano": 40.2,
+      "tVerde": 39.19,
+      "tP95": 42.34,
+      "tP5": null,
+      "deltaUHI": 1.01,
+      "tNdviAlto": 36.41,
+      "tNdviBajo": 40.36,
+      "enfriamiento": 3.95,
+      "zonas": []
+    }
+  },
+  "altagracia": {
+    "nombre": "Alta Gracia",
+    "dept": "Santa María",
+    "poblacion": 60373,
+    "area_km2": 28.0,
+    "cobertura": {
+      "arboles": 16.1,
+      "arbustos": 8.3,
+      "pastizales": 34.8,
+      "cultivos": 19.3,
+      "edificado": 19.6,
+      "suelo": 1.7,
+      "agua": 0.2
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 33.0,
+      "m2_hab_sat": 274.6,
+      "r_0_100": 96.9,
+      "r_100_300": 3.1,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 136180.29803921568
+    },
+    "lst": {
+      "imagenes": 5,
+      "tMedia": 38.61,
+      "tUrbano": 38.84,
+      "tVerde": 38.23,
+      "tP95": 41.47,
+      "tP5": null,
+      "deltaUHI": 0.61,
+      "tNdviAlto": 36.47,
+      "tNdviBajo": 39.46,
+      "enfriamiento": 2.99,
+      "zonas": []
+    }
+  },
+  "riotercero": {
+    "nombre": "Río Tercero",
+    "dept": "Tercero Arriba",
+    "poblacion": 50000,
+    "area_km2": 22.0,
+    "cobertura": {
+      "arboles": 7.4,
+      "arbustos": 3.4,
+      "pastizales": 21.8,
+      "cultivos": 37.2,
+      "edificado": 25.8,
+      "suelo": 3.3,
+      "agua": 1.1
+    },
+    "acceso": {
+      "acceso": 99.8,
+      "dist_prom": 51.0,
+      "m2_hab_sat": 143.4,
+      "r_0_100": 88.5,
+      "r_100_300": 11.3,
+      "r_300_500": 0.1,
+      "r_500_mas": 0.1,
+      "total_edif_pix": 134219.7921568627
+    },
+    "lst": {
+      "imagenes": 5,
+      "tMedia": 40.16,
+      "tUrbano": 40.03,
+      "tVerde": 40.39,
+      "tP95": 43.78,
+      "tP5": null,
+      "deltaUHI": -0.36,
+      "tNdviAlto": 37.28,
+      "tNdviBajo": 40.3,
+      "enfriamiento": 3.02,
+      "zonas": []
+    }
+  },
+  "jesusmaria": {
+    "nombre": "Jesús María",
+    "dept": "Colón",
+    "poblacion": 38000,
+    "area_km2": 16.0,
+    "cobertura": {
+      "arboles": 10.8,
+      "arbustos": 1.9,
+      "pastizales": 23.1,
+      "cultivos": 39.7,
+      "edificado": 20.5,
+      "suelo": 4.1,
+      "agua": 0.0
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 41.0,
+      "m2_hab_sat": 150.7,
+      "r_0_100": 95.5,
+      "r_100_300": 4.5,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 106431.55686274527
+    },
+    "lst": {
+      "imagenes": 8,
+      "tMedia": 37.68,
+      "tUrbano": 38.26,
+      "tVerde": 36.62,
+      "tP95": 41.72,
+      "tP5": null,
+      "deltaUHI": 1.64,
+      "tNdviAlto": 35.26,
+      "tNdviBajo": 38.99,
+      "enfriamiento": 3.73,
+      "zonas": []
+    }
+  },
+  "bellville": {
+    "nombre": "Bell Ville",
+    "dept": "Unión",
+    "poblacion": 34000,
+    "area_km2": 15.0,
+    "cobertura": {
+      "arboles": 8.7,
+      "arbustos": 0.1,
+      "pastizales": 14.8,
+      "cultivos": 54.3,
+      "edificado": 18.9,
+      "suelo": 3.2,
+      "agua": 0.0
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 38.0,
+      "m2_hab_sat": 104.1,
+      "r_0_100": 97.3,
+      "r_100_300": 2.7,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 98556.43529411766
+    },
+    "lst": {
+      "imagenes": 11,
+      "tMedia": 38.35,
+      "tUrbano": 38.55,
+      "tVerde": 37.74,
+      "tP95": 43.19,
+      "tP5": null,
+      "deltaUHI": 0.81,
+      "tNdviAlto": 35.54,
+      "tNdviBajo": 39.8,
+      "enfriamiento": 4.26,
+      "zonas": []
+    }
+  },
+  "cruzdeleje": {
+    "nombre": "Cruz del Eje",
+    "dept": "Cruz del Eje",
+    "poblacion": 35000,
+    "area_km2": 16.0,
+    "cobertura": {
+      "arboles": 9.9,
+      "arbustos": 60.6,
+      "pastizales": 2.2,
+      "cultivos": 5.0,
+      "edificado": 16.8,
+      "suelo": 5.6,
+      "agua": 0.0
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 34.0,
+      "m2_hab_sat": 332.3,
+      "r_0_100": 97.4,
+      "r_100_300": 2.6,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 102207.09411764712
+    },
+    "lst": {
+      "imagenes": 12,
+      "tMedia": 44.89,
+      "tUrbano": 44.37,
+      "tVerde": 43.27,
+      "tP95": 49.19,
+      "tP5": null,
+      "deltaUHI": 1.1,
+      "tNdviAlto": 39.85,
+      "tNdviBajo": 45.93,
+      "enfriamiento": 6.08,
+      "zonas": []
+    }
+  },
+  "villadolores": {
+    "nombre": "Villa Dolores",
+    "dept": "San Alberto",
+    "poblacion": 32000,
+    "area_km2": 14.0,
+    "cobertura": {
+      "arboles": 6.7,
+      "arbustos": 27.6,
+      "pastizales": 7.7,
+      "cultivos": 29.2,
+      "edificado": 20.1,
+      "suelo": 8.7,
+      "agua": 0.0
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 46.0,
+      "m2_hab_sat": 183.8,
+      "r_0_100": 93.4,
+      "r_100_300": 6.6,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 122028.17254901973
+    },
+    "lst": {
+      "imagenes": 10,
+      "tMedia": 43.93,
+      "tUrbano": 43.38,
+      "tVerde": 43.25,
+      "tP95": 47.94,
+      "tP5": null,
+      "deltaUHI": 0.13,
+      "tNdviAlto": 40.21,
+      "tNdviBajo": 44.43,
+      "enfriamiento": 4.22,
+      "zonas": []
+    }
+  },
+  "marcosjuarez": {
+    "nombre": "Marcos Juárez",
+    "dept": "Marcos Juárez",
+    "poblacion": 28000,
+    "area_km2": 13.0,
+    "cobertura": {
+      "arboles": 1.5,
+      "arbustos": 0.0,
+      "pastizales": 9.6,
+      "cultivos": 70.9,
+      "edificado": 15.7,
+      "suelo": 1.1,
+      "agua": 0.5
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 36.0,
+      "m2_hab_sat": 51.5,
+      "r_0_100": 96.9,
+      "r_100_300": 3.0,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 95422.6431372549
+    },
+    "lst": {
+      "imagenes": 17,
+      "tMedia": 36.94,
+      "tUrbano": 39.68,
+      "tVerde": 38.3,
+      "tP95": 41.03,
+      "tP5": null,
+      "deltaUHI": 1.38,
+      "tNdviAlto": 35.2,
+      "tNdviBajo": 39.72,
+      "enfriamiento": 4.52,
+      "zonas": []
+    }
+  },
+  "deanfunes": {
+    "nombre": "Deán Funes",
+    "dept": "Ischilín",
+    "poblacion": 18000,
+    "area_km2": 10.0,
+    "cobertura": {
+      "arboles": 5.2,
+      "arbustos": 42.1,
+      "pastizales": 15.7,
+      "cultivos": 23.6,
+      "edificado": 10.2,
+      "suelo": 3.2,
+      "agua": 0.0
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 37.0,
+      "m2_hab_sat": 350.0,
+      "r_0_100": 95.6,
+      "r_100_300": 4.4,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 61894.07843137255
+    },
+    "lst": {
+      "imagenes": 7,
+      "tMedia": 47.56,
+      "tUrbano": 44.75,
+      "tVerde": 47.89,
+      "tP95": 53.06,
+      "tP5": null,
+      "deltaUHI": -3.14,
+      "tNdviAlto": 39.99,
+      "tNdviBajo": 48.81,
+      "enfriamiento": 8.82,
+      "zonas": []
+    }
+  },
+  "laboulaye": {
+    "nombre": "Laboulaye",
+    "dept": "Pte. Roque Sáenz Peña",
+    "poblacion": 17000,
+    "area_km2": 9.0,
+    "cobertura": {
+      "arboles": 3.2,
+      "arbustos": 0.0,
+      "pastizales": 12.7,
+      "cultivos": 70.3,
+      "edificado": 11.6,
+      "suelo": 1.8,
+      "agua": 0.3
+    },
+    "acceso": {
+      "acceso": 99.9,
+      "dist_prom": 33.0,
+      "m2_hab_sat": 84.2,
+      "r_0_100": 98.7,
+      "r_100_300": 1.3,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 70556.92549019608
+    },
+    "lst": {
+      "imagenes": 4,
+      "tMedia": 37.86,
+      "tUrbano": 37.83,
+      "tVerde": 37.87,
+      "tP95": 41.53,
+      "tP5": null,
+      "deltaUHI": -0.04,
+      "tNdviAlto": 35.51,
+      "tNdviBajo": 38.52,
+      "enfriamiento": 3.01,
+      "zonas": []
+    }
+  },
+  "lacarlota": {
+    "nombre": "La Carlota",
+    "dept": "Juárez Celman",
+    "poblacion": 16000,
+    "area_km2": 9.0,
+    "cobertura": {
+      "arboles": 2.5,
+      "arbustos": 0.0,
+      "pastizales": 9.1,
+      "cultivos": 79.3,
+      "edificado": 7.0,
+      "suelo": 2.2,
+      "agua": 0.1
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 38.0,
+      "m2_hab_sat": 65.2,
+      "r_0_100": 97.3,
+      "r_100_300": 2.6,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 48330.67058823528
+    },
+    "lst": {
+      "imagenes": 5,
+      "tMedia": 38.59,
+      "tUrbano": 38.94,
+      "tVerde": 38.82,
+      "tP95": 43.34,
+      "tP5": null,
+      "deltaUHI": 0.12,
+      "tNdviAlto": 36.52,
+      "tNdviBajo": 40.62,
+      "enfriamiento": 4.1,
+      "zonas": []
+    }
+  },
+  "villadelrosario": {
+    "nombre": "Villa del Rosario",
+    "dept": "Río Segundo",
+    "poblacion": 15000,
+    "area_km2": 8.0,
+    "cobertura": {
+      "arboles": 5.3,
+      "arbustos": 0.5,
+      "pastizales": 12.8,
+      "cultivos": 69.0,
+      "edificado": 9.3,
+      "suelo": 2.3,
+      "agua": 0.9
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 33.0,
+      "m2_hab_sat": 99.2,
+      "r_0_100": 98.2,
+      "r_100_300": 1.7,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 56367.43529411763
+    },
+    "lst": {
+      "imagenes": 11,
+      "tMedia": 40.58,
+      "tUrbano": 40.61,
+      "tVerde": 39.36,
+      "tP95": 44.94,
+      "tP5": null,
+      "deltaUHI": 1.25,
+      "tNdviAlto": 38.31,
+      "tNdviBajo": 41.89,
+      "enfriamiento": 3.58,
+      "zonas": []
+    }
+  },
+  "capilladelmonte": {
+    "nombre": "Capilla del Monte",
+    "dept": "Río Primero",
+    "poblacion": 12000,
+    "area_km2": 7.0,
+    "cobertura": {
+      "arboles": 23.5,
+      "arbustos": 57.4,
+      "pastizales": 5.3,
+      "cultivos": 0.1,
+      "edificado": 11.1,
+      "suelo": 1.5,
+      "agua": 1.2
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 22.0,
+      "m2_hab_sat": 502.8,
+      "r_0_100": 99.9,
+      "r_100_300": 0.1,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 49454.71372549019
+    },
+    "lst": {
+      "imagenes": 12,
+      "tMedia": 39.21,
+      "tUrbano": 40.57,
+      "tVerde": 37.87,
+      "tP95": 43.56,
+      "tP5": null,
+      "deltaUHI": 2.7,
+      "tNdviAlto": 37.67,
+      "tNdviBajo": 39.92,
+      "enfriamiento": 2.25,
+      "zonas": []
+    }
+  },
+  "santarosacalamuchita": {
+    "nombre": "Santa Rosa de Calamuchita",
+    "dept": "Calamuchita",
+    "poblacion": 12000,
+    "area_km2": 6.0,
+    "cobertura": {
+      "arboles": 47.1,
+      "arbustos": 16.7,
+      "pastizales": 23.7,
+      "cultivos": 2.5,
+      "edificado": 8.6,
+      "suelo": 1.3,
+      "agua": 0.0
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 19.0,
+      "m2_hab_sat": 437.5,
+      "r_0_100": 100.0,
+      "r_100_300": 0.0,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 38556.64705882353
+    },
+    "lst": {
+      "imagenes": 5,
+      "tMedia": 37.5,
+      "tUrbano": 39.59,
+      "tVerde": 37.14,
+      "tP95": 41.28,
+      "tP5": null,
+      "deltaUHI": 2.45,
+      "tNdviAlto": 34.55,
+      "tNdviBajo": 39.52,
+      "enfriamiento": 4.97,
+      "zonas": []
+    }
+  },
+  "sampacho": {
+    "nombre": "Sampacho",
+    "dept": "General Roca",
+    "poblacion": 7500,
+    "area_km2": 5.0,
+    "cobertura": {
+      "arboles": 4.5,
+      "arbustos": 0.1,
+      "pastizales": 10.8,
+      "cultivos": 75.6,
+      "edificado": 7.3,
+      "suelo": 1.6,
+      "agua": 0.0
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 36.0,
+      "m2_hab_sat": 102.7,
+      "r_0_100": 97.4,
+      "r_100_300": 2.6,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 32354.741176470587
+    },
+    "lst": {
+      "imagenes": 5,
+      "tMedia": 38.61,
+      "tUrbano": 36.77,
+      "tVerde": 37.72,
+      "tP95": 42.84,
+      "tP5": null,
+      "deltaUHI": -0.95,
+      "tNdviAlto": 35.7,
+      "tNdviBajo": 40.57,
+      "enfriamiento": 4.87,
+      "zonas": []
+    }
+  },
+  "quilino": {
+    "nombre": "Quilino",
+    "dept": "Totoral",
+    "poblacion": 5000,
+    "area_km2": 4.0,
+    "cobertura": {
+      "arboles": 2.9,
+      "arbustos": 84.2,
+      "pastizales": 2.3,
+      "cultivos": 1.1,
+      "edificado": 5.7,
+      "suelo": 3.7,
+      "agua": 0.0
+    },
+    "acceso": {
+      "acceso": 100.0,
+      "dist_prom": 22.0,
+      "m2_hab_sat": 715.2,
+      "r_0_100": 99.7,
+      "r_100_300": 0.3,
+      "r_300_500": 0.0,
+      "r_500_mas": 0.0,
+      "total_edif_pix": 25448.780392156863
+    },
+    "lst": {
+      "imagenes": 7,
+      "tMedia": 46.38,
+      "tUrbano": 46.39,
+      "tVerde": 47.0,
+      "tP95": 49.91,
+      "tP5": null,
+      "deltaUHI": -0.61,
+      "tNdviAlto": null,
+      "tNdviBajo": 46.42,
+      "enfriamiento": null,
+      "zonas": []
+    }
+  }
+}

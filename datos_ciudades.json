@@ -1,88 +1,225 @@
 {
-  "villamaria": {
-    "nombre": "Villa María - Villa Nueva",
-    "lat": -32.415,
-    "lon": -63.24,
-    "zoom": 13,
-    "area": 49.6,
-    "poblacion": 120000,
-    "arboles": 8.2,
-    "pastizales": 14.2,
-    "cultivos": 23.9,
-    "edificado": 50.6,
-    "suelo_desnudo": 1.6,
-    "agua": 1.3,
-    "acceso": 100.0,
-    "dist_prom": 48,
-    "m2_hab": 93.2,
-    "r_0_100": 91.1,
-    "r_100_300": 8.9,
-    "r_300_500": 0.0,
-    "r_500_mas": 0.0,
-    "calificacion": "A - Excelente",
-    "puntaje": 7,
+  "cordoba_centro": {
+    "nombre": "Córdoba — Centro histórico",
+    "emoji": "🏛️",
+    "dept": "Capital",
+    "lat": -31.413,
+    "lon": -64.183,
+    "zoom": 14,
+    "poblacion": 420000,
+    "area_km2": 18.0,
     "coords_area": [
       [
-        -63.28,
-        -32.39
+        -64.22,
+        -31.39
       ],
       [
-        -63.2,
-        -32.39
+        -64.15,
+        -31.39
       ],
       [
-        -63.2,
-        -32.44
+        -64.15,
+        -31.44
       ],
       [
-        -63.28,
-        -32.44
+        -64.22,
+        -31.44
       ]
+    ],
+    "bbox_osm": [
+      -31.44,
+      -64.22,
+      -31.39,
+      -64.15
     ],
     "coords_rio": [
       [
-        -63.255,
+        -31.39,
+        -64.195
+      ],
+      [
+        -31.44,
+        -64.175
+      ]
+    ],
+    "nota": "Centro histórico dentro de Av. de Circunvalación"
+  },
+  "cordoba_circunvalacion": {
+    "nombre": "Córdoba — Área de Circunvalación",
+    "emoji": "🏙️",
+    "dept": "Capital",
+    "lat": -31.42,
+    "lon": -64.183,
+    "zoom": 12,
+    "poblacion": 1100000,
+    "area_km2": 150.0,
+    "coords_area": [
+      [
+        -64.32,
+        -31.3
+      ],
+      [
+        -64.05,
+        -31.3
+      ],
+      [
+        -64.05,
+        -31.54
+      ],
+      [
+        -64.32,
+        -31.54
+      ]
+    ],
+    "bbox_osm": [
+      -31.54,
+      -64.32,
+      -31.3,
+      -64.05
+    ],
+    "coords_rio": [
+      [
+        -31.3,
+        -64.22
+      ],
+      [
+        -31.54,
+        -64.19
+      ]
+    ]
+  },
+  "riocuarto": {
+    "nombre": "Río Cuarto",
+    "emoji": "🌾",
+    "dept": "Río Cuarto",
+    "lat": -33.13,
+    "lon": -64.349,
+    "zoom": 13,
+    "poblacion": 180756,
+    "area_km2": 68.0,
+    "coords_area": [
+      [
+        -64.4,
+        -33.09
+      ],
+      [
+        -64.29,
+        -33.09
+      ],
+      [
+        -64.29,
+        -33.17
+      ],
+      [
+        -64.4,
+        -33.17
+      ]
+    ],
+    "bbox_osm": [
+      -33.17,
+      -64.4,
+      -33.09,
+      -64.29
+    ],
+    "coords_rio": [
+      [
+        -33.09,
+        -64.37
+      ],
+      [
+        -33.17,
+        -64.34
+      ]
+    ]
+  },
+  "villamaria": {
+    "nombre": "Villa María - Villa Nueva",
+    "emoji": "🏙️",
+    "dept": "General San Martín",
+    "lat": -32.415,
+    "lon": -63.24,
+    "zoom": 13,
+    "poblacion": 120000,
+    "area_km2": 49.6,
+    "coords_area": [
+      [
+        -63.28,
         -32.39
       ],
       [
-        -63.25,
+        -63.2,
+        -32.39
+      ],
+      [
+        -63.2,
+        -32.44
+      ],
+      [
+        -63.28,
         -32.44
       ]
     ],
-    "fortalezas": [
-      "Accesibilidad universal (100% <300m)",
-      "Distribución homogénea entre zonas",
-      "Buena cobertura arbórea (8.2%)",
-      "Corredor del río Ctalamochita"
+    "bbox_osm": [
+      -32.44,
+      -63.28,
+      -32.39,
+      -63.2
     ],
-    "debilidades": [
-      "Cultivos en área urbana (23.9%)",
-      "Verde no necesariamente público",
-      "Falta de datos catastrales integrados"
+    "coords_rio": [
+      [
+        -32.39,
+        -63.255
+      ],
+      [
+        -32.44,
+        -63.25
+      ]
     ]
+  },
+  "villacarlospaz": {
+    "nombre": "Villa Carlos Paz",
+    "emoji": "⛰️",
+    "dept": "Punilla",
+    "lat": -31.423,
+    "lon": -64.497,
+    "zoom": 13,
+    "poblacion": 71274,
+    "area_km2": 40.0,
+    "coords_area": [
+      [
+        -64.54,
+        -31.39
+      ],
+      [
+        -64.45,
+        -31.39
+      ],
+      [
+        -64.45,
+        -31.46
+      ],
+      [
+        -64.54,
+        -31.46
+      ]
+    ],
+    "bbox_osm": [
+      -31.46,
+      -64.54,
+      -31.39,
+      -64.45
+    ],
+    "coords_rio": null
   },
   "sanfrancisco": {
     "nombre": "San Francisco",
+    "emoji": "🏘️",
+    "dept": "San Justo",
     "lat": -31.428,
     "lon": -62.083,
     "zoom": 13,
-    "area": 23.7,
-    "poblacion": 62000,
-    "arboles": 1.6,
-    "pastizales": 16.4,
-    "cultivos": 24.3,
-    "edificado": 56.8,
-    "suelo_desnudo": 0.9,
-    "agua": 0.0,
-    "acceso": 100.0,
-    "dist_prom": 50,
-    "m2_hab": 68.8,
-    "r_0_100": 91.0,
-    "r_100_300": 9.0,
-    "r_300_500": 0.0,
-    "r_500_mas": 0.0,
-    "calificacion": "B - Muy Bueno",
-    "puntaje": 6,
+    "poblacion": 69047,
+    "area_km2": 23.7,
     "coords_area": [
       [
         -62.105,
@@ -101,18 +238,564 @@
         -31.45
       ]
     ],
-    "coords_rio": null,
-    "fortalezas": [
-      "Accesibilidad universal (100% <300m)",
-      "Ciudad compacta y bien definida",
-      "Buena distribución del verde",
-      "Trazado en damero facilita planificación"
+    "bbox_osm": [
+      -31.45,
+      -62.105,
+      -31.405,
+      -62.055
     ],
-    "debilidades": [
-      "Cobertura arbórea muy baja (1.6%)",
-      "Verde mayormente pastizales",
-      "Sin corredor verde estructurante",
-      "Falta de datos catastrales"
+    "coords_rio": null
+  },
+  "altagracia": {
+    "nombre": "Alta Gracia",
+    "emoji": "🏔️",
+    "dept": "Santa María",
+    "lat": -31.655,
+    "lon": -64.431,
+    "zoom": 13,
+    "poblacion": 60373,
+    "area_km2": 28.0,
+    "coords_area": [
+      [
+        -64.47,
+        -31.62
+      ],
+      [
+        -64.39,
+        -31.62
+      ],
+      [
+        -64.39,
+        -31.69
+      ],
+      [
+        -64.47,
+        -31.69
+      ]
+    ],
+    "bbox_osm": [
+      -31.69,
+      -64.47,
+      -31.62,
+      -64.39
+    ],
+    "coords_rio": null
+  },
+  "riotercero": {
+    "nombre": "Río Tercero",
+    "emoji": "🏭",
+    "dept": "Tercero Arriba",
+    "lat": -32.172,
+    "lon": -64.108,
+    "zoom": 13,
+    "poblacion": 50000,
+    "area_km2": 22.0,
+    "coords_area": [
+      [
+        -64.14,
+        -32.14
+      ],
+      [
+        -64.07,
+        -32.14
+      ],
+      [
+        -64.07,
+        -32.2
+      ],
+      [
+        -64.14,
+        -32.2
+      ]
+    ],
+    "bbox_osm": [
+      -32.2,
+      -64.14,
+      -32.14,
+      -64.07
+    ],
+    "coords_rio": [
+      [
+        -32.14,
+        -64.12
+      ],
+      [
+        -32.2,
+        -64.1
+      ]
     ]
+  },
+  "jesusmaria": {
+    "nombre": "Jesús María",
+    "emoji": "🌿",
+    "dept": "Colón",
+    "lat": -30.983,
+    "lon": -64.098,
+    "zoom": 13,
+    "poblacion": 38000,
+    "area_km2": 16.0,
+    "coords_area": [
+      [
+        -64.13,
+        -30.95
+      ],
+      [
+        -64.06,
+        -30.95
+      ],
+      [
+        -64.06,
+        -31.01
+      ],
+      [
+        -64.13,
+        -31.01
+      ]
+    ],
+    "bbox_osm": [
+      -31.01,
+      -64.13,
+      -30.95,
+      -64.06
+    ],
+    "coords_rio": null
+  },
+  "bellville": {
+    "nombre": "Bell Ville",
+    "emoji": "🌽",
+    "dept": "Unión",
+    "lat": -32.625,
+    "lon": -62.692,
+    "zoom": 13,
+    "poblacion": 34000,
+    "area_km2": 15.0,
+    "coords_area": [
+      [
+        -62.73,
+        -32.59
+      ],
+      [
+        -62.66,
+        -32.59
+      ],
+      [
+        -62.66,
+        -32.65
+      ],
+      [
+        -62.73,
+        -32.65
+      ]
+    ],
+    "bbox_osm": [
+      -32.65,
+      -62.73,
+      -32.59,
+      -62.66
+    ],
+    "coords_rio": null
+  },
+  "cruzdeleje": {
+    "nombre": "Cruz del Eje",
+    "emoji": "🏜️",
+    "dept": "Cruz del Eje",
+    "lat": -30.727,
+    "lon": -64.806,
+    "zoom": 13,
+    "poblacion": 35000,
+    "area_km2": 16.0,
+    "coords_area": [
+      [
+        -64.84,
+        -30.69
+      ],
+      [
+        -64.77,
+        -30.69
+      ],
+      [
+        -64.77,
+        -30.76
+      ],
+      [
+        -64.84,
+        -30.76
+      ]
+    ],
+    "bbox_osm": [
+      -30.76,
+      -64.84,
+      -30.69,
+      -64.77
+    ],
+    "coords_rio": [
+      [
+        -30.69,
+        -64.81
+      ],
+      [
+        -30.76,
+        -64.8
+      ]
+    ]
+  },
+  "villadolores": {
+    "nombre": "Villa Dolores",
+    "emoji": "🏞️",
+    "dept": "San Alberto",
+    "lat": -31.945,
+    "lon": -65.192,
+    "zoom": 13,
+    "poblacion": 32000,
+    "area_km2": 14.0,
+    "coords_area": [
+      [
+        -65.23,
+        -31.91
+      ],
+      [
+        -65.16,
+        -31.91
+      ],
+      [
+        -65.16,
+        -31.98
+      ],
+      [
+        -65.23,
+        -31.98
+      ]
+    ],
+    "bbox_osm": [
+      -31.98,
+      -65.23,
+      -31.91,
+      -65.16
+    ],
+    "coords_rio": null
+  },
+  "marcosjuarez": {
+    "nombre": "Marcos Juárez",
+    "emoji": "🌾",
+    "dept": "Marcos Juárez",
+    "lat": -32.696,
+    "lon": -62.102,
+    "zoom": 13,
+    "poblacion": 28000,
+    "area_km2": 13.0,
+    "coords_area": [
+      [
+        -62.14,
+        -32.66
+      ],
+      [
+        -62.07,
+        -32.66
+      ],
+      [
+        -62.07,
+        -32.73
+      ],
+      [
+        -62.14,
+        -32.73
+      ]
+    ],
+    "bbox_osm": [
+      -32.73,
+      -62.14,
+      -32.66,
+      -62.07
+    ],
+    "coords_rio": null
+  },
+  "deanfunes": {
+    "nombre": "Deán Funes",
+    "emoji": "🌵",
+    "dept": "Ischilín",
+    "lat": -30.422,
+    "lon": -64.351,
+    "zoom": 13,
+    "poblacion": 18000,
+    "area_km2": 10.0,
+    "coords_area": [
+      [
+        -64.39,
+        -30.39
+      ],
+      [
+        -64.32,
+        -30.39
+      ],
+      [
+        -64.32,
+        -30.46
+      ],
+      [
+        -64.39,
+        -30.46
+      ]
+    ],
+    "bbox_osm": [
+      -30.46,
+      -64.39,
+      -30.39,
+      -64.32
+    ],
+    "coords_rio": null
+  },
+  "laboulaye": {
+    "nombre": "Laboulaye",
+    "emoji": "🌻",
+    "dept": "Pte. Roque Sáenz Peña",
+    "lat": -34.127,
+    "lon": -63.391,
+    "zoom": 13,
+    "poblacion": 17000,
+    "area_km2": 9.0,
+    "coords_area": [
+      [
+        -63.43,
+        -34.09
+      ],
+      [
+        -63.36,
+        -34.09
+      ],
+      [
+        -63.36,
+        -34.16
+      ],
+      [
+        -63.43,
+        -34.16
+      ]
+    ],
+    "bbox_osm": [
+      -34.16,
+      -63.43,
+      -34.09,
+      -63.36
+    ],
+    "coords_rio": null
+  },
+  "lacarlota": {
+    "nombre": "La Carlota",
+    "emoji": "🌾",
+    "dept": "Juárez Celman",
+    "lat": -33.418,
+    "lon": -63.296,
+    "zoom": 13,
+    "poblacion": 16000,
+    "area_km2": 9.0,
+    "coords_area": [
+      [
+        -63.34,
+        -33.38
+      ],
+      [
+        -63.27,
+        -33.38
+      ],
+      [
+        -63.27,
+        -33.46
+      ],
+      [
+        -63.34,
+        -33.46
+      ]
+    ],
+    "bbox_osm": [
+      -33.46,
+      -63.34,
+      -33.38,
+      -63.27
+    ],
+    "coords_rio": null
+  },
+  "villadelrosario": {
+    "nombre": "Villa del Rosario",
+    "emoji": "🌹",
+    "dept": "Río Segundo",
+    "lat": -31.547,
+    "lon": -63.529,
+    "zoom": 13,
+    "poblacion": 15000,
+    "area_km2": 8.0,
+    "coords_area": [
+      [
+        -63.57,
+        -31.51
+      ],
+      [
+        -63.5,
+        -31.51
+      ],
+      [
+        -63.5,
+        -31.58
+      ],
+      [
+        -63.57,
+        -31.58
+      ]
+    ],
+    "bbox_osm": [
+      -31.58,
+      -63.57,
+      -31.51,
+      -63.5
+    ],
+    "coords_rio": null
+  },
+  "capilladelmonte": {
+    "nombre": "Capilla del Monte",
+    "emoji": "⛰️",
+    "dept": "Río Primero",
+    "lat": -30.858,
+    "lon": -64.519,
+    "zoom": 14,
+    "poblacion": 12000,
+    "area_km2": 7.0,
+    "coords_area": [
+      [
+        -64.55,
+        -30.83
+      ],
+      [
+        -64.49,
+        -30.83
+      ],
+      [
+        -64.49,
+        -30.89
+      ],
+      [
+        -64.55,
+        -30.89
+      ]
+    ],
+    "bbox_osm": [
+      -30.89,
+      -64.55,
+      -30.83,
+      -64.49
+    ],
+    "coords_rio": null
+  },
+  "santarosacalamuchita": {
+    "nombre": "Santa Rosa de Calamuchita",
+    "emoji": "🏕️",
+    "dept": "Calamuchita",
+    "lat": -32.071,
+    "lon": -64.538,
+    "zoom": 14,
+    "poblacion": 12000,
+    "area_km2": 6.0,
+    "coords_area": [
+      [
+        -64.57,
+        -32.04
+      ],
+      [
+        -64.51,
+        -32.04
+      ],
+      [
+        -64.51,
+        -32.1
+      ],
+      [
+        -64.57,
+        -32.1
+      ]
+    ],
+    "bbox_osm": [
+      -32.1,
+      -64.57,
+      -32.04,
+      -64.51
+    ],
+    "coords_rio": [
+      [
+        -32.04,
+        -64.55
+      ],
+      [
+        -32.1,
+        -64.53
+      ]
+    ]
+  },
+  "sampacho": {
+    "nombre": "Sampacho",
+    "emoji": "🌿",
+    "dept": "General Roca",
+    "lat": -33.382,
+    "lon": -64.718,
+    "zoom": 14,
+    "poblacion": 7500,
+    "area_km2": 5.0,
+    "coords_area": [
+      [
+        -64.75,
+        -33.35
+      ],
+      [
+        -64.69,
+        -33.35
+      ],
+      [
+        -64.69,
+        -33.41
+      ],
+      [
+        -64.75,
+        -33.41
+      ]
+    ],
+    "bbox_osm": [
+      -33.41,
+      -64.75,
+      -33.35,
+      -64.69
+    ],
+    "coords_rio": null
+  },
+  "quilino": {
+    "nombre": "Quilino",
+    "emoji": "🌵",
+    "dept": "Totoral",
+    "lat": -30.218,
+    "lon": -64.501,
+    "zoom": 14,
+    "poblacion": 5000,
+    "area_km2": 4.0,
+    "coords_area": [
+      [
+        -64.53,
+        -30.19
+      ],
+      [
+        -64.47,
+        -30.19
+      ],
+      [
+        -64.47,
+        -30.25
+      ],
+      [
+        -64.53,
+        -30.25
+      ]
+    ],
+    "bbox_osm": [
+      -30.25,
+      -64.53,
+      -30.19,
+      -64.47
+    ],
+    "coords_rio": null
   }
 }

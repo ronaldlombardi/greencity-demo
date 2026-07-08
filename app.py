@@ -31,125 +31,96 @@ st.set_page_config(
 )
 
 # ============================================================
-# CIUDADES — configuración central
+# CIUDADES — carga dinámica desde JSON
 # ============================================================
-CIUDADES = {
-    "villamaria": {
-        "nombre":      "Villa María - Villa Nueva",
-        "emoji":       "🏙️",
-        "lat":         -32.415,
-        "lon":         -63.24,
-        "zoom":        13,
-        "poblacion":   120000,
-        "area_km2":    49.6,
-        "coords_area": [[-63.28,-32.39],[-63.20,-32.39],[-63.20,-32.44],[-63.28,-32.44]],
-        "bbox_osm":    (-32.44, -63.28, -32.39, -63.20),
-        "coords_rio":  [[-32.39,-63.255],[-32.44,-63.25]],
-        "cobertura": {
-            "Árboles": 8.2, "Pastizales": 14.2, "Cultivos": 23.9,
-            "Edificado": 50.6, "Suelo desnudo": 1.6, "Agua": 1.3,
+
+def _cargar_ciudades():
+    """
+    Fusiona datos_ciudades.json (geometría/config) con
+    resultados_ciudades.json (datos GEE calculados, si existe).
+    """
+    base_path = os.path.dirname(__file__)
+
+    with open(os.path.join(base_path, 'datos_ciudades.json'), encoding='utf-8') as f:
+        config = json.load(f)
+
+    # Resultados GEE (generados por paso11_batch_ciudades.py)
+    res_path = os.path.join(base_path, 'resultados_ciudades.json')
+    resultados = {}
+    if os.path.exists(res_path):
+        with open(res_path, encoding='utf-8') as f:
+            resultados = json.load(f)
+
+    # Datos por defecto para ciudades sin resultados aún
+    def_cobertura = {'arboles':0,'arbustos':0,'pastizales':0,'cultivos':0,'edificado':0,'suelo':0,'agua':0}
+    def_acceso    = {'acceso':0,'dist_prom':None,'m2_hab_sat':0,'r_0_100':0,'r_100_300':0,'r_300_500':0,'r_500_mas':0}
+    def_lst       = {'imagenes':0,'tMedia':None,'tUrbano':None,'tVerde':None,'tP95':None,'tP5':None,
+                     'deltaUHI':None,'tNdviAlto':None,'tNdviBajo':None,'enfriamiento':None,'zonas':[]}
+    def_osm       = {'elementos':0,'areaHa':0,'m2Hab':0}
+
+    # Valores conocidos para VM y SF (ya calculados)
+    conocidos = {
+        'villamaria': {
+            'cobertura': {'arboles':8.2,'arbustos':0,'pastizales':14.2,'cultivos':23.9,'edificado':50.6,'suelo':1.6,'agua':1.3},
+            'acceso': {'acceso':100.0,'dist_prom':48,'m2_hab_sat':93.2,'r_0_100':91.1,'r_100_300':8.9,'r_300_500':0.0,'r_500_mas':0.0},
+            'lst': {'imagenes':13,'tMedia':39.97,'tUrbano':39.51,'tVerde':39.34,'tP95':44.56,'tP5':37.07,
+                    'deltaUHI':0.17,'tNdviAlto':38.21,'tNdviBajo':39.88,'enfriamiento':1.67,
+                    'zonas':[{'nombre':'Noroeste (VM centro-N)','temp':40.76},{'nombre':'Noreste (VN norte)','temp':39.85},
+                             {'nombre':'Suroeste (VM sur)','temp':39.73},{'nombre':'Sureste (VN sur)','temp':39.55}]},
+            'osm': {'elementos':1027,'areaHa':784.7,'m2Hab':65.4},
+            'calificacion': 'A - Excelente', 'puntaje': 7,
+            'fortalezas': ['Accesibilidad universal (100% a <300m)','Buena cobertura arbórea (8.2%)','Corredor ecológico: río Ctalamochita','Verde público: 65.4 m²/hab (OSM)'],
+            'debilidades': ['27.9 m²/hab de verde no accesible al público','Zona Noroeste más caliente (+0.8°C)','Cultivos en área urbana (23.9%)'],
+            'recomendaciones': [('🔴','Forestar zona Noroeste','40.76°C en VM centro-norte. Intervención prioritaria.'),
+                                ('🟡','Publicitar 335 ha de verde sin catalogar','Relevar y abrir donde sea posible.'),
+                                ('🟡','Parque lineal río Ctalamochita','Ciclovías y senderos en ambas márgenes.'),
+                                ('🟢','Monitoreo LST anual','Medir impacto de cada intervención.')],
         },
-        "acceso":      100.0,
-        "dist_prom":   48,
-        "m2_hab_sat":  93.2,
-        "r_0_100":     91.1, "r_100_300": 8.9,
-        "r_300_500":   0.0,  "r_500_mas": 0.0,
-        "calificacion":"A - Excelente",
-        "puntaje":     7,
-        "lst": {
-            "tMedia": 39.97, "tUrbano": 39.51, "tVerde": 39.34,
-            "tP95": 44.56,   "tP5": 37.07,     "deltaUHI": 0.17,
-            "tNdviAlto": 38.21, "tNdviBajo": 39.88, "enfriamiento": 1.67,
-            "imagenes": 13,
-            "zonas": [
-                {"nombre": "Noroeste (VM centro-N)", "temp": 40.76},
-                {"nombre": "Noreste  (VN norte)",    "temp": 39.85},
-                {"nombre": "Suroeste (VM sur)",      "temp": 39.73},
-                {"nombre": "Sureste  (VN sur)",      "temp": 39.55},
-            ],
-        },
-        "osm": {
-            "elementos": 1027, "areaHa": 784.7, "m2Hab": 65.4,
-        },
-        "fortalezas": [
-            "Accesibilidad universal (100% a <300m)",
-            "Distribución homogénea entre zonas",
-            "Buena cobertura arbórea (8.2%)",
-            "Corredor ecológico: río Ctalamochita",
-        ],
-        "debilidades": [
-            "27.9 m²/hab de verde no accesible al público",
-            "Zona Noroeste más caliente (+0.8°C sobre la media)",
-            "Cultivos en área urbana (23.9%) — riesgo futuro",
-            "Verde no validado contra catastro municipal",
-        ],
-        "recomendaciones": [
-            ("🔴", "Forestar zona Noroeste (más caliente)",
-             "40.76°C en VM centro-norte. Intervención prioritaria con arbolado de calle y mini-bosques."),
-            ("🟡", "Publicitar y equipar 335 ha de verde sin catalogar",
-             "OSM detecta 784 ha públicas vs 1120 ha satelitales. Relevar y abrir donde sea posible."),
-            ("🟡", "Parque lineal río Ctalamochita",
-             "Conectar espacios verdes existentes. Ciclovías y senderos en ambas márgenes."),
-            ("🟢", "Monitoreo LST anual",
-             "Medir impacto de cada intervención verde en temperatura superficial."),
-        ],
-    },
-    "sanfrancisco": {
-        "nombre":      "San Francisco",
-        "emoji":       "🏘️",
-        "lat":         -31.428,
-        "lon":         -62.083,
-        "zoom":        13,
-        "poblacion":   62000,
-        "area_km2":    23.7,
-        "coords_area": [[-62.105,-31.405],[-62.055,-31.405],[-62.055,-31.450],[-62.105,-31.450]],
-        "bbox_osm":    (-31.450, -62.105, -31.405, -62.055),
-        "coords_rio":  None,
-        "cobertura": {
-            "Árboles": 1.6, "Pastizales": 16.4, "Cultivos": 24.3,
-            "Edificado": 56.8, "Suelo desnudo": 0.9, "Agua": 0.0,
-        },
-        "acceso":      100.0,
-        "dist_prom":   50,
-        "m2_hab_sat":  68.8,
-        "r_0_100":     91.0, "r_100_300": 9.0,
-        "r_300_500":   0.0,  "r_500_mas": 0.0,
-        "calificacion":"B - Muy Bueno",
-        "puntaje":     6,
-        "lst": {
-            "tMedia": 39.87, "tUrbano": 40.2, "tVerde": 39.19,
-            "tP95": 42.34,   "tP5": 36.65,    "deltaUHI": 1.01,
-            "tNdviAlto": 36.41, "tNdviBajo": 40.36, "enfriamiento": 3.95,
-            "imagenes": 6,
-            "zonas": [],
-        },
-        "osm": {
-            "elementos": 87, "areaHa": 81.6, "m2Hab": 13.2,
-        },
-        "fortalezas": [
-            "Accesibilidad universal (100% a <300m)",
-            "Verde público real: 13.2 m²/hab (dentro del rango OMS)",
-            "Ciudad compacta con trazado en damero",
-            "Buena distribución espacial del verde disponible",
-        ],
-        "debilidades": [
-            "Arbolado urbano crítico: solo 1.6% de cobertura",
-            "Isla de calor 6× mayor que Villa María (ΔT 1.01°C vs 0.17°C)",
-            "Verde es mayormente canchas, no espacios de descanso",
-            "Sin corredor verde estructurante",
-        ],
-        "recomendaciones": [
-            ("🔴", "Forestación masiva urgente",
-             "Con 1.6% de arbolado, el verde denso enfría hasta 3.95°C. Triplicar cobertura en 5 años."),
-            ("🔴", "Reducir isla de calor (ΔT 1.01°C)",
-             "San Francisco tiene la mayor isla de calor. Foco en avenidas y espacios sin sombra."),
-            ("🟡", "Convertir bordes de canchas en espacios arbolados",
-             "41 ha deportivas: diseñar bordes con sombra sin quitar superficie de juego."),
-            ("🟢", "Monitoreo LST anual",
-             "Medir el impacto de cada árbol plantado en la temperatura superficial."),
-        ],
-    },
-}
+        'sanfrancisco': {
+            'cobertura': {'arboles':1.6,'arbustos':0,'pastizales':16.4,'cultivos':24.3,'edificado':56.8,'suelo':0.9,'agua':0.0},
+            'acceso': {'acceso':100.0,'dist_prom':50,'m2_hab_sat':68.8,'r_0_100':91.0,'r_100_300':9.0,'r_300_500':0.0,'r_500_mas':0.0},
+            'lst': {'imagenes':6,'tMedia':39.87,'tUrbano':40.2,'tVerde':39.19,'tP95':42.34,'tP5':36.65,
+                    'deltaUHI':1.01,'tNdviAlto':36.41,'tNdviBajo':40.36,'enfriamiento':3.95,'zonas':[]},
+            'osm': {'elementos':87,'areaHa':81.6,'m2Hab':13.2},
+            'calificacion': 'B - Muy Bueno', 'puntaje': 6,
+            'fortalezas': ['Accesibilidad universal (100% a <300m)','Verde público: 13.2 m²/hab (OMS ✅)','Ciudad compacta','Trazado en damero'],
+            'debilidades': ['Arbolado crítico: 1.6%','Isla de calor 6× mayor que VM','Verde mayormente canchas'],
+            'recomendaciones': [('🔴','Forestación masiva urgente','Triplicar cobertura arbórea en 5 años.'),
+                                ('🔴','Reducir isla de calor (ΔT 1.01°C)','Foco en avenidas y espacios sin sombra.'),
+                                ('🟡','Bordes arbolados en canchas','Sumar sombra sin quitar superficie de juego.'),
+                                ('🟢','Monitoreo LST anual','Medir impacto de cada árbol plantado.')],
+        }
+    }
+
+    ciudades = {}
+    for key, cfg in config.items():
+        # Prioridad: datos conocidos > resultados GEE > defaults
+        if key in conocidos:
+            datos = conocidos[key]
+        elif key in resultados:
+            r = resultados[key]
+            datos = {
+                'cobertura': r.get('cobertura', def_cobertura),
+                'acceso':    r.get('acceso', def_acceso),
+                'lst':       r.get('lst') or def_lst,
+                'osm':       def_osm,
+                'calificacion': 'Pendiente', 'puntaje': 0,
+                'fortalezas': [], 'debilidades': [],
+                'recomendaciones': [],
+            }
+        else:
+            datos = {
+                'cobertura': def_cobertura, 'acceso': def_acceso,
+                'lst': def_lst, 'osm': def_osm,
+                'calificacion': 'Sin datos', 'puntaje': 0,
+                'fortalezas': [], 'debilidades': [], 'recomendaciones': [],
+            }
+
+        ciudades[key] = {**cfg, **datos}
+
+    return ciudades
+
+CIUDADES = _cargar_ciudades()
 
 SECCIONES = [
     ("🏠", "Inicio"),
@@ -232,12 +203,15 @@ with st.sidebar:
     st.markdown("## 🌿 GreenCity Agent")
     st.markdown("---")
 
+    ciudades_ord = sorted(CIUDADES.keys(), key=lambda k: -CIUDADES[k]['poblacion'])
     ciudad_key = st.selectbox(
         "Ciudad",
-        list(CIUDADES.keys()),
-        format_func=lambda k: f"{CIUDADES[k]['emoji']} {CIUDADES[k]['nombre']}",
+        ciudades_ord,
+        format_func=lambda k: f"{CIUDADES[k]['emoji']} {CIUDADES[k]['nombre']} ({CIUDADES[k]['poblacion']:,} hab)",
     )
     ciudad = CIUDADES[ciudad_key]
+    if not ciudad['lst']['tMedia']:
+        st.info("Sin datos GEE — correr paso11_batch_ciudades.py")
 
     st.markdown("---")
 
