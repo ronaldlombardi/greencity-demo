@@ -719,8 +719,8 @@ elif "Comparativa" in seccion:
     col1, col2 = st.columns(2)
 
     indicadores = [
-        ("Arbolado urbano",          f"{vm['cobertura']['Árboles']}%",    f"{sf['cobertura']['Árboles']}%",   "bad"),
-        ("Acceso <300m",             f"{vm['acceso']:.0f}%",              f"{sf['acceso']:.0f}%",             "good"),
+        ("Arbolado urbano",          f"{vm['arb_pct']}%",                 f"{sf['arb_pct']}%",                "bad"),
+        ("Acceso <300m",             f"{vm['acceso_pct']:.0f}%",          f"{sf['acceso_pct']:.0f}%",         "good"),
         ("Distancia promedio",       f"{vm['dist_prom']} m",              f"{sf['dist_prom']} m",             "normal"),
         ("m² verde público/hab",     f"{vm['osm']['m2Hab']} m²",         f"{sf['osm']['m2Hab']} m²",         "normal"),
         ("Isla de calor ΔT",         f"+{vm['lst']['deltaUHI']}°C",      f"+{sf['lst']['deltaUHI']}°C",      "inverse"),
@@ -744,11 +744,11 @@ elif "Comparativa" in seccion:
     st.markdown(f"""
     | Indicador | {vm['nombre']} | {sf['nombre']} | Diferencia |
     |-----------|:---:|:---:|:---:|
-    | Arbolado | {vm['cobertura']['Árboles']}% | {sf['cobertura']['Árboles']}% | 🔴 VM tiene 5× más árboles |
+    | Arbolado | {vm['arb_pct']}% | {sf['arb_pct']}% | 🔴 VM tiene 5× más árboles |
     | Verde público/hab | {vm['osm']['m2Hab']} m² | {sf['osm']['m2Hab']} m² | VM tiene 5× más verde público |
     | Isla de calor | +{vm['lst']['deltaUHI']}°C | +{sf['lst']['deltaUHI']}°C | SF tiene 6× mayor UHI |
     | Enfriamiento potencial | {vm['lst']['enfriamiento']}°C | {sf['lst']['enfriamiento']}°C | SF podría ganar {sf['lst']['enfriamiento']}°C con arbolado |
-    | Acceso <300m | {vm['acceso']:.0f}% | {sf['acceso']:.0f}% | ✅ Ambas cumplen OMS |
+    | Acceso <300m | {vm['acceso_pct']:.0f}% | {sf['acceso_pct']:.0f}% | ✅ Ambas cumplen OMS |
     """)
 
     st.info(
