@@ -31,6 +31,48 @@ st.set_page_config(
 )
 
 # ============================================================
+# LOGIN
+# ============================================================
+_LOGIN_USER = os.environ.get("APP_USERNAME", "admin")
+_LOGIN_PASS = os.environ.get("APP_PASSWORD", "greencity")
+
+def _render_login():
+    st.markdown("""
+    <style>
+    .login-box {
+        max-width: 380px;
+        margin: 8vh auto 0 auto;
+        padding: 2.5rem 2rem;
+        border-radius: 14px;
+        background: #f8fdf8;
+        border: 1px solid #c8e6c9;
+        box-shadow: 0 4px 24px #0001;
+    }
+    </style>
+    <div class="login-box">
+        <h2 style="text-align:center;color:#2e7d32;margin-bottom:0.2rem">🌿 GreenCity Agent</h2>
+        <p style="text-align:center;color:#666;margin-bottom:1.5rem;font-size:0.9em">
+            Acceso restringido — ingresá tus credenciales
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col = st.columns([1, 2, 1])[1]
+    with col:
+        usuario = st.text_input("Usuario", key="login_user")
+        contrasena = st.text_input("Contraseña", type="password", key="login_pass")
+        if st.button("Ingresar", use_container_width=True, type="primary"):
+            if usuario == _LOGIN_USER and contrasena == _LOGIN_PASS:
+                st.session_state["autenticado"] = True
+                st.rerun()
+            else:
+                st.error("Usuario o contraseña incorrectos.")
+
+if not st.session_state.get("autenticado"):
+    _render_login()
+    st.stop()
+
+# ============================================================
 # CIUDADES — carga dinámica desde JSON
 # ============================================================
 
