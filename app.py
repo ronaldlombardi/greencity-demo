@@ -226,8 +226,15 @@ with st.sidebar:
         format_func=lambda k: f"{CIUDADES[k]['emoji']} {CIUDADES[k]['nombre']} ({CIUDADES[k]['poblacion']:,} hab)",
     )
     ciudad = CIUDADES[ciudad_key]
-    if not ciudad['lst']['tMedia']:
-        st.info("Sin datos GEE — correr paso11_batch_ciudades.py")
+
+    # Indicador de completitud de datos (producción)
+    cal = ciudad.get('calificacion', 'Sin datos')
+    if cal not in ('Sin datos', 'Pendiente'):
+        st.success(f"✅ Datos completos · {cal}")
+    elif cal == 'Pendiente':
+        st.warning("⏳ Datos parciales — análisis GEE disponible")
+    else:
+        st.info("🔄 Sin análisis previo — datos se calcularán en vivo")
 
     st.markdown("---")
 
@@ -296,30 +303,116 @@ elif "Área" in seccion:
     st.title(f"📍 Área de estudio · {ciudad['nombre']}")
     st.markdown("---")
 
-    m = folium.Map(location=[ciudad['lat'], ciudad['lon']],
-                   zoom_start=ciudad['zoom'], tiles='CartoDB positron')
+    # --- Mapa con capas seleccionables ---
+    m = folium.Map(
+        location=[ciudad['lat'], ciudad['lon']],
+        zoom_start=ciudad['zoom'],
+        tiles=None,
+    )
 
+    # Capas base
+    folium.TileLayer(
+        tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attr='© OpenStreetMap contributors',
+        name='🗺️ OpenStreetMap',
+        max_zoom=19,
+    ).add_to(m)
+    folium.TileLayer(
+        tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        attr='© Esri — Esri, DigitalGlobe, GeoEye, i-cubed, USDA FSA, USGS, AEX, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, GIS User Community',
+        name='🛰️ Satélite',
+        max_zoom=19,
+    ).add_to(m)
+    folium.TileLayer(
+        tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+        attr='© Esri — Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China, and the GIS User Community',
+        name='🗻 Topográfico',
+        max_zoom=19,
+    ).add_to(m)
+    folium.TileLayer(
+        tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+        attr='© Google',
+        name='🌍 Híbrido Google',
+        max_zoom=20,
+    ).add_to(m)
+
+    # Grupo: Área de estudio (ciudad seleccionada)
+    from folium import FeatureGroup
+    grupo_area = FeatureGroup(name='📐 Área de estudio', show=True)
     coords_folium = [[c[1], c[0]] for c in ciudad['coords_area']]
     coords_folium.append(coords_folium[0])
     folium.Polygon(
         locations=coords_folium,
-        popup=f"{ciudad['nombre']} — {ciudad['area_km2']} km²",
-        color="#2e7d32", weight=2, fill=True,
-        fill_color="#4caf50", fill_opacity=0.15,
-    ).add_to(m)
+        popup=folium.Popup(
+            f"<b>{ciudad['nombre']}</b><br>{ciudad['area_km2']} km² · {ciudad['poblacion']:,} hab",
+            max_width=220,
+        ),
+        tooltip=f"{ciudad['nombre']} — área de análisis",
+        color="#2e7d32", weight=2.5, fill=True,
+        fill_color="#4caf50", fill_opacity=0.18,
+    ).add_to(grupo_area)
     folium.CircleMarker(
-        [ciudad['lat'], ciudad['lon']], radius=8,
-        color="#1b5e20", fill=True, fill_color="#4caf50", fill_opacity=0.9,
-        popup=f"{ciudad['nombre']} — {ciudad['poblacion']:,} hab",
-    ).add_to(m)
-    if ciudad['coords_rio']:
+        [ciudad['lat'], ciudad['lon']], radius=9,
+        color="#1b5e20", weight=2,
+        fill=True, fill_color="#4caf50", fill_opacity=0.95,
+        tooltip=ciudad['nombre'],
+        popup=folium.Popup(
+            f"<b>{ciudad['nombre']}</b><br>"
+            f"👥 {ciudad['poblacion']:,} hab · {ciudad['area_km2']} km²<br>"
+            f"⭐ {ciudad.get('calificacion','—')}",
+            max_width=220,
+        ),
+    ).add_to(grupo_area)
+    if ciudad.get('coords_rio'):
         coords_rio = [[c[1], c[0]] for c in ciudad['coords_rio']]
         folium.PolyLine(
-            coords_rio, color="#2196f3", weight=3,
-            dash_array="8 8", popup="Río Ctalamochita",
-        ).add_to(m)
+            coords_rio, color="#1565c0", weight=3,
+            dash_array="6 4",
+            tooltip="Curso de agua",
+        ).add_to(grupo_area)
+    grupo_area.add_to(m)
 
-    st_folium(m, width=900, height=480)
+    # Grupo: Todas las ciudades del proyecto (capa opcional)
+    _cal_color = {
+        'A - Excelente': '#1b5e20', 'B - Muy Bueno': '#2196f3',
+        'B': '#2196f3', 'A': '#1b5e20',
+        'Pendiente': '#ff9800', 'Sin datos': '#9e9e9e',
+    }
+    grupo_todas = FeatureGroup(name='🏙️ Todas las ciudades', show=True)
+    for k, c in CIUDADES.items():
+        if k == ciudad_key:
+            continue
+        cal_c = c.get('calificacion', 'Sin datos')
+        color_c = _cal_color.get(cal_c, '#9e9e9e')
+        folium.CircleMarker(
+            [c['lat'], c['lon']], radius=6,
+            color=color_c, weight=1.5,
+            fill=True, fill_color=color_c, fill_opacity=0.7,
+            tooltip=c['nombre'],
+            popup=folium.Popup(
+                f"<b>{c['emoji']} {c['nombre']}</b><br>"
+                f"Depto. {c.get('dept','—')}<br>"
+                f"👥 {c['poblacion']:,} hab<br>"
+                f"⭐ {cal_c}",
+                max_width=200,
+            ),
+        ).add_to(grupo_todas)
+    grupo_todas.add_to(m)
+
+    folium.LayerControl(position='topright', collapsed=False).add_to(m)
+
+    st_folium(m, width="100%", height=520, returned_objects=[])
+
+    # Leyenda de colores de calificación
+    st.markdown(
+        "<div style='display:flex;gap:18px;margin-top:4px;font-size:0.82em'>"
+        "<span>🟢 A · Excelente</span>"
+        "<span>🔵 B · Muy Bueno</span>"
+        "<span>🟠 Pendiente</span>"
+        "<span>⚫ Sin datos</span>"
+        "</div>",
+        unsafe_allow_html=True,
+    )
 
     c1, c2, c3 = st.columns(3)
     with c1: st.metric("Superficie", f"{ciudad['area_km2']} km²")
@@ -342,6 +435,81 @@ elif "Cobertura" in seccion:
             st.metric(nombre, f"{pct:.1f}%")
     with col2:
         st.bar_chart(cob_display)
+
+    st.markdown("---")
+
+    # --- Mapa de distribución de cobertura ---
+    st.markdown("#### 🗺️ Distribución espacial de cobertura")
+    st.caption("Paleta WorldCover: verde = arbolado · amarillo = pastizal · naranja = cultivos · gris = edificado · azul = agua")
+
+    m_cob = folium.Map(
+        location=[ciudad['lat'], ciudad['lon']],
+        zoom_start=ciudad['zoom'],
+        tiles=None,
+    )
+
+    # Capa base satélite por defecto (para ver contraste)
+    folium.TileLayer(
+        tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        attr='© Esri',
+        name='🛰️ Satélite',
+        max_zoom=19,
+    ).add_to(m_cob)
+    folium.TileLayer(
+        tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attr='© OpenStreetMap contributors',
+        name='🗺️ OpenStreetMap',
+        max_zoom=19,
+    ).add_to(m_cob)
+
+    # Overlay WorldCover via GEE XYZ tiles (si GEE conectado)
+    try:
+        area_ee = ee.Geometry.Polygon([ciudad['coords_area']])
+        wc = ee.Image('ESA/WorldCover/v100/2020').clip(area_ee)
+        palette = ['006400','ffbb22','ffff4c','f096ff','fa0000',
+                   'b4b4b4','f0f0f0','0064c8','0096a0','00cf75','fae6a0']
+        vis = {'min': 10, 'max': 110, 'palette': palette}
+        map_id = wc.getMapId(vis)
+        tiles_url = map_id['tile_fetcher'].url_format
+        from folium import FeatureGroup
+        grupo_wc = FeatureGroup(name='🌍 WorldCover (cobertura)', show=True)
+        folium.TileLayer(
+            tiles=tiles_url,
+            attr='ESA WorldCover 2020 · Google Earth Engine',
+            name='🌍 WorldCover',
+            overlay=True,
+            opacity=0.75,
+        ).add_to(grupo_wc)
+        grupo_wc.add_to(m_cob)
+    except Exception:
+        # Si GEE no está disponible, mostrar polígono del área con colores simbólicos
+        pass
+
+    # Polígono del área de estudio siempre visible
+    coords_cob = [[c[1], c[0]] for c in ciudad['coords_area']]
+    coords_cob.append(coords_cob[0])
+    folium.Polygon(
+        locations=coords_cob,
+        tooltip="Área de análisis",
+        color="#2e7d32", weight=2, fill=False,
+    ).add_to(m_cob)
+
+    # Leyenda de cobertura con datos reales de la ciudad
+    leyenda_html = f"""
+    <div style="position:fixed;bottom:20px;left:20px;z-index:9999;
+                background:white;padding:10px 14px;border-radius:8px;
+                box-shadow:0 2px 8px rgba(0,0,0,0.25);font-size:0.82em;line-height:1.7">
+        <b>Cobertura · {ciudad['nombre']}</b><br>
+        <span style="color:#006400">█</span> Árboles &nbsp;<b>{ciudad['arb_pct']:.1f}%</b><br>
+        <span style="color:#ffbb22">█</span> Pastizales &nbsp;<b>{ciudad['past_pct']:.1f}%</b><br>
+        <span style="color:#e65100">█</span> Cultivos &nbsp;<b>{ciudad['cult_pct']:.1f}%</b><br>
+        <span style="color:#757575">█</span> Edificado &nbsp;<b>{ciudad['edif_pct']:.1f}%</b><br>
+        <span style="color:#1565c0">█</span> Agua &nbsp;<b>{ciudad['agua_pct']:.1f}%</b>
+    </div>"""
+    m_cob.get_root().html.add_child(folium.Element(leyenda_html))
+
+    folium.LayerControl(position='topright', collapsed=False).add_to(m_cob)
+    st_folium(m_cob, width="100%", height=460, returned_objects=[])
 
     st.markdown("---")
     arb = ciudad['arb_pct']
