@@ -216,6 +216,7 @@ def cargar_worldcover(ciudad_key):
 # SIDEBAR
 # ============================================================
 with st.sidebar:
+    st.markdown("<style>div[data-testid='stSelectbox'] > div { cursor: pointer !important; }</style>", unsafe_allow_html=True)
     st.markdown("## 🌿 GreenCity Agent")
     st.markdown("---")
 
