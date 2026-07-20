@@ -20,6 +20,17 @@ from modulo_osm          import cargar_osm, render_osm
 from modulo_censo        import render_censo
 from modulo_ayuda        import ayuda_cobertura, ayuda_accesibilidad, ayuda_temperatura, ayuda_osm, ayuda_censo, ayuda_comparativa, ayuda_diagnostico
 from modulo_villamaria   import render_modulo_villamaria
+from modulo_asistente    import render_asistente_sidebar
+
+# ── Inyección de estilos ──────────────────────────────────
+def _inyectar_css():
+    css_path = os.path.join(os.path.dirname(__file__), 'assets', 'style.css')
+    if os.path.exists(css_path):
+        with open(css_path, encoding='utf-8') as f:
+            css = f.read()
+        st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
+
+_inyectar_css()
 
 # ============================================================
 # CONFIGURACIÓN DE PÁGINA
@@ -260,10 +271,45 @@ def cargar_worldcover(ciudad_key):
 # ============================================================
 with st.sidebar:
     st.markdown("<style>div[data-testid='stSelectbox'] > div { cursor: pointer !important; }</style>", unsafe_allow_html=True)
-    st.markdown("## 🌿 Ciudad Verde Agent")
-    st.markdown("---")
 
-    # --- Selector de módulo principal ---
+    # ── Topbar Ciudad Verde ──
+    st.markdown(
+        """
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 0 14px 0;
+             border-bottom:0.5px solid rgba(120,140,255,0.14);margin-bottom:14px;">
+          <div style="width:26px;height:26px;background:linear-gradient(135deg,#6228b4,#00b4dc);
+               border-radius:6px;display:flex;align-items:center;justify-content:center;
+               font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:#fff;
+               flex-shrink:0;">CV</div>
+          <div>
+            <div style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+                 letter-spacing:0.10em;color:#c8d0f0;">CIUDAD VERDE</div>
+            <div style="font-family:'Space Mono',monospace;font-size:8px;
+                 color:rgba(170,176,200,0.55);letter-spacing:0.08em;margin-top:1px;">
+                 AI AGENT · CÓRDOBA ARG</div>
+          </div>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:5px;
+               font-family:'Space Mono',monospace;font-size:8px;
+               color:rgba(64,220,144,0.7);letter-spacing:0.05em;">
+            <div style="width:5px;height:5px;border-radius:50%;background:#40dc90;
+                 animation:cv-pulse 2s ease-in-out infinite;"></div>
+            ACTIVO
+          </div>
+        </div>
+        <style>
+        @keyframes cv-pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # ── Selector de módulo principal ──
+    st.markdown(
+        "<div style='font-family:\"Space Mono\",monospace;font-size:8px;"
+        "letter-spacing:0.14em;text-transform:uppercase;"
+        "color:rgba(160,175,210,0.5);margin-bottom:6px;'>Módulo</div>",
+        unsafe_allow_html=True,
+    )
     modulo = st.radio(
         "Módulo",
         ["🏙️ Villa María", "🌍 Provincia de Córdoba"],
@@ -310,6 +356,9 @@ with st.sidebar:
         ciudad_key = 'villamaria'
         ciudad = CIUDADES[ciudad_key]
         seccion = None
+
+    # ── Asistente IA — siempre visible al fondo del sidebar ──
+    render_asistente_sidebar()
 
 # ============================================================
 # CONEXIÓN GEE
