@@ -448,28 +448,25 @@ def _render_indicadores():
         ]
         area_ee  = ee.Geometry.Polygon([coords_vm])
         wc       = ee.Image('ESA/WorldCover/v100/2020').clip(area_ee)
-        # Remapeo explícito: cada código de clase → índice 0-10
-        # Clases ESA: 10=árboles, 20=arbustos, 30=pastizal, 40=cultivos,
-        #             50=edificado, 60=suelo, 70=nieve, 80=agua, 90=humedal, 95=manglar, 100=musgo
-        wc_remap = wc.remap(
-            [10,  20,     30,     40,     50,     60,     70,     80,     90,     95,     100],
-            [1,   2,      3,      4,      5,      6,      7,      8,      9,      10,     11]
-        )
-        palette  = [
-            '006400',  # 1 árboles — verde oscuro
-            '8db360',  # 2 arbustos — verde oliva
-            'ffbb22',  # 3 pastizales — amarillo
-            'fffb00',  # 4 cultivos — amarillo claro
-            'fa0000',  # 5 edificado — rojo
-            'b4b4b4',  # 6 suelo desnudo — gris
-            'f0f0f0',  # 7 nieve — blanco
-            '0064c8',  # 8 agua — azul
-            '0096a0',  # 9 humedal — azul verdoso
-            '00cf75',  # 10 manglar — verde agua
-            'fae6a0',  # 11 musgo — beige
-        ]
-        vis      = {'min': 1, 'max': 11, 'palette': palette}
-        map_id   = wc_remap.getMapId(vis)
+        # SLD style con colores exactos por valor de pixel — sin interpolación
+        sld = """
+        <RasterSymbolizer>
+          <ColorMap type="values">
+            <ColorMapEntry color="#006400" quantity="10" label="Árboles"/>
+            <ColorMapEntry color="#8db360" quantity="20" label="Arbustos"/>
+            <ColorMapEntry color="#ffbb22" quantity="30" label="Pastizales"/>
+            <ColorMapEntry color="#fffb00" quantity="40" label="Cultivos"/>
+            <ColorMapEntry color="#fa0000" quantity="50" label="Edificado"/>
+            <ColorMapEntry color="#b4b4b4" quantity="60" label="Suelo desnudo"/>
+            <ColorMapEntry color="#f0f0f0" quantity="70" label="Nieve"/>
+            <ColorMapEntry color="#0064c8" quantity="80" label="Agua"/>
+            <ColorMapEntry color="#0096a0" quantity="90" label="Humedal"/>
+            <ColorMapEntry color="#00cf75" quantity="95" label="Manglar"/>
+            <ColorMapEntry color="#fae6a0" quantity="100" label="Musgo"/>
+          </ColorMap>
+        </RasterSymbolizer>
+        """
+        map_id   = wc.sldStyle(sld).getMapId()
         tiles_wc = map_id['tile_fetcher'].url_format
 
         m_wc = folium.Map(location=[-32.415, -63.242], zoom_start=13, tiles=None)
