@@ -15,10 +15,11 @@ import streamlit as st
 import folium
 from streamlit_folium import st_folium
 
-from modulo_temperatura import cargar_lst, render_temperatura
-from modulo_osm         import cargar_osm, render_osm
-from modulo_censo       import render_censo
-from modulo_ayuda       import ayuda_cobertura, ayuda_accesibilidad, ayuda_temperatura, ayuda_osm, ayuda_censo, ayuda_comparativa, ayuda_diagnostico
+from modulo_temperatura  import cargar_lst, render_temperatura
+from modulo_osm          import cargar_osm, render_osm
+from modulo_censo        import render_censo
+from modulo_ayuda        import ayuda_cobertura, ayuda_accesibilidad, ayuda_temperatura, ayuda_osm, ayuda_censo, ayuda_comparativa, ayuda_diagnostico
+from modulo_villamaria   import render_modulo_villamaria
 
 # ============================================================
 # CONFIGURACIÓN DE PÁGINA
@@ -262,35 +263,53 @@ with st.sidebar:
     st.markdown("## 🌿 Ciudad Verde Agent")
     st.markdown("---")
 
-    ciudades_ord = sorted(CIUDADES.keys(), key=lambda k: -CIUDADES[k]['poblacion'])
-    ciudad_key = st.selectbox(
-        "Ciudad",
-        ciudades_ord,
-        format_func=lambda k: f"{CIUDADES[k]['emoji']} {CIUDADES[k]['nombre']} ({CIUDADES[k]['poblacion']:,} hab)",
-    )
-    ciudad = CIUDADES[ciudad_key]
-
-    # Indicador de completitud de datos (producción)
-    cal = ciudad.get('calificacion', 'Sin datos')
-    if cal not in ('Sin datos', 'Pendiente'):
-        st.success(f"✅ Datos completos · {cal}")
-    elif cal == 'Pendiente':
-        st.warning("⏳ Datos parciales — análisis GEE disponible")
-    else:
-        st.info("🔄 Sin análisis previo — datos se calcularán en vivo")
-
-    st.markdown("---")
-
-    seccion = st.radio(
-        "Sección",
-        [f"{e} {n}" for e, n in SECCIONES],
+    # --- Selector de módulo principal ---
+    modulo = st.radio(
+        "Módulo",
+        ["🏙️ Villa María", "🌍 Provincia de Córdoba"],
         label_visibility="collapsed",
+        key="modulo_principal",
     )
-
     st.markdown("---")
-    st.caption(f"📍 {ciudad['nombre']}")
-    st.caption(f"👥 {ciudad['poblacion']:,} hab · {ciudad['area_km2']} km²")
-    st.caption(f"⭐ {ciudad['calificacion']}")
+
+    if modulo == "🌍 Provincia de Córdoba":
+        # Excluir Villa María y Villa Nueva del selector provincial
+        ciudades_prov = {
+            k: v for k, v in CIUDADES.items()
+            if k not in ('villamaria',)
+        }
+        ciudades_ord = sorted(ciudades_prov.keys(), key=lambda k: -ciudades_prov[k]['poblacion'])
+        ciudad_key = st.selectbox(
+            "Ciudad",
+            ciudades_ord,
+            format_func=lambda k: f"{CIUDADES[k]['emoji']} {CIUDADES[k]['nombre']} ({CIUDADES[k]['poblacion']:,} hab)",
+        )
+        ciudad = CIUDADES[ciudad_key]
+
+        cal = ciudad.get('calificacion', 'Sin datos')
+        if cal not in ('Sin datos', 'Pendiente'):
+            st.success(f"✅ Datos completos · {cal}")
+        elif cal == 'Pendiente':
+            st.warning("⏳ Datos parciales — análisis GEE disponible")
+        else:
+            st.info("🔄 Sin análisis previo — datos se calcularán en vivo")
+
+        st.markdown("---")
+        seccion = st.radio(
+            "Sección",
+            [f"{e} {n}" for e, n in SECCIONES],
+            label_visibility="collapsed",
+            key="seccion_provincia",
+        )
+        st.markdown("---")
+        st.caption(f"📍 {ciudad['nombre']}")
+        st.caption(f"👥 {ciudad['poblacion']:,} hab · {ciudad['area_km2']} km²")
+        st.caption(f"⭐ {ciudad['calificacion']}")
+    else:
+        # Módulo Villa María — el sidebar lo completa render_modulo_villamaria()
+        ciudad_key = 'villamaria'
+        ciudad = CIUDADES[ciudad_key]
+        seccion = None
 
 # ============================================================
 # CONEXIÓN GEE
@@ -299,11 +318,18 @@ with st.spinner("Conectando con Earth Engine..."):
     conectar_gee()
 
 # ============================================================
-# SECCIÓN: INICIO
+# MÓDULO VILLA MARÍA — delegar completamente
+# ============================================================
+if modulo == "🏙️ Villa María":
+    render_modulo_villamaria()
+    st.stop()
+
+# ============================================================
+# SECCIÓN: INICIO — Módulo Provincia de Córdoba
 # ============================================================
 if "Inicio" in seccion:
     st.title("🌿 Ciudad Verde AI Agent")
-    st.subheader("Diagnóstico inteligente de espacios verdes urbanos")
+    st.subheader("Diagnóstico inteligente de espacios verdes — Provincia de Córdoba")
     st.markdown("---")
 
     col1, col2, col3, col4 = st.columns(4)
