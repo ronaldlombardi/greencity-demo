@@ -123,7 +123,7 @@ def _card_indicador(titulo, valor, unidad, referencia, color):
 # ============================================================
 
 def _mapa_conglomerado(zoom=14):
-    """Mapa Folium rediseñado: límites claros VM/VN, río destacado, etiquetas DivIcon, zonas diagnóstico."""
+    """Mapa limpio: polígonos VM/VN bien diferenciados, río destacado, zonas simples con tooltip."""
     m = folium.Map(
         location=[-32.415, -63.242],
         zoom_start=zoom,
@@ -147,173 +147,102 @@ def _mapa_conglomerado(zoom=14):
 
     # --- Río Ctalamochita ---
     grupo_rio = FeatureGroup(name='💧 Río Ctalamochita', show=True)
-    coords_rio = [[-32.390, -63.258], [-32.398, -63.252],
-                  [-32.408, -63.248], [-32.418, -63.245],
-                  [-32.430, -63.244], [-32.440, -63.242]]
-    folium.PolyLine(coords_rio, color='#1565c0', weight=12, opacity=0.15).add_to(grupo_rio)
+    coords_rio = [[-32.390, -63.258], [-32.398, -63.252], [-32.408, -63.248],
+                  [-32.418, -63.245], [-32.430, -63.244], [-32.440, -63.242]]
+    folium.PolyLine(coords_rio, color='#1565c0', weight=10, opacity=0.18).add_to(grupo_rio)
     folium.PolyLine(
-        coords_rio, color='#1976d2', weight=4, opacity=0.9,
-        tooltip='Río Ctalamochita — corredor ecológico',
+        coords_rio, color='#42a5f5', weight=3.5, opacity=0.95,
+        tooltip='💧 Río Ctalamochita — corredor ecológico · potencial parque lineal ~8 km',
         popup=folium.Popup(
             "<b>💧 Río Ctalamochita</b><br>"
-            "Corredor ecológico que separa<br>"
-            "<b style='color:#1565c0'>Villa María</b> (oeste) y "
-            "<b style='color:#6a1b9a'>Villa Nueva</b> (este).<br><br>"
-            "<i>Oportunidad: parque lineal ~8 km</i>",
-            max_width=260,
-        ),
-    ).add_to(grupo_rio)
-    folium.Marker(
-        location=[-32.418, -63.246],
-        icon=folium.DivIcon(
-            html="<div style='background:#1565c018;border:1.5px solid #1976d2;"
-                 "color:#0d47a1;font-size:10px;font-weight:700;padding:3px 8px;"
-                 "border-radius:10px;white-space:nowrap;font-family:Arial,sans-serif;"
-                 "box-shadow:0 1px 4px rgba(0,0,0,0.2);'>💧 Río Ctalamochita</div>",
-            icon_size=(160, 24), icon_anchor=(80, 12),
+            "Separa Villa María (oeste) y Villa Nueva (este).<br>"
+            "<i>Potencial: parque lineal con ciclovías ~8 km</i>",
+            max_width=240,
         ),
     ).add_to(grupo_rio)
     grupo_rio.add_to(m)
 
-    # --- Villa María ---
+    # --- Villa María (polígono azul sólido) ---
     grupo_vm = FeatureGroup(name='🔵 Villa María', show=True)
     folium.Polygon(
         locations=[[-32.390, -63.280], [-32.390, -63.248],
                    [-32.440, -63.248], [-32.440, -63.280]],
-        color='#1565c0', weight=2.5,
-        fill=True, fill_color='#1565c0', fill_opacity=0.07,
-        tooltip='Villa María — área de análisis',
+        color='#1565c0', weight=3,
+        fill=True, fill_color='#1565c0', fill_opacity=0.10,
+        tooltip='🔵 Villa María — ~97.000 hab · 36 km² · Calificación: A ✅',
         popup=folium.Popup(
             "<b style='color:#1565c0'>🔵 Villa María</b><br>"
             "Cap. Depto. General San Martín<br>"
             "Población: ~97.000 hab · Área: 36 km²<br>"
             "<b>Calificación: A - Excelente ✅</b>",
-            max_width=230,
-        ),
-    ).add_to(grupo_vm)
-    folium.Marker(
-        location=[-32.397, -63.267],
-        icon=folium.DivIcon(
-            html="<div style='background:#1565c0ee;color:#fff;font-size:12px;"
-                 "font-weight:700;padding:5px 12px;border-radius:8px;"
-                 "font-family:Arial,sans-serif;white-space:nowrap;"
-                 "box-shadow:0 2px 6px rgba(0,0,0,0.35);'>🔵 Villa María</div>",
-            icon_size=(130, 30), icon_anchor=(65, 15),
-        ),
-    ).add_to(grupo_vm)
-    folium.Marker(
-        location=[-32.432, -63.267],
-        icon=folium.DivIcon(
-            html="<div style='font-size:10px;color:#1565c0;"
-                 "font-family:Arial,sans-serif;white-space:nowrap;"
-                 "font-weight:600;'>97.000 hab · 36 km²</div>",
-            icon_size=(130, 18), icon_anchor=(65, 9),
+            max_width=220,
         ),
     ).add_to(grupo_vm)
     grupo_vm.add_to(m)
 
-    # --- Villa Nueva ---
+    # --- Villa Nueva (polígono violeta punteado) ---
     grupo_vn = FeatureGroup(name='🟣 Villa Nueva', show=True)
     folium.Polygon(
         locations=[[-32.390, -63.248], [-32.390, -63.200],
                    [-32.440, -63.200], [-32.440, -63.248]],
-        color='#6a1b9a', weight=2.5, dash_array='6 4',
-        fill=True, fill_color='#6a1b9a', fill_opacity=0.06,
-        tooltip='Villa Nueva — contexto ecosistémico',
+        color='#7b1fa2', weight=2.5, dash_array='8 5',
+        fill=True, fill_color='#7b1fa2', fill_opacity=0.07,
+        tooltip='🟣 Villa Nueva — ~23.000 hab · 13.6 km² · contexto ecosistémico',
         popup=folium.Popup(
-            "<b style='color:#6a1b9a'>🟣 Villa Nueva</b><br>"
+            "<b style='color:#7b1fa2'>🟣 Villa Nueva</b><br>"
             "Población: ~23.000 hab · Área: 13.6 km²<br>"
             "<i>Incluida por continuidad ecológica con el Ctalamochita</i>",
-            max_width=240,
-        ),
-    ).add_to(grupo_vn)
-    folium.Marker(
-        location=[-32.397, -63.222],
-        icon=folium.DivIcon(
-            html="<div style='background:#6a1b9aee;color:#fff;font-size:12px;"
-                 "font-weight:700;padding:5px 12px;border-radius:8px;"
-                 "font-family:Arial,sans-serif;white-space:nowrap;"
-                 "box-shadow:0 2px 6px rgba(0,0,0,0.35);'>🟣 Villa Nueva</div>",
-            icon_size=(130, 30), icon_anchor=(65, 15),
-        ),
-    ).add_to(grupo_vn)
-    folium.Marker(
-        location=[-32.432, -63.222],
-        icon=folium.DivIcon(
-            html="<div style='font-size:10px;color:#6a1b9a;"
-                 "font-family:Arial,sans-serif;white-space:nowrap;"
-                 "font-weight:600;'>23.000 hab · 13.6 km²</div>",
-            icon_size=(130, 18), icon_anchor=(65, 9),
+            max_width=230,
         ),
     ).add_to(grupo_vn)
     grupo_vn.add_to(m)
 
-    # --- Zonas de análisis ---
+    # --- Zonas de análisis: solo polígonos coloreados, sin texto flotante ---
     grupo_zonas = FeatureGroup(name='📍 Zonas de análisis', show=True)
-    zonas_coords = {
+    zonas_def = {
         'Noroeste': {
-            'center': [-32.402, -63.265],
             'poly': [[-32.390, -63.280], [-32.390, -63.248], [-32.415, -63.248], [-32.415, -63.280]],
+            'z': ZONAS['Noroeste'],
         },
         'Noreste': {
-            'center': [-32.402, -63.222],
             'poly': [[-32.390, -63.248], [-32.390, -63.200], [-32.415, -63.200], [-32.415, -63.248]],
+            'z': ZONAS['Noreste'],
         },
         'Suroeste': {
-            'center': [-32.428, -63.265],
             'poly': [[-32.415, -63.280], [-32.415, -63.248], [-32.440, -63.248], [-32.440, -63.280]],
+            'z': ZONAS['Suroeste'],
         },
         'Sureste': {
-            'center': [-32.428, -63.222],
             'poly': [[-32.415, -63.248], [-32.415, -63.200], [-32.440, -63.200], [-32.440, -63.248]],
+            'z': ZONAS['Sureste'],
         },
     }
     lst_media = DATOS_VM['lst']['tMedia']
 
-    for nom, z in ZONAS.items():
-        coords = zonas_coords[nom]
+    for nom, d in zonas_def.items():
+        z   = d['z']
         acc = z['acceso_pct']
         temp_diff = z['temp'] - lst_media
         color_z = '#2e7d32' if acc >= 98 else '#f57c00' if acc >= 85 else '#c62828'
-        acc_emoji = '✅' if acc >= 98 else '⚠️'
-        temp_emoji = '🔴' if temp_diff > 0.3 else '🟢'
+        estado  = 'Excelente ✅' if acc >= 98 else 'Mejorable ⚠️' if acc >= 85 else 'Crítico 🔴'
 
         folium.Polygon(
-            locations=coords['poly'],
-            color=color_z, weight=1.5, dash_array='4 3',
-            fill=True, fill_color=color_z, fill_opacity=0.10,
-            tooltip=f"{nom} — Acceso: {acc}% | Temp: {z['temp']}°C",
+            locations=d['poly'],
+            color=color_z, weight=1.5, dash_array='5 4',
+            fill=True, fill_color=color_z, fill_opacity=0.15,
+            tooltip=f"{nom} ({z['municipio']}) — Acceso: {acc}% · {estado}",
             popup=folium.Popup(
                 f"<b>{z['label']}</b><br>"
-                f"Municipio: <b>{z['municipio']}</b><br><br>"
-                f"{acc_emoji} Acceso &lt;300m: <b>{acc}%</b><br>"
-                f"📏 Dist. promedio: <b>{z['dist_prom']} m</b><br>"
-                f"{temp_emoji} Temp. sup.: <b>{z['temp']}°C</b> "
-                f"({'%+.2f' % temp_diff}°C vs media)<br>"
-                f"🏗️ Área edificada: <b>{z['ha_edif']} ha</b>",
-                max_width=240,
-            ),
-        ).add_to(grupo_zonas)
-
-        folium.Marker(
-            location=coords['center'],
-            icon=folium.DivIcon(
-                html=(
-                    f"<div style='background:{color_z}dd;color:#fff;"
-                    f"font-size:10px;font-weight:700;padding:4px 9px;"
-                    f"border-radius:6px;font-family:Arial,sans-serif;"
-                    f"white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.3);"
-                    f"text-align:center;line-height:1.4;'>"
-                    f"{nom}<br>"
-                    f"<span style='font-weight:400;font-size:9px;'>"
-                    f"{acc}% · {z['temp']}°C</span></div>"
-                ),
-                icon_size=(90, 38), icon_anchor=(45, 19),
+                f"<b>{z['municipio']}</b><br><br>"
+                f"Acceso &lt;300m: <b style='color:{color_z}'>{acc}%</b> — {estado}<br>"
+                f"Dist. promedio: <b>{z['dist_prom']} m</b><br>"
+                f"Temp. sup.: <b>{z['temp']}°C</b> ({'+' if temp_diff>0 else ''}{temp_diff:.2f}°C)<br>"
+                f"Área edificada: <b>{z['ha_edif']} ha</b>",
+                max_width=230,
             ),
         ).add_to(grupo_zonas)
 
     grupo_zonas.add_to(m)
-
     folium.LayerControl(position='topright', collapsed=False).add_to(m)
     return m
 
@@ -616,6 +545,64 @@ def _render_osm():
         f"pero OSM confirma solo **{osm['m2Hab']} m²/hab** como accesible. "
         f"**{diff:.1f} m²/hab** ({diff * 97000 / 10000:.0f} ha estimadas) es verde que los vecinos probablemente no pueden usar."
     )
+
+    st.markdown("---")
+
+    # ---- Mapa OSM en vivo ----
+    st.markdown("### 🗺️ Mapa de espacios verdes públicos")
+    from modulo_osm import cargar_osm, COLORES_CAT
+
+    BBOX_VM = (-32.44, -63.28, -32.39, -63.20)  # sur, oeste, norte, este
+    with st.spinner("Consultando OpenStreetMap..."):
+        datos_osm = cargar_osm(BBOX_VM, 120000)
+
+    if datos_osm and datos_osm.get('elementos', 0) > 0:
+        espacios = datos_osm['espacios']
+        lats = [g['lat'] for g in espacios]
+        lons = [g['lon'] for g in espacios]
+        center = [sum(lats)/len(lats), sum(lons)/len(lons)]
+
+        m_osm = folium.Map(location=center, zoom_start=14, tiles=None)
+        folium.TileLayer(
+            tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+            attr='© Google', name='🌍 Híbrido Google', max_zoom=20, show=True,
+        ).add_to(m_osm)
+        folium.TileLayer(
+            tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            attr='© OpenStreetMap contributors', name='🗺️ OpenStreetMap',
+            max_zoom=19, show=False,
+        ).add_to(m_osm)
+
+        grupos = {cat: FeatureGroup(name=f"🌿 {cat}", show=True) for cat in COLORES_CAT}
+        for g in espacios:
+            cat   = g['categoria']
+            color = COLORES_CAT.get(cat, '#888')
+            area_str = f"{g['area_m2']/10000:.2f} ha" if g['area_m2'] >= 10000 else f"{g['area_m2']:.0f} m²"
+            folium.CircleMarker(
+                location=[g['lat'], g['lon']],
+                radius=5, color=color, weight=1.5,
+                fill=True, fill_color=color, fill_opacity=0.8,
+                tooltip=f"{g['nombre']} — {cat}",
+                popup=folium.Popup(
+                    f"<b>{g['nombre']}</b><br>Tipo: {cat}<br>Área: {area_str}",
+                    max_width=200,
+                ),
+            ).add_to(grupos.get(cat, m_osm))
+
+        for grupo in grupos.values():
+            grupo.add_to(m_osm)
+        folium.LayerControl(position='topright', collapsed=False).add_to(m_osm)
+        st_folium(m_osm, width="100%", height=500, returned_objects=[])
+
+        # Leyenda fuera del iframe
+        items = " &nbsp;&nbsp; ".join(
+            f"<span style='color:{c};font-size:15px;'>●</span> {cat}"
+            for cat, c in COLORES_CAT.items()
+        )
+        st.markdown(f"<div style='font-size:11px;color:#aaa;margin-top:4px;'>{items}</div>",
+                    unsafe_allow_html=True)
+    else:
+        st.info("No se encontraron espacios en OSM para este área, o hubo un error de conexión.")
 
     st.markdown("---")
     st.markdown("### 💡 Oportunidad de política pública")
