@@ -79,6 +79,7 @@ SECCIONES_VM = [
     ("🏛️", "Verde público (OSM)"),
     ("📋", "Diagnóstico por zonas"),
     ("🎯", "Estrategias · Villa María"),
+    ("🌍", "Agenda 2030 · C40"),
 ]
 
 # ============================================================
@@ -721,6 +722,400 @@ def _render_estrategias():
 
 
 # ============================================================
+# SECCIÓN: AGENDA 2030 · C40
+# ============================================================
+
+def _render_agenda2030():
+    st.title("🌍 Agenda 2030 · Estándares C40")
+    st.caption("Villa María medida con los mismos estándares que Londres, París, Tokio y Buenos Aires")
+    st.markdown("---")
+
+    # --- Contexto ---
+    st.markdown("""
+    En 2021, 31 alcaldes del **C40 Cities Climate Leadership Group** — incluyendo Buenos Aires —
+    firmaron la **Declaración de Naturaleza Urbana**, comprometiendo dos metas globales para 2030.
+    Ciudad Verde calcula el posicionamiento de Villa María frente a esos mismos estándares
+    usando los datos satelitales de ESA WorldCover y Landsat 8/9.
+    """)
+
+    # ============================================================
+    # BLOQUE 1 — TARGETS C40 2030
+    # ============================================================
+    st.markdown("## 🎯 Targets C40 Urban Nature Declaration 2030")
+
+    # Datos de VM
+    arb_pct   = 8.2    # % cobertura arbórea (WorldCover clase 10)
+    past_pct  = 14.2   # pastizales
+    agua_pct  = 1.3    # agua
+    # Verde total = árboles + pastizales + agua (clases naturales)
+    verde_total_pct = arb_pct + past_pct + agua_pct   # 23.7%
+    acceso_300m     = 100.0   # % área edificada con verde a <300m
+    poblacion_vm    = 97000
+    area_vm_ha      = 3600    # 36 km²
+
+    # Target 1: QTC — 30% superficie verde
+    meta_qtc = 30.0
+    gap_qtc  = max(0, meta_qtc - verde_total_pct)
+    color_qtc = "#2e7d32" if verde_total_pct >= meta_qtc else "#f57c00" if verde_total_pct >= 20 else "#c62828"
+
+    # Target 2: ESD — 70% población con acceso a verde/azul en 15 min
+    # VM cumple 100% a <300m (equivalente a ~4 min caminando) → cumple ampliamente
+    meta_esd = 70.0
+    esd_vm   = 100.0
+    color_esd = "#2e7d32"
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown(
+            f"""<div style='border:2.5px solid {color_qtc};border-radius:14px;padding:22px;text-align:center;background:{color_qtc}0d'>
+              <div style='font-size:0.8em;color:#555;margin-bottom:4px'>
+                TARGET 1 · Cobertura Total de Calidad (QTC)
+              </div>
+              <div style='font-size:2.6em;font-weight:800;color:{color_qtc}'>{verde_total_pct:.1f}%</div>
+              <div style='font-size:0.85em;color:#777'>de la superficie es verde/azul</div>
+              <div style='margin:10px 0'>
+                <div style='background:#eee;border-radius:8px;height:12px;overflow:hidden'>
+                  <div style='background:{color_qtc};width:{min(verde_total_pct/meta_qtc*100,100):.0f}%;height:100%;border-radius:8px'></div>
+                </div>
+                <div style='font-size:0.75em;color:#888;margin-top:4px'>{verde_total_pct:.1f}% de {meta_qtc:.0f}% meta C40</div>
+              </div>
+              <div style='font-size:0.8em;color:{color_qtc};font-weight:600'>
+                {'✅ META CUMPLIDA' if verde_total_pct >= meta_qtc else f'⚠️ Faltan {gap_qtc:.1f} puntos porcentuales'}
+              </div>
+            </div>""",
+            unsafe_allow_html=True
+        )
+
+    with col2:
+        st.markdown(
+            f"""<div style='border:2.5px solid {color_esd};border-radius:14px;padding:22px;text-align:center;background:{color_esd}0d'>
+              <div style='font-size:0.8em;color:#555;margin-bottom:4px'>
+                TARGET 2 · Distribución Espacial Equitativa (ESD)
+              </div>
+              <div style='font-size:2.6em;font-weight:800;color:{color_esd}'>{esd_vm:.0f}%</div>
+              <div style='font-size:0.85em;color:#777'>de la población con acceso a verde</div>
+              <div style='margin:10px 0'>
+                <div style='background:#eee;border-radius:8px;height:12px;overflow:hidden'>
+                  <div style='background:{color_esd};width:100%;height:100%;border-radius:8px'></div>
+                </div>
+                <div style='font-size:0.75em;color:#888;margin-top:4px'>{esd_vm:.0f}% de {meta_esd:.0f}% meta C40</div>
+              </div>
+              <div style='font-size:0.8em;color:{color_esd};font-weight:600'>✅ META SUPERADA — 100% a &lt;300m</div>
+            </div>""",
+            unsafe_allow_html=True
+        )
+
+    st.markdown("")
+    if verde_total_pct < meta_qtc:
+        ha_faltantes = gap_qtc / 100 * area_vm_ha
+        st.warning(
+            f"⚠️ **Target QTC:** Villa María necesita incorporar ~**{ha_faltantes:.0f} ha** adicionales "
+            f"de verde para alcanzar el 30% C40. El potencial está en los cultivos urbanos ({23.9:.1f}%) "
+            f"y el verde no catalogado como público."
+        )
+    else:
+        st.success("✅ Villa María cumple ambos targets de la Declaración de Naturaleza Urbana C40 2030.")
+
+    st.info(
+        "📌 **Contexto:** Buenos Aires firmó la Declaración C40. "
+        "Villa María puede alinearse con esta agenda, posicionando su política ambiental "
+        "en el mismo marco que Londres, París, Tokio, Copenhague y Medellín."
+    )
+
+    st.markdown("---")
+
+    # ============================================================
+    # BLOQUE 2 — CAPTURA DE CO₂
+    # ============================================================
+    st.markdown("## 🌳 Captura de CO₂ por el arbolado urbano")
+    st.caption("Metodología: USDA Forest Service · Nowak et al. 2013 · 28 ciudades")
+
+    st.markdown("""
+    El USDA Forest Service estableció, con datos de campo de 28 ciudades, que la densidad
+    de secuestro de carbono del arbolado urbano promedia **0.28 kg C/m²/año** de cobertura arbórea.
+    Aplicamos esta metodología estandarizada al 8.2% de cobertura arbórea de Villa María.
+    """)
+
+    # Cálculos de CO₂
+    area_vm_m2       = area_vm_ha * 10_000          # 36.000.000 m²
+    arb_m2           = area_vm_m2 * (arb_pct / 100) # m² de cobertura arbórea
+    # Secuestro neto = 0.205 kg C/m²/año (74% del bruto, según Nowak 2013)
+    seq_kg_c_anual   = arb_m2 * 0.205               # kg C/año
+    seq_ton_c_anual  = seq_kg_c_anual / 1000
+    # Convertir C → CO₂: factor 44/12 = 3.667
+    seq_ton_co2_anual = seq_ton_c_anual * 3.667
+
+    # Escenario meta: arbolado al 15%
+    arb_m2_meta      = area_vm_m2 * 0.15
+    seq_meta_ton_co2 = (arb_m2_meta * 0.205 / 1000) * 3.667
+    ganancia_co2     = seq_meta_ton_co2 - seq_ton_co2_anual
+
+    # Equivalencias comprensibles
+    autos_equiv      = seq_ton_co2_anual / 2.1      # un auto promedio emite ~2.1 tCO₂/año (EPA)
+    autos_meta       = seq_meta_ton_co2 / 2.1
+    vuelos_equiv     = seq_ton_co2_anual / 0.9      # BsAs-Madrid ≈ 0.9 tCO₂/pasajero
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        _card_indicador(
+            "CO₂ capturado hoy (8.2% arbolado)",
+            f"{seq_ton_co2_anual:.0f}",
+            "ton CO₂/año",
+            f"Equivale a sacar {autos_equiv:.0f} autos de circulación",
+            "#2e7d32"
+        )
+    with c2:
+        _card_indicador(
+            "CO₂ capturado con meta 15% arbolado",
+            f"{seq_meta_ton_co2:.0f}",
+            "ton CO₂/año",
+            f"Equivale a {autos_meta:.0f} autos fuera de circulación",
+            "#1565c0"
+        )
+    with c3:
+        _card_indicador(
+            "Ganancia neta al llegar al 15%",
+            f"+{ganancia_co2:.0f}",
+            "ton CO₂/año",
+            f"≈ {vuelos_equiv:.0f} vuelos BsAs–Madrid evitados",
+            "#6a1b9a"
+        )
+
+    st.markdown("---")
+
+    # Calculadora interactiva
+    st.markdown("### 🧮 Calculadora de impacto — ¿cuánto vale plantar más árboles?")
+    col_sl, col_res = st.columns([1, 2])
+
+    with col_sl:
+        arb_objetivo = st.slider(
+            "Meta de cobertura arbórea (%)",
+            min_value=int(arb_pct),
+            max_value=40,
+            value=15,
+            step=1,
+            help="Deslizá para ver el impacto de aumentar el arbolado urbano de Villa María"
+        )
+        arboles_nuevos = st.number_input(
+            "Árboles nuevos a plantar (estimado)",
+            min_value=0,
+            max_value=100000,
+            value=5000,
+            step=500,
+            help="Un árbol urbano adulto cubre ~25 m² de copa"
+        )
+
+    with col_res:
+        arb_m2_obj    = area_vm_m2 * (arb_objetivo / 100)
+        seq_obj_co2   = (arb_m2_obj * 0.205 / 1000) * 3.667
+        delta_co2     = seq_obj_co2 - seq_ton_co2_anual
+        autos_obj     = seq_obj_co2 / 2.1
+
+        # CO₂ de árboles nuevos (copa media 25m², secuestro neto)
+        co2_nuevos    = (arboles_nuevos * 25 * 0.205 / 1000) * 3.667
+
+        st.markdown(
+            f"""<div style='background:#f1f8e9;border:1.5px solid #81c784;border-radius:12px;padding:20px'>
+              <div style='font-size:1em;font-weight:700;color:#2e7d32;margin-bottom:12px'>
+                🌿 Con {arb_objetivo}% de arbolado urbano:
+              </div>
+              <table style='width:100%;font-size:0.88em;border-collapse:collapse'>
+                <tr><td style='padding:4px 0;color:#555'>CO₂ capturado/año</td>
+                    <td style='font-weight:700;color:#1b5e20;text-align:right'>{seq_obj_co2:.0f} ton CO₂</td></tr>
+                <tr><td style='padding:4px 0;color:#555'>Incremento vs. hoy</td>
+                    <td style='font-weight:700;color:#1565c0;text-align:right'>+{delta_co2:.0f} ton CO₂/año</td></tr>
+                <tr><td style='padding:4px 0;color:#555'>Equivale a autos retirados</td>
+                    <td style='font-weight:700;color:#1b5e20;text-align:right'>{autos_obj:.0f} vehículos</td></tr>
+              </table>
+              <div style='margin-top:14px;border-top:1px solid #c8e6c9;padding-top:10px;font-size:0.85em;color:#333'>
+                🌱 <b>{arboles_nuevos:,} árboles nuevos</b> capturarían adicionalmente
+                <b>{co2_nuevos:.1f} ton CO₂/año</b>
+                (≈ {co2_nuevos/2.1:.0f} autos fuera de circulación)
+              </div>
+            </div>""",
+            unsafe_allow_html=True
+        )
+
+    st.markdown("---")
+
+    # ============================================================
+    # BLOQUE 3 — VIDAS SALVADAS (metodología Lancet)
+    # ============================================================
+    st.markdown("## ❤️ Impacto en salud pública")
+    st.caption(
+        "Metodología: The Lancet Planetary Health, 2025 · "
+        "C40 Cities health impact assessment · 96 ciudades globales"
+    )
+
+    st.markdown("""
+    Un estudio publicado en **The Lancet Planetary Health** (2025) cuantificó que cada punto
+    porcentual adicional de verde urbano produce una reducción anual de **53 muertes prematuras
+    evitadas** por ciudad analizada (mediana global, 96 ciudades C40). Aplicamos esta metodología
+    a Villa María, escalada por población.
+    """)
+
+    # Escalar por población: las ciudades C40 tienen en promedio ~3.5M hab
+    # Factor de escala proporcional a la población
+    poblacion_c40_media = 3_500_000
+    factor_escala       = poblacion_vm / poblacion_c40_media
+    muertes_por_punto   = 53 * factor_escala   # muertes evitadas por 1% de verde adicional en VM
+
+    # Escenarios
+    delta_1pct  = muertes_por_punto
+    delta_5pct  = muertes_por_punto * 5
+    delta_meta  = muertes_por_punto * (meta_qtc - verde_total_pct)
+
+    col_a, col_b, col_c = st.columns(3)
+    with col_a:
+        _card_indicador(
+            "Muertes evitadas por +1% verde",
+            f"{delta_1pct:.1f}",
+            "por año",
+            "Mediana global C40 escalada a VM",
+            "#c62828"
+        )
+    with col_b:
+        _card_indicador(
+            "Muertes evitadas por +5% verde",
+            f"{delta_5pct:.1f}",
+            "por año",
+            "Forestación equivalente a ~1.800 ha",
+            "#f57c00"
+        )
+    with col_c:
+        if gap_qtc > 0:
+            _card_indicador(
+                f"Muertes evitadas al cumplir C40 (30%)",
+                f"{delta_meta:.1f}",
+                "por año",
+                f"Incremento de {gap_qtc:.1f}% para cumplir el target QTC",
+                "#2e7d32"
+            )
+        else:
+            _card_indicador(
+                "Villa María ya cumple el target C40",
+                "✅",
+                "",
+                "El beneficio de salud ya está siendo capturado",
+                "#2e7d32"
+            )
+
+    st.markdown("")
+    st.markdown(
+        f"""<div style='background:#fce4ec;border:1.5px solid #e91e63;border-radius:10px;padding:16px;font-size:0.9em'>
+          <b>📖 Referencia:</b> Barboza et al. (2021) estimaron que <b>42.968 muertes anuales</b>
+          podrían evitarse en ciudades europeas si se cumpliera el acceso universal OMS al verde.
+          Villa María ya cumple ese acceso — lo que queda pendiente es <b>aumentar la cobertura total</b>
+          para capturar los beneficios adicionales de temperatura, calidad del aire y bienestar.
+        </div>""",
+        unsafe_allow_html=True
+    )
+
+    st.markdown("---")
+
+    # ============================================================
+    # BLOQUE 4 — BRECHA 2030 Y HOJA DE RUTA
+    # ============================================================
+    st.markdown("## 🗓️ Hoja de ruta Villa María hacia 2030")
+
+    años_restantes = 2030 - 2025   # 5 años
+
+    # Cuánto verde hay que sumar para llegar al 30% QTC
+    ha_actuales_verde = verde_total_pct / 100 * area_vm_ha
+    ha_meta_verde     = meta_qtc / 100 * area_vm_ha
+    ha_a_sumar        = max(0, ha_meta_verde - ha_actuales_verde)
+    ha_por_año        = ha_a_sumar / años_restantes if años_restantes > 0 else 0
+
+    # Árboles necesarios (copa media 25m²)
+    arboles_necesarios     = int(ha_a_sumar * 10_000 / 25)
+    arboles_por_año        = int(arboles_necesarios / años_restantes) if años_restantes > 0 else 0
+
+    col_r1, col_r2 = st.columns(2)
+
+    with col_r1:
+        st.markdown("### 📐 ¿Cuánto falta?")
+        st.markdown(
+            f"""| Indicador | Hoy | Meta 2030 | Brecha |
+|-----------|:---:|:---------:|:------:|
+| Verde total | {verde_total_pct:.1f}% | 30% | {gap_qtc:.1f}% |
+| Hectáreas verdes | {ha_actuales_verde:.0f} ha | {ha_meta_verde:.0f} ha | {ha_a_sumar:.0f} ha |
+| Arbolado | {arb_pct}% | 15% | {15-arb_pct:.1f}% |
+| Acceso <300m | 100% | 70% | ✅ cumplido |
+| CO₂ capturado | {seq_ton_co2_anual:.0f} t/año | {seq_meta_ton_co2:.0f} t/año | +{ganancia_co2:.0f} t/año |
+"""
+        )
+
+    with col_r2:
+        st.markdown("### 📅 Ritmo necesario (2025–2030)")
+        st.markdown(
+            f"""| Acción | Por año | Total 2030 |
+|--------|:-------:|:----------:|
+| Nuevas hectáreas verdes | {ha_por_año:.1f} ha/año | {ha_a_sumar:.0f} ha |
+| Árboles a plantar | {arboles_por_año:,} árb/año | {arboles_necesarios:,} árboles |
+| Reducción CO₂ adicional | +{ganancia_co2/años_restantes:.0f} t/año | +{ganancia_co2:.0f} t CO₂/año |
+"""
+        )
+
+    st.success(
+        f"🎯 **Síntesis para política pública:** Villa María necesita incorporar "
+        f"**{ha_por_año:.1f} hectáreas de verde por año** durante 5 años para cumplir el target C40. "
+        f"Equivale a plantar ~**{arboles_por_año:,} árboles anuales** — "
+        f"un compromiso concreto, medible y alineado con la Agenda 2030."
+    )
+
+    st.markdown("---")
+
+    # ============================================================
+    # BLOQUE 5 — MARCO NORMATIVO INTERNACIONAL
+    # ============================================================
+    st.markdown("## 📋 Marco normativo internacional aplicable")
+
+    marcos = [
+        ("🌍", "Agenda 2030 — ODS 11",
+         "Meta 11.7: acceso universal a espacios verdes seguros e inclusivos. "
+         "Villa María cumple el indicador de accesibilidad (<300m al 100%)."),
+        ("🏙️", "C40 Urban Nature Declaration 2030",
+         "Targets QTC (30% verde) y ESD (70% con acceso). "
+         "Buenos Aires ya la firmó. VM puede alinearse a este estándar globalmente reconocido."),
+        ("🌡️", "Acuerdo de París — NDC Argentina",
+         "El arbolado urbano contribuye al inventario nacional de sumideros de carbono. "
+         "La captura estimada de VM (~{:.0f} t CO₂/año) es cuantificable y reportable.".format(seq_ton_co2_anual)),
+        ("🇪🇺", "EU Nature Restoration Law — Art. 8",
+         "Estándar europeo de restauración de ecosistemas urbanos. Establece metas de cobertura arbórea "
+         "para ciudades >20.000 hab — referencia de primer nivel para benchmarking internacional."),
+        ("🏥", "OMS — Espacios Verdes Urbanos",
+         "Mínimo 9 m²/hab de verde público (VM: 65.4 m²/hab ✅) y acceso a 0.5 ha "
+         "de espacio verde dentro de 300m (VM: 100% ✅)."),
+        ("🌿", "Ordenanza 7209 — Ruralidad Urbana (2017)",
+         "Marco local que reconoce los servicios ambientales del periurbano y establece "
+         "mecanismos de gestión del territorio rural-urbano en Villa María."),
+    ]
+
+    for icono, titulo, descripcion in marcos:
+        st.markdown(
+            f"""<div style='display:flex;gap:14px;align-items:flex-start;
+                padding:12px 16px;border-radius:10px;background:#fafafa;
+                border:1px solid #e0e0e0;margin-bottom:8px'>
+              <div style='font-size:1.6em;line-height:1'>{icono}</div>
+              <div>
+                <div style='font-weight:700;font-size:0.92em;color:#1b5e20'>{titulo}</div>
+                <div style='font-size:0.83em;color:#444;margin-top:3px'>{descripcion}</div>
+              </div>
+            </div>""",
+            unsafe_allow_html=True
+        )
+
+    st.markdown("---")
+    st.caption(
+        "Ciudad Verde AI Agent · Agenda 2030 · Villa María · "
+        "Fuentes: C40 Cities (2021), The Lancet Planetary Health (2025), "
+        "USDA Forest Service / Nowak et al. (2013), OMS, ODS-ONU, "
+        "ESA WorldCover 2020 · Landsat 8/9 · INDEC Censo 2022"
+    )
+
+
+# ============================================================
 # RENDER PRINCIPAL — punto de entrada desde app.py
 # ============================================================
 
@@ -755,3 +1150,5 @@ def render_modulo_villamaria():
         _render_diagnostico_zonas()
     elif "Estrategias" in seccion:
         _render_estrategias()
+    elif "Agenda" in seccion:
+        _render_agenda2030()
