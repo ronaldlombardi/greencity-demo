@@ -15,6 +15,301 @@ ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_URL           = "https://api.anthropic.com/v1/messages"
 MODEL_OPUS        = "claude-opus-4-7"
 
+# ── Overlay orbe procesando — estilo ANCLA SCIENCE ────────
+_ORBE_HTML = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;600&display=swap');
+
+#cvOrbeOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(5,8,16,0.97);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+}
+#cvOrbeOverlay.active { display: flex; }
+
+/* Canvas neuro de fondo */
+#cvNeuroCanvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.6;
+}
+
+/* Contenido sobre canvas */
+.cv-orbe-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Orbe con arcos */
+.cv-orbe-wrap {
+    position: relative;
+    width: 240px; height: 240px;
+    display: flex; align-items: center; justify-content: center;
+}
+.cv-o-arc {
+    position: absolute; border-radius: 50%;
+    border: 1px solid transparent;
+    animation: cv-arc-spin linear infinite;
+}
+.cv-o-arc:nth-child(1){
+    width:190px;height:190px;
+    border-top-color:rgba(120,80,255,0.75);
+    border-right-color:rgba(120,80,255,0.28);
+    animation-duration:2.8s;
+}
+.cv-o-arc:nth-child(2){
+    width:212px;height:212px;
+    border-bottom-color:rgba(0,180,220,0.65);
+    border-left-color:rgba(0,180,220,0.2);
+    animation-duration:4.2s;
+    animation-direction:reverse;
+}
+.cv-o-arc:nth-child(3){
+    width:234px;height:234px;
+    border-top-color:rgba(160,100,255,0.4);
+    animation-duration:6.5s;
+}
+@keyframes cv-arc-spin { to { transform: rotate(360deg); } }
+
+.cv-o-sphere {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%,
+        #d0a0ff 0%, #7030e0 30%, #2010a0 62%, #060318 100%);
+    position: relative; z-index: 2;
+    animation: cv-sphere-pulse 2.2s ease-in-out infinite;
+    box-shadow: 0 0 36px rgba(110,45,230,0.5), 0 0 70px rgba(90,30,190,0.25);
+}
+.cv-o-sphere::before {
+    content: '';
+    position: absolute; inset: -14px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(130,60,255,0.22) 0%, transparent 68%);
+    animation: cv-halo 2.2s ease-in-out infinite;
+}
+.cv-o-sphere::after {
+    content: '';
+    position: absolute; inset: 12px; border-radius: 50%;
+    border: 1px solid rgba(200,160,255,0.22);
+}
+@keyframes cv-sphere-pulse {
+    0%,100%{box-shadow:0 0 36px rgba(110,45,230,.5),0 0 70px rgba(90,30,190,.25);transform:scale(1);}
+    50%{box-shadow:0 0 55px rgba(130,60,255,.7),0 0 100px rgba(110,45,220,.35);transform:scale(1.04);}
+}
+@keyframes cv-halo {
+    0%,100%{opacity:.55;transform:scale(1);}
+    50%{opacity:1;transform:scale(1.1);}
+}
+
+/* Badge modelo */
+.cv-o-badge {
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(12,16,36,0.8);
+    border: 0.5px solid rgba(120,100,255,0.32);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: rgba(180,160,255,0.8);
+    letter-spacing: 0.05em;
+}
+.cv-o-bdot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: #a060ff;
+    animation: cv-pdot 1.2s ease-in-out infinite;
+}
+@keyframes cv-pdot { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+
+/* Fase animada */
+.cv-o-phase {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px; color: rgba(200,188,255,0.85);
+    letter-spacing: 0.02em;
+    min-height: 20px; text-align: center;
+}
+.cv-o-cursor {
+    display: inline-block;
+    width: 7px; height: 13px;
+    background: #9060ff;
+    margin-left: 3px;
+    animation: cv-blink 0.75s step-end infinite;
+    vertical-align: middle;
+}
+@keyframes cv-blink { 0%,100%{opacity:1;}50%{opacity:0;} }
+
+/* Progress bar */
+.cv-o-prog {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; color: rgba(130,115,195,0.55);
+    letter-spacing: 0.06em;
+}
+.cv-o-bar {
+    width: 200px; height: 2px;
+    background: rgba(80,60,160,0.22);
+    border-radius: 2px; overflow: hidden;
+}
+.cv-o-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6228b4, #a060ff, #00b4dc);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.4s ease;
+}
+</style>
+
+<!-- Overlay orbe -->
+<div id="cvOrbeOverlay">
+  <canvas id="cvNeuroCanvas"></canvas>
+  <div class="cv-orbe-content">
+    <div class="cv-orbe-wrap">
+      <div class="cv-o-arc"></div>
+      <div class="cv-o-arc"></div>
+      <div class="cv-o-arc"></div>
+      <div class="cv-o-sphere"></div>
+    </div>
+    <div class="cv-o-badge">
+      <div class="cv-o-bdot"></div>
+      Claude Opus 4.7 · generando Masterplan
+    </div>
+    <div class="cv-o-phase" id="cvOPhase">
+      Iniciando análisis<span class="cv-o-cursor"></span>
+    </div>
+    <div class="cv-o-prog">
+      <span id="cvOTok">0 tokens</span>
+      <div class="cv-o-bar"><div class="cv-o-fill" id="cvOFill"></div></div>
+      <span id="cvOPct">0%</span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ── Fases animadas ──
+  const FASES = [
+    'Analizando datos ambientales de Villa María',
+    'Procesando indicadores de cobertura verde',
+    'Evaluando métricas de temperatura superficial',
+    'Calculando captura de CO₂ y equivalencias',
+    'Comparando con estándares C40 y OMS',
+    'Alineando con Agenda 2030 y ODS 11',
+    'Identificando brechas y oportunidades',
+    'Diseñando líneas de acción prioritarias',
+    'Estimando presupuesto y gobernanza',
+    'Estructurando el Masterplan ejecutivo',
+    'Redactando recomendaciones para Villa María',
+    'Finalizando documento de política pública',
+  ];
+
+  let orbeTimer = null, orbePhaseIdx = 0, orbeProgress = 0, orbeProgressTimer = null;
+  let neuroNodes = [], neuroCtx, neuroW, neuroH, speedMult = 1;
+
+  // ── Canvas neuro ──
+  function initNeuro(){
+    const c = document.getElementById('cvNeuroCanvas');
+    if(!c) return;
+    neuroW = c.width  = window.innerWidth;
+    neuroH = c.height = window.innerHeight;
+    neuroCtx = c.getContext('2d');
+    neuroNodes = [];
+    for(let i=0;i<35;i++) neuroNodes.push({
+      x:Math.random()*neuroW, y:Math.random()*neuroH,
+      vx:(Math.random()-.5)*.4, vy:(Math.random()-.5)*.4,
+      r:Math.random()*2+1.2, o:Math.random()*.5+.2,
+      p:Math.random()*Math.PI*2
+    });
+    drawNeuro();
+  }
+
+  function drawNeuro(){
+    if(!neuroCtx) return;
+    neuroCtx.clearRect(0,0,neuroW,neuroH);
+    for(const n of neuroNodes){
+      n.x += n.vx*speedMult; n.y += n.vy*speedMult;
+      if(n.x<0||n.x>neuroW) n.vx*=-1;
+      if(n.y<0||n.y>neuroH) n.vy*=-1;
+      n.p += .025*speedMult;
+    }
+    for(let i=0;i<neuroNodes.length;i++){
+      for(let j=i+1;j<neuroNodes.length;j++){
+        const dx=neuroNodes[j].x-neuroNodes[i].x, dy=neuroNodes[j].y-neuroNodes[i].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<140){
+          neuroCtx.beginPath();
+          neuroCtx.moveTo(neuroNodes[i].x,neuroNodes[i].y);
+          neuroCtx.lineTo(neuroNodes[j].x,neuroNodes[j].y);
+          neuroCtx.strokeStyle=`rgba(120,90,255,${Math.min((1-d/140)*.20,.28)})`;
+          neuroCtx.lineWidth=.5;
+          neuroCtx.stroke();
+        }
+      }
+    }
+    for(const n of neuroNodes){
+      const p=Math.sin(n.p)*.3+.7;
+      neuroCtx.beginPath();
+      neuroCtx.arc(n.x,n.y,n.r*p,0,Math.PI*2);
+      neuroCtx.fillStyle=`rgba(140,100,255,${n.o*p})`;
+      neuroCtx.fill();
+    }
+    requestAnimationFrame(drawNeuro);
+  }
+
+  window.cvMostrarOrbe = function(){
+    const ov = document.getElementById('cvOrbeOverlay');
+    if(!ov) return;
+    ov.classList.add('active');
+    speedMult = 3;
+    initNeuro();
+    orbePhaseIdx = 0;
+    const ph = document.getElementById('cvOPhase');
+    if(ph) ph.innerHTML = FASES[0] + '<span class="cv-o-cursor"></span>';
+    orbeTimer = setInterval(()=>{
+      orbePhaseIdx = (orbePhaseIdx+1) % FASES.length;
+      if(ph) ph.innerHTML = FASES[orbePhaseIdx] + '<span class="cv-o-cursor"></span>';
+    }, 1400);
+    // Barra de progreso simulada (0→85% en ~55s, luego espera)
+    orbeProgress = 0;
+    const fill = document.getElementById('cvOFill');
+    const pct  = document.getElementById('cvOPct');
+    const tok  = document.getElementById('cvOTok');
+    orbeProgressTimer = setInterval(()=>{
+      if(orbeProgress < 85){
+        orbeProgress += 0.28;
+        if(fill) fill.style.width = orbeProgress.toFixed(1)+'%';
+        if(pct)  pct.textContent  = Math.round(orbeProgress)+'%';
+        if(tok)  tok.textContent  = Math.round(orbeProgress * 40).toLocaleString()+' tokens';
+      }
+    }, 150);
+  };
+
+  window.cvOcultarOrbe = function(tokFinal){
+    clearInterval(orbeTimer);
+    clearInterval(orbeProgressTimer);
+    speedMult = 1;
+    const fill = document.getElementById('cvOFill');
+    const pct  = document.getElementById('cvOPct');
+    const tok  = document.getElementById('cvOTok');
+    if(fill) fill.style.width = '100%';
+    if(pct)  pct.textContent  = '100%';
+    if(tok && tokFinal) tok.textContent = tokFinal.toLocaleString()+' tokens';
+    setTimeout(()=>{
+      const ov = document.getElementById('cvOrbeOverlay');
+      if(ov) ov.classList.remove('active');
+    }, 600);
+  };
+})();
+</script>
+"""
+
 # ── Contexto completo de Villa María ──────────────────────
 CONTEXTO_VM = """
 DATOS REALES DEL SISTEMA — VILLA MARÍA / VILLA NUEVA (Córdoba, Argentina)
@@ -203,6 +498,11 @@ indicada, incorporando el foco específico en las líneas de acción prioritaria
 def render_masterplan():
     """Sección completa del Masterplan. Llamar desde modulo_villamaria.py."""
 
+    # Inyectar overlay orbe una sola vez
+    if "cv_orbe_injected" not in st.session_state:
+        st.markdown(_ORBE_HTML, unsafe_allow_html=True)
+        st.session_state["cv_orbe_injected"] = True
+
     st.title("📄 Masterplan Ambiental · Villa María")
     st.caption(
         "Generado por Claude Opus 4.7 · contexto: Ciudad Verde AI Agent · "
@@ -301,22 +601,20 @@ def render_masterplan():
         if not foco.strip():
             st.warning("Ingresá un foco para personalizar el Masterplan.")
         else:
-            # Orbe animada mientras procesa
+            # Activar orbe overlay estilo ANCLA SCIENCE
             st.markdown(
-                """<div style='text-align:center;padding:30px 0 10px 0;'>
-                  <div style='display:inline-block;width:80px;height:80px;border-radius:50%;
-                       background:radial-gradient(circle at 38% 32%,#d0a0ff 0%,#7030e0 30%,#2010a0 62%,#060318 100%);
-                       box-shadow:0 0 40px rgba(130,60,255,0.6);
-                       animation:mp-orb 1.5s ease-in-out infinite;'>
-                  </div>
-                  <style>@keyframes mp-orb{0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(130,60,255,0.5);}
-                  50%{transform:scale(1.08);box-shadow:0 0 70px rgba(130,60,255,0.8);}}</style>
-                </div>""",
+                "<script>if(typeof cvMostrarOrbe==='function')cvMostrarOrbe();</script>",
                 unsafe_allow_html=True,
             )
-            with st.spinner("Claude Opus 4.7 generando el Masterplan… esto puede tomar hasta 60 segundos."):
+            with st.spinner(""):
                 usuario = st.session_state.get("cv_usuario", "usuarioverde")
                 texto, tok_in, tok_out = _llamar_opus(foco.strip(), usuario)
+
+            # Ocultar orbe con tokens finales
+            st.markdown(
+                f"<script>if(typeof cvOcultarOrbe==='function')cvOcultarOrbe({tok_in+tok_out});</script>",
+                unsafe_allow_html=True,
+            )
 
             # Registrar consumo
             if tok_in > 0:

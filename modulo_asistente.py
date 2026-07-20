@@ -208,11 +208,15 @@ def _dialog_asistente():
         )
         for i, sug in enumerate(SUGERENCIAS):
             if st.button(sug, key=f"dlg_sug_{i}", use_container_width=True):
-                with st.spinner("Consultando…"):
-                    st.session_state["cv_ai_resp"] = _consultar_haiku(sug)
-                st.rerun()
+                st.session_state["cv_ai_pregunta_activa"] = sug
 
     with col_resp:
+        # Disparar consulta si hay pregunta activa (sugerencia o input)
+        pregunta_activa = st.session_state.pop("cv_ai_pregunta_activa", None)
+        if pregunta_activa:
+            with st.spinner("Consultando…"):
+                st.session_state["cv_ai_resp"] = _consultar_haiku(pregunta_activa)
+
         # Caja de respuesta
         if "cv_ai_resp" in st.session_state:
             resp = st.session_state["cv_ai_resp"]
@@ -258,8 +262,7 @@ def _dialog_asistente():
             if st.button("Consultar →", key="dlg_enviar",
                          use_container_width=True, type="primary"):
                 if pregunta.strip():
-                    with st.spinner("Consultando…"):
-                        st.session_state["cv_ai_resp"] = _consultar_haiku(pregunta.strip())
+                    st.session_state["cv_ai_pregunta_activa"] = pregunta.strip()
                     st.rerun()
         with col_clr:
             if st.button("Limpiar", key="dlg_limpiar", use_container_width=True):
