@@ -448,10 +448,28 @@ def _render_indicadores():
         ]
         area_ee  = ee.Geometry.Polygon([coords_vm])
         wc       = ee.Image('ESA/WorldCover/v100/2020').clip(area_ee)
-        palette  = ['006400','ffbb22','ffff4c','f096ff','fa0000',
-                    'b4b4b4','f0f0f0','0064c8','0096a0','00cf75','fae6a0']
-        vis      = {'min': 10, 'max': 110, 'palette': palette}
-        map_id   = wc.getMapId(vis)
+        # Remapeo explícito: cada código de clase → índice 0-10
+        # Clases ESA: 10=árboles, 20=arbustos, 30=pastizal, 40=cultivos,
+        #             50=edificado, 60=suelo, 70=nieve, 80=agua, 90=humedal, 95=manglar, 100=musgo
+        wc_remap = wc.remap(
+            [10,  20,     30,     40,     50,     60,     70,     80,     90,     95,     100],
+            [1,   2,      3,      4,      5,      6,      7,      8,      9,      10,     11]
+        )
+        palette  = [
+            '006400',  # 1 árboles — verde oscuro
+            '8db360',  # 2 arbustos — verde oliva
+            'ffbb22',  # 3 pastizales — amarillo
+            'fffb00',  # 4 cultivos — amarillo claro
+            'fa0000',  # 5 edificado — rojo
+            'b4b4b4',  # 6 suelo desnudo — gris
+            'f0f0f0',  # 7 nieve — blanco
+            '0064c8',  # 8 agua — azul
+            '0096a0',  # 9 humedal — azul verdoso
+            '00cf75',  # 10 manglar — verde agua
+            'fae6a0',  # 11 musgo — beige
+        ]
+        vis      = {'min': 1, 'max': 11, 'palette': palette}
+        map_id   = wc_remap.getMapId(vis)
         tiles_wc = map_id['tile_fetcher'].url_format
 
         m_wc = folium.Map(location=[-32.415, -63.242], zoom_start=13, tiles=None)
@@ -561,19 +579,48 @@ def _render_indicadores():
         temp_diff = z['temp'] - lst_media
         color_z = '#2e7d32' if acc_z >= 98 else '#f57c00' if acc_z >= 85 else '#c62828'
         estado  = 'Excelente ✅' if acc_z >= 98 else 'Mejorable ⚠️' if acc_z >= 85 else 'Crítico 🔴'
+        popup_html = (
+            f"<b>{z['label']}</b><br>"
+            f"<b>{z['municipio']}</b><br><br>"
+            f"Acceso &lt;300m: <b style='color:{color_z}'>{acc_z}%</b> — {estado}<br>"
+            f"Dist. promedio: <b>{z['dist_prom']} m</b><br>"
+            f"Temp. sup.: <b>{z['temp']}°C</b> ({'+' if temp_diff>0 else ''}{temp_diff:.2f}°C)<br>"
+            f"Área edificada: <b>{z['ha_edif']} ha</b>"
+        )
+
+        # Polígono con relleno suave
         folium.Polygon(
             locations=d_z['poly'],
-            color=color_z, weight=2,
-            fill=True, fill_color=color_z, fill_opacity=0.30,
-            tooltip=f"{nom} — Acceso: {acc_z}% · {estado}",
-            popup=folium.Popup(
-                f"<b>{z['label']}</b><br>"
-                f"<b>{z['municipio']}</b><br><br>"
-                f"Acceso &lt;300m: <b style='color:{color_z}'>{acc_z}%</b> — {estado}<br>"
-                f"Dist. promedio: <b>{z['dist_prom']} m</b><br>"
-                f"Temp. sup.: <b>{z['temp']}°C</b> ({'+' if temp_diff>0 else ''}{temp_diff:.2f}°C)<br>"
-                f"Área edificada: <b>{z['ha_edif']} ha</b>",
-                max_width=230,
+            color=color_z, weight=2.5,
+            fill=True, fill_color=color_z, fill_opacity=0.12,
+            tooltip=f"{nom} ({z['municipio']}) — Acceso: {acc_z}%",
+            popup=folium.Popup(popup_html, max_width=230),
+        ).add_to(m_acc)
+
+        # Círculo central con porcentaje visible
+        centro = [
+            (d_z['poly'][0][0] + d_z['poly'][2][0]) / 2,
+            (d_z['poly'][0][1] + d_z['poly'][2][1]) / 2,
+        ]
+        folium.CircleMarker(
+            location=centro,
+            radius=28,
+            color=color_z, weight=2.5,
+            fill=True, fill_color=color_z, fill_opacity=0.85,
+            tooltip=f"{nom} — {acc_z}%",
+            popup=folium.Popup(popup_html, max_width=230),
+        ).add_to(m_acc)
+        folium.Marker(
+            location=centro,
+            icon=folium.DivIcon(
+                html=(
+                    f"<div style='text-align:center;line-height:1.2;"
+                    f"font-family:Arial,sans-serif;'>"
+                    f"<div style='font-size:12px;font-weight:700;color:#fff;'>{acc_z}%</div>"
+                    f"<div style='font-size:9px;color:rgba(255,255,255,0.85);'>{nom}</div>"
+                    f"</div>"
+                ),
+                icon_size=(60, 32), icon_anchor=(30, 16),
             ),
         ).add_to(m_acc)
 
