@@ -148,15 +148,7 @@ def _area_union(geometrias):
 def cargar_osm(bbox, poblacion):
     """
     Descarga y procesa espacios verdes públicos de OSM.
-
-    Parámetros
-    ----------
-    bbox       : tuple (sur, oeste, norte, este)
-    poblacion  : int
-
-    Retorna
-    -------
-    dict con métricas y lista de espacios, o None si hay error.
+    Solo devuelve datos serializables (sin objetos Polygon).
     """
     query = _construir_query(bbox)
     data  = _consultar_overpass(query)
@@ -181,14 +173,26 @@ def cargar_osm(bbox, poblacion):
         por_cat[cat]['cantidad'] += 1
         por_cat[cat]['area_m2']  += g['area_m2']
 
-    top10 = sorted(geometrias, key=lambda x: -x['area_m2'])[:10]
+    # Solo datos serializables — sin objetos Polygon/geometry
+    espacios_serial = [
+        {
+            'nombre':    g['nombre'],
+            'categoria': g['categoria'],
+            'tipo':      g['tipo'],
+            'area_m2':   g['area_m2'],
+            'lat':       g['lat'],
+            'lon':       g['lon'],
+        }
+        for g in geometrias
+    ]
+    top10 = sorted(espacios_serial, key=lambda x: -x['area_m2'])[:10]
 
     return {
         'elementos':     len(geometrias),
         'area_ha':       round(area_ha, 1),
         'm2_hab':        round(m2_hab, 1),
         'por_categoria': por_cat,
-        'espacios':      geometrias,
+        'espacios':      espacios_serial,
         'top10':         top10,
         'error':         None,
     }
@@ -428,36 +432,18 @@ def render_osm(datos_osm, m2_hab_satelital=None, poblacion=None):
         for grupo in grupos.values():
             grupo.add_to(m_osm)
 
-        # Leyenda via L.control (funciona dentro del iframe)
-        from branca.element import MacroElement
-        from jinja2 import Template
-
-        items_js = " + ".join(
-            f"'<div><span style=\"color:{c};font-size:13px;\">&#9679;</span> {cat}</div>'"
-            for cat, c in COLORES_CAT.items()
-        )
-
-        class LeyendaOSM(MacroElement):
-            def __init__(self):
-                super().__init__()
-                self._template = Template("""
-                {%% macro script(this, kwargs) %%}
-                var leyOSM = L.control({position: 'bottomleft'});
-                leyOSM.onAdd = function(map) {
-                    var div = L.DomUtil.create('div');
-                    div.style.cssText = 'background:rgba(255,255,255,0.93);border-radius:8px;'
-                        + 'padding:8px 12px;font-family:Arial,sans-serif;font-size:11px;'
-                        + 'box-shadow:0 2px 6px rgba(0,0,0,0.2);line-height:1.7;';
-                    div.innerHTML = '<b>Tipo de espacio</b><br>' + """ + items_js + """;
-                    return div;
-                };
-                leyOSM.addTo({{ this._parent.get_name() }});
-                {%% endmacro %%}
-                """)
-
-        m_osm.add_child(LeyendaOSM())
         folium.LayerControl(position='topright', collapsed=False).add_to(m_osm)
         st_folium(m_osm, width="100%", height=480, returned_objects=[])
+
+        # Leyenda fuera del iframe
+        items_leyenda = " &nbsp; ".join(
+            f"<span style='color:{c};font-size:15px;'>●</span> {cat}"
+            for cat, c in COLORES_CAT.items()
+        )
+        st.markdown(
+            f"<div style='font-size:11px;color:#555;margin-top:4px;'>{items_leyenda}</div>",
+            unsafe_allow_html=True,
+        )
 
     st.markdown("")
     st.caption(

@@ -839,20 +839,49 @@ def render_masterplan():
         col_print, col_dl, col_new, _ = st.columns([2, 2, 2, 1])
         with col_print:
             import streamlit.components.v1 as _components
-            _components.html(
-                """<button
-                   onclick="window.parent.print()"
-                   style="width:100%;background:linear-gradient(135deg,#6228b4,#00b4dc);
-                          border:none;border-radius:8px;color:#fff;
-                          font-family:'Space Grotesk',sans-serif;font-size:14px;
-                          font-weight:600;padding:10px;cursor:pointer;
-                          transition:opacity 0.2s;"
-                   onmouseover="this.style.opacity=0.85"
-                   onmouseout="this.style.opacity=1">
-                   🖨️ Imprimir / Guardar PDF
-                </button>""",
-                height=46,
-            )
+            import datetime as _dt
+            fecha_gen = _dt.datetime.now().strftime("%d/%m/%Y")
+            # Preparar texto HTML para nueva ventana
+            texto_html = texto.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+            print_js = f"""
+            <script>
+            function abrirImpresion() {{
+                var w = window.open('', '_blank', 'width=900,height=700');
+                w.document.write(`<!DOCTYPE html><html><head>
+                <meta charset="utf-8">
+                <title>Masterplan Ambiental Villa María 2025-2030</title>
+                <style>
+                  body {{ font-family: Arial, sans-serif; font-size: 13px;
+                          color: #111; margin: 40px; line-height: 1.7; }}
+                  h1 {{ font-size: 18px; color: #1b5e20; border-bottom: 2px solid #1b5e20;
+                        padding-bottom: 8px; margin-bottom: 4px; }}
+                  .meta {{ font-size: 10px; color: #555; margin-bottom: 24px; }}
+                  .footer {{ font-size: 9px; color: #888; border-top: 1px solid #ddd;
+                             padding-top: 8px; margin-top: 32px; }}
+                  @media print {{ button {{ display:none; }} }}
+                </style>
+                </head><body>
+                <h1>Masterplan Ambiental Villa Mar&#237;a 2025&#8211;2030</h1>
+                <div class="meta">Ciudad Verde AI Agent &middot; Claude Opus 4.7 &middot; {fecha_gen}<br>
+                Datos: ESA WorldCover 2020 &middot; Landsat 8/9 &middot; OpenStreetMap &middot; INDEC 2022</div>
+                <div>{texto_html}</div>
+                <div class="footer">Ciudad Verde AI Agent &middot; Marco: C40, ODS 11, Acuerdo de Par&#237;s, Ordenanza 7209/2017</div>
+                <br><button onclick="window.print()" style="padding:8px 20px;background:#1b5e20;
+                color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;">
+                &#128438; Imprimir / Guardar PDF</button>
+                </body></html>`);
+                w.document.close();
+                w.focus();
+            }}
+            </script>
+            <button onclick="abrirImpresion()"
+               style="width:100%;background:linear-gradient(135deg,#6228b4,#00b4dc);
+                      border:none;border-radius:8px;color:#fff;
+                      font-family:'Space Grotesk',sans-serif;font-size:14px;
+                      font-weight:600;padding:10px;cursor:pointer;">
+               🖨️ Imprimir / Guardar PDF
+            </button>"""
+            _components.html(print_js, height=50)
         with col_dl:
             st.download_button(
                 "⬇️ Descargar .txt",

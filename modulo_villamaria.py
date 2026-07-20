@@ -314,36 +314,6 @@ def _mapa_conglomerado(zoom=14):
 
     grupo_zonas.add_to(m)
 
-    # --- Leyenda via MacroElement (funciona dentro del iframe de Folium) ---
-    from branca.element import MacroElement
-    from jinja2 import Template
-
-    class Leyenda(MacroElement):
-        def __init__(self):
-            super().__init__()
-            self._template = Template("""
-            {% macro script(this, kwargs) %}
-            var leyenda = L.control({position: 'bottomleft'});
-            leyenda.onAdd = function(map) {
-                var div = L.DomUtil.create('div');
-                div.style.cssText = 'background:rgba(255,255,255,0.94);border-radius:10px;'
-                    + 'padding:10px 14px;box-shadow:0 2px 8px rgba(0,0,0,0.22);'
-                    + 'font-family:Arial,sans-serif;font-size:11px;line-height:1.85;';
-                div.innerHTML = '<b style="font-size:12px;">Zonas — Acceso al verde</b><br>'
-                    + '<span style="color:#2e7d32;font-weight:700;">&#9679;</span> &ge;98% — Excelente<br>'
-                    + '<span style="color:#f57c00;font-weight:700;">&#9679;</span> 85–97% — Mejorable<br>'
-                    + '<span style="color:#c62828;font-weight:700;">&#9679;</span> &lt;85% — Crítico<br>'
-                    + '<hr style="margin:4px 0;border-color:#ddd;">'
-                    + '<span style="color:#1565c0;font-weight:700;">&#9644;</span> Villa María<br>'
-                    + '<span style="color:#6a1b9a;font-weight:700;">&#9644;</span> Villa Nueva<br>'
-                    + '<span style="color:#1976d2;font-weight:700;">&#9644;</span> Río Ctalamochita';
-                return div;
-            };
-            leyenda.addTo({{ this._parent.get_name() }});
-            {% endmacro %}
-            """)
-
-    m.add_child(Leyenda())
     folium.LayerControl(position='topright', collapsed=False).add_to(m)
     return m
 
@@ -433,6 +403,22 @@ def _render_mapa():
 
     m = _mapa_conglomerado(zoom=14)
     st_folium(m, width="100%", height=560, returned_objects=[])
+
+    # Leyenda fuera del iframe — siempre visible
+    st.markdown(
+        "<div style='display:flex;gap:20px;flex-wrap:wrap;margin-top:8px;"
+        "font-family:Arial,sans-serif;font-size:12px;'>"
+        "<div><b>Zonas — Acceso al verde:</b></div>"
+        "<div><span style='color:#2e7d32;font-size:16px;'>●</span> &ge;98% Excelente</div>"
+        "<div><span style='color:#f57c00;font-size:16px;'>●</span> 85–97% Mejorable</div>"
+        "<div><span style='color:#c62828;font-size:16px;'>●</span> &lt;85% Crítico</div>"
+        "<div style='border-left:1px solid #ccc;padding-left:16px;'>"
+        "<span style='color:#1565c0;font-weight:700;'>━</span> Villa María &nbsp;"
+        "<span style='color:#6a1b9a;font-weight:700;'>╌</span> Villa Nueva &nbsp;"
+        "<span style='color:#1976d2;font-weight:700;'>━</span> Río Ctalamochita"
+        "</div></div>",
+        unsafe_allow_html=True,
+    )
 
     st.markdown("---")
     st.markdown("""
