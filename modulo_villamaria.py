@@ -71,6 +71,8 @@ ZONAS = {
     },
 }
 
+from modulo_masterplan import render_masterplan
+
 SECCIONES_VM = [
     ("🏠", "Inicio"),
     ("🗺️", "Mapa del conglomerado"),
@@ -80,6 +82,7 @@ SECCIONES_VM = [
     ("📋", "Diagnóstico por zonas"),
     ("🎯", "Estrategias · Villa María"),
     ("🌍", "Agenda 2030 · C40"),
+    ("📄", "Masterplan · Opus 4.7"),
 ]
 
 # ============================================================
@@ -1152,3 +1155,5 @@ def render_modulo_villamaria():
         _render_estrategias()
     elif "Agenda" in seccion:
         _render_agenda2030()
+    elif "Masterplan" in seccion:
+        render_masterplan()

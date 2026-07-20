@@ -21,6 +21,11 @@ from modulo_censo        import render_censo
 from modulo_ayuda        import ayuda_cobertura, ayuda_accesibilidad, ayuda_temperatura, ayuda_osm, ayuda_censo, ayuda_comparativa, ayuda_diagnostico
 from modulo_villamaria   import render_modulo_villamaria
 from modulo_asistente    import render_asistente_sidebar, render_asistente_panel
+from modulo_admin        import render_admin
+from modulo_db           import inicializar_db
+
+# ── Inicializar base de datos ─────────────────────────────
+inicializar_db()
 
 # ── Inyección de estilos ──────────────────────────────────
 def _inyectar_css():
@@ -182,6 +187,7 @@ def _render_login():
         if st.button("Ingresar →", use_container_width=True, type="primary"):
             if usuario == _LOGIN_USER and contrasena == _LOGIN_PASS:
                 st.session_state["autenticado"] = True
+                st.session_state["cv_usuario"]  = usuario
                 st.rerun()
             else:
                 st.error("Usuario o contraseña incorrectos.")
@@ -418,7 +424,7 @@ with st.sidebar:
     )
     modulo = st.radio(
         "Módulo",
-        ["🏙️ Villa María", "🌍 Provincia de Córdoba"],
+        ["🏙️ Villa María", "🌍 Provincia de Córdoba", "🔐 Administración"],
         label_visibility="collapsed",
         key="modulo_principal",
     )
@@ -478,6 +484,11 @@ with st.spinner("Conectando con Earth Engine..."):
 if modulo == "🏙️ Villa María":
     render_asistente_panel()
     render_modulo_villamaria()
+    st.stop()
+
+if modulo == "🔐 Administración":
+    render_asistente_panel()
+    render_admin()
     st.stop()
 
 # ── Panel flotante asistente (Provincia) ──
