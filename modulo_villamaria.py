@@ -423,6 +423,60 @@ def _render_indicadores():
     with c10:
         _card_indicador("Suelo edificado", cob['edificado'], "%", "Impermeabilización", "#1565c0")
 
+    # --- Mapa WorldCover ---
+    st.markdown("#### 🗺️ Distribución espacial de cobertura del suelo")
+    st.caption("Fuente: ESA WorldCover 2020 · resolución 10m · cada color representa una clase de cobertura")
+
+    st.markdown(
+        "<div style='background:rgba(30,40,80,0.5);border:1px solid rgba(120,140,255,0.2);"
+        "border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:0.82em;line-height:1.7;'>"
+        "<b>Paleta de colores WorldCover:</b> &nbsp;"
+        "<span style='color:#006400;font-weight:700;'>█</span> Árboles &nbsp;"
+        "<span style='color:#ffbb22;font-weight:700;'>█</span> Pastizales &nbsp;"
+        "<span style='color:#e65100;font-weight:700;'>█</span> Cultivos &nbsp;"
+        "<span style='color:#757575;font-weight:700;'>█</span> Edificado &nbsp;"
+        "<span style='color:#1565c0;font-weight:700;'>█</span> Agua"
+        "</div>",
+        unsafe_allow_html=True,
+    )
+
+    try:
+        import ee
+        coords_vm = [
+            [-63.280, -32.390], [-63.200, -32.390],
+            [-63.200, -32.440], [-63.280, -32.440], [-63.280, -32.390]
+        ]
+        area_ee  = ee.Geometry.Polygon([coords_vm])
+        wc       = ee.Image('ESA/WorldCover/v100/2020').clip(area_ee)
+        palette  = ['006400','ffbb22','ffff4c','f096ff','fa0000',
+                    'b4b4b4','f0f0f0','0064c8','0096a0','00cf75','fae6a0']
+        vis      = {'min': 10, 'max': 110, 'palette': palette}
+        map_id   = wc.getMapId(vis)
+        tiles_wc = map_id['tile_fetcher'].url_format
+
+        m_wc = folium.Map(location=[-32.415, -63.242], zoom_start=13, tiles=None)
+        folium.TileLayer(
+            tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            attr='© Esri', name='🛰️ Satélite', max_zoom=20, show=True,
+        ).add_to(m_wc)
+        folium.TileLayer(
+            tiles=tiles_wc,
+            attr='ESA WorldCover 2020 · GEE',
+            name='🌍 WorldCover',
+            overlay=True, show=True, opacity=0.72,
+        ).add_to(m_wc)
+        # Polígono del área
+        folium.Polygon(
+            locations=[[-32.390,-63.280],[-32.390,-63.200],
+                       [-32.440,-63.200],[-32.440,-63.280]],
+            color='#fff', weight=1.5, fill=False,
+            tooltip='Área de análisis VM+VN',
+        ).add_to(m_wc)
+        folium.LayerControl(position='topright', collapsed=False).add_to(m_wc)
+        st_folium(m_wc, width="100%", height=440, returned_objects=[])
+    except Exception as e:
+        st.info(f"Mapa WorldCover no disponible en este momento: {e}")
+
     st.markdown("---")
     st.markdown("### Distribución de accesibilidad por distancia al verde más cercano")
     st.caption("% del área edificada por rango · Referencia OMS: 100% a menos de 300 m")
@@ -476,6 +530,63 @@ def _render_indicadores():
         f"{acc['r_0_100']:.1f}% del &aacute;rea edificada tiene verde a menos de 100 m &middot; "
         f"{acc['r_100_300']:.1f}% adicional lo tiene entre 100 y 300 m &middot; Meta OMS: 100% &#9989;"
         f"</div>",
+        unsafe_allow_html=True,
+    )
+
+    # --- Mapa de accesibilidad por zonas ---
+    st.markdown("#### 🗺️ Mapa de accesibilidad por zona")
+    st.caption("Cada zona muestra el % de área edificada con acceso a verde en menos de 300 m · Hacé clic para ver detalle")
+
+    lst_media = DATOS_VM['lst']['tMedia']
+    m_acc = folium.Map(location=[-32.415, -63.242], zoom_start=13, tiles=None)
+    folium.TileLayer(
+        tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+        attr='© Google', name='🌍 Híbrido Google', max_zoom=20, show=True,
+    ).add_to(m_acc)
+    folium.TileLayer(
+        tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attr='© OpenStreetMap', name='🗺️ OpenStreetMap', max_zoom=19, show=False,
+    ).add_to(m_acc)
+
+    zonas_acc = {
+        'Noroeste': {'poly': [[-32.390,-63.280],[-32.390,-63.248],[-32.415,-63.248],[-32.415,-63.280]], 'z': ZONAS['Noroeste']},
+        'Noreste':  {'poly': [[-32.390,-63.248],[-32.390,-63.200],[-32.415,-63.200],[-32.415,-63.248]], 'z': ZONAS['Noreste']},
+        'Suroeste': {'poly': [[-32.415,-63.280],[-32.415,-63.248],[-32.440,-63.248],[-32.440,-63.280]], 'z': ZONAS['Suroeste']},
+        'Sureste':  {'poly': [[-32.415,-63.248],[-32.415,-63.200],[-32.440,-63.200],[-32.440,-63.248]], 'z': ZONAS['Sureste']},
+    }
+
+    for nom, d_z in zonas_acc.items():
+        z   = d_z['z']
+        acc_z = z['acceso_pct']
+        temp_diff = z['temp'] - lst_media
+        color_z = '#2e7d32' if acc_z >= 98 else '#f57c00' if acc_z >= 85 else '#c62828'
+        estado  = 'Excelente ✅' if acc_z >= 98 else 'Mejorable ⚠️' if acc_z >= 85 else 'Crítico 🔴'
+        folium.Polygon(
+            locations=d_z['poly'],
+            color=color_z, weight=2,
+            fill=True, fill_color=color_z, fill_opacity=0.30,
+            tooltip=f"{nom} — Acceso: {acc_z}% · {estado}",
+            popup=folium.Popup(
+                f"<b>{z['label']}</b><br>"
+                f"<b>{z['municipio']}</b><br><br>"
+                f"Acceso &lt;300m: <b style='color:{color_z}'>{acc_z}%</b> — {estado}<br>"
+                f"Dist. promedio: <b>{z['dist_prom']} m</b><br>"
+                f"Temp. sup.: <b>{z['temp']}°C</b> ({'+' if temp_diff>0 else ''}{temp_diff:.2f}°C)<br>"
+                f"Área edificada: <b>{z['ha_edif']} ha</b>",
+                max_width=230,
+            ),
+        ).add_to(m_acc)
+
+    folium.LayerControl(position='topright', collapsed=False).add_to(m_acc)
+    st_folium(m_acc, width="100%", height=420, returned_objects=[])
+
+    # Leyenda accesibilidad
+    st.markdown(
+        "<div style='display:flex;gap:20px;font-size:12px;margin-top:4px;'>"
+        "<span><span style='color:#2e7d32;font-size:16px;'>█</span> &ge;98% Excelente</span>"
+        "<span><span style='color:#f57c00;font-size:16px;'>█</span> 85–97% Mejorable</span>"
+        "<span><span style='color:#c62828;font-size:16px;'>█</span> &lt;85% Crítico</span>"
+        "</div>",
         unsafe_allow_html=True,
     )
 
