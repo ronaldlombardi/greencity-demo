@@ -49,31 +49,137 @@ _LOGIN_USER = os.environ.get("APP_USERNAME", "admin")
 _LOGIN_PASS = os.environ.get("APP_PASSWORD", "greencity")
 
 def _render_login():
+    # CSS completo de login dark — se aplica solo en esta pantalla
     st.markdown("""
     <style>
-    .login-box {
-        max-width: 380px;
-        margin: 8vh auto 0 auto;
-        padding: 2.5rem 2rem;
-        border-radius: 14px;
-        background: #f8fdf8;
-        border: 1px solid #c8e6c9;
-        box-shadow: 0 4px 24px #0001;
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+    /* Fondo oscuro global en login */
+    .stApp { background: #050810 !important; }
+
+    /* Gradientes ambientales */
+    .stApp::before {
+        content:'';position:fixed;top:-200px;left:-200px;
+        width:600px;height:600px;
+        background:radial-gradient(circle,rgba(99,40,180,0.18) 0%,transparent 70%);
+        pointer-events:none;z-index:0;
     }
+    .stApp::after {
+        content:'';position:fixed;bottom:-150px;right:-150px;
+        width:500px;height:500px;
+        background:radial-gradient(circle,rgba(0,180,220,0.12) 0%,transparent 70%);
+        pointer-events:none;z-index:0;
+    }
+
+    /* Ocultar sidebar y header en login */
+    [data-testid="stSidebar"] { display:none !important; }
+    [data-testid="stHeader"]  { display:none !important; }
+    #MainMenu, footer         { display:none !important; }
+
+    /* Centrar contenido */
+    .block-container {
+        max-width: 420px !important;
+        margin: 0 auto !important;
+        padding-top: 12vh !important;
+        background: transparent !important;
+    }
+
+    /* Box de login */
+    .cv-login-box {
+        background: rgba(10,14,32,0.82);
+        border: 0.5px solid rgba(120,140,255,0.28);
+        border-radius: 16px;
+        padding: 36px 32px 28px 32px;
+        backdrop-filter: blur(20px);
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    .cv-login-box::before {
+        content:'';display:block;height:1px;
+        background:linear-gradient(90deg,transparent,rgba(120,100,255,0.5),transparent);
+        margin-bottom:24px;
+    }
+    .cv-login-logo {
+        text-align:center;margin-bottom:24px;
+    }
+    .cv-login-mark {
+        width:48px;height:48px;
+        background:linear-gradient(135deg,#6228b4,#00b4dc);
+        border-radius:10px;
+        display:inline-flex;align-items:center;justify-content:center;
+        font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:#fff;
+        margin-bottom:12px;
+        box-shadow:0 0 24px rgba(99,40,180,0.4);
+    }
+    .cv-login-name {
+        font-family:'Space Mono',monospace;font-size:15px;
+        font-weight:700;letter-spacing:0.10em;color:#d0d8f8;
+        display:block;
+    }
+    .cv-login-sub {
+        font-family:'Space Mono',monospace;font-size:9px;
+        letter-spacing:0.14em;color:rgba(170,176,200,0.55);
+        text-transform:uppercase;margin-top:4px;display:block;
+    }
+
+    /* Labels de inputs */
+    .stTextInput label {
+        font-family:'Space Mono',monospace !important;
+        font-size:9px !important;font-weight:600 !important;
+        letter-spacing:0.14em !important;text-transform:uppercase !important;
+        color:rgba(170,176,200,0.7) !important;
+    }
+
+    /* Inputs */
+    .stTextInput > div > div > input {
+        background:rgba(8,12,28,0.85) !important;
+        border:0.5px solid rgba(120,140,255,0.26) !important;
+        border-radius:8px !important;
+        color:#fff !important;
+        font-family:'Space Grotesk',sans-serif !important;
+        font-size:13px !important;
+        padding:10px 14px !important;
+    }
+    .stTextInput > div > div > input:focus {
+        border-color:#9060ff !important;
+        box-shadow:0 0 0 1px rgba(144,96,255,0.3) !important;
+    }
+    .stTextInput > div > div > input::placeholder {
+        color:rgba(170,176,200,0.4) !important;
+    }
+
+    /* Botón Ingresar */
+    .stButton > button {
+        background:linear-gradient(135deg,#6228b4,#00b4dc) !important;
+        border:none !important;border-radius:8px !important;
+        font-family:'Space Grotesk',sans-serif !important;
+        font-size:14px !important;font-weight:600 !important;
+        color:#fff !important;letter-spacing:0.04em !important;
+        padding:11px !important;
+        transition:opacity 0.2s !important;
+        margin-top:6px !important;
+    }
+    .stButton > button:hover { opacity:0.88 !important; }
+
+    /* Error */
+    .stAlert { border-radius:8px !important; }
     </style>
-    <div class="login-box">
-        <h2 style="text-align:center;color:#2e7d32;margin-bottom:0.2rem">🌿 Ciudad Verde Agent</h2>
-        <p style="text-align:center;color:#666;margin-bottom:1.5rem;font-size:0.9em">
-            Acceso restringido — ingresá tus credenciales
-        </p>
+
+    <div class="cv-login-box">
+        <div class="cv-login-logo">
+            <div class="cv-login-mark">CV</div>
+            <span class="cv-login-name">CIUDAD VERDE</span>
+            <span class="cv-login-sub">AI Agent · Córdoba, Argentina</span>
+        </div>
+        <div style="height:0.5px;background:rgba(120,140,255,0.14);margin-bottom:20px;"></div>
     </div>
     """, unsafe_allow_html=True)
 
-    col = st.columns([1, 2, 1])[1]
-    with col:
-        usuario = st.text_input("Usuario", key="login_user")
-        contrasena = st.text_input("Contraseña", type="password", key="login_pass")
-        if st.button("Ingresar", use_container_width=True, type="primary"):
+    with st.container():
+        usuario   = st.text_input("Usuario",    key="login_user",   placeholder="Tu usuario")
+        contrasena = st.text_input("Contraseña", key="login_pass",  placeholder="Tu contraseña", type="password")
+        if st.button("Ingresar →", use_container_width=True, type="primary"):
             if usuario == _LOGIN_USER and contrasena == _LOGIN_PASS:
                 st.session_state["autenticado"] = True
                 st.rerun()
