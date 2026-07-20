@@ -44,6 +44,20 @@ def inicializar_db():
                         costo_usd   NUMERIC(10,6)
                     );
                 """)
+                cur.execute("""
+                    CREATE TABLE IF NOT EXISTS cv_masteplans (
+                        id          SERIAL PRIMARY KEY,
+                        fecha       TIMESTAMP DEFAULT NOW(),
+                        usuario     VARCHAR(80),
+                        ciudad      VARCHAR(80)  DEFAULT 'Villa María',
+                        foco        TEXT,
+                        texto       TEXT,
+                        tok_input   INTEGER,
+                        tok_output  INTEGER,
+                        costo_usd   NUMERIC(10,6),
+                        palabras    INTEGER
+                    );
+                """)
             conn.commit()
     except Exception as e:
         print(f"[cv_db] Error inicializando tabla: {e}")
@@ -114,6 +128,81 @@ def obtener_resumen():
     except Exception as e:
         print(f"[cv_db] Error leyendo resumen: {e}")
         return []
+
+
+def guardar_masterplan(usuario: str, foco: str, texto: str,
+                       tok_input: int, tok_output: int, ciudad: str = "Villa María"):
+    """Guarda un Masterplan generado en la base de datos."""
+    if not DB_URL:
+        return None
+    try:
+        costos = COSTOS.get("opus", {"input": 15.0, "output": 75.0})
+        costo  = (tok_input * costos["input"] + tok_output * costos["output"]) / 1_000_000
+        palabras = len(texto.split())
+        with _conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO cv_masteplans
+                        (usuario, ciudad, foco, texto, tok_input, tok_output, costo_usd, palabras)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    RETURNING id
+                """, (usuario, ciudad, foco[:500], texto,
+                      tok_input, tok_output, round(costo, 6), palabras))
+                nuevo_id = cur.fetchone()[0]
+            conn.commit()
+        return nuevo_id
+    except Exception as e:
+        print(f"[cv_db] Error guardando masterplan: {e}")
+        return None
+
+
+def obtener_masteplans(usuario: str = None, limit: int = 10):
+    """Devuelve los últimos Masteplans. Si usuario es None, devuelve todos."""
+    if not DB_URL:
+        return []
+    try:
+        with _conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                if usuario:
+                    cur.execute("""
+                        SELECT id, fecha, usuario, ciudad, foco, texto,
+                               tok_input, tok_output, costo_usd, palabras
+                        FROM cv_masteplans
+                        WHERE usuario = %s
+                        ORDER BY fecha DESC
+                        LIMIT %s
+                    """, (usuario, limit))
+                else:
+                    cur.execute("""
+                        SELECT id, fecha, usuario, ciudad, foco, texto,
+                               tok_input, tok_output, costo_usd, palabras
+                        FROM cv_masteplans
+                        ORDER BY fecha DESC
+                        LIMIT %s
+                    """, (limit,))
+                return cur.fetchall()
+    except Exception as e:
+        print(f"[cv_db] Error leyendo masteplans: {e}")
+        return []
+
+
+def obtener_masterplan_por_id(masterplan_id: int):
+    """Devuelve un Masterplan específico por ID."""
+    if not DB_URL:
+        return None
+    try:
+        with _conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("""
+                    SELECT id, fecha, usuario, ciudad, foco, texto,
+                           tok_input, tok_output, costo_usd, palabras
+                    FROM cv_masteplans
+                    WHERE id = %s
+                """, (masterplan_id,))
+                return cur.fetchone()
+    except Exception as e:
+        print(f"[cv_db] Error leyendo masterplan {masterplan_id}: {e}")
+        return None
 
 
 def obtener_totales():

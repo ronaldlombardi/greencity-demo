@@ -9,7 +9,7 @@ Registra consumo en PostgreSQL.
 import os
 import requests
 import streamlit as st
-from modulo_db import registrar_consumo
+from modulo_db import registrar_consumo, guardar_masterplan, obtener_masteplans
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_URL           = "https://api.anthropic.com/v1/messages"
@@ -596,15 +596,43 @@ def render_masterplan():
             unsafe_allow_html=True,
         )
 
-    # Generar — usar el valor del session_state directamente (más confiable)
+    # ── Historial guardado en PostgreSQL ──────────────────────────────────────
+    masteplans_guardados = obtener_masteplans(limit=5)
+    if masteplans_guardados:
+        with st.expander(f"📂 Masteplans guardados ({len(masteplans_guardados)} recientes)", expanded=False):
+            for mp in masteplans_guardados:
+                fecha = mp["fecha"]
+                fecha_str = fecha.strftime("%d/%m/%Y %H:%M") if hasattr(fecha, "strftime") else str(fecha)[:16]
+                foco_guardado = (mp["foco"] or "")[:120]
+                col_mp, col_load = st.columns([5, 1])
+                with col_mp:
+                    st.markdown(
+                        f"<div style='font-family:\"Space Mono\",monospace;font-size:10px;"
+                        f"color:rgba(170,176,200,0.7);'>"
+                        f"<b style='color:#9060ff;'>#{mp['id']}</b> · {fecha_str} · "
+                        f"<span style='color:rgba(200,188,255,0.6)'>{mp['palabras'] or 0:,} palabras</span><br>"
+                        f"<span style='font-size:9px;color:rgba(150,160,200,0.5);'>{foco_guardado}…</span>"
+                        f"</div>",
+                        unsafe_allow_html=True,
+                    )
+                with col_load:
+                    if st.button("Cargar", key=f"mp_load_{mp['id']}", use_container_width=True):
+                        st.session_state["mp_resultado"]    = mp["texto"]
+                        st.session_state["mp_tok_in"]       = mp["tok_input"] or 0
+                        st.session_state["mp_tok_out"]      = mp["tok_output"] or 0
+                        st.session_state["mp_id_guardado"]  = mp["id"]
+                        st.session_state["mp_fecha_guardado"] = fecha_str
+                        st.rerun()
+
+    st.markdown("---")
+
+    # ── Generar ───────────────────────────────────────────────────────────────
     if generar:
         foco_final = st.session_state.get("mp_foco", "").strip()
         if not foco_final:
             st.warning("Ingresá un foco para personalizar el Masterplan.")
         else:
-            # Guardar foco para mostrar después del rerun
             st.session_state["mp_foco_en_proceso"] = foco_final
-            # Activar orbe overlay
             st.markdown(
                 "<script>if(typeof cvMostrarOrbe==='function')cvMostrarOrbe();</script>",
                 unsafe_allow_html=True,
@@ -613,100 +641,230 @@ def render_masterplan():
                 usuario = st.session_state.get("cv_usuario", "usuarioverde")
                 texto, tok_in, tok_out = _llamar_opus(foco_final, usuario)
 
-            # Ocultar orbe
             st.markdown(
                 f"<script>if(typeof cvOcultarOrbe==='function')cvOcultarOrbe({tok_in+tok_out});</script>",
                 unsafe_allow_html=True,
             )
 
-            # Registrar consumo
             if tok_in > 0:
+                # Registrar consumo
                 registrar_consumo(
                     usuario=usuario,
                     tipo="opus",
-                    pregunta=f"[MASTERPLAN] {foco[:200]}",
+                    pregunta=f"[MASTERPLAN] {foco_final[:200]}",
                     tok_input=tok_in,
                     tok_output=tok_out,
                     modelo=MODEL_OPUS,
                 )
+                # Guardar Masterplan en PostgreSQL
+                nuevo_id = guardar_masterplan(
+                    usuario=usuario,
+                    foco=foco_final,
+                    texto=texto,
+                    tok_input=tok_in,
+                    tok_output=tok_out,
+                )
+                st.session_state["mp_id_guardado"]    = nuevo_id
+                st.session_state["mp_fecha_guardado"] = "recién generado"
 
             st.session_state["mp_resultado"] = texto
             st.session_state["mp_tok_in"]    = tok_in
             st.session_state["mp_tok_out"]   = tok_out
             st.rerun()
 
-    # Mostrar resultado
+    # ── Mostrar resultado ─────────────────────────────────────────────────────
     if "mp_resultado" in st.session_state:
         texto   = st.session_state["mp_resultado"]
         tok_in  = st.session_state.get("mp_tok_in",  0)
         tok_out = st.session_state.get("mp_tok_out", 0)
         costo   = (tok_in * 15.0 + tok_out * 75.0) / 1_000_000
+        mp_id   = st.session_state.get("mp_id_guardado", "")
+        mp_fecha = st.session_state.get("mp_fecha_guardado", "")
 
-        # Métricas de la generación
+        # Badge guardado
+        if mp_id:
+            st.success(f"✅ Masterplan #{mp_id} guardado en base de datos · {mp_fecha}")
+
+        # Métricas
         mc1, mc2, mc3, mc4 = st.columns(4)
-        with mc1: st.metric("Tokens input",   f"{tok_in:,}")
-        with mc2: st.metric("Tokens output",  f"{tok_out:,}")
-        with mc3: st.metric("Costo generación", f"USD {costo:.4f}")
-        with mc4: st.metric("Palabras aprox.",  f"{len(texto.split()):,}")
+        with mc1: st.metric("Tokens input",      f"{tok_in:,}")
+        with mc2: st.metric("Tokens output",     f"{tok_out:,}")
+        with mc3: st.metric("Costo generación",  f"USD {costo:.4f}")
+        with mc4: st.metric("Palabras aprox.",   f"{len(texto.split()):,}")
 
         st.markdown("---")
 
-        # Documento
-        st.markdown(
-            """<div style='background:rgba(10,14,32,0.6);border:0.5px solid rgba(120,140,255,0.20);
-                border-radius:12px;padding:28px 32px;font-family:"Space Grotesk",sans-serif;
-                font-size:14px;color:#dde3f5;line-height:1.8;'>""",
-            unsafe_allow_html=True,
-        )
-        # Renderizar el texto con saltos de línea
+        # ── CSS de impresión + documento ──────────────────────────────────────
+        import html as _html
+        texto_escaped = _html.escape(texto)
+
+        # Construir HTML del documento para pantalla Y para window.print()
+        lineas_html = []
         for linea in texto.split("\n"):
             if linea.strip() == "":
-                st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-            elif linea.startswith("# ") or linea.isupper() and len(linea) < 80:
-                st.markdown(
-                    f"<div style='font-family:\"Space Mono\",monospace;font-size:13px;"
-                    f"font-weight:700;letter-spacing:0.06em;color:#9060ff;"
-                    f"margin:18px 0 8px 0;border-bottom:0.5px solid rgba(120,140,255,0.2);"
-                    f"padding-bottom:6px;'>{linea.lstrip('# ')}</div>",
-                    unsafe_allow_html=True,
+                lineas_html.append("<div class='mp-spacer'></div>")
+            elif linea.startswith("# ") or (linea.isupper() and len(linea) < 80):
+                lineas_html.append(
+                    f"<div class='mp-h1'>{_html.escape(linea.lstrip('# '))}</div>"
                 )
             elif linea.startswith("## ") or (linea.endswith(":") and len(linea) < 60):
-                st.markdown(
-                    f"<div style='font-family:\"Space Mono\",monospace;font-size:11px;"
-                    f"font-weight:700;letter-spacing:0.08em;color:#00b4dc;"
-                    f"margin:14px 0 6px 0;'>{linea.lstrip('# ')}</div>",
-                    unsafe_allow_html=True,
+                lineas_html.append(
+                    f"<div class='mp-h2'>{_html.escape(linea.lstrip('# '))}</div>"
                 )
             elif linea.startswith("- ") or linea.startswith("• "):
-                st.markdown(
-                    f"<div style='padding-left:16px;margin:3px 0;color:#dde3f5;'>"
-                    f"◦ {linea[2:]}</div>",
-                    unsafe_allow_html=True,
+                lineas_html.append(
+                    f"<div class='mp-li'>◦ {_html.escape(linea[2:])}</div>"
+                )
+            elif linea.startswith("|"):
+                lineas_html.append(
+                    f"<div class='mp-table-row'>{_html.escape(linea)}</div>"
                 )
             else:
-                st.markdown(
-                    f"<div style='margin:4px 0;color:#dde3f5;'>{linea}</div>",
-                    unsafe_allow_html=True,
+                lineas_html.append(
+                    f"<div class='mp-p'>{_html.escape(linea)}</div>"
                 )
-        st.markdown("</div>", unsafe_allow_html=True)
+
+        documento_inner = "\n".join(lineas_html)
+        import datetime as _dt
+        fecha_gen = _dt.datetime.now().strftime("%d de %B de %Y")
+
+        st.markdown(f"""
+<style>
+/* ── Estilos pantalla ── */
+.mp-doc {{
+    background:rgba(10,14,32,0.6);
+    border:0.5px solid rgba(120,140,255,0.20);
+    border-radius:12px;
+    padding:28px 32px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:14px;color:#dde3f5;line-height:1.8;
+}}
+.mp-h1 {{
+    font-family:'Space Mono',monospace;font-size:13px;font-weight:700;
+    letter-spacing:0.06em;color:#9060ff;
+    margin:18px 0 8px 0;
+    border-bottom:0.5px solid rgba(120,140,255,0.2);padding-bottom:6px;
+}}
+.mp-h2 {{
+    font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
+    letter-spacing:0.08em;color:#00b4dc;margin:14px 0 6px 0;
+}}
+.mp-li  {{ padding-left:16px;margin:3px 0;color:#dde3f5; }}
+.mp-p   {{ margin:4px 0;color:#dde3f5; }}
+.mp-table-row {{ font-family:'Space Mono',monospace;font-size:11px;
+    color:rgba(200,210,240,0.75);margin:2px 0; }}
+.mp-spacer {{ height:8px; }}
+
+/* ── Estilos de impresión ── */
+@media print {{
+    body {{ background:#fff !important; color:#111 !important; }}
+    /* Ocultar TODO Streamlit excepto el documento */
+    header, footer, [data-testid="stSidebar"],
+    [data-testid="stToolbar"], [data-testid="stDecoration"],
+    .stButton, .stMetric, .stDownloadButton,
+    [data-testid="stHeader"], #cv-print-btn-row,
+    .element-container:not(.cv-printable) {{ display:none !important; }}
+
+    .mp-doc {{
+        background:#fff !important;border:none !important;
+        border-radius:0 !important;padding:0 !important;
+        color:#111 !important;
+    }}
+    .mp-h1 {{
+        color:#2e4a1e !important;font-size:14pt !important;
+        border-bottom:1px solid #ccc !important;
+    }}
+    .mp-h2  {{ color:#1a3a6e !important;font-size:11pt !important; }}
+    .mp-li  {{ color:#111 !important; }}
+    .mp-p   {{ color:#222 !important; }}
+    .mp-table-row {{ color:#333 !important; }}
+
+    /* Header de impresión */
+    #cv-print-header {{ display:block !important; }}
+    /* Footer de impresión */
+    #cv-print-footer {{ display:block !important; }}
+}}
+
+#cv-print-header {{
+    display:none;
+    font-family:'Arial',sans-serif;
+    border-bottom:2px solid #2e4a1e;
+    padding-bottom:14px;margin-bottom:24px;
+}}
+#cv-print-header .ph-logo {{
+    font-size:9pt;font-weight:700;letter-spacing:0.12em;
+    color:#2e4a1e;text-transform:uppercase;
+}}
+#cv-print-header .ph-titulo {{
+    font-size:18pt;font-weight:700;color:#1a1a1a;margin:6px 0 2px 0;
+}}
+#cv-print-header .ph-sub {{
+    font-size:9pt;color:#555;
+}}
+#cv-print-footer {{
+    display:none;
+    font-family:'Arial',sans-serif;font-size:8pt;color:#888;
+    border-top:1px solid #ddd;padding-top:10px;margin-top:32px;
+    text-align:center;
+}}
+</style>
+
+<div class="mp-doc cv-printable" id="cv-masterplan-doc">
+
+  <!-- Header solo visible en impresión -->
+  <div id="cv-print-header">
+    <div class="ph-logo">🌿 Ciudad Verde AI Agent · Municipio de Villa María · Córdoba, Argentina</div>
+    <div class="ph-titulo">Masterplan Ambiental 2025–2030</div>
+    <div class="ph-sub">
+      Generado con Claude Opus 4.7 · {fecha_gen} · 
+      Datos: ESA WorldCover 2020 · Landsat 8/9 · OpenStreetMap · INDEC Censo 2022
+    </div>
+  </div>
+
+  {documento_inner}
+
+  <!-- Footer solo visible en impresión -->
+  <div id="cv-print-footer">
+    Ciudad Verde AI Agent · Datos: ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022 ·
+    Marco: C40, ODS 11, Acuerdo de París, Ordenanza 7209/2017 ·
+    Generado el {fecha_gen}
+  </div>
+
+</div>
+""", unsafe_allow_html=True)
 
         st.markdown("---")
 
-        # Botones de acción
-        col_dl, col_new, _ = st.columns([2, 2, 3])
+        # ── Botones de acción ─────────────────────────────────────────────────
+        col_print, col_dl, col_new, _ = st.columns([2, 2, 2, 1])
+        with col_print:
+            st.markdown(
+                """<button onclick="window.print()"
+                   style="width:100%;background:linear-gradient(135deg,#6228b4,#00b4dc);
+                          border:none;border-radius:8px;color:#fff;
+                          font-family:'Space Grotesk',sans-serif;font-size:14px;
+                          font-weight:600;padding:10px;cursor:pointer;
+                          transition:opacity 0.2s;"
+                   onmouseover="this.style.opacity=0.85"
+                   onmouseout="this.style.opacity=1">
+                   🖨️ Imprimir / Guardar PDF
+                </button>""",
+                unsafe_allow_html=True,
+            )
         with col_dl:
             st.download_button(
-                "⬇️ Descargar Masterplan (.txt)",
+                "⬇️ Descargar .txt",
                 data=texto.encode("utf-8"),
                 file_name="masterplan_villa_maria.txt",
                 mime="text/plain",
                 key="mp_download",
+                use_container_width=True,
             )
         with col_new:
-            if st.button("🔄 Generar nuevo", key="mp_nuevo"):
-                del st.session_state["mp_resultado"]
-                del st.session_state["mp_tok_in"]
-                del st.session_state["mp_tok_out"]
+            if st.button("🔄 Generar nuevo", key="mp_nuevo", use_container_width=True):
+                for k in ("mp_resultado", "mp_tok_in", "mp_tok_out",
+                          "mp_id_guardado", "mp_fecha_guardado"):
+                    st.session_state.pop(k, None)
                 st.rerun()
 
     st.markdown("---")

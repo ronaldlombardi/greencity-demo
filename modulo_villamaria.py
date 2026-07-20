@@ -123,7 +123,7 @@ def _card_indicador(titulo, valor, unidad, referencia, color):
 # ============================================================
 
 def _mapa_conglomerado(zoom=14):
-    """Mapa Folium con capas de alta calidad centrado en el conglomerado."""
+    """Mapa Folium rediseñado: límites claros VM/VN, río destacado, etiquetas DivIcon, zonas diagnóstico."""
     m = folium.Map(
         location=[-32.415, -63.242],
         zoom_start=zoom,
@@ -131,23 +131,21 @@ def _mapa_conglomerado(zoom=14):
         prefer_canvas=True,
     )
 
-    # --- Capas base de alta calidad ---
+    # --- Capas base ---
     folium.TileLayer(
         tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
         attr='© Google',
-        name='🌍 Híbrido Google (por defecto)',
+        name='🌍 Híbrido Google',
         max_zoom=20,
         show=True,
     ).add_to(m)
-
     folium.TileLayer(
         tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        attr='© Esri — DigitalGlobe, GeoEye, USDA FSA, USGS',
+        attr='© Esri',
         name='🛰️ Satélite Esri',
         max_zoom=20,
         show=False,
     ).add_to(m)
-
     folium.TileLayer(
         tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         attr='© OpenStreetMap contributors',
@@ -156,28 +154,39 @@ def _mapa_conglomerado(zoom=14):
         show=False,
     ).add_to(m)
 
-    folium.TileLayer(
-        tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
-        attr='© Esri',
-        name='🗻 Topográfico',
-        max_zoom=19,
-        show=False,
-    ).add_to(m)
-
-    # --- Grupo: Río Ctalamochita ---
+    # --- Grupo: Río Ctalamochita — muy destacado ---
     grupo_rio = FeatureGroup(name='💧 Río Ctalamochita', show=True)
+    coords_rio = [[-32.390, -63.258], [-32.398, -63.252],
+                  [-32.408, -63.248], [-32.418, -63.245],
+                  [-32.430, -63.244], [-32.440, -63.242]]
+    # Sombra ancha
     folium.PolyLine(
-        locations=[[-32.390, -63.258], [-32.398, -63.252],
-                   [-32.408, -63.248], [-32.418, -63.245],
-                   [-32.430, -63.244], [-32.440, -63.242]],
-        color='#1565c0', weight=4, opacity=0.75,
+        locations=coords_rio,
+        color='#1565c0', weight=12, opacity=0.15,
+    ).add_to(grupo_rio)
+    # Trazo principal
+    folium.PolyLine(
+        locations=coords_rio,
+        color='#1976d2', weight=4, opacity=0.9,
         tooltip='Río Ctalamochita — corredor ecológico',
         popup=folium.Popup(
             "<b>💧 Río Ctalamochita</b><br>"
-            "Corredor ecológico natural que divide<br>"
-            "Villa María (oeste) y Villa Nueva (este).<br>"
-            "<i>Potencial: parque lineal con ciclovías</i>",
-            max_width=240,
+            "Corredor ecológico que separa<br>"
+            "<b style='color:#1565c0'>Villa María</b> (oeste) y "
+            "<b style='color:#6a1b9a'>Villa Nueva</b> (este).<br><br>"
+            "<i>Oportunidad: parque lineal ~8 km</i>",
+            max_width=260,
+        ),
+    ).add_to(grupo_rio)
+    # Etiqueta flotante río
+    folium.Marker(
+        location=[-32.418, -63.246],
+        icon=folium.DivIcon(
+            html="""<div style='background:#1565c018;border:1.5px solid #1976d2;
+                color:#0d47a1;font-size:10px;font-weight:700;padding:3px 8px;
+                border-radius:10px;white-space:nowrap;font-family:Arial,sans-serif;
+                box-shadow:0 1px 4px rgba(0,0,0,0.2);'>💧 Río Ctalamochita</div>""",
+            icon_size=(160, 24), icon_anchor=(80, 12),
         ),
     ).add_to(grupo_rio)
     grupo_rio.add_to(m)
@@ -189,24 +198,35 @@ def _mapa_conglomerado(zoom=14):
                    [-32.440, -63.248], [-32.440, -63.280]],
         tooltip='Villa María — área de análisis',
         popup=folium.Popup(
-            "<b>🔵 Villa María</b><br>"
-            "Municipio: Villa María<br>"
-            "Población: ~97.000 hab<br>"
-            "Área: 36 km²<br>"
-            "Calificación: A - Excelente",
-            max_width=220,
+            "<b style='color:#1565c0'>🔵 Villa María</b><br>"
+            "Cap. Depto. General San Martín<br>"
+            "Población: ~97.000 hab · Área: 36 km²<br>"
+            "<b>Calificación: A - Excelente ✅</b>",
+            max_width=230,
         ),
         color='#1565c0', weight=2.5,
-        fill=True, fill_color='#1565c0', fill_opacity=0.08,
+        fill=True, fill_color='#1565c0', fill_opacity=0.07,
     ).add_to(grupo_vm)
+    # Etiqueta nombre
     folium.Marker(
-        location=[-32.415, -63.265],
-        tooltip='Villa María',
-        popup=folium.Popup(
-            "<b>🔵 Villa María</b><br>Cap. Depto. General San Martín<br>~97.000 hab",
-            max_width=200,
+        location=[-32.397, -63.267],
+        icon=folium.DivIcon(
+            html="""<div style='background:#1565c0ee;color:#fff;font-size:12px;
+                font-weight:700;padding:5px 12px;border-radius:8px;
+                font-family:Arial,sans-serif;white-space:nowrap;
+                box-shadow:0 2px 6px rgba(0,0,0,0.35);'>🔵 Villa María</div>""",
+            icon_size=(130, 30), icon_anchor=(65, 15),
         ),
-        icon=folium.Icon(color='blue', icon='home', prefix='fa'),
+    ).add_to(grupo_vm)
+    # Etiqueta datos
+    folium.Marker(
+        location=[-32.432, -63.267],
+        icon=folium.DivIcon(
+            html="""<div style='font-size:10px;color:#1565c0;
+                font-family:Arial,sans-serif;white-space:nowrap;
+                font-weight:600;'>97.000 hab · 36 km²</div>""",
+            icon_size=(130, 18), icon_anchor=(65, 9),
+        ),
     ).add_to(grupo_vm)
     grupo_vm.add_to(m)
 
@@ -217,57 +237,119 @@ def _mapa_conglomerado(zoom=14):
                    [-32.440, -63.200], [-32.440, -63.248]],
         tooltip='Villa Nueva — contexto ecosistémico',
         popup=folium.Popup(
-            "<b>🟣 Villa Nueva</b><br>"
-            "Municipio: Villa Nueva<br>"
-            "Población: ~23.000 hab<br>"
-            "Área: 13.6 km²<br>"
-            "<i>Incluida por continuidad ecológica<br>con el río Ctalamochita</i>",
+            "<b style='color:#6a1b9a'>🟣 Villa Nueva</b><br>"
+            "Población: ~23.000 hab · Área: 13.6 km²<br>"
+            "<i>Incluida por continuidad ecológica<br>con el Ctalamochita</i>",
             max_width=240,
         ),
         color='#6a1b9a', weight=2.5, dash_array='6 4',
         fill=True, fill_color='#6a1b9a', fill_opacity=0.06,
     ).add_to(grupo_vn)
     folium.Marker(
-        location=[-32.415, -63.222],
-        tooltip='Villa Nueva',
-        popup=folium.Popup(
-            "<b>🟣 Villa Nueva</b><br>~23.000 hab<br>"
-            "<i>Contexto ecosistémico</i>",
-            max_width=200,
+        location=[-32.397, -63.222],
+        icon=folium.DivIcon(
+            html="""<div style='background:#6a1b9aee;color:#fff;font-size:12px;
+                font-weight:700;padding:5px 12px;border-radius:8px;
+                font-family:Arial,sans-serif;white-space:nowrap;
+                box-shadow:0 2px 6px rgba(0,0,0,0.35);'>🟣 Villa Nueva</div>""",
+            icon_size=(130, 30), icon_anchor=(65, 15),
         ),
-        icon=folium.Icon(color='purple', icon='home', prefix='fa'),
+    ).add_to(grupo_vn)
+    folium.Marker(
+        location=[-32.432, -63.222],
+        icon=folium.DivIcon(
+            html="""<div style='font-size:10px;color:#6a1b9a;
+                font-family:Arial,sans-serif;white-space:nowrap;
+                font-weight:600;'>23.000 hab · 13.6 km²</div>""",
+            icon_size=(130, 18), icon_anchor=(65, 9),
+        ),
     ).add_to(grupo_vn)
     grupo_vn.add_to(m)
 
-    # --- Grupo: Zonas de análisis ---
+    # --- Grupo: Zonas de análisis con polígonos + etiquetas diagnóstico ---
     grupo_zonas = FeatureGroup(name='📍 Zonas de análisis', show=True)
     zonas_coords = {
-        'Noroeste': {'center': [-32.402, -63.265], 'bounds': [[-32.390, -63.280], [-32.390, -63.248], [-32.415, -63.248], [-32.415, -63.280]]},
-        'Noreste':  {'center': [-32.402, -63.222], 'bounds': [[-32.390, -63.248], [-32.390, -63.200], [-32.415, -63.200], [-32.415, -63.248]]},
-        'Suroeste': {'center': [-32.428, -63.265], 'bounds': [[-32.415, -63.280], [-32.415, -63.248], [-32.440, -63.248], [-32.440, -63.280]]},
-        'Sureste':  {'center': [-32.428, -63.222], 'bounds': [[-32.415, -63.248], [-32.415, -63.200], [-32.440, -63.200], [-32.440, -63.248]]},
+        'Noroeste': {
+            'center': [-32.402, -63.265],
+            'poly': [[-32.390, -63.280], [-32.390, -63.248], [-32.415, -63.248], [-32.415, -63.280]],
+        },
+        'Noreste': {
+            'center': [-32.402, -63.222],
+            'poly': [[-32.390, -63.248], [-32.390, -63.200], [-32.415, -63.200], [-32.415, -63.248]],
+        },
+        'Suroeste': {
+            'center': [-32.428, -63.265],
+            'poly': [[-32.415, -63.280], [-32.415, -63.248], [-32.440, -63.248], [-32.440, -63.280]],
+        },
+        'Sureste': {
+            'center': [-32.428, -63.222],
+            'poly': [[-32.415, -63.248], [-32.415, -63.200], [-32.440, -63.200], [-32.440, -63.248]],
+        },
     }
+
+    lst_media = DATOS_VM['lst']['tMedia']
 
     for nom, z in ZONAS.items():
         coords = zonas_coords[nom]
         acc = z['acceso_pct']
+        temp_diff = z['temp'] - lst_media
         color_z = '#2e7d32' if acc >= 98 else '#f57c00' if acc >= 85 else '#c62828'
-        folium.CircleMarker(
-            location=coords['center'],
-            radius=14,
-            color=color_z, weight=2,
-            fill=True, fill_color=color_z, fill_opacity=0.55,
-            tooltip=f"{nom} — Acceso: {acc}%",
+        acc_emoji = '✅' if acc >= 98 else '⚠️'
+        temp_emoji = '🔴' if temp_diff > 0.3 else '🟢'
+
+        # Polígono con color diagnóstico
+        folium.Polygon(
+            locations=coords['poly'],
+            color=color_z, weight=1.5, dash_array='4 3',
+            fill=True, fill_color=color_z, fill_opacity=0.10,
+            tooltip=f"{nom} — Acceso: {acc}% | Temp: {z['temp']}°C",
             popup=folium.Popup(
                 f"<b>{z['label']}</b><br>"
-                f"Municipio: {z['municipio']}<br>"
-                f"Acceso <300m: <b>{acc}%</b><br>"
-                f"Dist. prom.: {z['dist_prom']} m<br>"
-                f"Temp. sup.: {z['temp']}°C",
-                max_width=220,
+                f"Municipio: <b>{z['municipio']}</b><br><br>"
+                f"{acc_emoji} Acceso &lt;300m: <b>{acc}%</b><br>"
+                f"📏 Dist. promedio: <b>{z['dist_prom']} m</b><br>"
+                f"{temp_emoji} Temp. sup.: <b>{z['temp']}°C</b> "
+                f"({'%+.2f' % temp_diff}°C vs media)<br>"
+                f"🏗️ Área edificada: <b>{z['ha_edif']} ha</b>",
+                max_width=240,
             ),
         ).add_to(grupo_zonas)
+
+        # Etiqueta flotante con diagnóstico
+        folium.Marker(
+            location=coords['center'],
+            icon=folium.DivIcon(
+                html=f"""<div style='background:{color_z}dd;color:#fff;
+                    font-size:10px;font-weight:700;padding:4px 9px;
+                    border-radius:6px;font-family:Arial,sans-serif;
+                    white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.3);
+                    text-align:center;line-height:1.4;'>
+                    {nom}<br>
+                    <span style='font-weight:400;font-size:9px;'>
+                    {acc}% · {z['temp']}°C</span>
+                </div>""",
+                icon_size=(90, 38), icon_anchor=(45, 19),
+            ),
+        ).add_to(grupo_zonas)
+
     grupo_zonas.add_to(m)
+
+    # --- Leyenda fija ---
+    leyenda_html = """
+    <div style='position:fixed;bottom:16px;left:12px;z-index:9999;
+                background:rgba(255,255,255,0.94);border-radius:10px;
+                padding:10px 14px;box-shadow:0 2px 8px rgba(0,0,0,0.22);
+                font-family:Arial,sans-serif;font-size:11px;line-height:1.85;'>
+      <b style='font-size:12px;'>Zonas — Acceso al verde</b><br>
+      <span style='color:#2e7d32;font-weight:700;'>●</span> &ge;98% — Excelente<br>
+      <span style='color:#f57c00;font-weight:700;'>●</span> 85–97% — Mejorable<br>
+      <span style='color:#c62828;font-weight:700;'>●</span> &lt;85% — Crítico<br>
+      <hr style='margin:4px 0;border-color:#ddd;'>
+      <span style='color:#1565c0;font-weight:700;'>━</span> Villa María<br>
+      <span style='color:#6a1b9a;font-weight:700;'>╌</span> Villa Nueva<br>
+      <span style='color:#1976d2;font-weight:700;'>━</span> Río Ctalamochita
+    </div>"""
+    m.get_root().html.add_child(folium.Element(leyenda_html))
 
     folium.LayerControl(position='topright', collapsed=False).add_to(m)
     return m
@@ -414,14 +496,64 @@ def _render_indicadores():
         _card_indicador("Suelo edificado", cob['edificado'], "%", "Impermeabilización", "#1565c0")
 
     st.markdown("---")
-    st.markdown("### Distribución de accesibilidad por distancia")
-    import pandas as pd
-    df_dist = pd.DataFrame({
-        'Rango': ['0–100 m', '100–300 m', '300–500 m', '>500 m'],
-        '% área edificada': [acc['r_0_100'], acc['r_100_300'], acc['r_300_500'], acc['r_500_mas']]
-    }).set_index('Rango')
-    st.bar_chart(df_dist)
-    st.caption("El 91.1% del área edificada tiene un espacio verde a menos de 100 metros.")
+    st.markdown("### Distribución de accesibilidad por distancia al verde más cercano")
+    st.caption("% del área edificada por rango · Referencia OMS: 100% a menos de 300 m")
+
+    rangos = [
+        ("0 – 100 m",   acc['r_0_100'],   "#2e7d32", "Verde inmediato · máxima accesibilidad"),
+        ("100 – 300 m", acc['r_100_300'],  "#66bb6a", "Dentro del estándar OMS · ~4 min caminando"),
+        ("300 – 500 m", acc['r_300_500'],  "#f57c00", "Por encima del umbral OMS"),
+        ("> 500 m",     acc['r_500_mas'],  "#c62828", "Déficit · intervención recomendada"),
+    ]
+    pct_oms = acc['r_0_100'] + acc['r_100_300']
+
+    for label, pct, color, desc in rangos:
+        col_l, col_b, col_v = st.columns([2, 5, 1])
+        with col_l:
+            st.markdown(
+                f"<div style='font-size:0.83em;font-weight:600;color:{color};"
+                f"padding-top:6px;'>{label}</div>"
+                f"<div style='font-size:0.72em;color:#888;'>{desc}</div>",
+                unsafe_allow_html=True,
+            )
+        with col_b:
+            bar_w = max(pct, 0.3)
+            inner = (
+                f'<span style="color:#fff;font-size:0.8em;font-weight:700;">{pct:.1f}%</span>'
+                if pct > 5 else ''
+            )
+            st.markdown(
+                f"""<div style='background:#f0f0f0;border-radius:6px;height:28px;
+                    margin-top:4px;overflow:hidden;'>
+                  <div style='width:{bar_w:.1f}%;background:{color};height:28px;
+                       border-radius:6px;display:flex;align-items:center;padding-left:8px;'>
+                    {inner}
+                  </div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
+        with col_v:
+            st.markdown(
+                f"<div style='font-weight:700;color:{color};padding-top:4px;"
+                f"text-align:right;font-size:0.95em;'>{pct:.1f}%</div>",
+                unsafe_allow_html=True,
+            )
+
+    st.markdown(
+        f"""<div style='margin-top:14px;background:#e8f5e9;border:1.5px solid #66bb6a;
+            border-radius:8px;padding:10px 16px;display:flex;
+            justify-content:space-between;align-items:center;'>
+          <div style='font-size:0.88em;'>
+            <b style='color:#2e7d32;'>✅ Dentro del estándar OMS (&lt;300 m)</b>
+          </div>
+          <div style='font-size:1.3em;font-weight:800;color:#2e7d32;'>{pct_oms:.1f}%</div>
+        </div>
+        <div style='font-size:0.75em;color:#888;margin-top:6px;'>
+          {acc['r_0_100']:.1f}% del área edificada tiene verde a menos de 100 m ·
+          {acc['r_100_300']:.1f}% adicional lo tiene entre 100 y 300 m · Meta OMS: 100% ✅
+        </div>""",
+        unsafe_allow_html=True,
+    )
 
 
 def _render_temperatura():

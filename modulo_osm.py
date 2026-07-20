@@ -378,6 +378,75 @@ def render_osm(datos_osm, m2_hab_satelital=None, poblacion=None):
             unsafe_allow_html=True
         )
 
+    st.markdown("---")
+
+    # ---- Mapa Folium con espacios OSM ----
+    st.markdown("### 🗺️ Mapa de espacios verdes públicos")
+    st.caption("Cada punto es un espacio catalogado en OpenStreetMap · Hacé clic para ver detalles")
+
+    if d.get('espacios'):
+        import folium as _folium
+        from streamlit_folium import st_folium as _st_folium
+        from folium import FeatureGroup as _FG
+
+        lats = [g['lat'] for g in d['espacios']]
+        lons = [g['lon'] for g in d['espacios']]
+        center = [sum(lats) / len(lats), sum(lons) / len(lons)]
+
+        m_osm = _folium.Map(location=center, zoom_start=14, tiles=None)
+
+        _folium.TileLayer(
+            tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+            attr='© Google', name='🌍 Híbrido Google', max_zoom=20, show=True,
+        ).add_to(m_osm)
+        _folium.TileLayer(
+            tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            attr='© OpenStreetMap contributors', name='🗺️ OpenStreetMap',
+            max_zoom=19, show=False,
+        ).add_to(m_osm)
+
+        # Grupos por categoría
+        grupos = {cat: _FG(name=f"🌿 {cat}", show=True) for cat in COLORES_CAT}
+
+        for g in d['espacios']:
+            cat   = g['categoria']
+            color = COLORES_CAT.get(cat, '#888888')
+            area_str = (
+                f"{g['area_m2']/10000:.2f} ha"
+                if g['area_m2'] >= 10000
+                else f"{g['area_m2']:.0f} m²"
+            )
+            _folium.CircleMarker(
+                location=[g['lat'], g['lon']],
+                radius=5, color=color, weight=1.5,
+                fill=True, fill_color=color, fill_opacity=0.75,
+                tooltip=f"{g['nombre']} — {cat}",
+                popup=_folium.Popup(
+                    f"<b>{g['nombre']}</b><br>Tipo: {cat}<br>Área: {area_str}",
+                    max_width=200,
+                ),
+            ).add_to(grupos.get(cat, m_osm))
+
+        for grupo in grupos.values():
+            grupo.add_to(m_osm)
+
+        # Leyenda
+        items = "".join(
+            f"<div><span style='color:{c};font-size:14px;'>●</span> {cat}</div>"
+            for cat, c in COLORES_CAT.items()
+        )
+        m_osm.get_root().html.add_child(_folium.Element(
+            f"""<div style='position:fixed;bottom:14px;left:10px;z-index:9999;
+                background:rgba(255,255,255,0.93);border-radius:8px;
+                padding:8px 12px;font-family:Arial,sans-serif;font-size:11px;
+                box-shadow:0 2px 6px rgba(0,0,0,0.2);line-height:1.7;'>
+              <b>Tipo de espacio</b><br>{items}
+            </div>"""
+        ))
+
+        _folium.LayerControl(position='topright', collapsed=False).add_to(m_osm)
+        _st_folium(m_osm, width="100%", height=480, returned_objects=[])
+
     st.markdown("")
     st.caption(
         "Datos de OpenStreetMap — colaborativos y actualizados por la comunidad. "
