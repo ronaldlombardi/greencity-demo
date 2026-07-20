@@ -1,5 +1,5 @@
 """
-app.py — GreenCity AI Agent
+app.py — Ciudad Verde AI Agent
 ============================
 App Streamlit unificada multi-ciudad.
 Reemplaza: demo.py, demo_sanfrancisco.py, dashboard.py, demo_v2.py
@@ -24,7 +24,7 @@ from modulo_ayuda       import ayuda_cobertura, ayuda_accesibilidad, ayuda_tempe
 # CONFIGURACIÓN DE PÁGINA
 # ============================================================
 st.set_page_config(
-    page_title="GreenCity AI Agent",
+    page_title="Ciudad Verde AI Agent",
     page_icon="🌿",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -50,7 +50,7 @@ def _render_login():
     }
     </style>
     <div class="login-box">
-        <h2 style="text-align:center;color:#2e7d32;margin-bottom:0.2rem">🌿 GreenCity Agent</h2>
+        <h2 style="text-align:center;color:#2e7d32;margin-bottom:0.2rem">🌿 Ciudad Verde Agent</h2>
         <p style="text-align:center;color:#666;margin-bottom:1.5rem;font-size:0.9em">
             Acceso restringido — ingresá tus credenciales
         </p>
@@ -259,7 +259,7 @@ def cargar_worldcover(ciudad_key):
 # ============================================================
 with st.sidebar:
     st.markdown("<style>div[data-testid='stSelectbox'] > div { cursor: pointer !important; }</style>", unsafe_allow_html=True)
-    st.markdown("## 🌿 GreenCity Agent")
+    st.markdown("## 🌿 Ciudad Verde Agent")
     st.markdown("---")
 
     ciudades_ord = sorted(CIUDADES.keys(), key=lambda k: -CIUDADES[k]['poblacion'])
@@ -302,7 +302,7 @@ with st.spinner("Conectando con Earth Engine..."):
 # SECCIÓN: INICIO
 # ============================================================
 if "Inicio" in seccion:
-    st.title("🌿 GreenCity AI Agent")
+    st.title("🌿 Ciudad Verde AI Agent")
     st.subheader("Diagnóstico inteligente de espacios verdes urbanos")
     st.markdown("---")
 
@@ -846,6 +846,6 @@ elif "Diagnóstico" in seccion:
 
     st.markdown("---")
     st.caption(
-        f"GreenCity AI Agent · {ciudad['nombre']} · "
+        f"Ciudad Verde AI Agent · {ciudad['nombre']} · "
         "Datos: ESA WorldCover 2020 · Landsat 8/9 · OpenStreetMap · INDEC Censo 2022"
     )
