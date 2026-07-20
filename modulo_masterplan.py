@@ -838,8 +838,10 @@ def render_masterplan():
         # ── Botones de acción ─────────────────────────────────────────────────
         col_print, col_dl, col_new, _ = st.columns([2, 2, 2, 1])
         with col_print:
-            st.markdown(
-                """<button onclick="window.print()"
+            import streamlit.components.v1 as _components
+            _components.html(
+                """<button
+                   onclick="window.parent.print()"
                    style="width:100%;background:linear-gradient(135deg,#6228b4,#00b4dc);
                           border:none;border-radius:8px;color:#fff;
                           font-family:'Space Grotesk',sans-serif;font-size:14px;
@@ -849,7 +851,7 @@ def render_masterplan():
                    onmouseout="this.style.opacity=1">
                    🖨️ Imprimir / Guardar PDF
                 </button>""",
-                unsafe_allow_html=True,
+                height=46,
             )
         with col_dl:
             st.download_button(
