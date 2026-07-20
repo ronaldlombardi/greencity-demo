@@ -145,23 +145,6 @@ def _mapa_conglomerado(zoom=14):
         attr='© OpenStreetMap contributors', name='🗺️ OpenStreetMap', max_zoom=19, show=False,
     ).add_to(m)
 
-    # --- Río Ctalamochita ---
-    grupo_rio = FeatureGroup(name='💧 Río Ctalamochita', show=True)
-    coords_rio = [[-32.390, -63.258], [-32.398, -63.252], [-32.408, -63.248],
-                  [-32.418, -63.245], [-32.430, -63.244], [-32.440, -63.242]]
-    folium.PolyLine(coords_rio, color='#1565c0', weight=10, opacity=0.18).add_to(grupo_rio)
-    folium.PolyLine(
-        coords_rio, color='#42a5f5', weight=3.5, opacity=0.95,
-        tooltip='💧 Río Ctalamochita — corredor ecológico · potencial parque lineal ~8 km',
-        popup=folium.Popup(
-            "<b>💧 Río Ctalamochita</b><br>"
-            "Separa Villa María (oeste) y Villa Nueva (este).<br>"
-            "<i>Potencial: parque lineal con ciclovías ~8 km</i>",
-            max_width=240,
-        ),
-    ).add_to(grupo_rio)
-    grupo_rio.add_to(m)
-
     # --- Villa María (polígono azul sólido) ---
     grupo_vm = FeatureGroup(name='🔵 Villa María', show=True)
     folium.Polygon(
@@ -316,45 +299,82 @@ def _render_mapa():
     st.caption("Villa María · Villa Nueva · Río Ctalamochita — conglomerado urbano")
     st.markdown("---")
 
+    # --- Explicación del mapa ---
     st.markdown("""
-    El mapa muestra el conglomerado como unidad de análisis ambiental. El **río Ctalamochita**
-    actúa como corredor ecológico natural entre Villa María (oeste, 🔵) y Villa Nueva (este, 🟣).
-    Las zonas de color indican el nivel de accesibilidad a espacios verdes.
+    Este mapa muestra el **conglomerado urbano Villa María – Villa Nueva** como una unidad de análisis ambiental.
+    Ambas ciudades comparten el ecosistema del **Río Ctalamochita** (visible en el centro del mapa satelital),
+    que actúa como corredor ecológico natural.
     """)
 
-    col_ley1, col_ley2, col_ley3 = st.columns(3)
-    with col_ley1:
-        st.markdown("🟢 **Acceso >98%** — excelente")
-    with col_ley2:
-        st.markdown("🟠 **Acceso 85–98%** — mejorable")
-    with col_ley3:
-        st.markdown("🔴 **Acceso <85%** — crítico")
-
-    m = _mapa_conglomerado(zoom=14)
-    st_folium(m, width="100%", height=560, returned_objects=[])
-
-    # Leyenda fuera del iframe — siempre visible
     st.markdown(
-        "<div style='display:flex;gap:20px;flex-wrap:wrap;margin-top:8px;"
-        "font-family:Arial,sans-serif;font-size:12px;'>"
-        "<div><b>Zonas — Acceso al verde:</b></div>"
-        "<div><span style='color:#2e7d32;font-size:16px;'>●</span> &ge;98% Excelente</div>"
-        "<div><span style='color:#f57c00;font-size:16px;'>●</span> 85–97% Mejorable</div>"
-        "<div><span style='color:#c62828;font-size:16px;'>●</span> &lt;85% Crítico</div>"
-        "<div style='border-left:1px solid #ccc;padding-left:16px;'>"
-        "<span style='color:#1565c0;font-weight:700;'>━</span> Villa María &nbsp;"
-        "<span style='color:#6a1b9a;font-weight:700;'>╌</span> Villa Nueva &nbsp;"
-        "<span style='color:#1976d2;font-weight:700;'>━</span> Río Ctalamochita"
-        "</div></div>",
+        "<div style='background:rgba(30,40,80,0.5);border:1px solid rgba(120,140,255,0.2);"
+        "border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:0.88em;line-height:1.8;'>"
+        "<b>Cómo leer el mapa:</b><br>"
+        "<span style='color:#1565c0;font-size:15px;font-weight:700;'>▬</span> "
+        "<b>Borde azul sólido</b> = Villa María (oeste del río) · ~97.000 hab<br>"
+        "<span style='color:#7b1fa2;font-size:15px;font-weight:700;'>╌</span> "
+        "<b>Borde violeta punteado</b> = Villa Nueva (este del río) · ~23.000 hab<br>"
+        "<span style='color:#2e7d32;font-size:15px;'>▬</span> "
+        "<b>Zona verde</b> = acceso al verde &ge;98% de la población — Excelente<br>"
+        "<span style='color:#f57c00;font-size:15px;'>▬</span> "
+        "<b>Zona naranja</b> = acceso al verde 85–97% — Mejorable<br>"
+        "<span style='color:#c62828;font-size:15px;'>▬</span> "
+        "<b>Zona roja</b> = acceso al verde &lt;85% — Crítico<br>"
+        "<i style='color:#aaa;font-size:0.9em;'>Hacé clic en cualquier zona para ver sus indicadores detallados.</i>"
+        "</div>",
         unsafe_allow_html=True,
     )
 
+    m = _mapa_conglomerado(zoom=14)
+    st_folium(m, width="100%", height=540, returned_objects=[])
+
+    # --- Cards de zonas debajo del mapa ---
     st.markdown("---")
-    st.markdown("""
-    **Sobre el área de Villa Nueva:** su inclusión en el análisis responde a que comparte el
-    ecosistema del Ctalamochita con Villa María. Las zonas Noreste y Sureste corresponden
-    geográficamente a Villa Nueva y se incluyen como contexto ambiental del conglomerado.
-    """)
+    st.markdown("### Diagnóstico por zonas")
+    st.caption("Hacé clic en el mapa sobre cada zona para ver el popup · Los datos se resumen acá:")
+
+    lst_media = DATOS_VM['lst']['tMedia']
+    cols = st.columns(4)
+    for i, (nom, z) in enumerate(ZONAS.items()):
+        acc  = z['acceso_pct']
+        temp_diff = z['temp'] - lst_media
+        color_acc = '#2e7d32' if acc >= 98 else '#f57c00' if acc >= 85 else '#c62828'
+        estado    = 'Excelente ✅' if acc >= 98 else 'Mejorable ⚠️' if acc >= 85 else 'Crítico 🔴'
+        color_t   = '#c62828' if temp_diff > 0.3 else '#2196f3' if temp_diff < -0.1 else '#888'
+        badge_muni = '#1565c0' if z['municipio'] == 'Villa María' else '#7b1fa2'
+
+        with cols[i]:
+            st.markdown(
+                f"<div style='border:2px solid {color_acc};border-radius:10px;"
+                f"padding:14px 12px;height:100%;'>"
+                f"<div style='font-size:0.7em;font-weight:700;color:{badge_muni};"
+                f"letter-spacing:0.05em;margin-bottom:4px;'>{z['municipio'].upper()}</div>"
+                f"<div style='font-size:1em;font-weight:700;margin-bottom:10px;'>{nom}</div>"
+                f"<div style='font-size:0.82em;margin-bottom:4px;'>"
+                f"<span style='color:{color_acc};font-weight:700;'>●</span> "
+                f"Acceso &lt;300m: <b>{acc}%</b></div>"
+                f"<div style='font-size:0.78em;color:#aaa;margin-bottom:2px;'>{estado}</div>"
+                f"<hr style='border-color:rgba(255,255,255,0.1);margin:8px 0;'>"
+                f"<div style='font-size:0.8em;margin-bottom:3px;'>"
+                f"📏 Dist. media: <b>{z['dist_prom']} m</b></div>"
+                f"<div style='font-size:0.8em;margin-bottom:3px;color:{color_t};'>"
+                f"🌡️ Temp: <b>{z['temp']}°C</b> "
+                f"<span style='font-size:0.85em;'>({'+' if temp_diff>0 else ''}{temp_diff:.2f}°C)</span></div>"
+                f"<div style='font-size:0.8em;color:#aaa;'>"
+                f"🏗️ Área edif.: {z['ha_edif']} ha</div>"
+                f"</div>",
+                unsafe_allow_html=True,
+            )
+
+    st.markdown("---")
+    st.markdown(
+        "<div style='font-size:0.82em;color:#888;'>"
+        "Villa Nueva se incluye en el análisis por su continuidad ecosistémica con Villa María "
+        "a través del Río Ctalamochita. Las estrategias de política pública corresponden "
+        "exclusivamente al municipio de Villa María."
+        "</div>",
+        unsafe_allow_html=True,
+    )
 
 
 def _render_indicadores():
