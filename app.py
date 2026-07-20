@@ -20,7 +20,7 @@ from modulo_osm          import cargar_osm, render_osm
 from modulo_censo        import render_censo
 from modulo_ayuda        import ayuda_cobertura, ayuda_accesibilidad, ayuda_temperatura, ayuda_osm, ayuda_censo, ayuda_comparativa, ayuda_diagnostico
 from modulo_villamaria   import render_modulo_villamaria
-from modulo_asistente    import render_asistente_sidebar
+from modulo_asistente    import render_asistente_sidebar, render_asistente_panel
 
 # ── Inyección de estilos ──────────────────────────────────
 def _inyectar_css():
@@ -476,8 +476,12 @@ with st.spinner("Conectando con Earth Engine..."):
 # MÓDULO VILLA MARÍA — delegar completamente
 # ============================================================
 if modulo == "🏙️ Villa María":
+    render_asistente_panel()
     render_modulo_villamaria()
     st.stop()
+
+# ── Panel flotante asistente (Provincia) ──
+render_asistente_panel()
 
 # ============================================================
 # SECCIÓN: INICIO — Módulo Provincia de Córdoba

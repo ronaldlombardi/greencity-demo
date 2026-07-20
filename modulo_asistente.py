@@ -2,8 +2,8 @@
 modulo_asistente.py — Ciudad Verde AI Agent
 ============================================
 Asistente IA con Claude Haiku.
-Panel compacto en la parte inferior del sidebar.
-Orbe animada al procesar estilo ANCLA SCIENCE.
+- Sidebar: solo un botón compacto
+- Al pulsar: panel horizontal flotante sobre el contenido
 """
 
 import os
@@ -68,273 +68,392 @@ SUGERENCIAS = [
     "¿Qué es la Ordenanza 7209?",
 ]
 
-# CSS del orbe procesando + panel compacto
-_CSS_ASISTENTE = """
+# ── CSS + HTML del panel flotante horizontal ──────────────
+_CSS_PANEL = """
 <style>
-/* ── Panel asistente compacto ── */
-.cv-ai-compact {
-    background: rgba(8,12,28,0.75);
-    border: 0.5px solid rgba(120,140,255,0.22);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-top: 6px;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+/* ── Panel flotante horizontal ── */
+#cvAiPanel {
+    display: none;
+    position: fixed;
+    left: 245px;          /* justo después del sidebar */
+    bottom: 0;
+    right: 0;
+    height: 300px;
+    z-index: 1000;
+    background: rgba(8,12,28,0.97);
+    border-top: 0.5px solid rgba(120,140,255,0.30);
+    border-left: 0.5px solid rgba(120,140,255,0.20);
+    backdrop-filter: blur(20px);
+    display: none;
+    flex-direction: row;
+    gap: 0;
+    font-family: 'Space Grotesk', sans-serif;
 }
-.cv-ai-header {
-    display: flex; align-items: center; gap: 9px;
-    margin-bottom: 10px;
-    padding-bottom: 9px;
+#cvAiPanel.open { display: flex !important; }
+
+/* Columna izquierda: orbe + sugerencias */
+#cvAiLeft {
+    width: 280px;
+    flex-shrink: 0;
+    padding: 16px 16px;
+    border-right: 0.5px solid rgba(120,140,255,0.16);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+/* Cabecera orbe */
+.cv-panel-header {
+    display: flex; align-items: center; gap: 10px;
+    padding-bottom: 10px;
     border-bottom: 0.5px solid rgba(120,140,255,0.14);
 }
-.cv-ai-orb-mini {
-    width: 28px; height: 28px; flex-shrink: 0;
+.cv-panel-orb {
+    width: 34px; height: 34px; flex-shrink: 0;
     border-radius: 50%;
     background: radial-gradient(circle at 35% 35%, #a060ff, #3010a0 60%, #050810);
-    box-shadow: 0 0 14px rgba(100,40,200,0.45);
-    animation: orb-mini 3s ease-in-out infinite;
+    box-shadow: 0 0 16px rgba(100,40,200,0.5);
+    animation: cv-orb-idle 3s ease-in-out infinite;
 }
-@keyframes orb-mini {
-    0%,100%{box-shadow:0 0 14px rgba(100,40,200,0.4);transform:scale(1);}
-    50%{box-shadow:0 0 26px rgba(100,40,200,0.65);transform:scale(1.05);}
+@keyframes cv-orb-idle {
+    0%,100%{box-shadow:0 0 16px rgba(100,40,200,0.4);transform:scale(1);}
+    50%{box-shadow:0 0 28px rgba(100,40,200,0.7);transform:scale(1.05);}
 }
-.cv-ai-header-info { flex:1; }
-.cv-ai-header-name {
+.cv-panel-orb.processing {
+    animation: cv-orb-proc 0.8s ease-in-out infinite !important;
+}
+@keyframes cv-orb-proc {
+    0%,100%{box-shadow:0 0 32px rgba(0,180,220,0.7);transform:scale(1);}
+    50%{box-shadow:0 0 56px rgba(0,180,220,0.9);transform:scale(1.10);}
+}
+.cv-panel-name {
     font-family:'Space Mono',monospace;font-size:11px;
     font-weight:700;color:#c0b0f0;letter-spacing:0.05em;
 }
-.cv-ai-header-status {
+.cv-panel-status {
     font-family:'Space Mono',monospace;font-size:8px;
-    color:rgba(64,220,144,0.7);letter-spacing:0.06em;margin-top:1px;
+    color:rgba(64,220,144,0.75);letter-spacing:0.07em;margin-top:2px;
 }
+.cv-panel-status.proc { color:rgba(0,180,220,0.85) !important; }
 
-/* Sugerencias en chips horizontales — scroll */
-.cv-ai-chips {
+/* Sugerencias */
+.cv-sugs-lbl {
     font-family:'Space Mono',monospace;font-size:8px;
-    letter-spacing:0.10em;text-transform:uppercase;
-    color:rgba(160,175,210,0.45);margin-bottom:5px;
-}
-
-/* ── Overlay orbe procesando ── */
-.cv-orbe-overlay {
-    display: none;
-    position: fixed; inset: 0; z-index: 9999;
-    background: rgba(5,8,16,0.94);
-    flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 24px;
-}
-.cv-orbe-overlay.active { display: flex; }
-
-.cv-orbe-wrap {
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
-    width: 220px; height: 220px;
-}
-.cv-arc {
-    position: absolute; border-radius: 50%;
-    border: 1px solid transparent;
-    animation: cv-arc-spin linear infinite;
-}
-.cv-arc:nth-child(1){
-    width:170px;height:170px;
-    border-top-color:rgba(120,80,255,0.75);
-    border-right-color:rgba(120,80,255,0.25);
-    animation-duration:2.8s;
-}
-.cv-arc:nth-child(2){
-    width:190px;height:190px;
-    border-bottom-color:rgba(0,180,220,0.65);
-    border-left-color:rgba(0,180,220,0.2);
-    animation-duration:4.2s;animation-direction:reverse;
-}
-.cv-arc:nth-child(3){
-    width:210px;height:210px;
-    border-top-color:rgba(160,100,255,0.35);
-    animation-duration:6.5s;
-}
-@keyframes cv-arc-spin { to{ transform:rotate(360deg); } }
-
-.cv-sphere {
-    width:120px;height:120px;border-radius:50%;
-    background:radial-gradient(circle at 38% 32%,#d0a0ff 0%,#7030e0 30%,#2010a0 62%,#060318 100%);
-    position:relative;z-index:2;
-    animation:cv-sphere-pulse 2.2s ease-in-out infinite;
-}
-.cv-sphere::before {
-    content:'';position:absolute;inset:-14px;border-radius:50%;
-    background:radial-gradient(circle,rgba(130,60,255,0.22) 0%,transparent 68%);
-    animation:cv-sphere-pulse 2.2s ease-in-out infinite;
-}
-@keyframes cv-sphere-pulse {
-    0%,100%{transform:scale(1);filter:brightness(1);}
-    50%{transform:scale(1.04);filter:brightness(1.12);}
-}
-
-.cv-orbe-label {
-    font-family:'Space Mono',monospace;font-size:11px;
     letter-spacing:0.12em;text-transform:uppercase;
-    color:rgba(180,160,255,0.7);text-align:center;
+    color:rgba(160,175,210,0.45);margin-bottom:2px;
 }
-.cv-orbe-dots {
-    display:flex;gap:8px;align-items:center;margin-top:4px;
+.cv-sug-chip {
+    display:block;width:100%;text-align:left;
+    padding:6px 10px;
+    background:rgba(99,40,180,0.12);
+    border:0.5px solid rgba(120,80,200,0.25);
+    border-radius:6px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:11px;color:#c8d0f0;
+    cursor:pointer;transition:all 0.18s;
+    margin-bottom:4px;
 }
-.cv-orbe-dot {
-    width:5px;height:5px;border-radius:50%;
-    background:#00b4dc;
-    animation:cv-dot-pulse 1s ease-in-out infinite;
+.cv-sug-chip:hover {
+    background:rgba(99,40,180,0.26);
+    border-color:rgba(144,96,255,0.45);
+    color:#e8e0ff;
 }
-.cv-orbe-dot:nth-child(2){animation-delay:0.2s;}
-.cv-orbe-dot:nth-child(3){animation-delay:0.4s;}
-@keyframes cv-dot-pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.7);}}
+
+/* Columna central: input + respuesta */
+#cvAiCenter {
+    flex: 1;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.cv-input-row {
+    display: flex; gap: 8px; align-items: flex-end;
+    flex-shrink: 0;
+}
+.cv-ai-textarea {
+    flex: 1;
+    padding: 9px 12px;
+    background: rgba(8,12,28,0.85);
+    border: 0.5px solid rgba(120,140,255,0.28);
+    border-radius: 7px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; color: #fff;
+    outline: none; resize: none;
+    height: 60px;
+    transition: border-color 0.2s;
+}
+.cv-ai-textarea:focus { border-color: #9060ff; }
+.cv-ai-textarea::placeholder { color: rgba(170,176,200,0.4); }
+
+.cv-send-btn {
+    padding: 9px 18px;
+    background: linear-gradient(135deg, #6228b4, #00b4dc);
+    border: none; border-radius: 7px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px; font-weight: 600; color: #fff;
+    cursor: pointer; white-space: nowrap;
+    transition: opacity 0.2s;
+    align-self: flex-end;
+}
+.cv-send-btn:hover { opacity: 0.88; }
+.cv-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* Respuesta */
-.cv-ai-respuesta {
-    background:rgba(10,14,32,0.65);
-    border:0.5px solid rgba(120,140,255,0.20);
-    border-radius:8px;padding:12px 14px;margin-top:8px;
+.cv-resp-box {
+    flex: 1;
+    background: rgba(10,14,32,0.6);
+    border: 0.5px solid rgba(120,140,255,0.18);
+    border-radius: 8px;
+    padding: 12px 14px;
+    overflow-y: auto;
 }
-.cv-ai-respuesta-lbl {
+.cv-resp-lbl {
     font-family:'Space Mono',monospace;font-size:8px;
     font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
     color:#00b4dc;margin-bottom:8px;
 }
-.cv-ai-respuesta-body {
+.cv-resp-body {
     font-family:'Space Grotesk',sans-serif;
     font-size:12px;color:#dde3f5;line-height:1.7;
 }
+.cv-resp-dots {
+    display:flex;gap:6px;align-items:center;
+    padding:4px 0;
+}
+.cv-resp-dot {
+    width:5px;height:5px;border-radius:50%;background:#00b4dc;
+    animation:cv-dot 1s ease-in-out infinite;
+}
+.cv-resp-dot:nth-child(2){animation-delay:0.2s;}
+.cv-resp-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes cv-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.6);}}
+
+/* Botón cerrar panel */
+#cvCloseBtn {
+    position:absolute;top:10px;right:14px;
+    background:transparent;border:none;
+    font-family:'Space Mono',monospace;font-size:11px;
+    color:rgba(170,176,200,0.5);cursor:pointer;
+    transition:color 0.2s;z-index:10;
+    padding:4px 8px;
+}
+#cvCloseBtn:hover{color:#fff;}
+
+/* Arco de procesamiento en orbe */
+.cv-panel-orb-wrap {
+    position:relative;width:34px;height:34px;flex-shrink:0;
+}
+.cv-proc-arc {
+    display:none;
+    position:absolute;inset:-6px;border-radius:50%;
+    border:1.5px solid transparent;
+    border-top-color:rgba(0,180,220,0.8);
+    animation:cv-arc-spin 1.2s linear infinite;
+}
+.cv-proc-arc.active { display:block; }
+@keyframes cv-arc-spin{to{transform:rotate(360deg);}}
 </style>
 
-<!-- Overlay orbe procesando -->
-<div class="cv-orbe-overlay" id="cvOrbeOverlay">
-  <div class="cv-orbe-wrap">
-    <div class="cv-arc"></div>
-    <div class="cv-arc"></div>
-    <div class="cv-arc"></div>
-    <div class="cv-sphere"></div>
+<!-- Panel flotante horizontal -->
+<div id="cvAiPanel">
+  <button id="cvCloseBtn" onclick="cvClosePanel()">✕ cerrar</button>
+
+  <!-- Columna izquierda -->
+  <div id="cvAiLeft">
+    <div class="cv-panel-header">
+      <div class="cv-panel-orb-wrap">
+        <div class="cv-panel-orb" id="cvOrb"></div>
+        <div class="cv-proc-arc" id="cvArc"></div>
+      </div>
+      <div>
+        <div class="cv-panel-name">Asistente IA</div>
+        <div class="cv-panel-status" id="cvStatus">● CLAUDE HAIKU · EN LÍNEA</div>
+      </div>
+    </div>
+    <div class="cv-sugs-lbl">Preguntas frecuentes</div>
+    <div id="cvSugs"></div>
   </div>
-  <div>
-    <div class="cv-orbe-label">Procesando consulta</div>
-    <div class="cv-orbe-dots">
-      <div class="cv-orbe-dot"></div>
-      <div class="cv-orbe-dot"></div>
-      <div class="cv-orbe-dot"></div>
+
+  <!-- Columna central -->
+  <div id="cvAiCenter">
+    <div class="cv-input-row">
+      <textarea class="cv-ai-textarea" id="cvPregunta"
+        placeholder="Preguntá sobre indicadores, fuentes de datos, metodología…"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();cvEnviar();}">
+      </textarea>
+      <button class="cv-send-btn" id="cvSendBtn" onclick="cvEnviar()">
+        Consultar →
+      </button>
+    </div>
+    <div class="cv-resp-box" id="cvRespBox">
+      <div class="cv-resp-lbl">// Asistente Ciudad Verde</div>
+      <div class="cv-resp-body" id="cvRespBody" style="color:rgba(170,176,200,0.45);">
+        Hacé una pregunta o elegí una sugerencia para comenzar.
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-function cvShowOrbe(){ document.getElementById('cvOrbeOverlay').classList.add('active'); }
-function cvHideOrbe(){ document.getElementById('cvOrbeOverlay').classList.remove('active'); }
+(function(){
+  // Sugerencias
+  const sugs = %SUGERENCIAS%;
+  const cont = document.getElementById('cvSugs');
+  if(cont){
+    sugs.forEach(s=>{
+      const b=document.createElement('button');
+      b.className='cv-sug-chip';
+      b.textContent=s;
+      b.onclick=()=>{ document.getElementById('cvPregunta').value=s; cvEnviar(); };
+      cont.appendChild(b);
+    });
+  }
+
+  window.cvOpenPanel = function(){
+    document.getElementById('cvAiPanel').classList.add('open');
+  };
+  window.cvClosePanel = function(){
+    document.getElementById('cvAiPanel').classList.remove('open');
+  };
+
+  window.cvEnviar = async function(){
+    const ta  = document.getElementById('cvPregunta');
+    const btn = document.getElementById('cvSendBtn');
+    const body= document.getElementById('cvRespBody');
+    const orb = document.getElementById('cvOrb');
+    const arc = document.getElementById('cvArc');
+    const st  = document.getElementById('cvStatus');
+    const pregunta = ta.value.trim();
+    if(!pregunta) return;
+
+    // Estado procesando
+    btn.disabled = true;
+    orb.classList.add('processing');
+    arc.classList.add('active');
+    st.textContent  = '● PROCESANDO…';
+    st.classList.add('proc');
+    body.innerHTML = '<div class="cv-resp-dots"><div class="cv-resp-dot"></div><div class="cv-resp-dot"></div><div class="cv-resp-dot"></div></div>';
+
+    try {
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'content-type':      'application/json',
+          'x-api-key':         '%API_KEY%',
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-calls': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 800,
+          system: %SYSTEM_JSON%,
+          messages: [{ role: 'user', content: pregunta }]
+        })
+      });
+      const data = await resp.json();
+      const texto = (data.content && data.content[0] && data.content[0].text)
+        ? data.content[0].text
+        : 'Sin respuesta del modelo.';
+      const html = texto
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/\n\n/g,'</p><p style="margin-top:8px">').replace(/\n/g,'<br>');
+      document.getElementById('cvRespBox').querySelector('.cv-resp-lbl').textContent = '// Respuesta';
+      body.innerHTML = '<p>' + html + '</p>';
+      ta.value = '';
+    } catch(e) {
+      body.innerHTML = '<span style="color:#e24b4a;">Error: ' + e.message + '</span>';
+    } finally {
+      btn.disabled = false;
+      orb.classList.remove('processing');
+      arc.classList.remove('active');
+      st.textContent = '● CLAUDE HAIKU · EN LÍNEA';
+      st.classList.remove('proc');
+    }
+  };
+})();
 </script>
 """
 
 
 def _consultar_haiku(pregunta: str) -> str:
+    """Fallback Python por si el JS falla (no debería usarse en producción)."""
     if not ANTHROPIC_API_KEY:
-        return "⚠️ API key de Anthropic no configurada. Agregá ANTHROPIC_API_KEY en Railway → Variables."
+        return "⚠️ API key no configurada."
     headers = {
         "x-api-key":         ANTHROPIC_API_KEY,
         "anthropic-version": "2023-06-01",
         "content-type":      "application/json",
     }
     payload = {
-        "model":    MODEL,
+        "model":      MODEL,
         "max_tokens": 800,
-        "system":   SYSTEM_PROMPT,
-        "messages": [{"role": "user", "content": pregunta}],
+        "system":     SYSTEM_PROMPT,
+        "messages":   [{"role": "user", "content": pregunta}],
     }
     try:
-        resp = requests.post(API_URL, headers=headers, json=payload, timeout=30)
-        resp.raise_for_status()
-        return resp.json()["content"][0]["text"]
-    except requests.exceptions.Timeout:
-        return "⚠️ Tiempo de espera agotado. Intentá de nuevo."
-    except requests.exceptions.RequestException as e:
-        return f"⚠️ Error de conexión: {str(e)}"
-    except (KeyError, IndexError):
-        return "⚠️ Respuesta inesperada del modelo."
+        r = requests.post(API_URL, headers=headers, json=payload, timeout=30)
+        r.raise_for_status()
+        return r.json()["content"][0]["text"]
+    except Exception as e:
+        return f"⚠️ Error: {str(e)}"
+
+
+def render_asistente_panel():
+    """
+    Inyecta el panel flotante horizontal en el área principal.
+    Llamar UNA VEZ al inicio del contenido principal (fuera del sidebar).
+    """
+    import json as _json
+    if "cv_panel_injected" not in st.session_state:
+        # Inyectar panel con sugerencias y API key reemplazadas
+        html = _CSS_PANEL
+        html = html.replace("%SUGERENCIAS%", _json.dumps(SUGERENCIAS, ensure_ascii=False))
+        html = html.replace("%API_KEY%", ANTHROPIC_API_KEY)
+        html = html.replace("%SYSTEM_JSON%", _json.dumps(SYSTEM_PROMPT, ensure_ascii=False))
+        st.markdown(html, unsafe_allow_html=True)
+        st.session_state["cv_panel_injected"] = True
 
 
 def render_asistente_sidebar():
-    """Panel compacto del asistente en la parte inferior del sidebar."""
-
-    # Inyectar CSS + overlay (una sola vez por sesión)
-    if "cv_ai_css_injected" not in st.session_state:
-        st.markdown(_CSS_ASISTENTE, unsafe_allow_html=True)
-        st.session_state["cv_ai_css_injected"] = True
-
+    """
+    Botón compacto en el sidebar que abre el panel flotante.
+    """
     st.markdown("---")
-
-    # Header compacto con orbe mini
     st.markdown(
-        """<div class="cv-ai-compact">
-          <div class="cv-ai-header">
-            <div class="cv-ai-orb-mini"></div>
-            <div class="cv-ai-header-info">
-              <div class="cv-ai-header-name">Asistente IA</div>
-              <div class="cv-ai-header-status">● CLAUDE HAIKU · EN LÍNEA</div>
-            </div>
+        """
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <div style="width:22px;height:22px;border-radius:50%;flex-shrink:0;
+               background:radial-gradient(circle at 35% 35%,#a060ff,#3010a0 60%,#050810);
+               box-shadow:0 0 12px rgba(100,40,200,0.5);
+               animation:orb-mini 3s ease-in-out infinite;">
           </div>
-          <div class="cv-ai-chips">Preguntas frecuentes</div>
-        </div>""",
+          <div style="font-family:'Space Mono',monospace;font-size:9px;
+               color:rgba(64,220,144,0.7);letter-spacing:0.06em;">
+            ● HAIKU · EN LÍNEA
+          </div>
+        </div>
+        <style>
+        @keyframes orb-mini{0%,100%{box-shadow:0 0 12px rgba(100,40,200,0.4);}
+        50%{box-shadow:0 0 22px rgba(100,40,200,0.7);}}
+        </style>
+        """,
         unsafe_allow_html=True,
     )
-
-    # Sugerencias como botones — 2 columnas compactas
-    cols = st.columns(2)
-    for i, sug in enumerate(SUGERENCIAS):
-        with cols[i % 2]:
-            if st.button(
-                sug, key=f"sug_{i}",
-                use_container_width=True,
-            ):
-                st.session_state["ai_pregunta_disparar"] = sug
-
-    # Input libre
-    pregunta_input = st.text_input(
-        "Pregunta libre",
-        placeholder="Preguntá sobre datos, metodología…",
-        key="ai_input_libre",
-        label_visibility="collapsed",
+    st.markdown(
+        """<button onclick="cvOpenPanel()"
+          style="width:100%;padding:9px 14px;
+          background:linear-gradient(135deg,rgba(99,40,180,0.35),rgba(0,180,220,0.25));
+          border:0.5px solid rgba(120,140,255,0.35);border-radius:7px;
+          font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;
+          color:#c8d4f8;cursor:pointer;letter-spacing:0.03em;
+          transition:all 0.2s;text-align:center;">
+          🤖 Asistente IA
+        </button>""",
+        unsafe_allow_html=True,
     )
-
-    col_btn, col_clear = st.columns([3, 1])
-    with col_btn:
-        enviar = st.button("Consultar →", key="ai_enviar", use_container_width=True, type="primary")
-    with col_clear:
-        if st.button("✕", key="ai_limpiar", use_container_width=True):
-            st.session_state.pop("ai_respuesta", None)
-            st.session_state.pop("ai_pregunta_disparar", None)
-            st.rerun()
-
-    # Resolver pregunta final
-    pregunta_final = None
-    if enviar and pregunta_input.strip():
-        pregunta_final = pregunta_input.strip()
-    elif "ai_pregunta_disparar" in st.session_state:
-        pregunta_final = st.session_state.pop("ai_pregunta_disparar")
-
-    # Consultar Haiku con spinner de Streamlit + orbe JS
-    if pregunta_final:
-        st.markdown(
-            "<script>if(typeof cvShowOrbe==='function')cvShowOrbe();</script>",
-            unsafe_allow_html=True,
-        )
-        with st.spinner(""):
-            respuesta = _consultar_haiku(pregunta_final)
-        st.session_state["ai_respuesta"] = respuesta
-        st.markdown(
-            "<script>if(typeof cvHideOrbe==='function')cvHideOrbe();</script>",
-            unsafe_allow_html=True,
-        )
-        st.rerun()
-
-    # Mostrar respuesta
-    if "ai_respuesta" in st.session_state:
-        cuerpo = st.session_state["ai_respuesta"].replace("\n", "<br>")
-        st.markdown(
-            f"""<div class="cv-ai-respuesta">
-              <div class="cv-ai-respuesta-lbl">// Respuesta</div>
-              <div class="cv-ai-respuesta-body">{cuerpo}</div>
-            </div>""",
-            unsafe_allow_html=True,
-        )
