@@ -534,6 +534,10 @@ def render_masterplan():
         "*cumplimiento del target C40 2030*, *reducción de isla de calor*, etc."
     )
 
+    # Aplicar foco sugerido si viene de un botón
+    if "mp_foco_set" in st.session_state:
+        st.session_state["mp_foco"] = st.session_state.pop("mp_foco_set")
+
     foco = st.text_area(
         "Foco y prioridades",
         placeholder="Ejemplo: Priorizar la forestación de la zona Noroeste (VM centro-norte) "
@@ -543,7 +547,7 @@ def render_masterplan():
         key="mp_foco",
     )
 
-    # Ejemplos rápidos
+    # Focos sugeridos
     st.markdown("**Focos sugeridos:**")
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -571,10 +575,6 @@ def render_masterplan():
             )
             st.rerun()
 
-    # Aplicar foco sugerido si se clickeó
-    if "mp_foco_set" in st.session_state:
-        foco = st.session_state.pop("mp_foco_set")
-
     st.markdown("---")
 
     # Botón generar
@@ -596,21 +596,24 @@ def render_masterplan():
             unsafe_allow_html=True,
         )
 
-    # Generar
+    # Generar — usar el valor del session_state directamente (más confiable)
     if generar:
-        if not foco.strip():
+        foco_final = st.session_state.get("mp_foco", "").strip()
+        if not foco_final:
             st.warning("Ingresá un foco para personalizar el Masterplan.")
         else:
-            # Activar orbe overlay estilo ANCLA SCIENCE
+            # Guardar foco para mostrar después del rerun
+            st.session_state["mp_foco_en_proceso"] = foco_final
+            # Activar orbe overlay
             st.markdown(
                 "<script>if(typeof cvMostrarOrbe==='function')cvMostrarOrbe();</script>",
                 unsafe_allow_html=True,
             )
-            with st.spinner(""):
+            with st.spinner("Claude Opus 4.7 generando el Masterplan…"):
                 usuario = st.session_state.get("cv_usuario", "usuarioverde")
-                texto, tok_in, tok_out = _llamar_opus(foco.strip(), usuario)
+                texto, tok_in, tok_out = _llamar_opus(foco_final, usuario)
 
-            # Ocultar orbe con tokens finales
+            # Ocultar orbe
             st.markdown(
                 f"<script>if(typeof cvOcultarOrbe==='function')cvOcultarOrbe({tok_in+tok_out});</script>",
                 unsafe_allow_html=True,
