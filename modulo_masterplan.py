@@ -1,8 +1,9 @@
 """
 modulo_masterplan.py — Ciudad Verde AI Agent
 =============================================
-Generador de Masterplan ambiental para Villa María.
-Usa Claude Haiku 4.5 con contexto completo de la plataforma.
+Masterplan ambiental para Villa María.
+- Admin: puede generar con Claude Sonnet 4.6 y ver historial.
+- Usuario: solo puede ver y cargar masteplans guardados.
 Registra consumo en PostgreSQL.
 """
 
@@ -13,302 +14,7 @@ from modulo_db import registrar_consumo, guardar_masterplan, obtener_masteplans
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_URL           = "https://api.anthropic.com/v1/messages"
-MODEL_OPUS        = "claude-haiku-4-5-20251001"
-
-# ── Overlay orbe procesando — estilo ANCLA SCIENCE ────────
-_ORBE_HTML = """
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;600&display=swap');
-
-#cvOrbeOverlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: rgba(5,8,16,0.97);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 28px;
-}
-#cvOrbeOverlay.active { display: flex; }
-
-/* Canvas neuro de fondo */
-#cvNeuroCanvas {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    opacity: 0.6;
-}
-
-/* Contenido sobre canvas */
-.cv-orbe-content {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-}
-
-/* Orbe con arcos */
-.cv-orbe-wrap {
-    position: relative;
-    width: 240px; height: 240px;
-    display: flex; align-items: center; justify-content: center;
-}
-.cv-o-arc {
-    position: absolute; border-radius: 50%;
-    border: 1px solid transparent;
-    animation: cv-arc-spin linear infinite;
-}
-.cv-o-arc:nth-child(1){
-    width:190px;height:190px;
-    border-top-color:rgba(120,80,255,0.75);
-    border-right-color:rgba(120,80,255,0.28);
-    animation-duration:2.8s;
-}
-.cv-o-arc:nth-child(2){
-    width:212px;height:212px;
-    border-bottom-color:rgba(0,180,220,0.65);
-    border-left-color:rgba(0,180,220,0.2);
-    animation-duration:4.2s;
-    animation-direction:reverse;
-}
-.cv-o-arc:nth-child(3){
-    width:234px;height:234px;
-    border-top-color:rgba(160,100,255,0.4);
-    animation-duration:6.5s;
-}
-@keyframes cv-arc-spin { to { transform: rotate(360deg); } }
-
-.cv-o-sphere {
-    width: 140px; height: 140px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 38% 32%,
-        #d0a0ff 0%, #7030e0 30%, #2010a0 62%, #060318 100%);
-    position: relative; z-index: 2;
-    animation: cv-sphere-pulse 2.2s ease-in-out infinite;
-    box-shadow: 0 0 36px rgba(110,45,230,0.5), 0 0 70px rgba(90,30,190,0.25);
-}
-.cv-o-sphere::before {
-    content: '';
-    position: absolute; inset: -14px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(130,60,255,0.22) 0%, transparent 68%);
-    animation: cv-halo 2.2s ease-in-out infinite;
-}
-.cv-o-sphere::after {
-    content: '';
-    position: absolute; inset: 12px; border-radius: 50%;
-    border: 1px solid rgba(200,160,255,0.22);
-}
-@keyframes cv-sphere-pulse {
-    0%,100%{box-shadow:0 0 36px rgba(110,45,230,.5),0 0 70px rgba(90,30,190,.25);transform:scale(1);}
-    50%{box-shadow:0 0 55px rgba(130,60,255,.7),0 0 100px rgba(110,45,220,.35);transform:scale(1.04);}
-}
-@keyframes cv-halo {
-    0%,100%{opacity:.55;transform:scale(1);}
-    50%{opacity:1;transform:scale(1.1);}
-}
-
-/* Badge modelo */
-.cv-o-badge {
-    display: flex; align-items: center; gap: 7px;
-    background: rgba(12,16,36,0.8);
-    border: 0.5px solid rgba(120,100,255,0.32);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-family: 'Space Mono', monospace;
-    font-size: 10px; color: rgba(180,160,255,0.8);
-    letter-spacing: 0.05em;
-}
-.cv-o-bdot {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: #a060ff;
-    animation: cv-pdot 1.2s ease-in-out infinite;
-}
-@keyframes cv-pdot { 0%,100%{opacity:1;}50%{opacity:0.3;} }
-
-/* Fase animada */
-.cv-o-phase {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px; color: rgba(200,188,255,0.85);
-    letter-spacing: 0.02em;
-    min-height: 20px; text-align: center;
-}
-.cv-o-cursor {
-    display: inline-block;
-    width: 7px; height: 13px;
-    background: #9060ff;
-    margin-left: 3px;
-    animation: cv-blink 0.75s step-end infinite;
-    vertical-align: middle;
-}
-@keyframes cv-blink { 0%,100%{opacity:1;}50%{opacity:0;} }
-
-/* Progress bar */
-.cv-o-prog {
-    display: flex; align-items: center; gap: 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: 9px; color: rgba(130,115,195,0.55);
-    letter-spacing: 0.06em;
-}
-.cv-o-bar {
-    width: 200px; height: 2px;
-    background: rgba(80,60,160,0.22);
-    border-radius: 2px; overflow: hidden;
-}
-.cv-o-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #6228b4, #a060ff, #00b4dc);
-    border-radius: 2px;
-    width: 0%;
-    transition: width 0.4s ease;
-}
-</style>
-
-<!-- Overlay orbe -->
-<div id="cvOrbeOverlay">
-  <canvas id="cvNeuroCanvas"></canvas>
-  <div class="cv-orbe-content">
-    <div class="cv-orbe-wrap">
-      <div class="cv-o-arc"></div>
-      <div class="cv-o-arc"></div>
-      <div class="cv-o-arc"></div>
-      <div class="cv-o-sphere"></div>
-    </div>
-    <div class="cv-o-badge">
-      <div class="cv-o-bdot"></div>
-      Claude Haiku 4.5 · generando Masterplan
-    </div>
-    <div class="cv-o-phase" id="cvOPhase">
-      Iniciando análisis<span class="cv-o-cursor"></span>
-    </div>
-    <div class="cv-o-prog">
-      <span id="cvOTok">0 tokens</span>
-      <div class="cv-o-bar"><div class="cv-o-fill" id="cvOFill"></div></div>
-      <span id="cvOPct">0%</span>
-    </div>
-  </div>
-</div>
-
-<script>
-(function(){
-  // ── Fases animadas ──
-  const FASES = [
-    'Analizando datos ambientales de Villa María',
-    'Procesando indicadores de cobertura verde',
-    'Evaluando métricas de temperatura superficial',
-    'Calculando captura de CO₂ y equivalencias',
-    'Comparando con estándares C40 y OMS',
-    'Alineando con Agenda 2030 y ODS 11',
-    'Identificando brechas y oportunidades',
-    'Diseñando líneas de acción prioritarias',
-    'Estimando presupuesto y gobernanza',
-    'Estructurando el Masterplan ejecutivo',
-    'Redactando recomendaciones para Villa María',
-    'Finalizando documento de política pública',
-  ];
-
-  let orbeTimer = null, orbePhaseIdx = 0, orbeProgress = 0, orbeProgressTimer = null;
-  let neuroNodes = [], neuroCtx, neuroW, neuroH, speedMult = 1;
-
-  // ── Canvas neuro ──
-  function initNeuro(){
-    const c = document.getElementById('cvNeuroCanvas');
-    if(!c) return;
-    neuroW = c.width  = window.innerWidth;
-    neuroH = c.height = window.innerHeight;
-    neuroCtx = c.getContext('2d');
-    neuroNodes = [];
-    for(let i=0;i<35;i++) neuroNodes.push({
-      x:Math.random()*neuroW, y:Math.random()*neuroH,
-      vx:(Math.random()-.5)*.4, vy:(Math.random()-.5)*.4,
-      r:Math.random()*2+1.2, o:Math.random()*.5+.2,
-      p:Math.random()*Math.PI*2
-    });
-    drawNeuro();
-  }
-
-  function drawNeuro(){
-    if(!neuroCtx) return;
-    neuroCtx.clearRect(0,0,neuroW,neuroH);
-    for(const n of neuroNodes){
-      n.x += n.vx*speedMult; n.y += n.vy*speedMult;
-      if(n.x<0||n.x>neuroW) n.vx*=-1;
-      if(n.y<0||n.y>neuroH) n.vy*=-1;
-      n.p += .025*speedMult;
-    }
-    for(let i=0;i<neuroNodes.length;i++){
-      for(let j=i+1;j<neuroNodes.length;j++){
-        const dx=neuroNodes[j].x-neuroNodes[i].x, dy=neuroNodes[j].y-neuroNodes[i].y;
-        const d=Math.sqrt(dx*dx+dy*dy);
-        if(d<140){
-          neuroCtx.beginPath();
-          neuroCtx.moveTo(neuroNodes[i].x,neuroNodes[i].y);
-          neuroCtx.lineTo(neuroNodes[j].x,neuroNodes[j].y);
-          neuroCtx.strokeStyle=`rgba(120,90,255,${Math.min((1-d/140)*.20,.28)})`;
-          neuroCtx.lineWidth=.5;
-          neuroCtx.stroke();
-        }
-      }
-    }
-    for(const n of neuroNodes){
-      const p=Math.sin(n.p)*.3+.7;
-      neuroCtx.beginPath();
-      neuroCtx.arc(n.x,n.y,n.r*p,0,Math.PI*2);
-      neuroCtx.fillStyle=`rgba(140,100,255,${n.o*p})`;
-      neuroCtx.fill();
-    }
-    requestAnimationFrame(drawNeuro);
-  }
-
-  window.cvMostrarOrbe = function(){
-    const ov = document.getElementById('cvOrbeOverlay');
-    if(!ov) return;
-    ov.classList.add('active');
-    speedMult = 3;
-    initNeuro();
-    orbePhaseIdx = 0;
-    const ph = document.getElementById('cvOPhase');
-    if(ph) ph.innerHTML = FASES[0] + '<span class="cv-o-cursor"></span>';
-    orbeTimer = setInterval(()=>{
-      orbePhaseIdx = (orbePhaseIdx+1) % FASES.length;
-      if(ph) ph.innerHTML = FASES[orbePhaseIdx] + '<span class="cv-o-cursor"></span>';
-    }, 1400);
-    // Barra de progreso simulada (0→85% en ~55s, luego espera)
-    orbeProgress = 0;
-    const fill = document.getElementById('cvOFill');
-    const pct  = document.getElementById('cvOPct');
-    const tok  = document.getElementById('cvOTok');
-    orbeProgressTimer = setInterval(()=>{
-      if(orbeProgress < 85){
-        orbeProgress += 0.28;
-        if(fill) fill.style.width = orbeProgress.toFixed(1)+'%';
-        if(pct)  pct.textContent  = Math.round(orbeProgress)+'%';
-        if(tok)  tok.textContent  = Math.round(orbeProgress * 40).toLocaleString()+' tokens';
-      }
-    }, 150);
-  };
-
-  window.cvOcultarOrbe = function(tokFinal){
-    clearInterval(orbeTimer);
-    clearInterval(orbeProgressTimer);
-    speedMult = 1;
-    const fill = document.getElementById('cvOFill');
-    const pct  = document.getElementById('cvOPct');
-    const tok  = document.getElementById('cvOTok');
-    if(fill) fill.style.width = '100%';
-    if(pct)  pct.textContent  = '100%';
-    if(tok && tokFinal) tok.textContent = tokFinal.toLocaleString()+' tokens';
-    setTimeout(()=>{
-      const ov = document.getElementById('cvOrbeOverlay');
-      if(ov) ov.classList.remove('active');
-    }, 600);
-  };
-})();
-</script>
-"""
+MODEL_SONNET      = "claude-sonnet-4-6"
 
 # ── Contexto completo de Villa María ──────────────────────
 CONTEXTO_VM = """
@@ -456,8 +162,8 @@ INSTRUCCIONES:
 """
 
 
-def _llamar_opus(foco: str, usuario: str) -> tuple[str, int, int]:
-    """Llama a Claude Haiku 4.5 y devuelve (texto, tok_in, tok_out)."""
+def _llamar_sonnet(foco: str, usuario: str) -> tuple[str, int, int]:
+    """Llama a Claude Sonnet 4.6 y devuelve (texto, tok_in, tok_out)."""
     if not ANTHROPIC_API_KEY:
         return "⚠️ ANTHROPIC_API_KEY no configurada.", 0, 0
 
@@ -476,7 +182,7 @@ indicada, incorporando el foco específico en las líneas de acción prioritaria
         "content-type":      "application/json",
     }
     payload = {
-        "model":      MODEL_OPUS,
+        "model":      MODEL_SONNET,
         "max_tokens": 4096,
         "system":     SYSTEM_MASTERPLAN,
         "messages":   [{"role": "user", "content": prompt_usuario}],
@@ -484,10 +190,10 @@ indicada, incorporando el foco específico en las líneas de acción prioritaria
     try:
         r = requests.post(API_URL, headers=headers, json=payload, timeout=120)
         r.raise_for_status()
-        data     = r.json()
-        texto    = data["content"][0]["text"]
-        tok_in   = data.get("usage", {}).get("input_tokens",  0)
-        tok_out  = data.get("usage", {}).get("output_tokens", 0)
+        data    = r.json()
+        texto   = data["content"][0]["text"]
+        tok_in  = data.get("usage", {}).get("input_tokens",  0)
+        tok_out = data.get("usage", {}).get("output_tokens", 0)
         return texto, tok_in, tok_out
     except requests.exceptions.Timeout:
         return "⚠️ Tiempo de espera agotado (120s). Intentá de nuevo.", 0, 0
@@ -495,38 +201,48 @@ indicada, incorporando el foco específico en las líneas de acción prioritaria
         return f"⚠️ Error: {str(e)}", 0, 0
 
 
-def render_masterplan():
-    """Sección completa del Masterplan. Llamar desde modulo_villamaria.py."""
+def _render_historial():
+    """Muestra el historial de masteplans guardados en PostgreSQL."""
+    masteplans_guardados = obtener_masteplans(limit=5)
+    if masteplans_guardados:
+        with st.expander(
+            f"📂 Masteplans guardados ({len(masteplans_guardados)} recientes)",
+            expanded=False,
+        ):
+            for mp in masteplans_guardados:
+                fecha = mp["fecha"]
+                fecha_str = (
+                    fecha.strftime("%d/%m/%Y %H:%M")
+                    if hasattr(fecha, "strftime")
+                    else str(fecha)[:16]
+                )
+                foco_guardado = (mp["foco"] or "")[:120]
+                col_mp, col_load = st.columns([5, 1])
+                with col_mp:
+                    st.markdown(
+                        f"<div style='font-family:\"Space Mono\",monospace;font-size:10px;"
+                        f"color:rgba(170,176,200,0.7);'>"
+                        f"<b style='color:#9060ff;'>#{mp['id']}</b> · {fecha_str} · "
+                        f"<span style='color:rgba(200,188,255,0.6)'>"
+                        f"{mp['palabras'] or 0:,} palabras</span><br>"
+                        f"<span style='font-size:9px;color:rgba(150,160,200,0.5);'>"
+                        f"{foco_guardado}…</span>"
+                        f"</div>",
+                        unsafe_allow_html=True,
+                    )
+                with col_load:
+                    if st.button("Cargar", key=f"mp_load_{mp['id']}", use_container_width=True):
+                        st.session_state["mp_resultado"]      = mp["texto"]
+                        st.session_state["mp_tok_in"]         = mp["tok_input"] or 0
+                        st.session_state["mp_tok_out"]        = mp["tok_output"] or 0
+                        st.session_state["mp_id_guardado"]    = mp["id"]
+                        st.session_state["mp_fecha_guardado"] = fecha_str
+                        st.rerun()
+    return masteplans_guardados
 
-    # Inyectar overlay orbe una sola vez
-    if "cv_orbe_injected" not in st.session_state:
-        st.markdown(_ORBE_HTML, unsafe_allow_html=True)
-        st.session_state["cv_orbe_injected"] = True
 
-    st.title("📄 Masterplan Ambiental · Villa María")
-    st.caption(
-        "Generado por Claude Haiku 4.5 · contexto: Ciudad Verde AI Agent · "
-        "datos reales ESA WorldCover + Landsat 8/9 + OSM + INDEC 2022"
-    )
-    st.markdown("---")
-
-    # Intro
-    st.markdown("""
-    El Masterplan es un documento ejecutivo completo generado por **Claude Haiku 4.5**
-    — el modelo de mayor capacidad de Anthropic — utilizando como contexto todos los
-    datos ambientales reales de Villa María que provee esta plataforma.
-
-    El resultado es un plan de política pública accionable, con metas cuantificables,
-    presupuesto referencial y alineación con estándares internacionales (C40, ODS, Acuerdo de París).
-    """)
-
-    # Estimación de costo
-    st.info(
-        "💡 **Nota:** la generación del Masterplan consume Claude Haiku 4.5 "
-        "(~2.000–4.000 tokens de output). Costo estimado por generación: USD 0.10–0.25."
-    )
-
-    st.markdown("---")
+def _render_formulario_admin():
+    """Formulario de generación — solo visible para admin."""
     st.markdown("### ✏️ Foco del plan")
     st.markdown(
         "Indicá el enfoque prioritario para personalizar el Masterplan. "
@@ -534,20 +250,20 @@ def render_masterplan():
         "*cumplimiento del target C40 2030*, *reducción de isla de calor*, etc."
     )
 
-    # Aplicar foco sugerido si viene de un botón
     if "mp_foco_set" in st.session_state:
         st.session_state["mp_foco"] = st.session_state.pop("mp_foco_set")
 
     foco = st.text_area(
         "Foco y prioridades",
-        placeholder="Ejemplo: Priorizar la forestación de la zona Noroeste (VM centro-norte) "
-                    "que es la más caliente (+0.79°C), junto con el desarrollo del parque lineal "
-                    "sobre el Río Ctalamochita como corredor verde y recreativo.",
+        placeholder=(
+            "Ejemplo: Priorizar la forestación de la zona Noroeste (VM centro-norte) "
+            "que es la más caliente (+0.79°C), junto con el desarrollo del parque lineal "
+            "sobre el Río Ctalamochita como corredor verde y recreativo."
+        ),
         height=120,
         key="mp_foco",
     )
 
-    # Focos sugeridos
     st.markdown("**Focos sugeridos:**")
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -577,7 +293,6 @@ def render_masterplan():
 
     st.markdown("---")
 
-    # Botón generar
     col_gen, col_info = st.columns([2, 3])
     with col_gen:
         generar = st.button(
@@ -591,415 +306,401 @@ def render_masterplan():
             "<div style='padding:9px 0;font-family:\"Space Mono\",monospace;"
             "font-size:10px;color:rgba(170,176,200,0.6);'>"
             "⏱️ Tiempo estimado: 30–60 segundos · "
-            "Modelo: Claude Haiku 4.5 · "
+            "Modelo: Claude Sonnet 4.6 · "
             "Output: 2.000–3.500 palabras</div>",
             unsafe_allow_html=True,
         )
 
-    # ── Historial guardado en PostgreSQL ──────────────────────────────────────
-    masteplans_guardados = obtener_masteplans(limit=5)
-    if masteplans_guardados:
-        with st.expander(f"📂 Masteplans guardados ({len(masteplans_guardados)} recientes)", expanded=False):
-            for mp in masteplans_guardados:
-                fecha = mp["fecha"]
-                fecha_str = fecha.strftime("%d/%m/%Y %H:%M") if hasattr(fecha, "strftime") else str(fecha)[:16]
-                foco_guardado = (mp["foco"] or "")[:120]
-                col_mp, col_load = st.columns([5, 1])
-                with col_mp:
-                    st.markdown(
-                        f"<div style='font-family:\"Space Mono\",monospace;font-size:10px;"
-                        f"color:rgba(170,176,200,0.7);'>"
-                        f"<b style='color:#9060ff;'>#{mp['id']}</b> · {fecha_str} · "
-                        f"<span style='color:rgba(200,188,255,0.6)'>{mp['palabras'] or 0:,} palabras</span><br>"
-                        f"<span style='font-size:9px;color:rgba(150,160,200,0.5);'>{foco_guardado}…</span>"
-                        f"</div>",
-                        unsafe_allow_html=True,
-                    )
-                with col_load:
-                    if st.button("Cargar", key=f"mp_load_{mp['id']}", use_container_width=True):
-                        st.session_state["mp_resultado"]    = mp["texto"]
-                        st.session_state["mp_tok_in"]       = mp["tok_input"] or 0
-                        st.session_state["mp_tok_out"]      = mp["tok_output"] or 0
-                        st.session_state["mp_id_guardado"]  = mp["id"]
-                        st.session_state["mp_fecha_guardado"] = fecha_str
-                        st.rerun()
+    return generar, foco
+
+
+def _render_documento(texto):
+    """Renderiza el documento Masterplan en pantalla y botones de acción."""
+    import html as _html
+    import re as _re
+    import datetime as _dt
+
+    tok_in   = st.session_state.get("mp_tok_in",  0)
+    tok_out  = st.session_state.get("mp_tok_out", 0)
+    costo    = (tok_in * 3.0 + tok_out * 15.0) / 1_000_000   # precios Sonnet 4.6
+    mp_id    = st.session_state.get("mp_id_guardado", "")
+    mp_fecha = st.session_state.get("mp_fecha_guardado", "")
+
+    if mp_id:
+        st.success(f"✅ Masterplan #{mp_id} guardado en base de datos · {mp_fecha}")
+
+    if tok_in > 0:
+        mc1, mc2, mc3, mc4 = st.columns(4)
+        with mc1: st.metric("Tokens input",     f"{tok_in:,}")
+        with mc2: st.metric("Tokens output",    f"{tok_out:,}")
+        with mc3: st.metric("Costo generación", f"USD {costo:.4f}")
+        with mc4: st.metric("Palabras aprox.",  f"{len(texto.split()):,}")
 
     st.markdown("---")
 
-    # ── Generar ───────────────────────────────────────────────────────────────
-    if generar:
-        foco_final = st.session_state.get("mp_foco", "").strip()
-        if not foco_final:
-            st.warning("Ingresá un foco para personalizar el Masterplan.")
-        else:
-            st.session_state["mp_foco_en_proceso"] = foco_final
+    fecha_gen     = _dt.datetime.now().strftime("%d de %B de %Y")
+    fecha_gen_pdf = _dt.datetime.now().strftime("%d/%m/%Y")
 
-            # Mini orbe nativo Streamlit — compatible con el ciclo de render
-            orbe_slot = st.empty()
-            orbe_slot.markdown(
-                """<div style='display:flex;flex-direction:column;align-items:center;
-                    gap:16px;padding:32px 0;'>
-                  <div style='position:relative;width:80px;height:80px;'>
-                    <div style='position:absolute;inset:0;border-radius:50%;
-                         background:radial-gradient(circle at 38% 32%,
-                         #d0a0ff 0%,#7030e0 30%,#2010a0 62%,#060318 100%);
-                         animation:mp-pulse 2s ease-in-out infinite;
-                         box-shadow:0 0 24px rgba(110,45,230,0.6);'></div>
-                  </div>
-                  <div style='font-family:"Space Mono",monospace;font-size:11px;
-                       color:rgba(180,160,255,0.8);letter-spacing:0.06em;'>
-                    ● CLAUDE SONNET · GENERANDO MASTERPLAN
-                  </div>
-                </div>
-                <style>
-                @keyframes mp-pulse {
-                  0%,100%{box-shadow:0 0 24px rgba(110,45,230,.6);transform:scale(1);}
-                  50%{box-shadow:0 0 42px rgba(130,60,255,.85);transform:scale(1.06);}
-                }
-                </style>""",
-                unsafe_allow_html=True,
-            )
+    def _md_inline(txt):
+        txt = _html.escape(txt)
+        txt = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', txt)
+        txt = _re.sub(r'\*(.+?)\*',     r'<em>\1</em>',         txt)
+        txt = _re.sub(r'`(.+?)`',       r'<code>\1</code>',     txt)
+        return txt
 
-            usuario = st.session_state.get("cv_usuario", "usuarioverde")
-            texto, tok_in, tok_out = _llamar_opus(foco_final, usuario)
-            orbe_slot.empty()
+    def _parsear(texto, modo):
+        resultado = []
+        lineas = texto.split("\n")
+        i = 0
+        while i < len(lineas):
+            linea = lineas[i]
+            s     = linea.strip()
 
-            if tok_in > 0:
-                registrar_consumo(
-                    usuario=usuario,
-                    tipo="haiku",  # precio Sonnet ~ Haiku para el registro
-                    pregunta=f"[MASTERPLAN] {foco_final[:200]}",
-                    tok_input=tok_in,
-                    tok_output=tok_out,
-                    modelo=MODEL_OPUS,
-                )
-                nuevo_id = guardar_masterplan(
-                    usuario=usuario,
-                    foco=foco_final,
-                    texto=texto,
-                    tok_input=tok_in,
-                    tok_output=tok_out,
-                )
-                st.session_state["mp_id_guardado"]    = nuevo_id
-                st.session_state["mp_fecha_guardado"] = "recién generado"
+            if _re.match(r'^-{3,}$', s) or _re.match(r'^\*{3,}$', s):
+                i += 1
+                continue
 
-            st.session_state["mp_resultado"] = texto
-            st.session_state["mp_tok_in"]    = tok_in
-            st.session_state["mp_tok_out"]   = tok_out
-            st.rerun()
-
-    # ── Mostrar resultado ─────────────────────────────────────────────────────
-    if "mp_resultado" in st.session_state:
-        texto   = st.session_state["mp_resultado"]
-        tok_in  = st.session_state.get("mp_tok_in",  0)
-        tok_out = st.session_state.get("mp_tok_out", 0)
-        costo   = (tok_in * 15.0 + tok_out * 75.0) / 1_000_000
-        mp_id   = st.session_state.get("mp_id_guardado", "")
-        mp_fecha = st.session_state.get("mp_fecha_guardado", "")
-
-        # Badge guardado
-        if mp_id:
-            st.success(f"✅ Masterplan #{mp_id} guardado en base de datos · {mp_fecha}")
-
-        # Métricas
-        mc1, mc2, mc3, mc4 = st.columns(4)
-        with mc1: st.metric("Tokens input",      f"{tok_in:,}")
-        with mc2: st.metric("Tokens output",     f"{tok_out:,}")
-        with mc3: st.metric("Costo generación",  f"USD {costo:.4f}")
-        with mc4: st.metric("Palabras aprox.",   f"{len(texto.split()):,}")
-
-        st.markdown("---")
-
-        # ── Reporte ejecutivo ──────────────────────────────────────────────────
-        import html as _html
-        import re as _re
-        import datetime as _dt
-        fecha_gen     = _dt.datetime.now().strftime("%d de %B de %Y")
-        fecha_gen_pdf = _dt.datetime.now().strftime("%d/%m/%Y")
-
-        def _md_inline(txt):
-            """Convierte markdown inline a HTML: **bold**, *italic*, `code`."""
-            txt = _html.escape(txt)
-            txt = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', txt)
-            txt = _re.sub(r'\*(.+?)\*',     r'<em>\1</em>',         txt)
-            txt = _re.sub(r'`(.+?)`',       r'<code>\1</code>',     txt)
-            return txt
-
-        def _parsear(texto, modo):
-            """
-            modo='screen' → clases mp-report-*
-            modo='print'  → tags HTML semánticos
-            """
-            resultado = []
-            lineas = texto.split("\n")
-            i = 0
-            while i < len(lineas):
-                linea = lineas[i]
-                s     = linea.strip()
-
-                # Separadores --- → ignorar (no añadir espacio extra)
-                if _re.match(r'^-{3,}$', s) or _re.match(r'^\*{3,}$', s):
-                    i += 1
-                    continue
-
-                # Línea vacía → salto visual solo si no hay ya uno
-                if not s:
-                    if resultado and resultado[-1] not in ('<br>', "<div class='mp-report-spacer'></div>"):
-                        resultado.append("<div class='mp-report-spacer'></div>" if modo == 'screen' else '<br>')
-                    i += 1
-                    continue
-
-                # Encabezados markdown #
-                if linea.startswith("# "):
-                    contenido = _md_inline(linea[2:])
+            if not s:
+                if resultado and resultado[-1] not in (
+                    '<br>', "<div class='mp-report-spacer'></div>"
+                ):
                     resultado.append(
-                        f"<div class='mp-report-h1'>{contenido}</div>" if modo == 'screen'
-                        else f"<h2>{contenido}</h2>"
+                        "<div class='mp-report-spacer'></div>"
+                        if modo == 'screen' else '<br>'
                     )
-                    i += 1
-                    continue
+                i += 1
+                continue
 
-                if linea.startswith("## ") or linea.startswith("### "):
-                    contenido = _md_inline(_re.sub(r'^#+\s*', '', linea))
-                    resultado.append(
-                        f"<div class='mp-report-h2'>{contenido}</div>" if modo == 'screen'
-                        else f"<h3>{contenido}</h3>"
-                    )
-                    i += 1
-                    continue
-
-                # Líneas TODO EN MAYÚSCULAS cortas → título de sección
-                if s.isupper() and 4 < len(s) < 90 and not s.startswith("|"):
-                    contenido = _md_inline(s)
-                    resultado.append(
-                        f"<div class='mp-report-h1'>{contenido}</div>" if modo == 'screen'
-                        else f"<h2>{contenido}</h2>"
-                    )
-                    i += 1
-                    continue
-
-                # Listas - y •
-                if linea.startswith("- ") or linea.startswith("• "):
-                    contenido = _md_inline(linea[2:])
-                    resultado.append(
-                        f"<div class='mp-report-li'>◦ {contenido}</div>" if modo == 'screen'
-                        else f"<li>{contenido}</li>"
-                    )
-                    i += 1
-                    continue
-
-                # Tablas |
-                if s.startswith("|"):
-                    # Saltar filas de separador |---|
-                    if _re.match(r'^\|[\s\-:|]+\|', s):
-                        i += 1
-                        continue
-                    celdas = [c.strip() for c in s.strip("|").split("|")]
-                    celdas_html = "".join(f"<td>{_md_inline(c)}</td>" for c in celdas)
-                    resultado.append(
-                        f"<div class='mp-report-table'><table style='width:100%;border-collapse:collapse;'>"
-                        f"<tr>{celdas_html}</tr></table></div>" if modo == 'screen'
-                        else f"<tr>{''.join(f'<td style=padding:3px 8px;border-bottom:0.5pt solid #ddd;font-size:9pt;>{_md_inline(c)}</td>' for c in celdas)}</tr>"
-                    )
-                    i += 1
-                    continue
-
-                # Párrafo normal
-                contenido = _md_inline(s)
+            if linea.startswith("# "):
+                contenido = _md_inline(linea[2:])
                 resultado.append(
-                    f"<div class='mp-report-p'>{contenido}</div>" if modo == 'screen'
-                    else f"<p>{contenido}</p>"
+                    f"<div class='mp-report-h1'>{contenido}</div>"
+                    if modo == 'screen' else f"<h2>{contenido}</h2>"
                 )
                 i += 1
+                continue
 
-            return "\n".join(resultado)
+            if linea.startswith("## ") or linea.startswith("### "):
+                contenido = _md_inline(_re.sub(r'^#+\s*', '', linea))
+                resultado.append(
+                    f"<div class='mp-report-h2'>{contenido}</div>"
+                    if modo == 'screen' else f"<h3>{contenido}</h3>"
+                )
+                i += 1
+                continue
 
-        documento_inner = _parsear(texto, 'screen')
-        documento_print = _parsear(texto, 'print')
+            if s.isupper() and 4 < len(s) < 90 and not s.startswith("|"):
+                contenido = _md_inline(s)
+                resultado.append(
+                    f"<div class='mp-report-h1'>{contenido}</div>"
+                    if modo == 'screen' else f"<h2>{contenido}</h2>"
+                )
+                i += 1
+                continue
 
-        # ── Render pantalla: reporte ejecutivo ────────────────────────────────
+            if linea.startswith("- ") or linea.startswith("• "):
+                contenido = _md_inline(linea[2:])
+                resultado.append(
+                    f"<div class='mp-report-li'>◦ {contenido}</div>"
+                    if modo == 'screen' else f"<li>{contenido}</li>"
+                )
+                i += 1
+                continue
+
+            if s.startswith("|"):
+                if _re.match(r'^\|[\s\-:|]+\|', s):
+                    i += 1
+                    continue
+                celdas = [c.strip() for c in s.strip("|").split("|")]
+                celdas_html = "".join(f"<td>{_md_inline(c)}</td>" for c in celdas)
+                resultado.append(
+                    f"<div class='mp-report-table'>"
+                    f"<table style='width:100%;border-collapse:collapse;'>"
+                    f"<tr>{celdas_html}</tr></table></div>"
+                    if modo == 'screen'
+                    else (
+                        "<tr>"
+                        + "".join(
+                            f"<td style='padding:3px 8px;border-bottom:0.5pt solid #ddd;"
+                            f"font-size:9pt;'>{_md_inline(c)}</td>"
+                            for c in celdas
+                        )
+                        + "</tr>"
+                    )
+                )
+                i += 1
+                continue
+
+            contenido = _md_inline(s)
+            resultado.append(
+                f"<div class='mp-report-p'>{contenido}</div>"
+                if modo == 'screen' else f"<p>{contenido}</p>"
+            )
+            i += 1
+
+        return "\n".join(resultado)
+
+    documento_inner = _parsear(texto, 'screen')
+    documento_print = _parsear(texto, 'print')
+
+    st.markdown(
+        f"""<div class='mp-report cv-printable'>
+          <div class='mp-report-header'>
+            <div style='display:flex;align-items:center;gap:14px;margin-bottom:12px;'>
+              <div style='width:44px;height:44px;border-radius:10px;flex-shrink:0;
+                   background:linear-gradient(135deg,#6228b4,#00b4dc);
+                   display:flex;align-items:center;justify-content:center;
+                   font-family:"Space Mono",monospace;font-size:18px;font-weight:700;color:#fff;'>
+                CV</div>
+              <div>
+                <div style='font-family:"Space Mono",monospace;font-size:10px;
+                     letter-spacing:0.12em;color:rgba(160,175,220,0.6);
+                     text-transform:uppercase;'>Ciudad Verde AI Agent · Villa María, Córdoba</div>
+                <div style='font-family:"Space Grotesk",sans-serif;font-size:22px;
+                     font-weight:700;color:#fff;margin-top:2px;'>
+                     Masterplan Ambiental 2025–2030</div>
+              </div>
+            </div>
+            <div style='display:flex;gap:24px;flex-wrap:wrap;
+                 font-family:"Space Mono",monospace;font-size:10px;
+                 color:rgba(160,175,220,0.55);letter-spacing:0.06em;'>
+              <span>📅 {fecha_gen}</span>
+              <span>🤖 Claude Sonnet 4.6</span>
+              <span>📡 ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022</span>
+            </div>
+          </div>
+          {documento_inner}
+          <div style='margin-top:32px;padding-top:12px;
+               border-top:0.5px solid rgba(120,140,255,0.15);
+               font-family:"Space Mono",monospace;font-size:10px;
+               color:rgba(160,175,220,0.4);letter-spacing:0.05em;'>
+            Ciudad Verde AI Agent · Marco: C40, ODS 11, Acuerdo de París, Ordenanza 7209/2017
+          </div>
+        </div>""",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("---")
+
+    col_print, col_dl, col_new, _ = st.columns([2, 2, 2, 1])
+    with col_print:
+        import streamlit.components.v1 as _components
+        print_js = f"""
+        <script>
+        function abrirImpresion() {{
+            var w = window.open('', '_blank', 'width=960,height=750,scrollbars=yes');
+            w.document.write(`<!DOCTYPE html><html><head>
+            <meta charset="utf-8">
+            <title>Masterplan Ambiental · Villa María 2025-2030</title>
+            <style>
+              * {{ box-sizing:border-box; margin:0; padding:0; }}
+              body {{
+                font-family: Georgia, 'Times New Roman', serif;
+                font-size: 11pt; color: #111;
+                margin: 0; padding: 0; background: #f5f5f5;
+              }}
+              .page {{
+                background: #fff; max-width: 820px; margin: 24px auto;
+                padding: 52px 56px 48px 56px;
+                box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+              }}
+              .rp-header {{
+                border-bottom: 3px solid #1b5e20;
+                padding-bottom: 18px; margin-bottom: 28px;
+              }}
+              .rp-org {{
+                font-family: Arial, sans-serif; font-size: 9pt;
+                font-weight: 700; letter-spacing: 0.12em;
+                text-transform: uppercase; color: #2e7d32; margin-bottom: 6px;
+              }}
+              .rp-titulo {{
+                font-family: Arial, sans-serif; font-size: 22pt;
+                font-weight: 700; color: #1a1a1a; line-height: 1.1; margin-bottom: 6px;
+              }}
+              .rp-subtitulo {{
+                font-family: Arial, sans-serif; font-size: 11pt;
+                color: #4a4a4a; margin-bottom: 10px;
+              }}
+              .rp-meta {{
+                display: flex; gap: 24px; flex-wrap: wrap;
+                font-family: Arial, sans-serif; font-size: 8.5pt; color: #777;
+                border-top: 0.5pt solid #ddd; padding-top: 10px; margin-top: 10px;
+              }}
+              h2 {{
+                font-family: Arial, sans-serif; font-size: 12pt; font-weight: 700;
+                color: #1b5e20; text-transform: uppercase; letter-spacing: 0.06em;
+                margin: 22px 0 6px 0; padding-bottom: 5px;
+                border-bottom: 1pt solid #c8e6c9;
+              }}
+              h3 {{
+                font-family: Arial, sans-serif; font-size: 11pt; font-weight: 700;
+                color: #1a3a6e; margin: 16px 0 5px 0;
+              }}
+              p {{ line-height: 1.65; margin: 5px 0; font-size: 10.5pt; text-align: justify; }}
+              li {{ line-height: 1.6; margin: 3px 0 3px 18px; font-size: 10.5pt; }}
+              .rp-footer {{
+                margin-top: 36px; padding-top: 10px; border-top: 1pt solid #ddd;
+                font-family: Arial, sans-serif; font-size: 8pt; color: #999; text-align: center;
+              }}
+              .btn-print {{
+                display: block; margin: 20px auto 0; padding: 10px 28px;
+                background: #1b5e20; color: #fff; border: none; border-radius: 6px;
+                font-family: Arial, sans-serif; font-size: 13px; cursor: pointer;
+              }}
+              @media print {{
+                body {{ background:#fff; }}
+                .page {{ margin:0; box-shadow:none; padding:20mm 22mm; }}
+                .btn-print {{ display:none; }}
+              }}
+            </style>
+            </head><body>
+            <div class="page">
+              <div class="rp-header">
+                <div class="rp-org">🌿 Ciudad Verde AI Agent &nbsp;·&nbsp; Municipio de Villa Mar&#237;a &nbsp;·&nbsp; C&#243;rdoba, Argentina</div>
+                <div class="rp-titulo">Masterplan Ambiental<br>Villa Mar&#237;a 2025&#8211;2030</div>
+                <div class="rp-subtitulo">Diagn&#243;stico, objetivos y l&#237;neas de acci&#243;n para la pol&#237;tica p&#250;blica ambiental municipal</div>
+                <div class="rp-meta">
+                  <span>&#128197; {fecha_gen_pdf}</span>
+                  <span>&#129302; Claude Sonnet 4.6</span>
+                  <span>&#128225; ESA WorldCover 2020 &middot; Landsat 8/9 &middot; OpenStreetMap &middot; INDEC 2022</span>
+                </div>
+              </div>
+              {documento_print}
+              <div class="rp-footer">
+                Ciudad Verde AI Agent &nbsp;&middot;&nbsp; Marco normativo: C40, ODS 11, Acuerdo de Par&#237;s, Ordenanza 7209/2017 &nbsp;&middot;&nbsp; {fecha_gen_pdf}
+              </div>
+              <button class="btn-print" onclick="window.print()">&#128438; Imprimir / Guardar PDF</button>
+            </div>
+            </body></html>`);
+            w.document.close();
+            w.focus();
+        }}
+        </script>
+        <button onclick="abrirImpresion()"
+           style="width:100%;background:linear-gradient(135deg,#6228b4,#00b4dc);
+                  border:none;border-radius:8px;color:#fff;
+                  font-family:'Space Grotesk',sans-serif;font-size:14px;
+                  font-weight:600;padding:10px;cursor:pointer;">
+           🖨️ Imprimir / Guardar PDF
+        </button>"""
+        _components.html(print_js, height=50)
+
+    with col_dl:
+        st.download_button(
+            "⬇️ Descargar .txt",
+            data=texto.encode("utf-8"),
+            file_name="masterplan_villa_maria.txt",
+            mime="text/plain",
+            key="mp_download",
+            use_container_width=True,
+        )
+    with col_new:
+        if st.button("🔄 Nuevo Masterplan", key="mp_nuevo", use_container_width=True):
+            for k in ("mp_resultado", "mp_tok_in", "mp_tok_out",
+                      "mp_id_guardado", "mp_fecha_guardado"):
+                st.session_state.pop(k, None)
+            st.rerun()
+
+
+def render_masterplan():
+    """Punto de entrada del módulo. Llamar desde modulo_villamaria.py."""
+
+    st.title("📄 Masterplan Ambiental · Villa María")
+    st.markdown("---")
+
+    es_admin = st.session_state.get("cv_admin_auth", False)
+
+    # ── Historial visible para todos ──────────────────────────
+    _render_historial()
+
+    st.markdown("---")
+
+    # ── Bloque según rol ──────────────────────────────────────
+    if not es_admin:
+        st.info(
+            "🔒 **Generación restringida** — Solo los administradores pueden generar "
+            "nuevos Masteplans. Si necesitás uno actualizado, contactá al administrador "
+            "de la plataforma. Podés cargar y visualizar los documentos ya guardados "
+            "desde el historial de arriba."
+        )
+    else:
         st.markdown(
-            f"""<div class='mp-report cv-printable'>
-              <div class='mp-report-header'>
-                <div style='display:flex;align-items:center;gap:14px;margin-bottom:12px;'>
-                  <div style='width:44px;height:44px;border-radius:10px;flex-shrink:0;
-                       background:linear-gradient(135deg,#6228b4,#00b4dc);
-                       display:flex;align-items:center;justify-content:center;
-                       font-family:"Space Mono",monospace;font-size:18px;font-weight:700;color:#fff;'>
-                    CV</div>
-                  <div>
-                    <div style='font-family:"Space Mono",monospace;font-size:10px;
-                         letter-spacing:0.12em;color:rgba(160,175,220,0.6);
-                         text-transform:uppercase;'>Ciudad Verde AI Agent · Villa María, Córdoba</div>
-                    <div style='font-family:"Space Grotesk",sans-serif;font-size:22px;
-                         font-weight:700;color:#fff;margin-top:2px;'>
-                         Masterplan Ambiental 2025–2030</div>
-                  </div>
-                </div>
-                <div style='display:flex;gap:24px;flex-wrap:wrap;
-                     font-family:"Space Mono",monospace;font-size:10px;
-                     color:rgba(160,175,220,0.55);letter-spacing:0.06em;'>
-                  <span>📅 {fecha_gen}</span>
-                  <span>🤖 Claude Haiku 4.5</span>
-                  <span>📡 ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022</span>
-                </div>
-              </div>
-              {documento_inner}
-              <div style='margin-top:32px;padding-top:12px;
-                   border-top:0.5px solid rgba(120,140,255,0.15);
-                   font-family:"Space Mono",monospace;font-size:10px;
-                   color:rgba(160,175,220,0.4);letter-spacing:0.05em;'>
-                Ciudad Verde AI Agent · Marco: C40, ODS 11, Acuerdo de París, Ordenanza 7209/2017
-              </div>
-            </div>""",
+            "<div style='font-family:\"Space Mono\",monospace;font-size:10px;"
+            "color:rgba(120,200,120,0.7);letter-spacing:0.08em;margin-bottom:16px;'>"
+            "🔑 MODO ADMINISTRADOR · Generación habilitada · Claude Sonnet 4.6"
+            "</div>",
             unsafe_allow_html=True,
         )
 
-        st.markdown("---")
+        generar, foco = _render_formulario_admin()
 
-        # ── Botones de acción ─────────────────────────────────────────────────
-        col_print, col_dl, col_new, _ = st.columns([2, 2, 2, 1])
-        with col_print:
-            import streamlit.components.v1 as _components
-            print_js = f"""
-            <script>
-            function abrirImpresion() {{
-                var w = window.open('', '_blank', 'width=960,height=750,scrollbars=yes');
-                w.document.write(`<!DOCTYPE html><html><head>
-                <meta charset="utf-8">
-                <title>Masterplan Ambiental · Villa María 2025-2030</title>
-                <style>
-                  * {{ box-sizing:border-box; margin:0; padding:0; }}
-                  body {{
-                    font-family: Georgia, 'Times New Roman', serif;
-                    font-size: 11pt; color: #111;
-                    margin: 0; padding: 0; background: #f5f5f5;
-                  }}
-                  .page {{
-                    background: #fff;
-                    max-width: 820px; margin: 24px auto;
-                    padding: 52px 56px 48px 56px;
-                    box-shadow: 0 2px 16px rgba(0,0,0,0.12);
-                  }}
-                  /* Header institucional */
-                  .rp-header {{
-                    border-bottom: 3px solid #1b5e20;
-                    padding-bottom: 18px; margin-bottom: 28px;
-                  }}
-                  .rp-org {{
-                    font-family: Arial, sans-serif; font-size: 9pt;
-                    font-weight: 700; letter-spacing: 0.12em;
-                    text-transform: uppercase; color: #2e7d32;
-                    margin-bottom: 6px;
-                  }}
-                  .rp-titulo {{
-                    font-family: Arial, sans-serif; font-size: 22pt;
-                    font-weight: 700; color: #1a1a1a; line-height: 1.1;
-                    margin-bottom: 6px;
-                  }}
-                  .rp-subtitulo {{
-                    font-family: Arial, sans-serif; font-size: 11pt;
-                    color: #4a4a4a; margin-bottom: 10px;
-                  }}
-                  .rp-meta {{
-                    display: flex; gap: 24px; flex-wrap: wrap;
-                    font-family: Arial, sans-serif; font-size: 8.5pt;
-                    color: #777; border-top: 0.5pt solid #ddd;
-                    padding-top: 10px; margin-top: 10px;
-                  }}
-                  /* Cuerpo */
-                  h2 {{
-                    font-family: Arial, sans-serif; font-size: 12pt;
-                    font-weight: 700; color: #1b5e20;
-                    text-transform: uppercase; letter-spacing: 0.06em;
-                    margin: 22px 0 6px 0; padding-bottom: 5px;
-                    border-bottom: 1pt solid #c8e6c9;
-                  }}
-                  h3 {{
-                    font-family: Arial, sans-serif; font-size: 11pt;
-                    font-weight: 700; color: #1a3a6e;
-                    margin: 16px 0 5px 0;
-                  }}
-                  p {{
-                    line-height: 1.65; margin: 5px 0; font-size: 10.5pt;
-                    text-align: justify;
-                  }}
-                  li {{
-                    line-height: 1.6; margin: 3px 0 3px 18px;
-                    font-size: 10.5pt;
-                  }}
-                  /* Footer */
-                  .rp-footer {{
-                    margin-top: 36px; padding-top: 10px;
-                    border-top: 1pt solid #ddd;
-                    font-family: Arial, sans-serif; font-size: 8pt;
-                    color: #999; text-align: center;
-                  }}
-                  /* Botón imprimir (oculto en impresión) */
-                  .btn-print {{
-                    display: block; margin: 20px auto 0;
-                    padding: 10px 28px; background: #1b5e20;
-                    color: #fff; border: none; border-radius: 6px;
-                    font-family: Arial, sans-serif; font-size: 13px;
-                    cursor: pointer;
-                  }}
-                  @media print {{
-                    body {{ background:#fff; }}
-                    .page {{ margin:0; box-shadow:none; padding:20mm 22mm; }}
-                    .btn-print {{ display:none; }}
-                    h2 {{ page-break-before: auto; }}
-                  }}
-                </style>
-                </head><body>
-                <div class="page">
-                  <div class="rp-header">
-                    <div class="rp-org">🌿 Ciudad Verde AI Agent &nbsp;·&nbsp; Municipio de Villa Mar&#237;a &nbsp;·&nbsp; C&#243;rdoba, Argentina</div>
-                    <div class="rp-titulo">Masterplan Ambiental<br>Villa Mar&#237;a 2025&#8211;2030</div>
-                    <div class="rp-subtitulo">Diagn&#243;stico, objetivos y l&#237;neas de acci&#243;n para la pol&#237;tica p&#250;blica ambiental municipal</div>
-                    <div class="rp-meta">
-                      <span>&#128197; {fecha_gen_pdf}</span>
-                      <span>&#129302; Claude Haiku 4.5</span>
-                      <span>&#128225; ESA WorldCover 2020 &middot; Landsat 8/9 &middot; OpenStreetMap &middot; INDEC 2022</span>
+        if generar:
+            foco_final = st.session_state.get("mp_foco", "").strip()
+            if not foco_final:
+                st.warning("Ingresá un foco para personalizar el Masterplan.")
+            else:
+                st.session_state["mp_foco_en_proceso"] = foco_final
+
+                orbe_slot = st.empty()
+                orbe_slot.markdown(
+                    """<div style='display:flex;flex-direction:column;align-items:center;
+                        gap:16px;padding:32px 0;'>
+                      <div style='position:relative;width:80px;height:80px;'>
+                        <div style='position:absolute;inset:0;border-radius:50%;
+                             background:radial-gradient(circle at 38% 32%,
+                             #d0a0ff 0%,#7030e0 30%,#2010a0 62%,#060318 100%);
+                             animation:mp-pulse 2s ease-in-out infinite;
+                             box-shadow:0 0 24px rgba(110,45,230,0.6);'></div>
+                      </div>
+                      <div style='font-family:"Space Mono",monospace;font-size:11px;
+                           color:rgba(180,160,255,0.8);letter-spacing:0.06em;'>
+                        ● CLAUDE SONNET 4.6 · GENERANDO MASTERPLAN
+                      </div>
                     </div>
-                  </div>
-                  {documento_print}
-                  <div class="rp-footer">
-                    Ciudad Verde AI Agent &nbsp;&middot;&nbsp; Marco normativo: C40, ODS 11, Acuerdo de Par&#237;s, Ordenanza 7209/2017 &nbsp;&middot;&nbsp; {fecha_gen_pdf}
-                  </div>
-                  <button class="btn-print" onclick="window.print()">&#128438; Imprimir / Guardar PDF</button>
-                </div>
-                </body></html>`);
-                w.document.close();
-                w.focus();
-            }}
-            </script>
-            <button onclick="abrirImpresion()"
-               style="width:100%;background:linear-gradient(135deg,#6228b4,#00b4dc);
-                      border:none;border-radius:8px;color:#fff;
-                      font-family:'Space Grotesk',sans-serif;font-size:14px;
-                      font-weight:600;padding:10px;cursor:pointer;">
-               🖨️ Imprimir / Guardar PDF
-            </button>"""
-            _components.html(print_js, height=50)
-        with col_dl:
-            st.download_button(
-                "⬇️ Descargar .txt",
-                data=texto.encode("utf-8"),
-                file_name="masterplan_villa_maria.txt",
-                mime="text/plain",
-                key="mp_download",
-                use_container_width=True,
-            )
-        with col_new:
-            if st.button("🔄 Generar nuevo", key="mp_nuevo", use_container_width=True):
-                for k in ("mp_resultado", "mp_tok_in", "mp_tok_out",
-                          "mp_id_guardado", "mp_fecha_guardado"):
-                    st.session_state.pop(k, None)
+                    <style>
+                    @keyframes mp-pulse {
+                      0%,100%{box-shadow:0 0 24px rgba(110,45,230,.6);transform:scale(1);}
+                      50%{box-shadow:0 0 42px rgba(130,60,255,.85);transform:scale(1.06);}
+                    }
+                    </style>""",
+                    unsafe_allow_html=True,
+                )
+
+                usuario = st.session_state.get("cv_usuario", "admin")
+                texto, tok_in, tok_out = _llamar_sonnet(foco_final, usuario)
+                orbe_slot.empty()
+
+                if tok_in > 0:
+                    registrar_consumo(
+                        usuario=usuario,
+                        tipo="haiku",    # categoría existente en DB
+                        pregunta=f"[MASTERPLAN] {foco_final[:200]}",
+                        tok_input=tok_in,
+                        tok_output=tok_out,
+                        modelo=MODEL_SONNET,
+                    )
+                    nuevo_id = guardar_masterplan(
+                        usuario=usuario,
+                        foco=foco_final,
+                        texto=texto,
+                        tok_input=tok_in,
+                        tok_output=tok_out,
+                    )
+                    st.session_state["mp_id_guardado"]    = nuevo_id
+                    st.session_state["mp_fecha_guardado"] = "recién generado"
+
+                st.session_state["mp_resultado"] = texto
+                st.session_state["mp_tok_in"]    = tok_in
+                st.session_state["mp_tok_out"]   = tok_out
                 st.rerun()
+
+    # ── Mostrar documento cargado o recién generado ───────────
+    if "mp_resultado" in st.session_state:
+        _render_documento(st.session_state["mp_resultado"])
 
     st.markdown("---")
     st.caption(
-        "Ciudad Verde AI Agent · Masterplan generado con Claude Haiku 4.5 · "
+        "Ciudad Verde AI Agent · Masterplan generado con Claude Sonnet 4.6 · "
         "Datos: ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022 · "
         "Marco: C40, ODS 11, Acuerdo de París, Ordenanza 7209"
     )
