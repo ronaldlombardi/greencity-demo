@@ -712,62 +712,110 @@ def render_masterplan():
 
         # ── Reporte ejecutivo ──────────────────────────────────────────────────
         import html as _html
+        import re as _re
         import datetime as _dt
         fecha_gen     = _dt.datetime.now().strftime("%d de %B de %Y")
         fecha_gen_pdf = _dt.datetime.now().strftime("%d/%m/%Y")
 
-        # Parsear líneas en clases del reporte
-        lineas_html = []
-        for linea in texto.split("\n"):
-            s = linea.strip()
-            if not s:
-                lineas_html.append("<div class='mp-report-spacer'></div>")
-            elif linea.startswith("# ") or (s.isupper() and len(s) < 80):
-                lineas_html.append(
-                    f"<div class='mp-report-h1'>{_html.escape(linea.lstrip('# '))}</div>"
-                )
-            elif linea.startswith("## ") or linea.startswith("### "):
-                lineas_html.append(
-                    f"<div class='mp-report-h2'>{_html.escape(linea.lstrip('# '))}</div>"
-                )
-            elif s.endswith(":") and len(s) < 70 and not s.startswith("|"):
-                lineas_html.append(
-                    f"<div class='mp-report-h2'>{_html.escape(s)}</div>"
-                )
-            elif linea.startswith("- ") or linea.startswith("• "):
-                lineas_html.append(
-                    f"<div class='mp-report-li'>◦ {_html.escape(linea[2:])}</div>"
-                )
-            elif linea.startswith("|"):
-                lineas_html.append(
-                    f"<div class='mp-report-table'>{_html.escape(linea)}</div>"
-                )
-            else:
-                lineas_html.append(
-                    f"<div class='mp-report-p'>{_html.escape(linea)}</div>"
-                )
+        def _md_inline(txt):
+            """Convierte markdown inline a HTML: **bold**, *italic*, `code`."""
+            txt = _html.escape(txt)
+            txt = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', txt)
+            txt = _re.sub(r'\*(.+?)\*',     r'<em>\1</em>',         txt)
+            txt = _re.sub(r'`(.+?)`',       r'<code>\1</code>',     txt)
+            return txt
 
-        documento_inner = "\n".join(lineas_html)
+        def _parsear(texto, modo):
+            """
+            modo='screen' → clases mp-report-*
+            modo='print'  → tags HTML semánticos
+            """
+            resultado = []
+            lineas = texto.split("\n")
+            i = 0
+            while i < len(lineas):
+                linea = lineas[i]
+                s     = linea.strip()
 
-        # Versión HTML limpia para la ventana de impresión
-        lineas_print = []
-        for linea in texto.split("\n"):
-            s = linea.strip()
-            if not s:
-                lineas_print.append("<br>")
-            elif linea.startswith("# ") or (s.isupper() and len(s) < 80):
-                lineas_print.append(f"<h2>{_html.escape(linea.lstrip('# '))}</h2>")
-            elif linea.startswith("## ") or linea.startswith("### "):
-                lineas_print.append(f"<h3>{_html.escape(linea.lstrip('# '))}</h3>")
-            elif s.endswith(":") and len(s) < 70 and not s.startswith("|"):
-                lineas_print.append(f"<h3>{_html.escape(s)}</h3>")
-            elif linea.startswith("- ") or linea.startswith("• "):
-                lineas_print.append(f"<li>{_html.escape(linea[2:])}</li>")
-            elif linea.startswith("|"):
-                lineas_print.append(f"<p style='font-family:monospace;font-size:9pt;'>{_html.escape(linea)}</p>")
-            else:
-                lineas_print.append(f"<p>{_html.escape(linea)}</p>")
-        documento_print = "\n".join(lineas_print)
+                # Separadores --- → ignorar (no añadir espacio extra)
+                if _re.match(r'^-{3,}$', s) or _re.match(r'^\*{3,}$', s):
+                    i += 1
+                    continue
+
+                # Línea vacía → salto visual solo si no hay ya uno
+                if not s:
+                    if resultado and resultado[-1] not in ('<br>', "<div class='mp-report-spacer'></div>"):
+                        resultado.append("<div class='mp-report-spacer'></div>" if modo == 'screen' else '<br>')
+                    i += 1
+                    continue
+
+                # Encabezados markdown #
+                if linea.startswith("# "):
+                    contenido = _md_inline(linea[2:])
+                    resultado.append(
+                        f"<div class='mp-report-h1'>{contenido}</div>" if modo == 'screen'
+                        else f"<h2>{contenido}</h2>"
+                    )
+                    i += 1
+                    continue
+
+                if linea.startswith("## ") or linea.startswith("### "):
+                    contenido = _md_inline(_re.sub(r'^#+\s*', '', linea))
+                    resultado.append(
+                        f"<div class='mp-report-h2'>{contenido}</div>" if modo == 'screen'
+                        else f"<h3>{contenido}</h3>"
+                    )
+                    i += 1
+                    continue
+
+                # Líneas TODO EN MAYÚSCULAS cortas → título de sección
+                if s.isupper() and 4 < len(s) < 90 and not s.startswith("|"):
+                    contenido = _md_inline(s)
+                    resultado.append(
+                        f"<div class='mp-report-h1'>{contenido}</div>" if modo == 'screen'
+                        else f"<h2>{contenido}</h2>"
+                    )
+                    i += 1
+                    continue
+
+                # Listas - y •
+                if linea.startswith("- ") or linea.startswith("• "):
+                    contenido = _md_inline(linea[2:])
+                    resultado.append(
+                        f"<div class='mp-report-li'>◦ {contenido}</div>" if modo == 'screen'
+                        else f"<li>{contenido}</li>"
+                    )
+                    i += 1
+                    continue
+
+                # Tablas |
+                if s.startswith("|"):
+                    # Saltar filas de separador |---|
+                    if _re.match(r'^\|[\s\-:|]+\|', s):
+                        i += 1
+                        continue
+                    celdas = [c.strip() for c in s.strip("|").split("|")]
+                    celdas_html = "".join(f"<td>{_md_inline(c)}</td>" for c in celdas)
+                    resultado.append(
+                        f"<div class='mp-report-table'><table style='width:100%;border-collapse:collapse;'>"
+                        f"<tr>{celdas_html}</tr></table></div>" if modo == 'screen'
+                        else f"<tr>{''.join(f'<td style=padding:3px 8px;border-bottom:0.5pt solid #ddd;font-size:9pt;>{_md_inline(c)}</td>' for c in celdas)}</tr>"
+                    )
+                    i += 1
+                    continue
+
+                # Párrafo normal
+                contenido = _md_inline(s)
+                resultado.append(
+                    f"<div class='mp-report-p'>{contenido}</div>" if modo == 'screen'
+                    else f"<p>{contenido}</p>"
+                )
+                i += 1
+
+            return "\n".join(resultado)
+
+        documento_inner = _parsear(texto, 'screen')
+        documento_print = _parsear(texto, 'print')
 
         # ── Render pantalla: reporte ejecutivo ────────────────────────────────
         st.markdown(
