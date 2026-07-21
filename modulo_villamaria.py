@@ -111,9 +111,9 @@ def _card_indicador(titulo, valor, unidad, referencia, color):
     st.markdown(
         f"""<div style='border-left:4px solid {color};background:{color}11;
             padding:14px 16px;border-radius:0 10px 10px 0;margin-bottom:8px'>
-          <div style='font-size:0.78em;color:#555;margin-bottom:2px'>{titulo}</div>
+          <div style='font-size:0.88em;color:#fff;margin-bottom:2px;font-weight:500'>{titulo}</div>
           <div style='font-size:1.7em;font-weight:700;color:{color}'>{valor}<span style='font-size:0.55em;font-weight:400;margin-left:4px'>{unidad}</span></div>
-          <div style='font-size:0.75em;color:#777;margin-top:2px'>{referencia}</div>
+          <div style='font-size:0.84em;color:#ccc;margin-top:2px'>{referencia}</div>
         </div>""",
         unsafe_allow_html=True
     )
@@ -504,9 +504,9 @@ def _render_indicadores():
         col_l, col_b, col_v = st.columns([2, 5, 1])
         with col_l:
             st.markdown(
-                f"<div style='font-size:0.83em;font-weight:600;color:{color};"
+                f"<div style='font-size:0.88em;font-weight:600;color:{color};"
                 f"padding-top:6px;'>{label}</div>"
-                f"<div style='font-size:0.72em;color:#888;'>{desc}</div>",
+                f"<div style='font-size:0.82em;color:#ccc;'>{desc}</div>",
                 unsafe_allow_html=True,
             )
         with col_b:
@@ -537,7 +537,7 @@ def _render_indicadores():
         f"</div>"
         f"<div style='font-size:1.3em;font-weight:800;color:#2e7d32;'>{pct_oms:.1f}%</div>"
         f"</div>"
-        f"<div style='font-size:0.75em;color:#888;margin-top:6px;'>"
+        f"<div style='font-size:0.84em;color:#ccc;margin-top:6px;'>"
         f"{acc['r_0_100']:.1f}% del &aacute;rea edificada tiene verde a menos de 100 m &middot; "
         f"{acc['r_100_300']:.1f}% adicional lo tiene entre 100 y 300 m &middot; Meta OMS: 100% &#9989;"
         f"</div>",
@@ -662,11 +662,11 @@ def _render_temperatura():
             st.markdown(
                 f"""<div style='border:1.5px solid {color};border-radius:10px;
                     padding:14px;text-align:center;background:{color}09'>
-                  <div style='font-size:0.72em;color:#555'>{z['nombre']}</div>
+                  <div style='font-size:0.84em;color:#ddd;font-weight:500'>{z['nombre']}</div>
                   <div style='font-size:1.6em;font-weight:700;color:{color}'>{z['temp']}°C</div>
-                  <div style='font-size:0.78em;color:{color}'>{'+' if diff>0 else ''}{diff:.2f}°C vs media</div>
+                  <div style='font-size:0.84em;color:{color}'>{'+' if diff>0 else ''}{diff:.2f}°C vs media</div>
                   <div style='margin-top:6px'><span style='background:{badge_color}22;border:1px solid {badge_color};
-                    color:{badge_color};border-radius:5px;padding:1px 7px;font-size:0.7em'>{municipio}</span></div>
+                    color:#fff;border-radius:5px;padding:2px 9px;font-size:0.8em;font-weight:500'>{municipio}</span></div>
                 </div>""",
                 unsafe_allow_html=True
             )
@@ -1037,18 +1037,18 @@ def _render_agenda2030():
     with col1:
         st.markdown(
             f"""<div style='border:2.5px solid {color_qtc};border-radius:14px;padding:22px;text-align:center;background:{color_qtc}0d'>
-              <div style='font-size:0.8em;color:#555;margin-bottom:4px'>
+              <div style='font-size:0.88em;color:#fff;font-weight:600;margin-bottom:4px'>
                 TARGET 1 · Cobertura Total de Calidad (QTC)
               </div>
               <div style='font-size:2.6em;font-weight:800;color:{color_qtc}'>{verde_total_pct:.1f}%</div>
-              <div style='font-size:0.85em;color:#777'>de la superficie es verde/azul</div>
+              <div style='font-size:0.9em;color:#ddd'>de la superficie es verde/azul</div>
               <div style='margin:10px 0'>
-                <div style='background:#eee;border-radius:8px;height:12px;overflow:hidden'>
+                <div style='background:rgba(255,255,255,0.15);border-radius:8px;height:12px;overflow:hidden'>
                   <div style='background:{color_qtc};width:{min(verde_total_pct/meta_qtc*100,100):.0f}%;height:100%;border-radius:8px'></div>
                 </div>
-                <div style='font-size:0.75em;color:#888;margin-top:4px'>{verde_total_pct:.1f}% de {meta_qtc:.0f}% meta C40</div>
+                <div style='font-size:0.84em;color:#ccc;margin-top:4px'>{verde_total_pct:.1f}% de {meta_qtc:.0f}% meta C40</div>
               </div>
-              <div style='font-size:0.8em;color:{color_qtc};font-weight:600'>
+              <div style='font-size:0.88em;color:{color_qtc};font-weight:600'>
                 {'✅ META CUMPLIDA' if verde_total_pct >= meta_qtc else f'⚠️ Faltan {gap_qtc:.1f} puntos porcentuales'}
               </div>
             </div>""",
@@ -1058,18 +1058,18 @@ def _render_agenda2030():
     with col2:
         st.markdown(
             f"""<div style='border:2.5px solid {color_esd};border-radius:14px;padding:22px;text-align:center;background:{color_esd}0d'>
-              <div style='font-size:0.8em;color:#555;margin-bottom:4px'>
+              <div style='font-size:0.88em;color:#fff;font-weight:600;margin-bottom:4px'>
                 TARGET 2 · Distribución Espacial Equitativa (ESD)
               </div>
               <div style='font-size:2.6em;font-weight:800;color:{color_esd}'>{esd_vm:.0f}%</div>
-              <div style='font-size:0.85em;color:#777'>de la población con acceso a verde</div>
+              <div style='font-size:0.9em;color:#ddd'>de la población con acceso a verde</div>
               <div style='margin:10px 0'>
-                <div style='background:#eee;border-radius:8px;height:12px;overflow:hidden'>
+                <div style='background:rgba(255,255,255,0.15);border-radius:8px;height:12px;overflow:hidden'>
                   <div style='background:{color_esd};width:100%;height:100%;border-radius:8px'></div>
                 </div>
-                <div style='font-size:0.75em;color:#888;margin-top:4px'>{esd_vm:.0f}% de {meta_esd:.0f}% meta C40</div>
+                <div style='font-size:0.84em;color:#ccc;margin-top:4px'>{esd_vm:.0f}% de {meta_esd:.0f}% meta C40</div>
               </div>
-              <div style='font-size:0.8em;color:{color_esd};font-weight:600'>✅ META SUPERADA — 100% a &lt;300m</div>
+              <div style='font-size:0.88em;color:{color_esd};font-weight:600'>✅ META SUPERADA — 100% a &lt;300m</div>
             </div>""",
             unsafe_allow_html=True
         )
