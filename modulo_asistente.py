@@ -162,7 +162,6 @@ def _dialog_ayuda():
                 use_container_width=True,
             ):
                 st.session_state["ayuda_cat_activa"] = cat
-                st.session_state["ayuda_query"] = ""
                 st.rerun()
 
         # Botón limpiar
@@ -170,7 +169,6 @@ def _dialog_ayuda():
             st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
             if st.button("✕ Limpiar filtro", key="ayuda_limpiar", use_container_width=True):
                 st.session_state.pop("ayuda_cat_activa", None)
-                st.session_state["ayuda_query"] = ""
                 st.rerun()
 
     with col_cont:
