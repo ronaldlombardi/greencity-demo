@@ -728,6 +728,36 @@ elif "Cobertura" in seccion:
         max_zoom=19,
     ).add_to(m_cob)
 
+# Overlay WorldCover desde GEE
+    try:
+        import ee as _ee
+        coords_cob_ee = [
+            [c[0], c[1]] for c in ciudad['coords_area']
+        ]
+        area_ee  = _ee.Geometry.Polygon([coords_cob_ee])
+        wc       = _ee.Image('ESA/WorldCover/v100/2020').clip(area_ee)
+        sld = """
+        <RasterSymbolizer>
+          <ColorMap type="values">
+            <ColorMapEntry color="#006400" quantity="10" label="Árboles"/>
+            <ColorMapEntry color="#ffbb22" quantity="30" label="Pastizales"/>
+            <ColorMapEntry color="#e65100" quantity="40" label="Cultivos"/>
+            <ColorMapEntry color="#757575" quantity="50" label="Edificado"/>
+            <ColorMapEntry color="#0064c8" quantity="80" label="Agua"/>
+          </ColorMap>
+        </RasterSymbolizer>
+        """
+        map_id   = wc.sldStyle(sld).getMapId()
+        tiles_wc = map_id['tile_fetcher'].url_format
+        folium.TileLayer(
+            tiles=tiles_wc,
+            attr='ESA WorldCover 2020 · GEE',
+            name='🌍 WorldCover',
+            overlay=True, show=True, opacity=0.15,
+        ).add_to(m_cob)
+    except Exception:
+        pass
+
     # Polígono del área de estudio siempre visible
     coords_cob = [[c[1], c[0]] for c in ciudad['coords_area']]
     coords_cob.append(coords_cob[0])
