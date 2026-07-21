@@ -579,7 +579,8 @@ elif "Área" in seccion:
         attr='© OpenStreetMap contributors',
         name='🗺️ OpenStreetMap',
         max_zoom=19,
-    ).add_to(m)
+        show=False,
+    ).add_to(m_cob)
     folium.TileLayer(
         tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         attr='© Esri — Esri, DigitalGlobe, GeoEye, i-cubed, USDA FSA, USGS, AEX, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, GIS User Community',
@@ -770,14 +771,15 @@ elif "Cobertura" in seccion:
     # Leyenda de cobertura con datos reales de la ciudad
     leyenda_html = f"""
     <div style="position:fixed;bottom:20px;left:20px;z-index:9999;
-                background:white;padding:10px 14px;border-radius:8px;
-                box-shadow:0 2px 8px rgba(0,0,0,0.25);font-size:0.82em;line-height:1.7">
-        <b>Cobertura · {ciudad['nombre']}</b><br>
-        <span style="color:#006400">█</span> Árboles &nbsp;<b>{ciudad['arb_pct']:.1f}%</b><br>
-        <span style="color:#ffbb22">█</span> Pastizales &nbsp;<b>{ciudad['past_pct']:.1f}%</b><br>
-        <span style="color:#e65100">█</span> Cultivos &nbsp;<b>{ciudad['cult_pct']:.1f}%</b><br>
-        <span style="color:#757575">█</span> Edificado &nbsp;<b>{ciudad['edif_pct']:.1f}%</b><br>
-        <span style="color:#1565c0">█</span> Agua &nbsp;<b>{ciudad['agua_pct']:.1f}%</b>
+                background:rgba(10,14,32,0.85);padding:10px 14px;border-radius:8px;
+                box-shadow:0 2px 8px rgba(0,0,0,0.5);font-size:0.82em;line-height:1.9;
+                border:1px solid rgba(120,140,255,0.2);">
+        <b style="color:#fff;">Cobertura · {ciudad['nombre']}</b><br>
+        <span style="color:#006400;font-size:15px;">█</span> <span style="color:#ccc;">Árboles</span> &nbsp;<b style="color:#fff;">{ciudad['arb_pct']:.1f}%</b><br>
+        <span style="color:#ffbb22;font-size:15px;">█</span> <span style="color:#ccc;">Pastizales</span> &nbsp;<b style="color:#fff;">{ciudad['past_pct']:.1f}%</b><br>
+        <span style="color:#e65100;font-size:15px;">█</span> <span style="color:#ccc;">Cultivos</span> &nbsp;<b style="color:#fff;">{ciudad['cult_pct']:.1f}%</b><br>
+        <span style="color:#757575;font-size:15px;">█</span> <span style="color:#ccc;">Edificado</span> &nbsp;<b style="color:#fff;">{ciudad['edif_pct']:.1f}%</b><br>
+        <span style="color:#1565c0;font-size:15px;">█</span> <span style="color:#ccc;">Agua</span> &nbsp;<b style="color:#fff;">{ciudad['agua_pct']:.1f}%</b>
     </div>"""
     m_cob.get_root().html.add_child(folium.Element(leyenda_html))
 
