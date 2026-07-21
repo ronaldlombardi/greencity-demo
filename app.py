@@ -337,7 +337,6 @@ SECCIONES = [
     ("🌡️", "Temperatura superficial"),
     ("🏛️", "Verde público (OSM)"),
     ("👥", "Censo 2022"),
-    ("📊", "Comparativa"),
     ("📝", "Diagnóstico"),
 ]
 
@@ -729,29 +728,6 @@ elif "Cobertura" in seccion:
         max_zoom=19,
     ).add_to(m_cob)
 
-    # Overlay WorldCover via GEE XYZ tiles (si GEE conectado)
-    try:
-        area_ee = ee.Geometry.Polygon([ciudad['coords_area']])
-        wc = ee.Image('ESA/WorldCover/v100/2020').clip(area_ee)
-        palette = ['006400','ffbb22','ffff4c','f096ff','fa0000',
-                   'b4b4b4','f0f0f0','0064c8','0096a0','00cf75','fae6a0']
-        vis = {'min': 10, 'max': 110, 'palette': palette}
-        map_id = wc.getMapId(vis)
-        tiles_url = map_id['tile_fetcher'].url_format
-        from folium import FeatureGroup
-        grupo_wc = FeatureGroup(name='🌍 WorldCover (cobertura)', show=True)
-        folium.TileLayer(
-            tiles=tiles_url,
-            attr='ESA WorldCover 2020 · Google Earth Engine',
-            name='🌍 WorldCover',
-            overlay=True,
-            opacity=0.75,
-        ).add_to(grupo_wc)
-        grupo_wc.add_to(m_cob)
-    except Exception:
-        # Si GEE no está disponible, mostrar polígono del área con colores simbólicos
-        pass
-
     # Polígono del área de estudio siempre visible
     coords_cob = [[c[1], c[0]] for c in ciudad['coords_area']]
     coords_cob.append(coords_cob[0])
@@ -1032,71 +1008,6 @@ elif "Censo" in seccion:
     ayuda_censo()
     st.markdown("---")
     render_censo(ciudad_key)
-
-# ============================================================
-# SECCIÓN: COMPARATIVA
-# ============================================================
-elif "Comparativa" in seccion:
-    st.title("📊 Comparativa entre ciudades")
-    ayuda_comparativa()
-    st.markdown("---")
-
-    vm = CIUDADES['villamaria']
-    sf = CIUDADES['sanfrancisco']
-
-    st.markdown("### Indicadores principales")
-    col1, col2 = st.columns(2)
-
-    indicadores = [
-        ("Arbolado urbano",          f"{vm['arb_pct']}%",                 f"{sf['arb_pct']}%",                "bad"),
-        ("Acceso <300m",             f"{vm['acceso_pct']:.0f}%",          f"{sf['acceso_pct']:.0f}%",         "good"),
-        ("Distancia promedio",       f"{vm['dist_prom']} m",              f"{sf['dist_prom']} m",             "normal"),
-        ("m² verde público/hab",     f"{vm['osm']['m2Hab']} m²",         f"{sf['osm']['m2Hab']} m²",         "normal"),
-        ("Isla de calor ΔT",         f"+{vm['lst']['deltaUHI']}°C",      f"+{sf['lst']['deltaUHI']}°C",      "inverse"),
-        ("Enfriamiento por verde",   f"-{vm['lst']['enfriamiento']}°C",   f"-{sf['lst']['enfriamiento']}°C",  "normal"),
-        ("Calificación",             vm['calificacion'],                  sf['calificacion'],                 "normal"),
-    ]
-
-    colores_comp = {
-        "Arbolado urbano":        (_semaforo(vm['arb_pct'], 10, 5),       _semaforo(sf['arb_pct'], 10, 5)),
-        "Acceso <300m":           (_semaforo(vm['acceso_pct'], 95, 80),    _semaforo(sf['acceso_pct'], 95, 80)),
-        "Distancia promedio":     ("#f57c00",                              "#f57c00"),
-        "m² verde público/hab":   (_semaforo(vm['osm']['m2Hab'], 15, 9),  _semaforo(sf['osm']['m2Hab'], 15, 9)),
-        "Isla de calor ΔT":       (_semaforo(vm['lst']['deltaUHI'], 0.5, 1.5, invert=True),
-                                   _semaforo(sf['lst']['deltaUHI'], 0.5, 1.5, invert=True)),
-        "Enfriamiento por verde": ("#2196f3",                              "#2196f3"),
-        "Calificación":           ("#2e7d32",                              "#2e7d32"),
-    }
-
-    with col1:
-        st.markdown(f"### 🏙️ {vm['nombre']}")
-        for label, val_vm, _, _ in indicadores:
-            c_vm, _ = colores_comp.get(label, ("#9e9e9e", "#9e9e9e"))
-            _card_indicador(label, val_vm, "", "", c_vm)
-
-    with col2:
-        st.markdown(f"### 🏘️ {sf['nombre']}")
-        for label, _, val_sf, _ in indicadores:
-            _, c_sf = colores_comp.get(label, ("#9e9e9e", "#9e9e9e"))
-            _card_indicador(label, val_sf, "", "", c_sf)
-
-    st.markdown("---")
-    st.markdown("### 🔑 Diferencias clave")
-    st.markdown(f"""
-    | Indicador | {vm['nombre']} | {sf['nombre']} | Diferencia |
-    |-----------|:---:|:---:|:---:|
-    | Arbolado | {vm['arb_pct']}% | {sf['arb_pct']}% | 🔴 VM tiene 5× más árboles |
-    | Verde público/hab | {vm['osm']['m2Hab']} m² | {sf['osm']['m2Hab']} m² | VM tiene 5× más verde público |
-    | Isla de calor | +{vm['lst']['deltaUHI']}°C | +{sf['lst']['deltaUHI']}°C | SF tiene 6× mayor UHI |
-    | Enfriamiento potencial | {vm['lst']['enfriamiento']}°C | {sf['lst']['enfriamiento']}°C | SF podría ganar {sf['lst']['enfriamiento']}°C con arbolado |
-    | Acceso <300m | {vm['acceso_pct']:.0f}% | {sf['acceso_pct']:.0f}% | ✅ Ambas cumplen OMS |
-    """)
-
-    st.info(
-        "💡 **Conclusión:** Villa María tiene mejor infraestructura verde. San Francisco tiene igual "
-        "accesibilidad pero urgente necesidad de arbolado — su potencial de enfriamiento (3.95°C) "
-        "es el argumento más fuerte para un plan de forestación municipal."
-    )
 
 # ============================================================
 # SECCIÓN: DIAGNÓSTICO
