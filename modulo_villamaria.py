@@ -469,6 +469,13 @@ def _render_indicadores():
         map_id   = wc.sldStyle(sld).getMapId()
         tiles_wc = map_id['tile_fetcher'].url_format
 
+        opacidad = st.slider(
+            "Opacidad del overlay WorldCover",
+            min_value=0.1, max_value=1.0, value=0.5, step=0.05,
+            help="Bajá para ver más el satélite debajo · Subí para ver mejor la clasificación",
+            key="wc_opacity",
+        )
+
         m_wc = folium.Map(location=[-32.415, -63.242], zoom_start=13, tiles=None)
         folium.TileLayer(
             tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -478,7 +485,7 @@ def _render_indicadores():
             tiles=tiles_wc,
             attr='ESA WorldCover 2020 · GEE',
             name='🌍 WorldCover',
-            overlay=True, show=True, opacity=0.72,
+            overlay=True, show=True, opacity=opacidad,
         ).add_to(m_wc)
         # Polígono del área
         folium.Polygon(
