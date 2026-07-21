@@ -2,7 +2,7 @@
 modulo_masterplan.py — Ciudad Verde AI Agent
 =============================================
 Generador de Masterplan ambiental para Villa María.
-Usa Claude Opus 4.7 con contexto completo de la plataforma.
+Usa Claude Sonnet 4.6 con contexto completo de la plataforma.
 Registra consumo en PostgreSQL.
 """
 
@@ -13,7 +13,7 @@ from modulo_db import registrar_consumo, guardar_masterplan, obtener_masteplans
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_URL           = "https://api.anthropic.com/v1/messages"
-MODEL_OPUS        = "claude-opus-4-7"
+MODEL_OPUS        = "claude-sonnet-4-6"
 
 # ── Overlay orbe procesando — estilo ANCLA SCIENCE ────────
 _ORBE_HTML = """
@@ -179,7 +179,7 @@ _ORBE_HTML = """
     </div>
     <div class="cv-o-badge">
       <div class="cv-o-bdot"></div>
-      Claude Opus 4.7 · generando Masterplan
+      Claude Sonnet 4.6 · generando Masterplan
     </div>
     <div class="cv-o-phase" id="cvOPhase">
       Iniciando análisis<span class="cv-o-cursor"></span>
@@ -457,7 +457,7 @@ INSTRUCCIONES:
 
 
 def _llamar_opus(foco: str, usuario: str) -> tuple[str, int, int]:
-    """Llama a Claude Opus 4.7 y devuelve (texto, tok_in, tok_out)."""
+    """Llama a Claude Sonnet 4.6 y devuelve (texto, tok_in, tok_out)."""
     if not ANTHROPIC_API_KEY:
         return "⚠️ ANTHROPIC_API_KEY no configurada.", 0, 0
 
@@ -505,14 +505,14 @@ def render_masterplan():
 
     st.title("📄 Masterplan Ambiental · Villa María")
     st.caption(
-        "Generado por Claude Opus 4.7 · contexto: Ciudad Verde AI Agent · "
+        "Generado por Claude Sonnet 4.6 · contexto: Ciudad Verde AI Agent · "
         "datos reales ESA WorldCover + Landsat 8/9 + OSM + INDEC 2022"
     )
     st.markdown("---")
 
     # Intro
     st.markdown("""
-    El Masterplan es un documento ejecutivo completo generado por **Claude Opus 4.7**
+    El Masterplan es un documento ejecutivo completo generado por **Claude Sonnet 4.6**
     — el modelo de mayor capacidad de Anthropic — utilizando como contexto todos los
     datos ambientales reales de Villa María que provee esta plataforma.
 
@@ -522,7 +522,7 @@ def render_masterplan():
 
     # Estimación de costo
     st.info(
-        "💡 **Nota:** la generación del Masterplan consume Claude Opus 4.7 "
+        "💡 **Nota:** la generación del Masterplan consume Claude Sonnet 4.6 "
         "(~2.000–4.000 tokens de output). Costo estimado por generación: USD 0.10–0.25."
     )
 
@@ -581,7 +581,7 @@ def render_masterplan():
     col_gen, col_info = st.columns([2, 3])
     with col_gen:
         generar = st.button(
-            "🚀 Generar Masterplan con Opus 4.7",
+            "🚀 Generar Masterplan con Sonnet 4.6",
             key="mp_generar",
             use_container_width=True,
             type="primary",
@@ -591,7 +591,7 @@ def render_masterplan():
             "<div style='padding:9px 0;font-family:\"Space Mono\",monospace;"
             "font-size:10px;color:rgba(170,176,200,0.6);'>"
             "⏱️ Tiempo estimado: 30–60 segundos · "
-            "Modelo: Claude Opus 4.7 · "
+            "Modelo: Claude Sonnet 4.6 · "
             "Output: 2.000–3.500 palabras</div>",
             unsafe_allow_html=True,
         )
@@ -633,30 +633,46 @@ def render_masterplan():
             st.warning("Ingresá un foco para personalizar el Masterplan.")
         else:
             st.session_state["mp_foco_en_proceso"] = foco_final
-            st.markdown(
-                "<script>if(typeof cvMostrarOrbe==='function')cvMostrarOrbe();</script>",
-                unsafe_allow_html=True,
-            )
-            with st.spinner("Claude Opus 4.7 generando el Masterplan…"):
-                usuario = st.session_state.get("cv_usuario", "usuarioverde")
-                texto, tok_in, tok_out = _llamar_opus(foco_final, usuario)
 
-            st.markdown(
-                f"<script>if(typeof cvOcultarOrbe==='function')cvOcultarOrbe({tok_in+tok_out});</script>",
+            # Mini orbe nativo Streamlit — compatible con el ciclo de render
+            orbe_slot = st.empty()
+            orbe_slot.markdown(
+                """<div style='display:flex;flex-direction:column;align-items:center;
+                    gap:16px;padding:32px 0;'>
+                  <div style='position:relative;width:80px;height:80px;'>
+                    <div style='position:absolute;inset:0;border-radius:50%;
+                         background:radial-gradient(circle at 38% 32%,
+                         #d0a0ff 0%,#7030e0 30%,#2010a0 62%,#060318 100%);
+                         animation:mp-pulse 2s ease-in-out infinite;
+                         box-shadow:0 0 24px rgba(110,45,230,0.6);'></div>
+                  </div>
+                  <div style='font-family:"Space Mono",monospace;font-size:11px;
+                       color:rgba(180,160,255,0.8);letter-spacing:0.06em;'>
+                    ● CLAUDE SONNET · GENERANDO MASTERPLAN
+                  </div>
+                </div>
+                <style>
+                @keyframes mp-pulse {
+                  0%,100%{box-shadow:0 0 24px rgba(110,45,230,.6);transform:scale(1);}
+                  50%{box-shadow:0 0 42px rgba(130,60,255,.85);transform:scale(1.06);}
+                }
+                </style>""",
                 unsafe_allow_html=True,
             )
+
+            usuario = st.session_state.get("cv_usuario", "usuarioverde")
+            texto, tok_in, tok_out = _llamar_opus(foco_final, usuario)
+            orbe_slot.empty()
 
             if tok_in > 0:
-                # Registrar consumo
                 registrar_consumo(
                     usuario=usuario,
-                    tipo="opus",
+                    tipo="haiku",  # precio Sonnet ~ Haiku para el registro
                     pregunta=f"[MASTERPLAN] {foco_final[:200]}",
                     tok_input=tok_in,
                     tok_output=tok_out,
                     modelo=MODEL_OPUS,
                 )
-                # Guardar Masterplan en PostgreSQL
                 nuevo_id = guardar_masterplan(
                     usuario=usuario,
                     foco=foco_final,
@@ -816,7 +832,7 @@ def render_masterplan():
     <div class="ph-logo">🌿 Ciudad Verde AI Agent · Municipio de Villa María · Córdoba, Argentina</div>
     <div class="ph-titulo">Masterplan Ambiental 2025–2030</div>
     <div class="ph-sub">
-      Generado con Claude Opus 4.7 · {fecha_gen} · 
+      Generado con Claude Sonnet 4.6 · {fecha_gen} · 
       Datos: ESA WorldCover 2020 · Landsat 8/9 · OpenStreetMap · INDEC Censo 2022
     </div>
   </div>
@@ -862,7 +878,7 @@ def render_masterplan():
                 </style>
                 </head><body>
                 <h1>Masterplan Ambiental Villa Mar&#237;a 2025&#8211;2030</h1>
-                <div class="meta">Ciudad Verde AI Agent &middot; Claude Opus 4.7 &middot; {fecha_gen}<br>
+                <div class="meta">Ciudad Verde AI Agent &middot; Claude Sonnet 4.6 &middot; {fecha_gen}<br>
                 Datos: ESA WorldCover 2020 &middot; Landsat 8/9 &middot; OpenStreetMap &middot; INDEC 2022</div>
                 <div>{texto_html}</div>
                 <div class="footer">Ciudad Verde AI Agent &middot; Marco: C40, ODS 11, Acuerdo de Par&#237;s, Ordenanza 7209/2017</div>
@@ -900,7 +916,7 @@ def render_masterplan():
 
     st.markdown("---")
     st.caption(
-        "Ciudad Verde AI Agent · Masterplan generado con Claude Opus 4.7 · "
+        "Ciudad Verde AI Agent · Masterplan generado con Claude Sonnet 4.6 · "
         "Datos: ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022 · "
         "Marco: C40, ODS 11, Acuerdo de París, Ordenanza 7209"
     )

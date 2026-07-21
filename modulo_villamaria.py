@@ -430,12 +430,8 @@ def _render_indicadores():
     st.markdown(
         "<div style='background:rgba(30,40,80,0.5);border:1px solid rgba(120,140,255,0.2);"
         "border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:0.82em;line-height:1.7;'>"
-        "<b>Paleta de colores WorldCover:</b> &nbsp;"
-        "<span style='color:#006400;font-weight:700;'>█</span> Árboles &nbsp;"
-        "<span style='color:#ffbb22;font-weight:700;'>█</span> Pastizales &nbsp;"
-        "<span style='color:#e65100;font-weight:700;'>█</span> Cultivos &nbsp;"
-        "<span style='color:#757575;font-weight:700;'>█</span> Edificado &nbsp;"
-        "<span style='color:#1565c0;font-weight:700;'>█</span> Agua"
+        "<b>Clasificación ESA WorldCover 2020:</b> "
+        "Árboles · Pastizales · Cultivos · Edificado · Agua · Suelo desnudo · Humedal"
         "</div>",
         unsafe_allow_html=True,
     )
@@ -469,13 +465,6 @@ def _render_indicadores():
         map_id   = wc.sldStyle(sld).getMapId()
         tiles_wc = map_id['tile_fetcher'].url_format
 
-        opacidad = st.slider(
-            "Opacidad del overlay WorldCover",
-            min_value=0.1, max_value=1.0, value=0.5, step=0.05,
-            help="Bajá para ver más el satélite debajo · Subí para ver mejor la clasificación",
-            key="wc_opacity",
-        )
-
         m_wc = folium.Map(location=[-32.415, -63.242], zoom_start=13, tiles=None)
         folium.TileLayer(
             tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -485,7 +474,7 @@ def _render_indicadores():
             tiles=tiles_wc,
             attr='ESA WorldCover 2020 · GEE',
             name='🌍 WorldCover',
-            overlay=True, show=True, opacity=opacidad,
+            overlay=True, show=True, opacity=0.15,
         ).add_to(m_wc)
         # Polígono del área
         folium.Polygon(
