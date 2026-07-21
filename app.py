@@ -24,6 +24,31 @@ from modulo_asistente    import render_asistente_sidebar, render_asistente_panel
 from modulo_admin        import render_admin
 from modulo_db           import inicializar_db
 
+# ── Helpers visuales compartidos ─────────────────────────
+def _semaforo(valor, umbral_ok, umbral_warn, invert=False):
+    if valor is None:
+        return "#9e9e9e"
+    if invert:
+        if valor <= umbral_ok:   return "#2e7d32"
+        if valor <= umbral_warn: return "#f57c00"
+        return "#c62828"
+    else:
+        if valor >= umbral_ok:   return "#2e7d32"
+        if valor >= umbral_warn: return "#f57c00"
+        return "#c62828"
+
+def _card_indicador(titulo, valor, unidad, referencia, color):
+    val_str = str(valor) if valor is not None else "—"
+    st.markdown(
+        f"""<div style='border-left:4px solid {color};background:{color}11;
+            padding:14px 16px;border-radius:0 10px 10px 0;margin-bottom:8px'>
+          <div style='font-size:0.88em;color:#fff;margin-bottom:2px;font-weight:500'>{titulo}</div>
+          <div style='font-size:1.7em;font-weight:700;color:{color}'>{val_str}<span style='font-size:0.55em;font-weight:400;margin-left:4px'>{unidad}</span></div>
+          <div style='font-size:0.84em;color:#ccc;margin-top:2px'>{referencia}</div>
+        </div>""",
+        unsafe_allow_html=True
+    )
+
 # ── Inicializar base de datos ─────────────────────────────
 inicializar_db()
 
@@ -667,13 +692,16 @@ elif "Cobertura" in seccion:
     ayuda_cobertura()
     st.markdown("---")
 
-    cob_display = {'Árboles': ciudad['arb_pct'], 'Pastizales': ciudad['past_pct'], 'Cultivos': ciudad['cult_pct'], 'Edificado': ciudad['edif_pct'], 'Agua': ciudad['agua_pct']}
-    col1, col2 = st.columns([1, 2])
-    with col1:
-        for nombre, pct in cob_display.items():
-            st.metric(nombre, f"{pct:.1f}%")
-    with col2:
-        st.bar_chart(cob_display)
+    c1, c2, c3, c4 = st.columns(4)
+    with c1:
+        color = _semaforo(ciudad['arb_pct'], 10, 5)
+        _card_indicador("Arbolado urbano", f"{ciudad['arb_pct']:.1f}", "%", "FAO ideal: >10%", color)
+    with c2:
+        _card_indicador("Pastizales", f"{ciudad['past_pct']:.1f}", "%", "Verde herbáceo", "#f57c00")
+    with c3:
+        _card_indicador("Cultivos en área urbana", f"{ciudad['cult_pct']:.1f}", "%", "Potencial de reconversión", "#f57c00")
+    with c4:
+        _card_indicador("Suelo edificado", f"{ciudad['edif_pct']:.1f}", "%", "Superficie impermeable", "#1565c0")
 
     st.markdown("---")
 
@@ -776,31 +804,66 @@ elif "Accesibilidad" in seccion:
 
     c1, c2, c3 = st.columns(3)
     with c1:
-        st.metric("Acceso <300m", f"{ciudad['acceso_pct']:.0f}%", "Meta OMS: 100%")
+        color = _semaforo(ciudad['acceso_pct'], 95, 80)
+        _card_indicador("Acceso a <300 metros", f"{ciudad['acceso_pct']:.0f}", "%", "Meta OMS: 100%", color)
     with c2:
-        st.metric("Distancia promedio", f"{ciudad['dist_prom']} m")
+        color = _semaforo(ciudad['dist_prom'] or 999, 150, 300, invert=True)
+        dist_val = ciudad['dist_prom'] if ciudad['dist_prom'] is not None else "—"
+        _card_indicador("Distancia promedio al verde", dist_val, "m", "Referencia OMS: <300m", color)
     with c3:
         m2 = ciudad['m2_hab_sat']
-        st.metric("m² verde/hab (sat.)", f"{m2:.0f} m²", "OMS: 9-15 m²")
+        color = _semaforo(m2, 15, 9)
+        _card_indicador("Verde detectado / habitante", f"{m2:.0f}", "m²/hab", "OMS mínimo: 9 m²/hab", color)
 
     st.markdown("---")
     st.markdown("#### Distribución por distancia al verde más cercano")
+    st.caption("% del área edificada por rango · Referencia OMS: 100% a menos de 300 m")
 
     rangos = [
-        ("0 – 100 m",   ciudad['r_0_100'],   "#1b5e20"),
-        ("100 – 300 m", ciudad['r_100_300'],  "#66bb6a"),
-        ("300 – 500 m", ciudad['r_300_500'],  "#ffcc80"),
-        ("Más de 500 m",ciudad['r_500_mas'],  "#ef9a9a"),
+        ("0 – 100 m",    ciudad['r_0_100'],   "#2e7d32", "Verde inmediato · máxima accesibilidad"),
+        ("100 – 300 m",  ciudad['r_100_300'],  "#66bb6a", "Dentro del estándar OMS · ~4 min caminando"),
+        ("300 – 500 m",  ciudad['r_300_500'],  "#f57c00", "Por encima del umbral OMS"),
+        ("> 500 m",      ciudad['r_500_mas'],  "#c62828", "Déficit · intervención recomendada"),
     ]
-    for label, pct, color in rangos:
+    for label, pct, color, desc in rangos:
         col_l, col_b, col_v = st.columns([2, 5, 1])
-        with col_l: st.markdown(f"<small>{label}</small>", unsafe_allow_html=True)
-        with col_b:
+        with col_l:
             st.markdown(
-                f"""<div style='background:#e8f5e9;border-radius:6px;height:18px;margin-top:4px'>
-                <div style='width:{max(pct,0.5):.1f}%;background:{color};height:18px;border-radius:6px'></div>
-                </div>""", unsafe_allow_html=True)
-        with col_v: st.markdown(f"**{pct:.1f}%**")
+                f"<div style='font-size:0.88em;font-weight:600;color:{color};padding-top:6px;'>{label}</div>"
+                f"<div style='font-size:0.82em;color:#ccc;'>{desc}</div>",
+                unsafe_allow_html=True,
+            )
+        with col_b:
+            bar_w = max(pct, 0.3)
+            label_inner = f'<span style="color:#fff;font-size:0.8em;font-weight:700;">{pct:.1f}%</span>' if pct > 5 else ''
+            st.markdown(
+                f"<div style='background:rgba(255,255,255,0.08);border-radius:6px;height:28px;"
+                f"margin-top:4px;overflow:hidden;'>"
+                f"<div style='width:{bar_w:.1f}%;background:{color};height:28px;"
+                f"border-radius:6px;display:flex;align-items:center;padding-left:8px;'>"
+                f"{label_inner}</div></div>",
+                unsafe_allow_html=True,
+            )
+        with col_v:
+            st.markdown(
+                f"<div style='font-weight:700;color:{color};padding-top:4px;"
+                f"text-align:right;font-size:0.95em;'>{pct:.1f}%</div>",
+                unsafe_allow_html=True,
+            )
+
+    pct_oms = ciudad['r_0_100'] + ciudad['r_100_300']
+    color_oms = "#2e7d32" if pct_oms >= 95 else "#f57c00" if pct_oms >= 80 else "#c62828"
+    st.markdown(
+        f"<div style='margin-top:14px;background:{color_oms}18;border:1.5px solid {color_oms}66;"
+        f"border-radius:8px;padding:10px 16px;display:flex;"
+        f"justify-content:space-between;align-items:center;'>"
+        f"<div style='font-size:0.88em;color:#fff;font-weight:600;'>"
+        f"{'✅' if pct_oms >= 95 else '⚠️'} Dentro del estándar OMS (&lt;300 m)"
+        f"</div>"
+        f"<div style='font-size:1.3em;font-weight:800;color:{color_oms};'>{pct_oms:.1f}%</div>"
+        f"</div>",
+        unsafe_allow_html=True,
+    )
 
     if ciudad['acceso_pct'] >= 100:
         st.success("✅ Cumple el estándar OMS: toda la población tiene verde a menos de 300m")
@@ -845,53 +908,76 @@ elif "Temperatura" in seccion:
 
     st.markdown("---")
     c1, c2, c3, c4 = st.columns(4)
-    with c1: st.metric("Temp. media (LST)", f"{lst['tMedia']}°C", f"{lst['imagenes']} imágenes")
+    with c1:
+        _card_indicador("Temperatura media (LST)", lst['tMedia'] or "—", "°C",
+                        f"{lst['imagenes']} imágenes analizadas", "#f57c00")
     with c2:
-        delta = f"+{lst['deltaUHI']}°C vs verde"
-        st.metric("Zona urbana", f"{lst['tUrbano']}°C", delta, delta_color="inverse")
-    with c3: st.metric("Zona verde", f"{lst['tVerde']}°C")
-    with c4: st.metric("Punto más caliente (P95)", f"{lst['tP95']}°C")
+        color_uhi = _semaforo(lst['deltaUHI'] or 0, 0.5, 1.5, invert=True)
+        _card_indicador("Isla de calor ΔT", f"+{lst['deltaUHI']}" if lst['deltaUHI'] is not None else "—",
+                        "°C", "Urbano vs verde", color_uhi)
+    with c3:
+        _card_indicador("Verde denso (NDVI>0.4)", lst['tNdviAlto'] or "—", "°C",
+                        "Zonas con vegetación densa", "#2e7d32")
+    with c4:
+        _card_indicador("Suelo/asfalto (NDVI<0.2)", lst['tNdviBajo'] or "—", "°C",
+                        "Zonas sin vegetación", "#c62828")
 
     st.markdown("---")
+
+    # ── Zonas de temperatura (si las hay) ────────────────
+    if lst['zonas']:
+        st.markdown("### Temperatura por zona")
+        cols_z = st.columns(len(lst['zonas']))
+        for i, z in enumerate(lst['zonas']):
+            with cols_z[i]:
+                diff = z['temp'] - (lst['tMedia'] or 0)
+                color_z = "#c62828" if diff > 0.5 else "#2196f3" if diff < -0.2 else "#555"
+                st.markdown(
+                    f"""<div style='border:1.5px solid {color_z};border-radius:10px;
+                        padding:14px;text-align:center;background:{color_z}09'>
+                      <div style='font-size:0.84em;color:#ddd;font-weight:500'>{z['nombre']}</div>
+                      <div style='font-size:1.6em;font-weight:700;color:{color_z}'>{z['temp']}°C</div>
+                      <div style='font-size:0.84em;color:{color_z}'>{'+' if diff>0 else ''}{diff:.2f}°C vs media</div>
+                    </div>""",
+                    unsafe_allow_html=True,
+                )
+        st.markdown("---")
+
     col_uhi, col_enf = st.columns(2)
 
     with col_uhi:
         st.markdown("### 🏙️ Isla de calor urbano")
-        uhi = lst['deltaUHI']
-        color = "#f44336" if uhi > 3 else "#ff9800" if uhi > 1.5 else "#4caf50"
+        uhi = lst['deltaUHI'] or 0
+        color = "#c62828" if uhi > 3 else "#f57c00" if uhi > 1.5 else "#2e7d32"
         nivel = "🔴 ALTO" if uhi > 3 else "🟡 MODERADO" if uhi > 1.5 else "🟢 BAJO"
         pct   = min(uhi/6*100, 100)
-        st.markdown(f"**Intensidad:** {nivel} — **ΔT = +{uhi}°C**")
         st.markdown(
-            f"""<div style='background:#e0e0e0;border-radius:6px;height:14px;margin:8px 0'>
-            <div style='width:{pct:.0f}%;background:{color};height:14px;border-radius:6px'></div>
-            </div><div style='display:flex;justify-content:space-between;font-size:0.75em;color:#888'>
-            <span>0°C</span><span>1.5°C</span><span>3°C</span><span>6°C+</span></div>""",
-            unsafe_allow_html=True
+            f"<div style='font-size:1em;color:#fff;font-weight:600;margin-bottom:8px'>"
+            f"Intensidad: {nivel} &nbsp;·&nbsp; <span style='color:{color}'>ΔT = +{uhi}°C</span></div>",
+            unsafe_allow_html=True,
         )
-        if lst['zonas']:
-            st.markdown("**Por zonas:**")
-            for z in lst['zonas']:
-                diff = z['temp'] - lst['tMedia']
-                color_z = "#f44336" if diff > 0.5 else "#2196f3" if diff < -0.5 else "#888"
-                st.markdown(
-                    f"<div style='display:flex;justify-content:space-between;font-size:0.85em'>"
-                    f"<span>{z['nombre']}</span>"
-                    f"<span style='color:{color_z};font-weight:600'>{z['temp']}°C "
-                    f"({'+' if diff>0 else ''}{diff:.2f}°C)</span></div>",
-                    unsafe_allow_html=True
-                )
+        st.markdown(
+            f"<div style='background:rgba(255,255,255,0.10);border-radius:6px;height:14px;margin:8px 0'>"
+            f"<div style='width:{pct:.0f}%;background:{color};height:14px;border-radius:6px'></div>"
+            f"</div><div style='display:flex;justify-content:space-between;font-size:0.82em;color:#ccc'>"
+            f"<span>0°C</span><span>1.5°C</span><span>3°C</span><span>6°C+</span></div>",
+            unsafe_allow_html=True,
+        )
 
     with col_enf:
         st.markdown("### 🌿 Efecto enfriador de la vegetación")
-        enf = lst['enfriamiento']
-        st.markdown(f"""
-        | Cobertura | Temperatura |
-        |-----------|:-----------:|
-        | 🌳 Verde denso (NDVI >0.4) | **{lst['tNdviAlto']}°C** |
-        | 🏗️ Suelo/asfalto (NDVI <0.2) | **{lst['tNdviBajo']}°C** |
-        | ❄️ Enfriamiento | **{enf}°C menos** |
-        """)
+        enf = lst['enfriamiento'] or 0
+        st.markdown(
+            f"<table style='width:100%;border-collapse:collapse;font-size:0.92em;'>"
+            f"<tr><td style='padding:6px 0;color:#ccc;'>🌳 Verde denso (NDVI &gt;0.4)</td>"
+            f"<td style='font-weight:700;color:#2e7d32;text-align:right'>{lst['tNdviAlto']}°C</td></tr>"
+            f"<tr><td style='padding:6px 0;color:#ccc;'>🏗️ Suelo / asfalto (NDVI &lt;0.2)</td>"
+            f"<td style='font-weight:700;color:#c62828;text-align:right'>{lst['tNdviBajo']}°C</td></tr>"
+            f"<tr><td style='padding:6px 0;color:#ccc;'>❄️ Diferencia de enfriamiento</td>"
+            f"<td style='font-weight:700;color:#2196f3;text-align:right'>{enf}°C menos</td></tr>"
+            f"</table>",
+            unsafe_allow_html=True,
+        )
         if enf > 3:
             st.success(f"✅ Alto potencial: cada ha de arbolado puede reducir hasta {enf}°C la temperatura local.")
         else:
@@ -914,12 +1000,16 @@ elif "OSM" in seccion:
 
     osm_cache = ciudad['osm']
     c1, c2, c3 = st.columns(3)
-    with c1: st.metric("Espacios catalogados", osm_cache['elementos'])
-    with c2: st.metric("Área pública total", f"{osm_cache['areaHa']} ha")
+    with c1:
+        _card_indicador("Verde público / habitante", osm_cache['m2Hab'], "m²/hab",
+                        "OMS mínimo: 9 m²/hab" + (" ✅" if osm_cache['m2Hab'] >= 9 else " ⚠️"),
+                        _semaforo(osm_cache['m2Hab'], 15, 9))
+    with c2:
+        _card_indicador("Área pública total", osm_cache['areaHa'], "ha",
+                        "Catalogada como pública en OSM", "#2e7d32")
     with c3:
-        m2 = osm_cache['m2Hab']
-        oms = "✅ OMS" if m2 >= 9 else "⚠️ bajo OMS"
-        st.metric("m² público / hab", f"{m2} m²", oms)
+        _card_indicador("Espacios catalogados", osm_cache['elementos'], "",
+                        "Plazas · parques · arbolado", "#2e7d32")
 
     diff = ciudad['m2_hab_sat'] - osm_cache['m2Hab']
     st.warning(
@@ -967,16 +1057,28 @@ elif "Comparativa" in seccion:
         ("Calificación",             vm['calificacion'],                  sf['calificacion'],                 "normal"),
     ]
 
+    colores_comp = {
+        "Arbolado urbano":        (_semaforo(vm['arb_pct'], 10, 5),       _semaforo(sf['arb_pct'], 10, 5)),
+        "Acceso <300m":           (_semaforo(vm['acceso_pct'], 95, 80),    _semaforo(sf['acceso_pct'], 95, 80)),
+        "Distancia promedio":     ("#f57c00",                              "#f57c00"),
+        "m² verde público/hab":   (_semaforo(vm['osm']['m2Hab'], 15, 9),  _semaforo(sf['osm']['m2Hab'], 15, 9)),
+        "Isla de calor ΔT":       (_semaforo(vm['lst']['deltaUHI'], 0.5, 1.5, invert=True),
+                                   _semaforo(sf['lst']['deltaUHI'], 0.5, 1.5, invert=True)),
+        "Enfriamiento por verde": ("#2196f3",                              "#2196f3"),
+        "Calificación":           ("#2e7d32",                              "#2e7d32"),
+    }
+
     with col1:
         st.markdown(f"### 🏙️ {vm['nombre']}")
         for label, val_vm, _, _ in indicadores:
-            st.metric(label, val_vm)
+            c_vm, _ = colores_comp.get(label, ("#9e9e9e", "#9e9e9e"))
+            _card_indicador(label, val_vm, "", "", c_vm)
 
     with col2:
         st.markdown(f"### 🏘️ {sf['nombre']}")
-        for label, val_vm, val_sf, dc in indicadores:
-            # Calcular delta numérico donde aplique
-            st.metric(label, val_sf)
+        for label, _, val_sf, _ in indicadores:
+            _, c_sf = colores_comp.get(label, ("#9e9e9e", "#9e9e9e"))
+            _card_indicador(label, val_sf, "", "", c_sf)
 
     st.markdown("---")
     st.markdown("### 🔑 Diferencias clave")
