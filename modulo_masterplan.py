@@ -710,144 +710,102 @@ def render_masterplan():
 
         st.markdown("---")
 
-        # ── CSS de impresión + documento ──────────────────────────────────────
+        # ── Reporte ejecutivo ──────────────────────────────────────────────────
         import html as _html
-        texto_escaped = _html.escape(texto)
+        import datetime as _dt
+        fecha_gen     = _dt.datetime.now().strftime("%d de %B de %Y")
+        fecha_gen_pdf = _dt.datetime.now().strftime("%d/%m/%Y")
 
-        # Construir HTML del documento para pantalla Y para window.print()
+        # Parsear líneas en clases del reporte
         lineas_html = []
         for linea in texto.split("\n"):
-            if linea.strip() == "":
-                lineas_html.append("<div class='mp-spacer'></div>")
-            elif linea.startswith("# ") or (linea.isupper() and len(linea) < 80):
+            s = linea.strip()
+            if not s:
+                lineas_html.append("<div class='mp-report-spacer'></div>")
+            elif linea.startswith("# ") or (s.isupper() and len(s) < 80):
                 lineas_html.append(
-                    f"<div class='mp-h1'>{_html.escape(linea.lstrip('# '))}</div>"
+                    f"<div class='mp-report-h1'>{_html.escape(linea.lstrip('# '))}</div>"
                 )
-            elif linea.startswith("## ") or (linea.endswith(":") and len(linea) < 60):
+            elif linea.startswith("## ") or linea.startswith("### "):
                 lineas_html.append(
-                    f"<div class='mp-h2'>{_html.escape(linea.lstrip('# '))}</div>"
+                    f"<div class='mp-report-h2'>{_html.escape(linea.lstrip('# '))}</div>"
+                )
+            elif s.endswith(":") and len(s) < 70 and not s.startswith("|"):
+                lineas_html.append(
+                    f"<div class='mp-report-h2'>{_html.escape(s)}</div>"
                 )
             elif linea.startswith("- ") or linea.startswith("• "):
                 lineas_html.append(
-                    f"<div class='mp-li'>◦ {_html.escape(linea[2:])}</div>"
+                    f"<div class='mp-report-li'>◦ {_html.escape(linea[2:])}</div>"
                 )
             elif linea.startswith("|"):
                 lineas_html.append(
-                    f"<div class='mp-table-row'>{_html.escape(linea)}</div>"
+                    f"<div class='mp-report-table'>{_html.escape(linea)}</div>"
                 )
             else:
                 lineas_html.append(
-                    f"<div class='mp-p'>{_html.escape(linea)}</div>"
+                    f"<div class='mp-report-p'>{_html.escape(linea)}</div>"
                 )
 
         documento_inner = "\n".join(lineas_html)
-        import datetime as _dt
-        fecha_gen = _dt.datetime.now().strftime("%d de %B de %Y")
 
-        st.markdown(f"""
-<style>
-/* ── Estilos pantalla ── */
-.mp-doc {{
-    background:rgba(10,14,32,0.6);
-    border:0.5px solid rgba(120,140,255,0.20);
-    border-radius:12px;
-    padding:28px 32px;
-    font-family:'Space Grotesk',sans-serif;
-    font-size:14px;color:#dde3f5;line-height:1.8;
-}}
-.mp-h1 {{
-    font-family:'Space Mono',monospace;font-size:13px;font-weight:700;
-    letter-spacing:0.06em;color:#9060ff;
-    margin:18px 0 8px 0;
-    border-bottom:0.5px solid rgba(120,140,255,0.2);padding-bottom:6px;
-}}
-.mp-h2 {{
-    font-family:'Space Mono',monospace;font-size:11px;font-weight:700;
-    letter-spacing:0.08em;color:#00b4dc;margin:14px 0 6px 0;
-}}
-.mp-li  {{ padding-left:16px;margin:3px 0;color:#dde3f5; }}
-.mp-p   {{ margin:4px 0;color:#dde3f5; }}
-.mp-table-row {{ font-family:'Space Mono',monospace;font-size:11px;
-    color:rgba(200,210,240,0.75);margin:2px 0; }}
-.mp-spacer {{ height:8px; }}
+        # Versión HTML limpia para la ventana de impresión
+        lineas_print = []
+        for linea in texto.split("\n"):
+            s = linea.strip()
+            if not s:
+                lineas_print.append("<br>")
+            elif linea.startswith("# ") or (s.isupper() and len(s) < 80):
+                lineas_print.append(f"<h2>{_html.escape(linea.lstrip('# '))}</h2>")
+            elif linea.startswith("## ") or linea.startswith("### "):
+                lineas_print.append(f"<h3>{_html.escape(linea.lstrip('# '))}</h3>")
+            elif s.endswith(":") and len(s) < 70 and not s.startswith("|"):
+                lineas_print.append(f"<h3>{_html.escape(s)}</h3>")
+            elif linea.startswith("- ") or linea.startswith("• "):
+                lineas_print.append(f"<li>{_html.escape(linea[2:])}</li>")
+            elif linea.startswith("|"):
+                lineas_print.append(f"<p style='font-family:monospace;font-size:9pt;'>{_html.escape(linea)}</p>")
+            else:
+                lineas_print.append(f"<p>{_html.escape(linea)}</p>")
+        documento_print = "\n".join(lineas_print)
 
-/* ── Estilos de impresión ── */
-@media print {{
-    body {{ background:#fff !important; color:#111 !important; }}
-    /* Ocultar TODO Streamlit excepto el documento */
-    header, footer, [data-testid="stSidebar"],
-    [data-testid="stToolbar"], [data-testid="stDecoration"],
-    .stButton, .stMetric, .stDownloadButton,
-    [data-testid="stHeader"], #cv-print-btn-row,
-    .element-container:not(.cv-printable) {{ display:none !important; }}
-
-    .mp-doc {{
-        background:#fff !important;border:none !important;
-        border-radius:0 !important;padding:0 !important;
-        color:#111 !important;
-    }}
-    .mp-h1 {{
-        color:#2e4a1e !important;font-size:14pt !important;
-        border-bottom:1px solid #ccc !important;
-    }}
-    .mp-h2  {{ color:#1a3a6e !important;font-size:11pt !important; }}
-    .mp-li  {{ color:#111 !important; }}
-    .mp-p   {{ color:#222 !important; }}
-    .mp-table-row {{ color:#333 !important; }}
-
-    /* Header de impresión */
-    #cv-print-header {{ display:block !important; }}
-    /* Footer de impresión */
-    #cv-print-footer {{ display:block !important; }}
-}}
-
-#cv-print-header {{
-    display:none;
-    font-family:'Arial',sans-serif;
-    border-bottom:2px solid #2e4a1e;
-    padding-bottom:14px;margin-bottom:24px;
-}}
-#cv-print-header .ph-logo {{
-    font-size:9pt;font-weight:700;letter-spacing:0.12em;
-    color:#2e4a1e;text-transform:uppercase;
-}}
-#cv-print-header .ph-titulo {{
-    font-size:18pt;font-weight:700;color:#1a1a1a;margin:6px 0 2px 0;
-}}
-#cv-print-header .ph-sub {{
-    font-size:9pt;color:#555;
-}}
-#cv-print-footer {{
-    display:none;
-    font-family:'Arial',sans-serif;font-size:8pt;color:#888;
-    border-top:1px solid #ddd;padding-top:10px;margin-top:32px;
-    text-align:center;
-}}
-</style>
-
-<div class="mp-doc cv-printable" id="cv-masterplan-doc">
-
-  <!-- Header solo visible en impresión -->
-  <div id="cv-print-header">
-    <div class="ph-logo">🌿 Ciudad Verde AI Agent · Municipio de Villa María · Córdoba, Argentina</div>
-    <div class="ph-titulo">Masterplan Ambiental 2025–2030</div>
-    <div class="ph-sub">
-      Generado con Claude Sonnet 4.6 · {fecha_gen} · 
-      Datos: ESA WorldCover 2020 · Landsat 8/9 · OpenStreetMap · INDEC Censo 2022
-    </div>
-  </div>
-
-  {documento_inner}
-
-  <!-- Footer solo visible en impresión -->
-  <div id="cv-print-footer">
-    Ciudad Verde AI Agent · Datos: ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022 ·
-    Marco: C40, ODS 11, Acuerdo de París, Ordenanza 7209/2017 ·
-    Generado el {fecha_gen}
-  </div>
-
-</div>
-""", unsafe_allow_html=True)
+        # ── Render pantalla: reporte ejecutivo ────────────────────────────────
+        st.markdown(
+            f"""<div class='mp-report cv-printable'>
+              <div class='mp-report-header'>
+                <div style='display:flex;align-items:center;gap:14px;margin-bottom:12px;'>
+                  <div style='width:44px;height:44px;border-radius:10px;flex-shrink:0;
+                       background:linear-gradient(135deg,#6228b4,#00b4dc);
+                       display:flex;align-items:center;justify-content:center;
+                       font-family:"Space Mono",monospace;font-size:18px;font-weight:700;color:#fff;'>
+                    CV</div>
+                  <div>
+                    <div style='font-family:"Space Mono",monospace;font-size:10px;
+                         letter-spacing:0.12em;color:rgba(160,175,220,0.6);
+                         text-transform:uppercase;'>Ciudad Verde AI Agent · Villa María, Córdoba</div>
+                    <div style='font-family:"Space Grotesk",sans-serif;font-size:22px;
+                         font-weight:700;color:#fff;margin-top:2px;'>
+                         Masterplan Ambiental 2025–2030</div>
+                  </div>
+                </div>
+                <div style='display:flex;gap:24px;flex-wrap:wrap;
+                     font-family:"Space Mono",monospace;font-size:10px;
+                     color:rgba(160,175,220,0.55);letter-spacing:0.06em;'>
+                  <span>📅 {fecha_gen}</span>
+                  <span>🤖 Claude Sonnet 4.6</span>
+                  <span>📡 ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022</span>
+                </div>
+              </div>
+              {documento_inner}
+              <div style='margin-top:32px;padding-top:12px;
+                   border-top:0.5px solid rgba(120,140,255,0.15);
+                   font-family:"Space Mono",monospace;font-size:10px;
+                   color:rgba(160,175,220,0.4);letter-spacing:0.05em;'>
+                Ciudad Verde AI Agent · Marco: C40, ODS 11, Acuerdo de París, Ordenanza 7209/2017
+              </div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
 
         st.markdown("---")
 
@@ -855,36 +813,113 @@ def render_masterplan():
         col_print, col_dl, col_new, _ = st.columns([2, 2, 2, 1])
         with col_print:
             import streamlit.components.v1 as _components
-            import datetime as _dt
-            fecha_gen = _dt.datetime.now().strftime("%d/%m/%Y")
-            # Preparar texto HTML para nueva ventana
-            texto_html = texto.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
             print_js = f"""
             <script>
             function abrirImpresion() {{
-                var w = window.open('', '_blank', 'width=900,height=700');
+                var w = window.open('', '_blank', 'width=960,height=750,scrollbars=yes');
                 w.document.write(`<!DOCTYPE html><html><head>
                 <meta charset="utf-8">
-                <title>Masterplan Ambiental Villa María 2025-2030</title>
+                <title>Masterplan Ambiental · Villa María 2025-2030</title>
                 <style>
-                  body {{ font-family: Arial, sans-serif; font-size: 13px;
-                          color: #111; margin: 40px; line-height: 1.7; }}
-                  h1 {{ font-size: 18px; color: #1b5e20; border-bottom: 2px solid #1b5e20;
-                        padding-bottom: 8px; margin-bottom: 4px; }}
-                  .meta {{ font-size: 10px; color: #555; margin-bottom: 24px; }}
-                  .footer {{ font-size: 9px; color: #888; border-top: 1px solid #ddd;
-                             padding-top: 8px; margin-top: 32px; }}
-                  @media print {{ button {{ display:none; }} }}
+                  * {{ box-sizing:border-box; margin:0; padding:0; }}
+                  body {{
+                    font-family: Georgia, 'Times New Roman', serif;
+                    font-size: 11pt; color: #111;
+                    margin: 0; padding: 0; background: #f5f5f5;
+                  }}
+                  .page {{
+                    background: #fff;
+                    max-width: 820px; margin: 24px auto;
+                    padding: 52px 56px 48px 56px;
+                    box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+                  }}
+                  /* Header institucional */
+                  .rp-header {{
+                    border-bottom: 3px solid #1b5e20;
+                    padding-bottom: 18px; margin-bottom: 28px;
+                  }}
+                  .rp-org {{
+                    font-family: Arial, sans-serif; font-size: 9pt;
+                    font-weight: 700; letter-spacing: 0.12em;
+                    text-transform: uppercase; color: #2e7d32;
+                    margin-bottom: 6px;
+                  }}
+                  .rp-titulo {{
+                    font-family: Arial, sans-serif; font-size: 22pt;
+                    font-weight: 700; color: #1a1a1a; line-height: 1.1;
+                    margin-bottom: 6px;
+                  }}
+                  .rp-subtitulo {{
+                    font-family: Arial, sans-serif; font-size: 11pt;
+                    color: #4a4a4a; margin-bottom: 10px;
+                  }}
+                  .rp-meta {{
+                    display: flex; gap: 24px; flex-wrap: wrap;
+                    font-family: Arial, sans-serif; font-size: 8.5pt;
+                    color: #777; border-top: 0.5pt solid #ddd;
+                    padding-top: 10px; margin-top: 10px;
+                  }}
+                  /* Cuerpo */
+                  h2 {{
+                    font-family: Arial, sans-serif; font-size: 12pt;
+                    font-weight: 700; color: #1b5e20;
+                    text-transform: uppercase; letter-spacing: 0.06em;
+                    margin: 22px 0 6px 0; padding-bottom: 5px;
+                    border-bottom: 1pt solid #c8e6c9;
+                  }}
+                  h3 {{
+                    font-family: Arial, sans-serif; font-size: 11pt;
+                    font-weight: 700; color: #1a3a6e;
+                    margin: 16px 0 5px 0;
+                  }}
+                  p {{
+                    line-height: 1.65; margin: 5px 0; font-size: 10.5pt;
+                    text-align: justify;
+                  }}
+                  li {{
+                    line-height: 1.6; margin: 3px 0 3px 18px;
+                    font-size: 10.5pt;
+                  }}
+                  /* Footer */
+                  .rp-footer {{
+                    margin-top: 36px; padding-top: 10px;
+                    border-top: 1pt solid #ddd;
+                    font-family: Arial, sans-serif; font-size: 8pt;
+                    color: #999; text-align: center;
+                  }}
+                  /* Botón imprimir (oculto en impresión) */
+                  .btn-print {{
+                    display: block; margin: 20px auto 0;
+                    padding: 10px 28px; background: #1b5e20;
+                    color: #fff; border: none; border-radius: 6px;
+                    font-family: Arial, sans-serif; font-size: 13px;
+                    cursor: pointer;
+                  }}
+                  @media print {{
+                    body {{ background:#fff; }}
+                    .page {{ margin:0; box-shadow:none; padding:20mm 22mm; }}
+                    .btn-print {{ display:none; }}
+                    h2 {{ page-break-before: auto; }}
+                  }}
                 </style>
                 </head><body>
-                <h1>Masterplan Ambiental Villa Mar&#237;a 2025&#8211;2030</h1>
-                <div class="meta">Ciudad Verde AI Agent &middot; Claude Sonnet 4.6 &middot; {fecha_gen}<br>
-                Datos: ESA WorldCover 2020 &middot; Landsat 8/9 &middot; OpenStreetMap &middot; INDEC 2022</div>
-                <div>{texto_html}</div>
-                <div class="footer">Ciudad Verde AI Agent &middot; Marco: C40, ODS 11, Acuerdo de Par&#237;s, Ordenanza 7209/2017</div>
-                <br><button onclick="window.print()" style="padding:8px 20px;background:#1b5e20;
-                color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;">
-                &#128438; Imprimir / Guardar PDF</button>
+                <div class="page">
+                  <div class="rp-header">
+                    <div class="rp-org">🌿 Ciudad Verde AI Agent &nbsp;·&nbsp; Municipio de Villa Mar&#237;a &nbsp;·&nbsp; C&#243;rdoba, Argentina</div>
+                    <div class="rp-titulo">Masterplan Ambiental<br>Villa Mar&#237;a 2025&#8211;2030</div>
+                    <div class="rp-subtitulo">Diagn&#243;stico, objetivos y l&#237;neas de acci&#243;n para la pol&#237;tica p&#250;blica ambiental municipal</div>
+                    <div class="rp-meta">
+                      <span>&#128197; {fecha_gen_pdf}</span>
+                      <span>&#129302; Claude Sonnet 4.6</span>
+                      <span>&#128225; ESA WorldCover 2020 &middot; Landsat 8/9 &middot; OpenStreetMap &middot; INDEC 2022</span>
+                    </div>
+                  </div>
+                  {documento_print}
+                  <div class="rp-footer">
+                    Ciudad Verde AI Agent &nbsp;&middot;&nbsp; Marco normativo: C40, ODS 11, Acuerdo de Par&#237;s, Ordenanza 7209/2017 &nbsp;&middot;&nbsp; {fecha_gen_pdf}
+                  </div>
+                  <button class="btn-print" onclick="window.print()">&#128438; Imprimir / Guardar PDF</button>
+                </div>
                 </body></html>`);
                 w.document.close();
                 w.focus();

@@ -67,7 +67,7 @@
 [data-testid="stSidebar"] .stRadio label {
   color: var(--text-m) !important;
   font-family: 'Space Grotesk', sans-serif !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
 }
 
 /* Título del sidebar */
@@ -91,7 +91,7 @@
   padding: 7px 10px !important;
   transition: all 0.2s !important;
   color: #b8c0d8 !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
 }
 [data-testid="stSidebar"] .stRadio label:hover {
   background: rgba(99,40,180,0.14) !important;
@@ -150,7 +150,8 @@ h3 {
 p, li {
   font-family: 'Space Grotesk', sans-serif !important;
   color: var(--text-m) !important;
-  line-height: 1.65 !important;
+  line-height: 1.7 !important;
+  font-size: 15px !important;
 }
 
 /* ── MÉTRICAS ── */
@@ -248,7 +249,7 @@ p, li {
   border-radius: var(--radius) !important;
   color: var(--text) !important;
   font-family: 'Space Grotesk', sans-serif !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
 }
 .stTextInput > div > div > input:focus,
 .stTextArea > div > div > textarea:focus {
@@ -269,7 +270,7 @@ p, li {
   border-radius: var(--radius) !important;
   border-width: 0.5px !important;
   font-family: 'Space Grotesk', sans-serif !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
 }
 .stInfo {
   background: rgba(0,180,220,0.08) !important;
@@ -330,7 +331,7 @@ p, li {
   border-radius: var(--radius) !important;
   font-family: 'Space Grotesk', sans-serif !important;
   font-weight: 600 !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
   color: var(--text-m) !important;
   transition: all 0.2s !important;
 }
@@ -480,4 +481,89 @@ iframe {
   font-family: 'Space Mono', monospace;
   color: rgba(64,220,144,0.6);
   text-transform: uppercase;
+}
+
+/* ── REPORTE EJECUTIVO MASTERPLAN — PANTALLA ── */
+.mp-report {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  color: #dde3f5;
+  line-height: 1.8;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.mp-report-header {
+  border-bottom: 2px solid rgba(120,140,255,0.3);
+  padding-bottom: 20px;
+  margin-bottom: 28px;
+}
+.mp-report-h1 {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #9060ff;
+  margin: 22px 0 6px 0;
+  padding-bottom: 6px;
+  border-bottom: 0.5px solid rgba(120,140,255,0.2);
+  text-transform: uppercase;
+}
+.mp-report-h2 {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #00b4dc;
+  margin: 16px 0 6px 0;
+  text-transform: uppercase;
+}
+.mp-report-p  { margin: 6px 0; font-size: 15px; }
+.mp-report-li { padding-left: 18px; margin: 4px 0; font-size: 15px; }
+.mp-report-table { font-family: 'Space Mono', monospace; font-size: 12px; color: rgba(200,210,240,0.8); margin: 3px 0; }
+.mp-spacer { height: 10px; }
+
+/* ── @MEDIA PRINT — REPORTE EJECUTIVO ── */
+@media print {
+  /* Ocultar toda la UI de Streamlit */
+  header, footer, [data-testid="stSidebar"],
+  [data-testid="stToolbar"], [data-testid="stDecoration"],
+  [data-testid="stHeader"], .stButton, .stMetric,
+  .stDownloadButton, .element-container:not(.cv-printable) {
+    display: none !important;
+  }
+
+  body, .stApp {
+    background: #fff !important;
+    color: #111 !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 11pt !important;
+  }
+
+  .mp-report {
+    color: #111 !important;
+    font-family: Georgia, 'Times New Roman', serif !important;
+    font-size: 11pt !important;
+    max-width: 100% !important;
+  }
+  .mp-report-header {
+    border-bottom: 2pt solid #1b5e20 !important;
+  }
+  .mp-report-h1 {
+    color: #1b5e20 !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 13pt !important;
+    border-bottom: 0.5pt solid #ccc !important;
+    text-transform: uppercase !important;
+  }
+  .mp-report-h2 {
+    color: #1a3a6e !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 11pt !important;
+  }
+  .mp-report-p, .mp-report-li {
+    color: #222 !important;
+    font-size: 10.5pt !important;
+    line-height: 1.6 !important;
+  }
+  .mp-report-table { color: #333 !important; font-size: 9pt !important; }
 }
