@@ -513,7 +513,7 @@ def _render_indicadores():
             bar_w = max(pct, 0.3)
             label_inner = f'<span style="color:#fff;font-size:0.8em;font-weight:700;">{pct:.1f}%</span>' if pct > 5 else ''
             st.markdown(
-                f"<div style='background:#f0f0f0;border-radius:6px;height:28px;"
+                f"<div style='background:rgba(255,255,255,0.08);border-radius:6px;height:28px;"
                 f"margin-top:4px;overflow:hidden;'>"
                 f"<div style='width:{bar_w:.1f}%;background:{color};height:28px;"
                 f"border-radius:6px;display:flex;align-items:center;padding-left:8px;'>"
@@ -812,14 +812,14 @@ def _render_diagnostico_zonas():
                     {z['municipio']}
                   </div>
                   <div style='font-size:1em;font-weight:700;margin-bottom:10px'>{z['label']}</div>
-                  <div style='font-size:0.82em;color:#333;margin-bottom:4px'>
+                  <div style='font-size:0.82em;color:#ccc;margin-bottom:4px'>
                     <span style='color:{color_acc};font-weight:700'>●</span>
                     Acceso <300m: <b>{acc}%</b>
                   </div>
-                  <div style='font-size:0.82em;color:#333;margin-bottom:4px'>
+                  <div style='font-size:0.82em;color:#ccc;margin-bottom:4px'>
                     📏 Dist. media: <b>{z['dist_prom']} m</b>
                   </div>
-                  <div style='font-size:0.82em;color:#333;margin-bottom:4px'>
+                  <div style='font-size:0.82em;color:#ccc;margin-bottom:4px'>
                     🏗️ Área edificada: <b>{z['ha_edif']} ha</b>
                   </div>
                   <div style='font-size:0.82em;color:{color_t};margin-bottom:4px'>
@@ -1184,19 +1184,19 @@ def _render_agenda2030():
         co2_nuevos    = (arboles_nuevos * 25 * 0.205 / 1000) * 3.667
 
         st.markdown(
-            f"""<div style='background:#f1f8e9;border:1.5px solid #81c784;border-radius:12px;padding:20px'>
-              <div style='font-size:1em;font-weight:700;color:#2e7d32;margin-bottom:12px'>
+            f"""<div style='background:rgba(46,125,50,0.12);border:1.5px solid #81c784;border-radius:12px;padding:20px'>
+              <div style='font-size:1em;font-weight:700;color:#81c784;margin-bottom:12px'>
                 🌿 Con {arb_objetivo}% de arbolado urbano:
               </div>
               <table style='width:100%;font-size:0.88em;border-collapse:collapse'>
-                <tr><td style='padding:4px 0;color:#555'>CO₂ capturado/año</td>
-                    <td style='font-weight:700;color:#1b5e20;text-align:right'>{seq_obj_co2:.0f} ton CO₂</td></tr>
-                <tr><td style='padding:4px 0;color:#555'>Incremento vs. hoy</td>
-                    <td style='font-weight:700;color:#1565c0;text-align:right'>+{delta_co2:.0f} ton CO₂/año</td></tr>
-                <tr><td style='padding:4px 0;color:#555'>Equivale a autos retirados</td>
-                    <td style='font-weight:700;color:#1b5e20;text-align:right'>{autos_obj:.0f} vehículos</td></tr>
+                <tr><td style='padding:4px 0;color:#ccc'>CO₂ capturado/año</td>
+                    <td style='font-weight:700;color:#66bb6a;text-align:right'>{seq_obj_co2:.0f} ton CO₂</td></tr>
+                <tr><td style='padding:4px 0;color:#ccc'>Incremento vs. hoy</td>
+                    <td style='font-weight:700;color:#64b5f6;text-align:right'>+{delta_co2:.0f} ton CO₂/año</td></tr>
+                <tr><td style='padding:4px 0;color:#ccc'>Equivale a autos retirados</td>
+                    <td style='font-weight:700;color:#66bb6a;text-align:right'>{autos_obj:.0f} vehículos</td></tr>
               </table>
-              <div style='margin-top:14px;border-top:1px solid #c8e6c9;padding-top:10px;font-size:0.85em;color:#333'>
+              <div style='margin-top:14px;border-top:1px solid rgba(200,230,201,0.3);padding-top:10px;font-size:0.85em;color:#aaa'>
                 🌱 <b>{arboles_nuevos:,} árboles nuevos</b> capturarían adicionalmente
                 <b>{co2_nuevos:.1f} ton CO₂/año</b>
                 (≈ {co2_nuevos/2.1:.0f} autos fuera de circulación)
@@ -1271,7 +1271,7 @@ def _render_agenda2030():
 
     st.markdown("")
     st.markdown(
-        f"""<div style='background:#fce4ec;border:1.5px solid #e91e63;border-radius:10px;padding:16px;font-size:0.9em'>
+        f"""<div style='background:rgba(233,30,99,0.12);border:1.5px solid #e91e63;border-radius:10px;padding:16px;font-size:0.9em'>
           <b>📖 Referencia:</b> Barboza et al. (2021) estimaron que <b>42.968 muertes anuales</b>
           podrían evitarse en ciudades europeas si se cumpliera el acceso universal OMS al verde.
           Villa María ya cumple ese acceso — lo que queda pendiente es <b>aumentar la cobertura total</b>
@@ -1363,12 +1363,12 @@ def _render_agenda2030():
     for icono, titulo, descripcion in marcos:
         st.markdown(
             f"""<div style='display:flex;gap:14px;align-items:flex-start;
-                padding:12px 16px;border-radius:10px;background:#fafafa;
-                border:1px solid #e0e0e0;margin-bottom:8px'>
+                padding:12px 16px;border-radius:10px;background:rgba(255,255,255,0.05);
+                border:1px solid rgba(255,255,255,0.12);margin-bottom:8px'>
               <div style='font-size:1.6em;line-height:1'>{icono}</div>
               <div>
-                <div style='font-weight:700;font-size:0.92em;color:#1b5e20'>{titulo}</div>
-                <div style='font-size:0.83em;color:#444;margin-top:3px'>{descripcion}</div>
+                <div style='font-weight:700;font-size:0.92em;color:#81c784'>{titulo}</div>
+                <div style='font-size:0.83em;color:#ccc;margin-top:3px'>{descripcion}</div>
               </div>
             </div>""",
             unsafe_allow_html=True
