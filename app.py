@@ -521,9 +521,6 @@ render_asistente_panel()
 # ============================================================
 # SECCIÓN: INICIO — Módulo Provincia de Córdoba
 # ============================================================
-if seccion is None:
-    st.stop()
-
 if "Inicio" in seccion:
     st.title("🌿 Ciudad Verde AI Agent")
     st.subheader("Diagnóstico inteligente de espacios verdes — Provincia de Córdoba")
@@ -708,54 +705,62 @@ elif "Cobertura" in seccion:
     st.markdown("---")
 
     # --- Mapa de distribución de cobertura ---
-    st.markdown("#### 🗺️ Distribución espacial de cobertura")
-    st.caption("Paleta WorldCover: verde = arbolado · amarillo = pastizal · naranja = cultivos · gris = edificado · azul = agua")
+    st.markdown("#### 🗺️ Distribución espacial de cobertura del suelo")
+    st.caption("Fuente: ESA WorldCover 2020 · resolución 10m · cada color representa una clase de cobertura")
 
-    m_cob = folium.Map(
-        location=[ciudad['lat'], ciudad['lon']],
-        zoom_start=ciudad['zoom'],
-        tiles=None,
+    st.markdown(
+        "<div style='background:rgba(30,40,80,0.5);border:1px solid rgba(120,140,255,0.2);"
+        "border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:0.82em;line-height:1.7;'>"
+        "<b>Clasificación ESA WorldCover 2020:</b> "
+        "Árboles · Pastizales · Cultivos · Edificado · Agua · Suelo desnudo · Humedal"
+        "</div>",
+        unsafe_allow_html=True,
     )
 
-    # Capa base satélite por defecto (para ver contraste)
-    folium.TileLayer(
-        tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        attr='© Esri',
-        name='🛰️ Satélite',
-        max_zoom=19,
-    ).add_to(m_cob)
-    folium.TileLayer(
-        tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        attr='© OpenStreetMap contributors',
-        name='🗺️ OpenStreetMap',
-        max_zoom=19,
-    ).add_to(m_cob)
+    try:
+        import ee
+        coords_ee = ciudad['coords_area']
+        area_ee   = ee.Geometry.Polygon([coords_ee])
+        wc        = ee.Image('ESA/WorldCover/v100/2020').clip(area_ee)
+        sld = """
+        <RasterSymbolizer>
+          <ColorMap type="values">
+            <ColorMapEntry color="#006400" quantity="10" label="Árboles"/>
+            <ColorMapEntry color="#8db360" quantity="20" label="Arbustos"/>
+            <ColorMapEntry color="#ffbb22" quantity="30" label="Pastizales"/>
+            <ColorMapEntry color="#fffb00" quantity="40" label="Cultivos"/>
+            <ColorMapEntry color="#fa0000" quantity="50" label="Edificado"/>
+            <ColorMapEntry color="#b4b4b4" quantity="60" label="Suelo desnudo"/>
+            <ColorMapEntry color="#f0f0f0" quantity="70" label="Nieve"/>
+            <ColorMapEntry color="#0064c8" quantity="80" label="Agua"/>
+            <ColorMapEntry color="#0096a0" quantity="90" label="Humedal"/>
+            <ColorMapEntry color="#00cf75" quantity="95" label="Manglar"/>
+            <ColorMapEntry color="#fae6a0" quantity="100" label="Musgo"/>
+          </ColorMap>
+        </RasterSymbolizer>
+        """
+        map_id   = wc.sldStyle(sld).getMapId()
+        tiles_wc = map_id['tile_fetcher'].url_format
 
-    # Polígono del área de estudio siempre visible
-    coords_cob = [[c[1], c[0]] for c in ciudad['coords_area']]
-    coords_cob.append(coords_cob[0])
-    folium.Polygon(
-        locations=coords_cob,
-        tooltip="Área de análisis",
-        color="#2e7d32", weight=2, fill=False,
-    ).add_to(m_cob)
-
-    # Leyenda de cobertura con datos reales de la ciudad
-    leyenda_html = f"""
-    <div style="position:fixed;bottom:20px;left:20px;z-index:9999;
-                background:white;padding:10px 14px;border-radius:8px;
-                box-shadow:0 2px 8px rgba(0,0,0,0.25);font-size:0.82em;line-height:1.7">
-        <b>Cobertura · {ciudad['nombre']}</b><br>
-        <span style="color:#006400">█</span> Árboles &nbsp;<b>{ciudad['arb_pct']:.1f}%</b><br>
-        <span style="color:#ffbb22">█</span> Pastizales &nbsp;<b>{ciudad['past_pct']:.1f}%</b><br>
-        <span style="color:#e65100">█</span> Cultivos &nbsp;<b>{ciudad['cult_pct']:.1f}%</b><br>
-        <span style="color:#757575">█</span> Edificado &nbsp;<b>{ciudad['edif_pct']:.1f}%</b><br>
-        <span style="color:#1565c0">█</span> Agua &nbsp;<b>{ciudad['agua_pct']:.1f}%</b>
-    </div>"""
-    m_cob.get_root().html.add_child(folium.Element(leyenda_html))
-
-    folium.LayerControl(position='topright', collapsed=False).add_to(m_cob)
-    st_folium(m_cob, width="100%", height=460, returned_objects=[])
+        m_cob = folium.Map(location=[ciudad['lat'], ciudad['lon']], zoom_start=ciudad['zoom'], tiles=None)
+        folium.TileLayer(
+            tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            attr='© Esri', name='🛰️ Satélite', max_zoom=19, show=True,
+        ).add_to(m_cob)
+        folium.TileLayer(
+            tiles=tiles_wc, attr='ESA WorldCover 2020 · GEE',
+            name='🌍 WorldCover', overlay=True, show=True, opacity=0.15,
+        ).add_to(m_cob)
+        coords_cob = [[c[1], c[0]] for c in ciudad['coords_area']]
+        coords_cob.append(coords_cob[0])
+        folium.Polygon(
+            locations=coords_cob, tooltip="Área de análisis",
+            color="#fff", weight=1.5, fill=False,
+        ).add_to(m_cob)
+        folium.LayerControl(position='topright', collapsed=False).add_to(m_cob)
+        st_folium(m_cob, width="100%", height=460, returned_objects=[])
+    except Exception as e:
+        st.info(f"Mapa WorldCover no disponible en este momento: {e}")
 
     st.markdown("---")
     arb = ciudad['arb_pct']
