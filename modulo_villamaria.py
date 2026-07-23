@@ -1287,7 +1287,7 @@ def _render_agenda2030():
     # ============================================================
     st.markdown("## 🗓️ Hoja de ruta Villa María hacia 2030")
 
-    años_restantes = 2030 - 2025   # 5 años
+    años_restantes = 2030 - 2026   # 4 años
 
     # Cuánto verde hay que sumar para llegar al 30% QTC
     ha_actuales_verde = verde_total_pct / 100 * area_vm_ha
