@@ -83,6 +83,7 @@ SECCIONES_VM = [
     ("🎯", "Estrategias · Villa María"),
     ("🌍", "Agenda 2030 · C40"),
     ("📄", "Masterplan · Opus 4.7"),
+    ("🤝", "A Mejorar juntos"),
 ]
 
 # ============================================================
@@ -1382,6 +1383,130 @@ def _render_agenda2030():
         "ESA WorldCover 2020 · Landsat 8/9 · INDEC Censo 2022"
     )
 
+# ============================================================
+# SECCIÓN: A MEJORAR JUNTOS
+# ============================================================
+
+def _render_amejorar():
+    st.title("🤝 A Mejorar juntos")
+    st.markdown(
+        "Estos son los datos municipales que, integrados a Ciudad Verde, transforman la plataforma "
+        "de diagnóstico externo en el **sistema oficial de monitoreo ambiental de Villa María**. "
+        "Cada conjunto de datos abre nuevas funciones concretas en la app."
+    )
+    st.markdown("---")
+
+    items = [
+        {
+            "icono": "🗺️",
+            "titulo": "Catastro municipal digitalizado",
+            "que_es": "Polígonos SIG del ejido urbano con uso del suelo real por parcela.",
+            "funciones": [
+                "Reemplazar el bbox rectangular por los límites reales del ejido urbano",
+                "Identificar baldíos, franjas ferroviarias y bordes de canales con potencial verde",
+                "Calcular déficit de verde por barrio con geometría real, no aproximada",
+            ],
+            "impacto": "Los indicadores de accesibilidad y cobertura pasan de estimados satelitales a datos catastrales oficiales.",
+            "color": "#1565c0",
+        },
+        {
+            "icono": "🌳",
+            "titulo": "Censo de arbolado urbano",
+            "que_es": "Relevamiento georeferenciado de árboles por especie, estado sanitario y ubicación.",
+            "funciones": [
+                "Cruzar densidad de arbolado con mapa de temperatura — confirmar zonas críticas con datos de campo",
+                "Calcular captura de CO₂ real por especie en lugar de promedio USDA",
+                "Identificar corredores de arbolado existentes y faltantes por barrio",
+            ],
+            "impacto": "El análisis de isla de calor pasa de satelital a validado con datos de campo.",
+            "color": "#2e7d32",
+        },
+        {
+            "icono": "🏞️",
+            "titulo": "Padrón oficial de espacios verdes",
+            "que_es": "Registro municipal de plazas, parques y paseos con superficie, equipamiento y estado.",
+            "funciones": [
+                "Reemplazar datos OSM colaborativos por el inventario oficial del municipio",
+                "Calcular m²/hab de verde público con datos propios y auditables",
+                "Detectar espacios verdes sin catalogar en OSM que sí existen en el padrón",
+            ],
+            "impacto": "Los 65.4 m²/hab actuales se ajustan con datos reales — el municipio tiene su propio indicador oficial.",
+            "color": "#00796b",
+        },
+        {
+            "icono": "🏥",
+            "titulo": "Datos de salud pública por barrio",
+            "que_es": "Casos de internación por estrés térmico, enfermedades respiratorias y consultas pediátricas georreferenciadas.",
+            "funciones": [
+                "Cruzar mapa de temperatura superficial con incidencia de patologías termosensibles",
+                "Construir un Índice de Vulnerabilidad Ambiental con base epidemiológica real",
+                "Priorizar intervenciones verdes en zonas con mayor carga de enfermedad",
+            ],
+            "impacto": "Argumento de salud pública cuantificado para justificar inversión en arbolado ante el Concejo Deliberante.",
+            "color": "#c62828",
+        },
+        {
+            "icono": "🚌",
+            "titulo": "Red de transporte público",
+            "que_es": "Recorridos georeferenciados de líneas de colectivo con frecuencias y paradas.",
+            "funciones": [
+                "Calcular accesibilidad real al verde combinando caminata + transporte (isócronas 15 min)",
+                "Identificar barrios con déficit de acceso tanto peatonal como en transporte",
+                "Alinear el análisis con el estándar C40 de ciudad de 15 minutos",
+            ],
+            "impacto": "El indicador de accesibilidad pasa de distancia euclidiana a accesibilidad real por red urbana.",
+            "color": "#f57c00",
+        },
+        {
+            "icono": "📐",
+            "titulo": "Plan de obras y presupuesto ambiental",
+            "que_es": "Intervenciones verdes planificadas 2026–2030 con localización e inversión estimada.",
+            "funciones": [
+                "Mostrar en el mapa las obras planificadas vs las zonas de déficit detectadas",
+                "Calcular el delta entre lo planificado y lo necesario para cumplir el target C40",
+                "Generar el Masterplan IA con inversión real en lugar de estimada",
+            ],
+            "impacto": "El Masterplan pasa de recomendaciones genéricas a plan de acción con presupuesto municipal real.",
+            "color": "#6a1b9a",
+        },
+    ]
+
+    for item in items:
+        color = item["color"]
+        with st.expander(f"{item['icono']} {item['titulo']}", expanded=False):
+            st.markdown(
+                f"<div style='font-size:0.88em;color:#aaa;margin-bottom:12px;'>"
+                f"<b style='color:#ccc;'>Qué es:</b> {item['que_es']}</div>",
+                unsafe_allow_html=True,
+            )
+            st.markdown(f"**Funciones que se habilitan en la app:**")
+            for f in item["funciones"]:
+                st.markdown(
+                    f"<div style='display:flex;gap:10px;align-items:flex-start;margin-bottom:6px;'>"
+                    f"<span style='color:{color};font-size:1.1em;'>▸</span>"
+                    f"<span style='font-size:0.88em;color:#ddd;'>{f}</span>"
+                    f"</div>",
+                    unsafe_allow_html=True,
+                )
+            st.markdown(
+                f"<div style='margin-top:12px;border-left:3px solid {color};"
+                f"padding:8px 14px;background:{color}11;border-radius:0 8px 8px 0;'>"
+                f"<span style='font-size:0.85em;color:#ccc;'>"
+                f"<b style='color:{color};'>Impacto:</b> {item['impacto']}</span>"
+                f"</div>",
+                unsafe_allow_html=True,
+            )
+
+    st.markdown("---")
+    st.success(
+        "💡 Con el catastro y el padrón de espacios verdes, Ciudad Verde pasa de ser "
+        "una herramienta de diagnóstico externo a ser el **sistema oficial de monitoreo "
+        "ambiental de Villa María** — con datos propios, auditables y actualizables."
+    )
+    st.caption(
+        "Ciudad Verde AI Agent · Villa María · "
+        "Datos propios del municipio + ESA WorldCover · Landsat 8/9 · OSM · INDEC 2022"
+    )
 
 # ============================================================
 # RENDER PRINCIPAL — punto de entrada desde app.py
@@ -1422,3 +1547,5 @@ def render_modulo_villamaria():
         _render_agenda2030()
     elif "Masterplan" in seccion:
         render_masterplan()
+    elif "Mejorar" in seccion:
+        _render_amejorar()
