@@ -317,7 +317,7 @@ def _render_mapa():
         "<span style='color:#2e7d32;font-size:15px;'>▬</span> "
         "<b>Zona verde</b> = acceso al verde &ge;98% de la población — Excelente<br>"
         "<span style='color:#f57c00;font-size:15px;'>▬</span> "
-        "<b>Zona naranja</b> = acceso al verde 85–97% — Mejorable<br>"
+        "<b>Zona naranja</b> = acceso al verde 85% a &lt;98% — Mejorable<br>"
         "<span style='color:#c62828;font-size:15px;'>▬</span> "
         "<b>Zona roja</b> = acceso al verde &lt;85% — Crítico<br>"
         "<i style='color:#aaa;font-size:0.9em;'>Hacé clic en cualquier zona para ver sus indicadores detallados.</i>"
