@@ -897,7 +897,7 @@ def _render_estrategias():
 
     st.markdown("---")
     # --- Prioridad MEDIA ---
-    st.markdown("### 🟡 Prioridad Media — Planificación 2025–2027")
+    st.markdown("### 🟡 Prioridad Media — Planificación 2026–2028")
 
     estrategias_media = [
         {
