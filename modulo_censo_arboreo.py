@@ -7,12 +7,13 @@ Objetivo municipal: 1 árbol por vivienda.
 Este módulo se construye paso a paso:
   1. Estructura de pantalla ✅
   2. Numerador — Canopy Height (GEE, 1m):
-       - Área/altura de copa ciudad completa (agregado) ✅
+       - Cobertura agregada ciudad, acotada a los 38 barrios reales
+         (fuente: datos.villamaria.gob.ar) — ya NO incluye Villa Nueva ✅
        - Conteo piloto en zona chica (validación de método) ✅
-       - Censo completo por celdas 300x300m — PRECALCULADO LOCAL ✅
-         (ver exportar_censo_json.py — corre aparte, no en Streamlit)
+       - Censo completo POR BARRIO REAL — precalculado local ✅
+         (ver convertir_barrios.py + exportar_censo_json.py)
   3. Denominador — Catastro IDECOR (parcelas edificadas por manzana)
-  4. Cruce numerador/denominador → ratio árboles/vivienda por zona
+  4. Cruce numerador/denominador → ratio árboles/vivienda por barrio
   5. Margen de error validado — comparar conteo automático vs conteo
      manual en muestra de manzanas (pendiente, próximo paso)
 
@@ -34,14 +35,7 @@ from streamlit_folium import st_folium
 # ============================================================
 
 CANOPY_ASSET = 'projects/meta-forest-monitoring-okw37/assets/CanopyHeight'
-ALTURA_MIN_ARBOL = 2  # metros — umbral para distinguir árbol de pasto/arbusto bajo
-TAMANO_CELDA_M = 300  # debe coincidir con exportar_censo_json.py
-
-# Bbox de Villa María + Villa Nueva (mismo usado en modulo_villamaria.py)
-COORDS_VM = [
-    [-63.280, -32.390], [-63.200, -32.390],
-    [-63.200, -32.440], [-63.280, -32.440], [-63.280, -32.390]
-]
+ALTURA_MIN_ARBOL = 2
 
 # ⚠️ ZONA PILOTO DE PRUEBA — coordenadas aproximadas, A AJUSTAR
 # con el municipio a un barrio real una vez validado el método.
@@ -50,41 +44,49 @@ COORDS_PILOTO = [
     [-63.238, -32.412], [-63.245, -32.412], [-63.245, -32.405]
 ]
 
-# Archivo generado por exportar_censo_json.py (script local, corre aparte)
+RUTA_BARRIOS = os.path.join(os.path.dirname(__file__), 'data', 'barrios_villamaria.geojson')
 RUTA_CENSO_JSON = os.path.join(os.path.dirname(__file__), 'data', 'censo_arboreo_villamaria.json')
 
 
 # ============================================================
-# GEE — ÁREA/ALTURA DE COPA (CIUDAD COMPLETA, AGREGADO)
+# GEE — COBERTURA AGREGADA, ACOTADA A LOS BARRIOS REALES
 # ============================================================
 
 @st.cache_data(show_spinner=False, ttl=86400)
-def cargar_canopy_ciudad(coords_area=COORDS_VM):
+def cargar_canopy_ciudad():
     """
-    Área cubierta por copas y altura media/máxima para toda el área urbana.
-    Cálculo agregado (reduceRegion) — liviano, sin riesgo de timeout.
+    Área cubierta por copas y altura media/máxima, acotado a la unión
+    real de los 38 barrios de Villa María (ya no un bbox que incluye
+    Villa Nueva). Requiere data/barrios_villamaria.geojson.
     """
-    area = ee.Geometry.Polygon([coords_area])
+    if not os.path.exists(RUTA_BARRIOS):
+        return None
+
+    with open(RUTA_BARRIOS, encoding='utf-8') as f:
+        barrios_geojson = json.load(f)
+
+    fc = ee.FeatureCollection(barrios_geojson)
+    area = fc.geometry()
+
     canopy = ee.ImageCollection(CANOPY_ASSET).mosaic().rename('altura').clip(area)
     mask_arbol = canopy.gte(ALTURA_MIN_ARBOL)
     altura_arbol = canopy.updateMask(mask_arbol)
 
     area_stats = mask_arbol.multiply(ee.Image.pixelArea()).reduceRegion(
         reducer=ee.Reducer.sum(), geometry=area, scale=1,
-        maxPixels=1e10, bestEffort=True, tileScale=4,
+        maxPixels=1e10, bestEffort=True, tileScale=8,
     ).getInfo()
     area_m2 = list(area_stats.values())[0] if area_stats else 0
 
     stats_altura = altura_arbol.reduceRegion(
         reducer=ee.Reducer.mean().combine(ee.Reducer.max(), sharedInputs=True),
-        geometry=area, scale=1, maxPixels=1e10, bestEffort=True, tileScale=4,
+        geometry=area, scale=1, maxPixels=1e10, bestEffort=True, tileScale=8,
     ).getInfo()
 
     return {
         'area_copa_ha': round(area_m2 / 10000, 1) if area_m2 else 0,
         'altura_media_m': round(stats_altura.get('altura_mean'), 1) if stats_altura.get('altura_mean') else None,
         'altura_max_m': round(stats_altura.get('altura_max'), 1) if stats_altura.get('altura_max') else None,
-        'umbral_altura_m': ALTURA_MIN_ARBOL,
     }
 
 
@@ -94,10 +96,7 @@ def cargar_canopy_ciudad(coords_area=COORDS_VM):
 
 @st.cache_data(show_spinner=False, ttl=86400)
 def cargar_canopy_conteo_piloto(coords_area=COORDS_PILOTO):
-    """
-    Conteo de árboles ('manchones' de copa contigua) en zona piloto chica.
-    Sirve para validar el método antes de confiar en el censo completo.
-    """
+    """Conteo de árboles en zona piloto chica — validación del método."""
     area = ee.Geometry.Polygon([coords_area])
     canopy = ee.ImageCollection(CANOPY_ASSET).mosaic().rename('altura').clip(area)
     mask_arbol = canopy.gte(ALTURA_MIN_ARBOL).selfMask()
@@ -127,29 +126,36 @@ def cargar_canopy_conteo_piloto(coords_area=COORDS_PILOTO):
 
 
 # ============================================================
-# CENSO COMPLETO — LEE EL JSON PRECALCULADO (exportar_censo_json.py)
+# CENSO COMPLETO POR BARRIO — LEE EL JSON PRECALCULADO
 # ============================================================
 
 @st.cache_data(show_spinner=False, ttl=3600)
 def _cargar_censo_json():
-    """Lee el censo completo precalculado localmente. None si aún no existe."""
     if not os.path.exists(RUTA_CENSO_JSON):
         return None
     with open(RUTA_CENSO_JSON, encoding='utf-8') as f:
         return json.load(f)
 
 
-def _color_densidad(n_arboles):
-    """Color según densidad de árboles en la celda (para el mapa)."""
-    if n_arboles is None:
+@st.cache_data(show_spinner=False, ttl=3600)
+def _cargar_barrios_geojson():
+    if not os.path.exists(RUTA_BARRIOS):
+        return None
+    with open(RUTA_BARRIOS, encoding='utf-8') as f:
+        return json.load(f)
+
+
+def _color_densidad(densidad_ha):
+    """Color según densidad de árboles/ha (para el mapa y el ranking)."""
+    if densidad_ha is None:
         return '#555555'
-    if n_arboles >= 60:
+    if densidad_ha >= 40:
         return '#1b5e20'
-    if n_arboles >= 30:
+    if densidad_ha >= 20:
         return '#4caf50'
-    if n_arboles >= 10:
+    if densidad_ha >= 8:
         return '#aed581'
-    if n_arboles > 0:
+    if densidad_ha > 0:
         return '#fff59d'
     return '#e0e0e0'
 
@@ -163,16 +169,23 @@ FUENTES = [
         'nombre': 'Canopy Height (GEE, 1m)',
         'rol': 'Numerador — conteo y cobertura de árboles',
         'estado': 'en_progreso',
-        'detalle': 'Dataset global de altura de dosel a 1m (Meta/WRI). Conectado: agregado ciudad, '
-                    'piloto de validación y censo completo (precalculado local, ver '
-                    'exportar_censo_json.py). Falta el margen de error empírico (próximo paso).',
+        'detalle': 'Dataset global de altura de dosel a 1m (Meta/WRI). Conectado: agregado ciudad '
+                    '(acotado a barrios reales), piloto de validación y censo completo por barrio '
+                    '(precalculado local). Falta el margen de error empírico (próximo paso).',
+    },
+    {
+        'nombre': 'Barrios (Municipalidad de Villa María)',
+        'rol': 'Unidad de agregación — 38 barrios reales',
+        'estado': 'conectada',
+        'detalle': 'Fuente: datos.villamaria.gob.ar, dataset "Barrios" (2021), shapefile oficial. '
+                    'Reemplaza la grilla arbitraria y el bbox que incluía Villa Nueva.',
     },
     {
         'nombre': 'Catastro IDECOR (WFS/WMS)',
-        'rol': 'Denominador — parcelas edificadas por manzana',
+        'rol': 'Denominador — parcelas edificadas por barrio',
         'estado': 'pendiente',
         'detalle': 'Distingue parcelas baldío/edificado/PH. Da el número real de viviendas '
-                    'por manzana para calcular el ratio árboles/vivienda. Requiere consulta '
+                    'por barrio para calcular el ratio árboles/vivienda. Requiere consulta '
                     'a idecor@cba.gov.ar para descarga sin filtro por WFS.',
     },
     {
@@ -217,42 +230,42 @@ def render_censo_arboreo():
         unsafe_allow_html=True,
     )
 
-    # ---- Ciudad completa: área y altura de copa ----
+    # ---- Ciudad completa: área y altura de copa (acotado a barrios reales) ----
     st.markdown("### 🌍 Cobertura de copa arbórea — ciudad completa")
-    st.caption(f"Fuente: Canopy Height (Meta/WRI, 1m) · umbral de altura: {ALTURA_MIN_ARBOL}m")
+    st.caption(f"Fuente: Canopy Height (Meta/WRI, 1m) · umbral de altura: {ALTURA_MIN_ARBOL}m · "
+               "área acotada a los 38 barrios oficiales (excluye Villa Nueva)")
 
     try:
-        with st.spinner("Calculando cobertura de copa en Villa María + Villa Nueva..."):
+        with st.spinner("Calculando cobertura de copa en Villa María..."):
             datos_ciudad = cargar_canopy_ciudad()
 
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            st.metric("Área cubierta por copas", f"{datos_ciudad['area_copa_ha']} ha")
-        with c2:
-            st.metric("Altura media de copa",
-                      f"{datos_ciudad['altura_media_m']} m" if datos_ciudad['altura_media_m'] else "N/D")
-        with c3:
-            st.metric("Altura máxima detectada",
-                      f"{datos_ciudad['altura_max_m']} m" if datos_ciudad['altura_max_m'] else "N/D")
-
-        st.caption(
-            "⚠️ Esto es superficie de copa, NO cantidad de árboles — varios árboles con copas "
-            "que se tocan se ven como una sola mancha verde a esta escala."
-        )
+        if datos_ciudad:
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                st.metric("Área cubierta por copas", f"{datos_ciudad['area_copa_ha']} ha")
+            with c2:
+                st.metric("Altura media de copa",
+                          f"{datos_ciudad['altura_media_m']} m" if datos_ciudad['altura_media_m'] else "N/D")
+            with c3:
+                st.metric("Altura máxima detectada",
+                          f"{datos_ciudad['altura_max_m']} m" if datos_ciudad['altura_max_m'] else "N/D")
+        else:
+            st.info("Falta data/barrios_villamaria.geojson — correr convertir_barrios.py primero.")
     except Exception as e:
         st.warning("No se pudo calcular la cobertura de copa para toda la ciudad.")
         st.caption(f"Detalle técnico: {e}")
 
     st.markdown("---")
 
-    # ---- Censo completo (precalculado, lee JSON local) ----
-    st.markdown("### 🌳 Censo Arbóreo Completo — árboles individuales")
+    # ---- Censo completo por barrio (precalculado, lee JSON local) ----
+    st.markdown("### 🌳 Censo Arbóreo Completo — por barrio")
     st.caption(
-        f"Celdas de {TAMANO_CELDA_M}x{TAMANO_CELDA_M}m sobre toda el área urbana. "
+        "38 barrios oficiales (fuente: datos.villamaria.gob.ar). "
         "Precalculado localmente — ver exportar_censo_json.py."
     )
 
     censo = _cargar_censo_json()
+    barrios_geo = _cargar_barrios_geojson()
 
     if censo:
         st.caption(f"Último cálculo: {censo['fecha_calculo'][:16].replace('T', ' ')}")
@@ -263,37 +276,103 @@ def render_censo_arboreo():
         with c5:
             st.metric("Área total de copa", f"{censo['total_area_copa_ha']} ha")
         with c6:
-            st.metric("Celdas procesadas", f"{censo['celdas_procesadas']}/{censo['celdas_totales']}")
+            st.metric("Barrios procesados", f"{censo['barrios_procesados']}/{censo['barrios_totales']}")
 
-        st.markdown("#### Mapa de densidad — árboles por celda")
-        centro_mapa = [
-            (COORDS_VM[0][1] + COORDS_VM[2][1]) / 2,
-            (COORDS_VM[0][0] + COORDS_VM[1][0]) / 2,
-        ]
-        m_censo = folium.Map(location=centro_mapa, zoom_start=13, tiles=None)
-        folium.TileLayer(
-            tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
-            attr='© Google', name='🌍 Satelital', max_zoom=20, show=True,
-        ).add_to(m_censo)
+        # Calcular densidad por barrio (árboles/ha)
+        validos = [b for b in censo['barrios'] if b['n_arboles'] is not None and b.get('area_barrio_ha')]
+        for b in validos:
+            b['densidad_arboles_ha'] = round(b['n_arboles'] / b['area_barrio_ha'], 1) if b['area_barrio_ha'] else 0
 
-        for r in censo['celdas']:
-            color = _color_densidad(r['n_arboles'])
-            tooltip = f"{r['n_arboles']} árboles" if r['n_arboles'] is not None else "Sin datos"
-            folium.CircleMarker(
-                location=r['centro'], radius=6, color=color, weight=1,
-                fill=True, fill_color=color, fill_opacity=0.85,
-                tooltip=tooltip,
+        # ---- Ranking top 5 / bottom 5 ----
+        if validos:
+            ordenados = sorted(validos, key=lambda b: -b['densidad_arboles_ha'])
+            top5 = ordenados[:5]
+            bottom5 = ordenados[-5:][::-1]
+
+            st.markdown("#### 🏆 Ranking de barrios — densidad arbórea (árboles/ha)")
+            col_top, col_bottom = st.columns(2)
+
+            with col_top:
+                st.markdown("**🟢 Los 5 con mayor densidad**")
+                for i, b in enumerate(top5, 1):
+                    st.markdown(
+                        f"<div style='display:flex;justify-content:space-between;padding:6px 0;"
+                        f"border-bottom:1px solid rgba(255,255,255,0.08)'>"
+                        f"<span>#{i} {b['nombre'].title()}</span>"
+                        f"<span style='font-weight:700;color:#4caf50'>{b['densidad_arboles_ha']} árb/ha</span>"
+                        f"</div>",
+                        unsafe_allow_html=True,
+                    )
+
+            with col_bottom:
+                st.markdown("**🟡 Los 5 con menor densidad**")
+                for i, b in enumerate(bottom5, 1):
+                    st.markdown(
+                        f"<div style='display:flex;justify-content:space-between;padding:6px 0;"
+                        f"border-bottom:1px solid rgba(255,255,255,0.08)'>"
+                        f"<span>#{i} {b['nombre'].title()}</span>"
+                        f"<span style='font-weight:700;color:#f57c00'>{b['densidad_arboles_ha']} árb/ha</span>"
+                        f"</div>",
+                        unsafe_allow_html=True,
+                    )
+
+            st.caption(
+                "💡 Los barrios con menor densidad son los primeros candidatos para planes de "
+                "forestación dirigidos al objetivo '1 árbol por casa'."
+            )
+
+        st.markdown("---")
+
+        # ---- Mapa por barrio (polígonos reales, coloreados por densidad) ----
+        st.markdown("#### 🗺️ Mapa por barrio — densidad arbórea")
+
+        if barrios_geo:
+            censo_por_nombre = {b['nombre']: b for b in censo['barrios']}
+
+            lat_centro = sum(b['centro'][0] for b in censo['barrios']) / len(censo['barrios'])
+            lon_centro = sum(b['centro'][1] for b in censo['barrios']) / len(censo['barrios'])
+
+            m_censo = folium.Map(location=[lat_centro, lon_centro], zoom_start=13, tiles=None)
+            folium.TileLayer(
+                tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+                attr='© Google', name='🌍 Satelital', max_zoom=20, show=True,
             ).add_to(m_censo)
 
-        st_folium(m_censo, width="100%", height=480, returned_objects=[])
-        st.caption(
-            "🟢 Alta densidad (≥60 árboles/celda) · 🟩 Media (30-59) · 🟡 Baja (10-29) · "
-            "⚪ Muy baja (1-9) · ⚫ Sin datos/error"
-        )
+            for feat in barrios_geo['features']:
+                nombre = feat['properties']['NOMBRE']
+                stats = censo_por_nombre.get(nombre, {})
+                densidad = None
+                if stats.get('n_arboles') is not None and stats.get('area_barrio_ha'):
+                    densidad = round(stats['n_arboles'] / stats['area_barrio_ha'], 1)
+                color = _color_densidad(densidad)
+
+                tooltip = f"{nombre.title()}"
+                if stats.get('n_arboles') is not None:
+                    tooltip += f" — {stats['n_arboles']} árboles ({densidad} árb/ha)"
+                else:
+                    tooltip += " — sin datos"
+
+                folium.GeoJson(
+                    feat,
+                    style_function=lambda x, c=color: {
+                        'fillColor': c, 'color': '#ffffff', 'weight': 1,
+                        'fillOpacity': 0.55,
+                    },
+                    tooltip=tooltip,
+                ).add_to(m_censo)
+
+            st_folium(m_censo, width="100%", height=520, returned_objects=[])
+            st.caption(
+                "🟢 Alta densidad (≥40 árb/ha) · 🟩 Media (20-39) · 🟡 Baja (8-19) · "
+                "⚪ Muy baja (1-7) · ⚫ Sin datos/error"
+            )
+        else:
+            st.info("Falta data/barrios_villamaria.geojson para dibujar el mapa por barrio.")
+
     else:
         st.info(
-            "Censo completo aún no calculado. Correr `python exportar_censo_json.py` "
-            "localmente para generarlo (tarda 10-25 min, corre una sola vez)."
+            "Censo completo aún no calculado. Correr `python convertir_barrios.py` y luego "
+            "`python exportar_censo_json.py` localmente para generarlo."
         )
 
     st.markdown("---")
@@ -322,23 +401,6 @@ def render_censo_arboreo():
             "automático contra un conteo manual sobre imagen satelital de esta misma zona, "
             "para reportar un % de error real y auditable — no una cifra genérica."
         )
-
-        centro = [
-            sum(p[1] for p in COORDS_PILOTO) / len(COORDS_PILOTO),
-            sum(p[0] for p in COORDS_PILOTO) / len(COORDS_PILOTO),
-        ]
-        m_piloto = folium.Map(location=centro, zoom_start=17, tiles=None)
-        folium.TileLayer(
-            tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
-            attr='© Google', name='🌍 Satelital', max_zoom=20, show=True,
-        ).add_to(m_piloto)
-        folium.Polygon(
-            locations=[[p[1], p[0]] for p in COORDS_PILOTO],
-            color='#f57c00', weight=2, fill=True, fill_opacity=0.08,
-            tooltip="Zona piloto de conteo",
-        ).add_to(m_piloto)
-        st_folium(m_piloto, width="100%", height=380, returned_objects=[])
-
     except Exception as e:
         st.warning("No se pudo calcular el conteo en la zona piloto (posible timeout de GEE).")
         st.caption(f"Detalle técnico: {e}")
@@ -366,5 +428,5 @@ def render_censo_arboreo():
     st.markdown("---")
     st.caption(
         "Ciudad Verde AI Agent · Villa María · Censo Arbóreo · "
-        "En desarrollo — Canopy Height (GEE) + Catastro IDECOR"
+        "En desarrollo — Canopy Height (GEE) + Barrios (Municipalidad) + Catastro IDECOR"
     )
