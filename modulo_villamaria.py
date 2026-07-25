@@ -72,6 +72,7 @@ ZONAS = {
 }
 
 from modulo_masterplan import render_masterplan
+from modulo_censo_arboreo import render_censo_arboreo
 
 SECCIONES_VM = [
     ("🏠", "Inicio"),
@@ -79,6 +80,7 @@ SECCIONES_VM = [
     ("📊", "Indicadores ambientales"),
     ("🌡️", "Temperatura superficial"),
     ("🏛️", "Verde público (OSM)"),
+    ("🌳", "Censo Arbóreo"),
     ("📋", "Diagnóstico por zonas"),
     ("🎯", "Estrategias · Villa María"),
     ("🌍", "Agenda 2030 · C40"),
@@ -1539,6 +1541,8 @@ def render_modulo_villamaria():
         _render_temperatura()
     elif "OSM" in seccion:
         _render_osm()
+    elif "Censo Arbóreo" in seccion:
+        render_censo_arboreo()
     elif "Diagnóstico" in seccion:
         _render_diagnostico_zonas()
     elif "Estrategias" in seccion:
