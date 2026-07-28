@@ -156,30 +156,34 @@ def guardar_masterplan(usuario: str, foco: str, texto: str,
         return None
 
 
-def obtener_masteplans(usuario: str = None, limit: int = 10):
-    """Devuelve los últimos Masteplans. Si usuario es None, devuelve todos."""
+def obtener_masteplans(usuario: str = None, limit: int = 10, ciudad: str = None):
+    """Devuelve los últimos Masteplans. Si usuario es None, devuelve todos.
+    Si ciudad se especifica, filtra solo los de esa ciudad (separación VM/VN)."""
     if not DB_URL:
         return []
     try:
         with _conn() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                condiciones = []
+                params = []
                 if usuario:
-                    cur.execute("""
-                        SELECT id, fecha, usuario, ciudad, foco, texto,
-                               tok_input, tok_output, costo_usd, palabras
-                        FROM cv_masteplans
-                        WHERE usuario = %s
-                        ORDER BY fecha DESC
-                        LIMIT %s
-                    """, (usuario, limit))
-                else:
-                    cur.execute("""
-                        SELECT id, fecha, usuario, ciudad, foco, texto,
-                               tok_input, tok_output, costo_usd, palabras
-                        FROM cv_masteplans
-                        ORDER BY fecha DESC
-                        LIMIT %s
-                    """, (limit,))
+                    condiciones.append("usuario = %s")
+                    params.append(usuario)
+                if ciudad:
+                    condiciones.append("ciudad = %s")
+                    params.append(ciudad)
+
+                where = f"WHERE {' AND '.join(condiciones)}" if condiciones else ""
+                params.append(limit)
+
+                cur.execute(f"""
+                    SELECT id, fecha, usuario, ciudad, foco, texto,
+                           tok_input, tok_output, costo_usd, palabras
+                    FROM cv_masteplans
+                    {where}
+                    ORDER BY fecha DESC
+                    LIMIT %s
+                """, tuple(params))
                 return cur.fetchall()
     except Exception as e:
         print(f"[cv_db] Error leyendo masteplans: {e}")

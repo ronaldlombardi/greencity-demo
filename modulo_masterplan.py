@@ -16,6 +16,18 @@ ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_URL           = "https://api.anthropic.com/v1/messages"
 MODEL_SONNET      = "claude-sonnet-4-6"
 
+# ── Municipios soportados ─────────────────────────────────
+MUNICIPIOS = {
+    'villamaria': {
+        'nombre':  'Villa María',
+        'archivo': 'villa_maria',
+    },
+    'villanueva': {
+        'nombre':  'Villa Nueva',
+        'archivo': 'villa_nueva',
+    },
+}
+
 # ── Contexto completo de Villa María ──────────────────────
 CONTEXTO_VM = """
 DATOS REALES DEL SISTEMA — VILLA MARÍA / VILLA NUEVA (Córdoba, Argentina)
@@ -91,11 +103,12 @@ CORREDOR ECOLÓGICO:
 - ~8 km de corredor verde posible
 """
 
-SYSTEM_MASTERPLAN = """Sos un experto en planificación urbana ambiental, política pública y desarrollo
+def _system_masterplan(nombre_municipio: str) -> str:
+    return f"""Sos un experto en planificación urbana ambiental, política pública y desarrollo
 sostenible de ciudades intermedias en Argentina y América Latina.
 
 Tu tarea es generar un MASTERPLAN AMBIENTAL completo, riguroso y accionable para
-el Municipio de Villa María, Córdoba, Argentina, basado exclusivamente en los datos
+el Municipio de {nombre_municipio}, Córdoba, Argentina, basado exclusivamente en los datos
 reales provistos por la plataforma Ciudad Verde AI Agent.
 
 El Masterplan debe ser un documento ejecutivo de alta calidad, listo para ser
@@ -114,7 +127,7 @@ ESTRUCTURA OBLIGATORIA DEL MASTERPLAN:
    - Zona prioritaria de intervención y justificación técnica
 
 3. VISIÓN 2030
-   - Enunciado de visión para Villa María como ciudad verde líder en ciudades intermedias de Argentina
+   - Enunciado de visión para {nombre_municipio} como ciudad verde líder en ciudades intermedias de Argentina
    - 3 objetivos estratégicos medibles
 
 4. LÍNEAS DE ACCIÓN (mínimo 5, priorizadas 🔴🟡🟢)
@@ -149,7 +162,7 @@ ESTRUCTURA OBLIGATORIA DEL MASTERPLAN:
    - Indicadores clave de desempeño (KPIs)
 
 10. CONCLUSIÓN
-    - Síntesis del compromiso climático de Villa María
+    - Síntesis del compromiso climático de {nombre_municipio}
     - Próximos pasos inmediatos (primeros 90 días)
 
 INSTRUCCIONES:
@@ -162,7 +175,7 @@ INSTRUCCIONES:
 """
 
 
-def _llamar_sonnet(foco: str, usuario: str) -> tuple[str, int, int]:
+def _llamar_sonnet(foco: str, usuario: str, nombre_municipio: str) -> tuple[str, int, int]:
     """Llama a Claude Sonnet 4.6 y devuelve (texto, tok_in, tok_out)."""
     if not ANTHROPIC_API_KEY:
         return "⚠️ ANTHROPIC_API_KEY no configurada.", 0, 0
@@ -173,7 +186,7 @@ def _llamar_sonnet(foco: str, usuario: str) -> tuple[str, int, int]:
 FOCO ESPECÍFICO DEL PLAN (indicado por el usuario):
 {foco}
 
-Generá el Masterplan Ambiental completo para Villa María siguiendo la estructura
+Generá el Masterplan Ambiental completo para {nombre_municipio} siguiendo la estructura
 indicada, incorporando el foco específico en las líneas de acción prioritarias.
 """
     headers = {
@@ -184,7 +197,7 @@ indicada, incorporando el foco específico en las líneas de acción prioritaria
     payload = {
         "model":      MODEL_SONNET,
         "max_tokens": 4096,
-        "system":     SYSTEM_MASTERPLAN,
+        "system":     _system_masterplan(nombre_municipio),
         "messages":   [{"role": "user", "content": prompt_usuario}],
     }
     try:
@@ -201,9 +214,9 @@ indicada, incorporando el foco específico en las líneas de acción prioritaria
         return f"⚠️ Error: {str(e)}", 0, 0
 
 
-def _render_historial():
-    """Muestra el historial de masteplans guardados en PostgreSQL."""
-    masteplans_guardados = obtener_masteplans(limit=5)
+def _render_historial(ciudad: str):
+    """Muestra el historial de masteplans guardados en PostgreSQL, filtrado por ciudad."""
+    masteplans_guardados = obtener_masteplans(limit=5, ciudad=ciudad)
     if masteplans_guardados:
         with st.expander(
             f"📂 Masteplans guardados ({len(masteplans_guardados)} recientes)",
@@ -314,7 +327,7 @@ def _render_formulario_admin():
     return generar, foco
 
 
-def _render_documento(texto):
+def _render_documento(texto, nombre_municipio, archivo_slug, marco_normativo_local):
     """Renderiza el documento Masterplan en pantalla y botones de acción."""
     import html as _html
     import re as _re
@@ -455,7 +468,7 @@ def _render_documento(texto):
               <div>
                 <div style='font-family:"Space Mono",monospace;font-size:10px;
                      letter-spacing:0.12em;color:rgba(160,175,220,0.6);
-                     text-transform:uppercase;'>Ciudad Verde AI Agent · Villa María, Córdoba</div>
+                     text-transform:uppercase;'>Ciudad Verde AI Agent · {nombre_municipio}, Córdoba</div>
                 <div style='font-family:"Space Grotesk",sans-serif;font-size:22px;
                      font-weight:700;color:#fff;margin-top:2px;'>
                      Masterplan Ambiental 2025–2030</div>
@@ -474,7 +487,7 @@ def _render_documento(texto):
                border-top:0.5px solid rgba(120,140,255,0.15);
                font-family:"Space Mono",monospace;font-size:10px;
                color:rgba(160,175,220,0.4);letter-spacing:0.05em;'>
-            Ciudad Verde AI Agent · Marco: C40, ODS 11, Acuerdo de París, Ordenanza 7209/2017
+            Ciudad Verde AI Agent · Marco: C40, ODS 11, Acuerdo de París{marco_normativo_local}
           </div>
         </div>""",
         unsafe_allow_html=True,
@@ -491,7 +504,7 @@ def _render_documento(texto):
             var w = window.open('', '_blank', 'width=960,height=750,scrollbars=yes');
             w.document.write(`<!DOCTYPE html><html><head>
             <meta charset="utf-8">
-            <title>Masterplan Ambiental · Villa María 2025-2030</title>
+            <title>Masterplan Ambiental · {nombre_municipio} 2025-2030</title>
             <style>
               * {{ box-sizing:border-box; margin:0; padding:0; }}
               body {{
@@ -556,8 +569,8 @@ def _render_documento(texto):
             </head><body>
             <div class="page">
               <div class="rp-header">
-                <div class="rp-org">🌿 Ciudad Verde AI Agent &nbsp;·&nbsp; Municipio de Villa Mar&#237;a &nbsp;·&nbsp; C&#243;rdoba, Argentina</div>
-                <div class="rp-titulo">Masterplan Ambiental<br>Villa Mar&#237;a 2026&#8211;2030</div>
+                <div class="rp-org">🌿 Ciudad Verde AI Agent &nbsp;·&nbsp; Municipio de {nombre_municipio} &nbsp;·&nbsp; C&#243;rdoba, Argentina</div>
+                <div class="rp-titulo">Masterplan Ambiental<br>{nombre_municipio} 2026&#8211;2030</div>
                 <div class="rp-subtitulo">Diagn&#243;stico, objetivos y l&#237;neas de acci&#243;n para la pol&#237;tica p&#250;blica ambiental municipal</div>
                 <div class="rp-meta">
                   <span>&#128197; {fecha_gen_pdf}</span>
@@ -567,7 +580,7 @@ def _render_documento(texto):
               </div>
               {documento_print}
               <div class="rp-footer">
-                Ciudad Verde AI Agent &nbsp;&middot;&nbsp; Marco normativo: C40, ODS 11, Acuerdo de Par&#237;s, Ordenanza 7209/2017 &nbsp;&middot;&nbsp; {fecha_gen_pdf}
+                Ciudad Verde AI Agent &nbsp;&middot;&nbsp; Marco normativo: C40, ODS 11, Acuerdo de Par&#237;s{marco_normativo_local} &nbsp;&middot;&nbsp; {fecha_gen_pdf}
               </div>
               <button class="btn-print" onclick="window.print()">&#128438; Imprimir / Guardar PDF</button>
             </div>
@@ -589,7 +602,7 @@ def _render_documento(texto):
         st.download_button(
             "⬇️ Descargar .txt",
             data=texto.encode("utf-8"),
-            file_name="masterplan_villa_maria.txt",
+            file_name=f"masterplan_{archivo_slug}.txt",
             mime="text/plain",
             key="mp_download",
             use_container_width=True,
@@ -602,16 +615,22 @@ def _render_documento(texto):
             st.rerun()
 
 
-def render_masterplan():
-    """Punto de entrada del módulo. Llamar desde modulo_villamaria.py."""
+def render_masterplan(municipio: str = 'villamaria'):
+    """Punto de entrada del módulo. Llamar desde modulo_villamaria.py o modulo_villanueva.py.
+    municipio: 'villamaria' (default) o 'villanueva'."""
 
-    st.title("📄 Masterplan Ambiental · Villa María")
+    info_municipio    = MUNICIPIOS.get(municipio, MUNICIPIOS['villamaria'])
+    nombre_municipio  = info_municipio['nombre']
+    archivo_slug      = info_municipio['archivo']
+    marco_normativo_local = ", Ordenanza 7209/2017" if municipio == 'villamaria' else ""
+
+    st.title(f"📄 Masterplan Ambiental · {nombre_municipio}")
     st.markdown("---")
 
     es_admin = st.session_state.get("cv_admin_auth", False)
 
-    # ── Historial visible para todos ──────────────────────────
-    _render_historial()
+    # ── Historial visible para todos (filtrado por ciudad) ────
+    _render_historial(ciudad=nombre_municipio)
 
     st.markdown("---")
 
@@ -667,7 +686,7 @@ def render_masterplan():
                 )
 
                 usuario = st.session_state.get("cv_usuario", "admin")
-                texto, tok_in, tok_out = _llamar_sonnet(foco_final, usuario)
+                texto, tok_in, tok_out = _llamar_sonnet(foco_final, usuario, nombre_municipio)
                 orbe_slot.empty()
 
                 if tok_in > 0:
@@ -685,6 +704,7 @@ def render_masterplan():
                         texto=texto,
                         tok_input=tok_in,
                         tok_output=tok_out,
+                        ciudad=nombre_municipio,
                     )
                     st.session_state["mp_id_guardado"]    = nuevo_id
                     st.session_state["mp_fecha_guardado"] = "recién generado"
@@ -696,11 +716,16 @@ def render_masterplan():
 
     # ── Mostrar documento cargado o recién generado ───────────
     if "mp_resultado" in st.session_state:
-        _render_documento(st.session_state["mp_resultado"])
+        _render_documento(
+            st.session_state["mp_resultado"],
+            nombre_municipio=nombre_municipio,
+            archivo_slug=archivo_slug,
+            marco_normativo_local=marco_normativo_local,
+        )
 
     st.markdown("---")
     st.caption(
-        "Ciudad Verde AI Agent · Masterplan generado con Claude Sonnet 4.6 · "
-        "Datos: ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022 · "
-        "Marco: C40, ODS 11, Acuerdo de París, Ordenanza 7209"
+        f"Ciudad Verde AI Agent · Masterplan generado con Claude Sonnet 4.6 · "
+        f"Datos: ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022 · "
+        f"Marco: C40, ODS 11, Acuerdo de París{marco_normativo_local}"
     )

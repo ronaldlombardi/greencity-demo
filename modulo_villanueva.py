@@ -17,6 +17,7 @@ import folium
 from streamlit_folium import st_folium
 from folium import FeatureGroup
 from modulo_censo_arboreo_villanueva import render_censo_arboreo_villanueva
+from modulo_masterplan import render_masterplan
 
 RUTA_ZONIFICACION = os.path.join(os.path.dirname(__file__), 'data', 'zonificacion_villanueva.geojson')
 
@@ -579,17 +580,7 @@ def _render_agenda2030_vn():
 # ============================================================
 
 def _render_masterplan_vn():
-    st.title("📄 Masterplan · Villa Nueva")
-
-    st.info(
-        "🚧 **En construcción.** El Masterplan de Villa Nueva va a reusar "
-        "`modulo_masterplan.py` (mismo modelo, Claude Sonnet 4.6, admin-only), "
-        "pero necesita que ese módulo acepte el municipio destinatario como "
-        "parámetro — hoy está redactado exclusivamente para Villa María.\n\n"
-        "Este ajuste queda pendiente como paso posterior del plan, una vez "
-        "resuelto el tema de facturación de Anthropic que está bloqueando "
-        "el Masterplan de Villa María también."
-    )
+    render_masterplan(municipio='villanueva')
 
 
 # ============================================================
