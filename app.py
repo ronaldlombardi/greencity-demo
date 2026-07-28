@@ -20,6 +20,7 @@ from modulo_osm          import cargar_osm, render_osm
 from modulo_censo        import render_censo
 from modulo_ayuda        import ayuda_cobertura, ayuda_accesibilidad, ayuda_temperatura, ayuda_osm, ayuda_censo, ayuda_comparativa, ayuda_diagnostico
 from modulo_villamaria   import render_modulo_villamaria
+from modulo_villanueva   import render_villanueva
 from modulo_asistente    import render_asistente_sidebar, render_asistente_panel
 from modulo_admin        import render_admin
 from modulo_db           import inicializar_db
@@ -448,7 +449,7 @@ with st.sidebar:
     )
     modulo = st.radio(
         "Módulo",
-        ["🏙️ Villa María", "🌍 Provincia de Córdoba", "🔐 Administración"],
+        ["🏙️ Villa María", "🏙️ Villa Nueva", "🌍 Provincia de Córdoba", "🔐 Administración"],
         label_visibility="collapsed",
         key="modulo_principal",
     )
@@ -487,10 +488,20 @@ with st.sidebar:
         st.caption(f"📍 {ciudad['nombre']}")
         st.caption(f"👥 {ciudad['poblacion']:,} hab · {ciudad['area_km2']} km²")
         st.caption(f"⭐ {ciudad['calificacion']}")
-    else:
+    elif modulo == "🏙️ Villa María":
         # Módulo Villa María — el sidebar lo completa render_modulo_villamaria()
         ciudad_key = 'villamaria'
         ciudad = CIUDADES[ciudad_key]
+        seccion = None
+    elif modulo == "🏙️ Villa Nueva":
+        # Módulo Villa Nueva — el sidebar lo completa render_villanueva()
+        ciudad_key = None
+        ciudad = None
+        seccion = None
+    else:
+        # 🔐 Administración — no usa ciudad/sección
+        ciudad_key = None
+        ciudad = None
         seccion = None
 
     # ── Asistente IA — siempre visible al fondo del sidebar ──
@@ -508,6 +519,11 @@ with st.spinner("Conectando con Earth Engine..."):
 if modulo == "🏙️ Villa María":
     render_asistente_panel()
     render_modulo_villamaria()
+    st.stop()
+
+if modulo == "🏙️ Villa Nueva":
+    render_asistente_panel()
+    render_villanueva()
     st.stop()
 
 if modulo == "🔐 Administración":
