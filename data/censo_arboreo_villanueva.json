@@ -1,0 +1,399 @@
+{
+  "fecha_calculo": "2026-07-28T19:14:40.448762",
+  "metodo": "por_zona_normativa",
+  "fuente_zonas": "IDECOR / Municipalidad de Villa Nueva — Código Urbano Rural 2025",
+  "altura_min_arbol_m": 2,
+  "total_arboles": 10021,
+  "total_area_copa_ha": 390.8,
+  "zonas_procesadas": 32,
+  "zonas_totales": 32,
+  "ciudad_area_copa_ha": 366.2,
+  "ciudad_altura_media_m": 5.8,
+  "ciudad_altura_max_m": 63,
+  "zonas": [
+    {
+      "n_arboles": 219,
+      "area_copa_ha": 17.319,
+      "area_zona_ha": 55.89,
+      "error": null,
+      "desig": "AVP",
+      "nombre": "Verde Protegida",
+      "centro": [
+        -32.439396301511586,
+        -63.21765202015592
+      ]
+    },
+    {
+      "n_arboles": 83,
+      "area_copa_ha": 35.209,
+      "area_zona_ha": 57.59,
+      "error": null,
+      "desig": "RNA",
+      "nombre": "Reserva Natural Autoctona",
+      "centro": [
+        -32.420002337227594,
+        -63.279224193602374
+      ]
+    },
+    {
+      "n_arboles": 450,
+      "area_copa_ha": 6.485,
+      "area_zona_ha": 48.25,
+      "error": null,
+      "desig": "ZCen",
+      "nombre": "Central",
+      "centro": [
+        -32.42984985137309,
+        -63.24998137787068
+      ]
+    },
+    {
+      "n_arboles": 60,
+      "area_copa_ha": 1.322,
+      "area_zona_ha": 7.51,
+      "error": null,
+      "desig": "ZCenA",
+      "nombre": "Central en Altura",
+      "centro": [
+        -32.425859000210956,
+        -63.247944314795014
+      ]
+    },
+    {
+      "n_arboles": 1011,
+      "area_copa_ha": 12.3,
+      "area_zona_ha": 100.39,
+      "error": null,
+      "desig": "ZCenR",
+      "nombre": "Central Residencial",
+      "centro": [
+        -32.43364767440303,
+        -63.24748518493498
+      ]
+    },
+    {
+      "n_arboles": 200,
+      "area_copa_ha": 7.584,
+      "area_zona_ha": 311.49,
+      "error": null,
+      "desig": "ZCir",
+      "nombre": "Circunvalacion y RN N158",
+      "centro": [
+        -32.44458322129536,
+        -63.281589933359
+      ]
+    },
+    {
+      "n_arboles": 268,
+      "area_copa_ha": 9.352,
+      "area_zona_ha": 258.08,
+      "error": null,
+      "desig": "ZComI 2 y 3",
+      "nombre": "Comercial Industrial 2",
+      "centro": [
+        -32.45069866767176,
+        -63.26199238975212
+      ]
+    },
+    {
+      "n_arboles": 682,
+      "area_copa_ha": 19.409,
+      "area_zona_ha": 234.78,
+      "error": null,
+      "desig": "ZComI1",
+      "nombre": "Comercial Industrial 1",
+      "centro": [
+        -32.44860517845376,
+        -63.2437295273064
+      ]
+    },
+    {
+      "n_arboles": 141,
+      "area_copa_ha": 1.793,
+      "area_zona_ha": 27.27,
+      "error": null,
+      "desig": "ZComR1",
+      "nombre": "Comercial Residencial 1",
+      "centro": [
+        -32.4314978560839,
+        -63.24306266588294
+      ]
+    },
+    {
+      "n_arboles": 214,
+      "area_copa_ha": 2.728,
+      "area_zona_ha": 27.31,
+      "error": null,
+      "desig": "ZComR2",
+      "nombre": "Comercial Residencial 2",
+      "centro": [
+        -32.439322308883014,
+        -63.2496742782188
+      ]
+    },
+    {
+      "n_arboles": 161,
+      "area_copa_ha": 3.312,
+      "area_zona_ha": 36.36,
+      "error": null,
+      "desig": "ZComR3",
+      "nombre": "Comercial Residencial 3",
+      "centro": [
+        -32.43754845371493,
+        -63.2371056920686
+      ]
+    },
+    {
+      "n_arboles": 58,
+      "area_copa_ha": 1.676,
+      "area_zona_ha": 8.05,
+      "error": null,
+      "desig": "ZComRecre4",
+      "nombre": "Comercial Recreativa 4",
+      "centro": [
+        -32.44302308117276,
+        -63.23127958938337
+      ]
+    },
+    {
+      "n_arboles": 52,
+      "area_copa_ha": 1.147,
+      "area_zona_ha": 16.03,
+      "error": null,
+      "desig": "ZComServ5",
+      "nombre": "Comercial - Servicios 5",
+      "centro": [
+        -32.448636062916776,
+        -63.230865349644276
+      ]
+    },
+    {
+      "n_arboles": 85,
+      "area_copa_ha": 1.769,
+      "area_zona_ha": 143.42,
+      "error": null,
+      "desig": "ZDUrb1",
+      "nombre": "Desarrollo Urbano 1",
+      "centro": [
+        -32.45742301445831,
+        -63.22709639146774
+      ]
+    },
+    {
+      "n_arboles": 253,
+      "area_copa_ha": 20.283,
+      "area_zona_ha": 207.0,
+      "error": null,
+      "desig": "ZDUrb2",
+      "nombre": "Desarrollo Urbano 2",
+      "centro": [
+        -32.42332338762961,
+        -63.27189146008963
+      ]
+    },
+    {
+      "n_arboles": 539,
+      "area_copa_ha": 36.882,
+      "area_zona_ha": 118.8,
+      "error": null,
+      "desig": "ZE",
+      "nombre": "Especial",
+      "centro": [
+        -32.448651090799565,
+        -63.23785326163847
+      ]
+    },
+    {
+      "n_arboles": 151,
+      "area_copa_ha": 5.35,
+      "area_zona_ha": 65.71,
+      "error": null,
+      "desig": "ZIAE",
+      "nombre": "Industrial Alimenticia Existente",
+      "centro": [
+        -32.4547579049559,
+        -63.22740004133019
+      ]
+    },
+    {
+      "n_arboles": 1356,
+      "area_copa_ha": 24.889,
+      "area_zona_ha": 169.03,
+      "error": null,
+      "desig": "ZPCons",
+      "nombre": "Pericentral Consolidada",
+      "centro": [
+        -32.44251865682642,
+        -63.24907227344282
+      ]
+    },
+    {
+      "n_arboles": 87,
+      "area_copa_ha": 8.686,
+      "area_zona_ha": 23.65,
+      "error": null,
+      "desig": "ZParque",
+      "nombre": "Parque Hipolito Irigoyen",
+      "centro": [
+        -32.42307197589388,
+        -63.251996025379476
+      ]
+    },
+    {
+      "n_arboles": 428,
+      "area_copa_ha": 30.574,
+      "area_zona_ha": 369.01,
+      "error": null,
+      "desig": "ZProdUrb1",
+      "nombre": "Productiva Urbana 1",
+      "centro": [
+        -32.45213346472274,
+        -63.20821737984626
+      ]
+    },
+    {
+      "n_arboles": 1467,
+      "area_copa_ha": 31.832,
+      "area_zona_ha": 401.82,
+      "error": null,
+      "desig": "ZR1",
+      "nombre": "Residencial 1",
+      "centro": [
+        -32.45145414766258,
+        -63.232520397603956
+      ]
+    },
+    {
+      "n_arboles": 175,
+      "area_copa_ha": 4.333,
+      "area_zona_ha": 29.83,
+      "error": null,
+      "desig": "ZR2A",
+      "nombre": "Residencial 2 A",
+      "centro": [
+        -32.445327150036555,
+        -63.22332278427036
+      ]
+    },
+    {
+      "n_arboles": 33,
+      "area_copa_ha": 0.272,
+      "area_zona_ha": 15.09,
+      "error": null,
+      "desig": "ZR2B",
+      "nombre": "Residencial 2 B",
+      "centro": [
+        -32.446221953874684,
+        -63.229020574784016
+      ]
+    },
+    {
+      "n_arboles": 14,
+      "area_copa_ha": 0.076,
+      "area_zona_ha": 19.55,
+      "error": null,
+      "desig": "ZR2C",
+      "nombre": "Residencial 2 C",
+      "centro": [
+        -32.44626994376428,
+        -63.232355475763
+      ]
+    },
+    {
+      "n_arboles": 22,
+      "area_copa_ha": 1.484,
+      "area_zona_ha": 15.95,
+      "error": null,
+      "desig": "ZR2D",
+      "nombre": "Residencial 2 D",
+      "centro": [
+        -32.44303424334962,
+        -63.23574111251644
+      ]
+    },
+    {
+      "n_arboles": 0,
+      "area_copa_ha": 0.0,
+      "area_zona_ha": 10.08,
+      "error": null,
+      "desig": "ZR2E",
+      "nombre": "Residencial 2 E",
+      "centro": [
+        -32.42422198253793,
+        -63.30534522654699
+      ]
+    },
+    {
+      "n_arboles": 116,
+      "area_copa_ha": 4.836,
+      "area_zona_ha": 15.35,
+      "error": null,
+      "desig": "ZR2F",
+      "nombre": "Residencial 2 F",
+      "centro": [
+        -32.416546380662865,
+        -63.28204434382109
+      ]
+    },
+    {
+      "n_arboles": 606,
+      "area_copa_ha": 25.643,
+      "area_zona_ha": 1422.87,
+      "error": null,
+      "desig": "ZRurE",
+      "nombre": "Rural Extensiva",
+      "centro": [
+        -32.466488601892614,
+        -63.23165371943494
+      ]
+    },
+    {
+      "n_arboles": 155,
+      "area_copa_ha": 11.868,
+      "area_zona_ha": 170.84,
+      "error": null,
+      "desig": "ZRurI",
+      "nombre": "Rural Intensiva de Pequeña Escala",
+      "centro": [
+        -32.44160068463878,
+        -63.273547830039625
+      ]
+    },
+    {
+      "n_arboles": 531,
+      "area_copa_ha": 31.089,
+      "area_zona_ha": 333.94,
+      "error": null,
+      "desig": "ZUrbProd1",
+      "nombre": "Urbana Productiva 1",
+      "centro": [
+        -32.52856440790377,
+        -63.24839102242187
+      ]
+    },
+    {
+      "n_arboles": 310,
+      "area_copa_ha": 7.019,
+      "area_zona_ha": 91.74,
+      "error": null,
+      "desig": "ZUrbProd2",
+      "nombre": "Urbana Productiva 2",
+      "centro": [
+        -32.45668526576548,
+        -63.240642044017896
+      ]
+    },
+    {
+      "n_arboles": 94,
+      "area_copa_ha": 24.265,
+      "area_zona_ha": 40.67,
+      "error": null,
+      "desig": "ZVP",
+      "nombre": "Verde Periurbana",
+      "centro": [
+        -32.470248282127166,
+        -63.24464684342325
+      ]
+    }
+  ]
+}

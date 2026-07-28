@@ -16,6 +16,7 @@ import streamlit as st
 import folium
 from streamlit_folium import st_folium
 from folium import FeatureGroup
+from modulo_censo_arboreo_villanueva import render_censo_arboreo_villanueva
 
 RUTA_ZONIFICACION = os.path.join(os.path.dirname(__file__), 'data', 'zonificacion_villanueva.geojson')
 
@@ -461,21 +462,7 @@ def _render_osm():
 # ============================================================
 
 def _render_censo_vn():
-    st.title("🌳 Censo Arbóreo — Villa Nueva")
-    st.caption("Objetivo municipal: 1 árbol por vivienda")
-
-    st.info(
-        "🚧 **En construcción.** El Censo Arbóreo de Villa Nueva sigue el "
-        "mismo método que Villa María (Canopy Height GEE + conteo por "
-        "unidad territorial), pero usando las **32 zonas oficiales de "
-        "zonificación** (`data/zonificacion_villanueva.geojson`) como "
-        "unidad de agregación en vez de barrios.\n\n"
-        "**Falta correr:** un script `exportar_censo_villanueva.py` "
-        "(mismo patrón que `exportar_censo_json.py` de Villa María) que "
-        "calcule el conteo de árboles por zona vía Earth Engine y guarde "
-        "el resultado en `data/censo_arboreo_villanueva.json`.\n\n"
-        "Este es el próximo paso pendiente de ejecutar localmente."
-    )
+    render_censo_arboreo_villanueva()
 
 
 # ============================================================
