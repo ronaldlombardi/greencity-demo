@@ -114,6 +114,7 @@ AYUDA = [
             "• FAO: mínimo 10% recomendado para ciudades\n"
             "• Ciudad Verde: ≥10% = bueno | ≥5% = mínimo | <5% = crítico\n\n"
             "Villa María: 8.2% — por debajo del óptimo FAO pero sobre el mínimo.\n"
+            "Villa Nueva: 7.0% — por debajo del óptimo FAO pero sobre el mínimo.\n"
             "San Francisco: 1.6% — nivel crítico, principal debilidad ambiental."
         ),
     },
@@ -125,7 +126,9 @@ AYUDA = [
             "Superficies cubiertas por vegetación herbácea baja: césped, pasto, "
             "praderas y terrenos sin edificar con cobertura vegetal (clase 30 de WorldCover).\n\n"
             "Contribuyen al verde total y a la accesibilidad, aunque su efecto enfriador "
-            "y de captura de CO₂ es menor que el arbolado. En Villa María representan el 14.2%."
+            "y de captura de CO₂ es menor que el arbolado.\n\n"
+            "Villa María: 14.2%. Villa Nueva: 16.0% (incluye el campo periurbano dentro "
+            "de la jurisdicción del Código Urbano Rural 2025)."
         ),
     },
     {
@@ -135,7 +138,9 @@ AYUDA = [
         "texto": (
             "Tierras con uso agrícola dentro o en el periurbano de la ciudad (clase 40 de WorldCover). "
             "En ciudades de la llanura pampeana como Villa María y San Francisco, esta clase "
-            "es muy significativa (23.9% y 24.3% respectivamente).\n\n"
+            "es muy significativa (23.9% y 24.3% respectivamente). En Villa Nueva es todavía "
+            "más marcada (60.4%), porque su jurisdicción oficial (Código Urbano Rural 2025) "
+            "incluye zonas productivas/rurales extensas además de la mancha urbana.\n\n"
             "Representan una oportunidad de reconversión: son suelos no edificados que podrían "
             "transformarse en verde público o corredores ecológicos en el largo plazo.\n\n"
             "La Ordenanza 7209/2017 de Villa María ('Ruralidad Urbana') reconoce y regula "
@@ -149,7 +154,9 @@ AYUDA = [
         "texto": (
             "Superficie cubierta por construcciones, pavimento, asfalto, techos y otras "
             "estructuras impermeables (clase 50 de WorldCover).\n\n"
-            "Es la categoría dominante en ciudades: Villa María 50.6%, San Francisco 56.8%. "
+            "Es la categoría dominante en la mancha urbana: Villa María 50.6%, San Francisco "
+            "56.8%. En Villa Nueva es menor en términos relativos (12.0%) porque su "
+            "jurisdicción oficial incluye una gran superficie rural además del área edificada. "
             "Correlaciona directamente con el efecto de isla de calor: a mayor superficie "
             "edificada, mayor temperatura superficial."
         ),
@@ -169,8 +176,8 @@ AYUDA = [
             "El estándar de 300 metros es el criterio de la Organización Mundial de la Salud (OMS): "
             "toda la población urbana debería poder llegar a pie a un espacio verde en menos "
             "de 4 minutos caminando.\n\n"
-            "Tanto Villa María como San Francisco alcanzan el 100% — valor máximo posible, "
-            "posible gracias a la presencia de pastizales y cultivos periurbanos."
+            "Villa María, San Francisco y Villa Nueva alcanzan el 100% — valor máximo posible, "
+            "gracias a la presencia de pastizales y cultivos periurbanos."
         ),
     },
     {
@@ -197,8 +204,11 @@ AYUDA = [
             "Este indicador satelital incluye todo el verde visible desde el satélite: "
             "patios privados, baldíos, cultivos y verde público. Por eso es siempre mayor "
             "que el m²/hab de OSM.\n\n"
-            "Villa María: 93.2 m²/hab satelital vs 65.4 m²/hab OSM público.\n"
-            "La diferencia (27.8 m²/hab ≈ 270 ha) es verde no accesible a los vecinos."
+            "Villa María: 93.2 m²/hab satelital vs 65.4 m²/hab OSM público (27.8 m²/hab de "
+            "diferencia, verde no accesible a los vecinos).\n"
+            "Villa Nueva: 248.7 m²/hab satelital vs 25.0 m²/hab OSM de uso público explícito — "
+            "cifra alta porque incluye pastizales/arbolado de la zona rural periurbana, no solo "
+            "el verde urbano típico."
         ),
     },
     {
@@ -208,8 +218,8 @@ AYUDA = [
         "texto": (
             "Media de la distancia euclidiana desde cada pixel edificado hasta el pixel "
             "de zona verde más cercano. Complementa el indicador de '% a menos de 300m'.\n\n"
-            "Villa María: 48 metros promedio — equivale a cruzar media manzana.\n"
-            "Distribución: 91.1% a menos de 100m | 8.9% entre 100 y 300m.\n\n"
+            "Villa María: 48 metros promedio (91.1% a menos de 100m, 8.9% entre 100 y 300m).\n"
+            "Villa Nueva: 36 metros promedio (97.6% a menos de 100m, 2.4% entre 100 y 300m).\n\n"
             "Un valor bajo indica que el verde está bien distribuido por toda la ciudad, "
             "no concentrado en un solo sector."
         ),
@@ -278,6 +288,7 @@ AYUDA = [
             "• ΔT 1.5-3°C: moderado — intervención recomendada\n"
             "• ΔT > 3°C: alto — intervención urgente\n\n"
             "Villa María: ΔT = +0.17°C — excelente (muy baja isla de calor).\n"
+            "Villa Nueva: ΔT = +0.6°C — excelente (baja isla de calor).\n"
             "San Francisco: ΔT = +1.01°C — moderado, requiere atención."
         ),
     },
@@ -291,6 +302,7 @@ AYUDA = [
             "Cuantifica cuántos grados más fresca está la vegetación densa respecto al asfalto. "
             "Indica el potencial de reducción de temperatura si se incrementa el arbolado.\n\n"
             "Villa María: 1.67°C de diferencia (ya tiene bastante verde).\n"
+            "Villa Nueva: 4.1°C de diferencia — alto potencial de enfriamiento con más arbolado.\n"
             "San Francisco: 3.95°C — alto potencial, la forestación tendría mayor impacto."
         ),
     },
@@ -318,6 +330,8 @@ AYUDA = [
             "Villa María (8.2% arbolado):\n"
             "• CO₂ actual: ~556 toneladas/año ≈ 265 autos fuera de circulación\n"
             "• Con meta 15% arbolado: ~1.017 toneladas/año\n\n"
+            "La misma metodología aplica a cualquier ciudad con cobertura arbórea calculada — "
+            "para Villa Nueva (7.0% arbolado) el cálculo de CO₂ está pendiente.\n\n"
             "Esta métrica es reportable bajo el Acuerdo de París como sumidero de carbono urbano."
         ),
     },
@@ -338,7 +352,10 @@ AYUDA = [
             "La diferencia entre ambos valores es el 'verde inaccesible': vegetación "
             "que existe pero que los vecinos no pueden usar.\n\n"
             "Villa María: 93.2 m²/hab (satelital) vs 65.4 m²/hab (OSM público) → "
-            "27.8 m²/hab ≈ 270 ha de verde que los vecinos probablemente no pueden usar."
+            "27.8 m²/hab ≈ 270 ha de verde que los vecinos probablemente no pueden usar.\n\n"
+            "Villa Nueva: 248.7 m²/hab (satelital) vs 25.0 m²/hab (OSM de uso público explícito) "
+            "→ brecha grande explicada mayormente por el campo periurbano dentro de la "
+            "jurisdicción, no solo por verde privado inaccesible."
         ),
     },
     {
@@ -370,6 +387,8 @@ AYUDA = [
             "• 9-15 m²/hab: dentro del rango recomendado\n"
             "• < 9 m²/hab: por debajo del mínimo\n\n"
             "Villa María: 65.4 m²/hab — supera ampliamente el estándar OMS.\n"
+            "Villa Nueva: 25.0 m²/hab (parques, deportivo, plazas y cementerios de uso público "
+            "explícito) — supera ampliamente el estándar OMS.\n"
             "San Francisco: 13.2 m²/hab — dentro del rango recomendado."
         ),
     },
@@ -533,7 +552,8 @@ AYUDA = [
             "6. UHI controlado: ΔT < 1.5°C\n"
             "7. Equidad espacial: CV < 40%\n\n"
             "Escala: A (7/7) · B (6/7) · C (5/7) · D (4/7) · F (<4/7)\n\n"
-            "Villa María: A - Excelente (7/7) · San Francisco: B - Muy Bueno (6/7)"
+            "Villa María: A - Excelente (7/7) · San Francisco: B - Muy Bueno (6/7)\n"
+            "Villa Nueva: indicadores ya calculados, puntaje A-F aún no asignado."
         ),
     },
     {
@@ -553,12 +573,12 @@ AYUDA = [
     },
 
     # ══════════════════════════════════════════════════════════
-    # 🏙️ VILLA MARÍA — CONCEPTOS ESPECÍFICOS
+    # 🏙️ VILLA MARÍA – VILLA NUEVA — CONCEPTOS ESPECÍFICOS
     # ══════════════════════════════════════════════════════════
 
     {
         "titulo": "Conglomerado Villa María – Villa Nueva",
-        "categoria": "🏙️ Villa María",
+        "categoria": "🏙️ Villa María – Villa Nueva",
         "tags": ["villa maria", "villa nueva", "conglomerado", "ctalamochita", "rio", "ecosistema"],
         "texto": (
             "Villa María (~97.000 hab) y Villa Nueva (~23.000 hab) forman un conglomerado "
@@ -566,13 +586,14 @@ AYUDA = [
             "Total: ~120.000 habitantes en 49.6 km² analizados.\n\n"
             "Ciudad Verde las analiza como una única unidad ecosistémica porque comparten "
             "el corredor ambiental del río y la mancha verde del periurbano.\n\n"
-            "Las estrategias y el Masterplan corresponden al Municipio de Villa María "
-            "(la cabecera del Departamento General San Martín)."
+            "Cada municipio tiene su propio módulo, con estrategias y Masterplan generados "
+            "de forma independiente: Villa María (cabecera del Departamento General San "
+            "Martín) y Villa Nueva, cada uno con su propia zonificación oficial y normativa."
         ),
     },
     {
         "titulo": "Río Ctalamochita — Corredor ecológico",
-        "categoria": "🏙️ Villa María",
+        "categoria": "🏙️ Villa María – Villa Nueva",
         "tags": ["ctalamochita", "rio", "corredor", "ecologico", "parque lineal", "ciclovias"],
         "texto": (
             "El Río Ctalamochita divide el conglomerado: Villa María al oeste y Villa Nueva al este. "
@@ -588,7 +609,7 @@ AYUDA = [
     },
     {
         "titulo": "Zona Noroeste — Área prioritaria de intervención",
-        "categoria": "🏙️ Villa María",
+        "categoria": "🏙️ Villa María – Villa Nueva",
         "tags": ["noroeste", "zona", "caliente", "prioritaria", "temperatura", "acceso", "intervencion"],
         "texto": (
             "La zona Noroeste (VM centro-norte) es la de mayor temperatura superficial "
@@ -602,7 +623,7 @@ AYUDA = [
     },
     {
         "titulo": "Zonas de análisis del conglomerado",
-        "categoria": "🏙️ Villa María",
+        "categoria": "🏙️ Villa María – Villa Nueva",
         "tags": ["zonas", "noroeste", "noreste", "suroeste", "sureste", "cuadrantes", "analisis"],
         "texto": (
             "El área analizada se divide en 4 cuadrantes para el análisis de temperatura "
@@ -617,7 +638,7 @@ AYUDA = [
     },
     {
         "titulo": "Target QTC 2030 en Villa María",
-        "categoria": "🏙️ Villa María",
+        "categoria": "🏙️ Villa María – Villa Nueva",
         "tags": ["qtc", "c40", "30 porciento", "2030", "verde", "hectareas", "meta"],
         "texto": (
             "Para cumplir el target C40 de 30% de cobertura verde (QTC) al año 2030, "
@@ -667,14 +688,19 @@ AYUDA = [
         ),
     },
     {
-        "titulo": "Módulo Villa María vs Módulo Provincia",
+        "titulo": "Módulos de la plataforma",
         "categoria": "ℹ️ Sobre la plataforma",
-        "tags": ["modulos", "villa maria", "provincia", "cordoba", "ciudades", "navegacion"],
+        "tags": ["modulos", "villa maria", "villa nueva", "provincia", "cordoba", "ciudades", "navegacion", "administracion"],
         "texto": (
-            "Ciudad Verde tiene dos módulos principales accesibles desde el menú lateral:\n\n"
-            "• 🏙️ Villa María: análisis detallado del conglomerado Villa María – Villa Nueva. "
-            "Incluye mapa interactivo, indicadores por zonas, diagnóstico, estrategias, "
-            "Agenda 2030/C40 y generación de Masterplan (solo administradores).\n\n"
+            "Ciudad Verde tiene cuatro módulos accesibles desde el menú lateral:\n\n"
+            "• 🏙️ Villa María: análisis detallado de la ciudad, con contexto del conglomerado "
+            "que comparte con Villa Nueva. Incluye mapa interactivo, indicadores por zonas, "
+            "diagnóstico, estrategias, Agenda 2030/C40 y generación de Masterplan (solo "
+            "administradores).\n\n"
+            "• 🏙️ Villa Nueva: análisis propio de la ciudad, protagonista en su propio módulo "
+            "(no solo como contexto de Villa María). Incluye mapa de zonificación oficial "
+            "(32 zonas, Código Urbano Rural 2025), indicadores ambientales, censo arbóreo, "
+            "diagnóstico por zonas, estrategias, Agenda 2030/C40 y Masterplan propio.\n\n"
             "• 🌍 Provincia de Córdoba: análisis de las ciudades capitales de departamento "
             "con datos GEE disponibles. Permite comparar indicadores entre ciudades y "
             "navegar por cobertura, accesibilidad, temperatura, OSM, Censo y Diagnóstico.\n\n"
@@ -693,7 +719,7 @@ CATEGORIAS_ORDEN = [
     "👥 Censo y vulnerabilidad",
     "🌍 Marcos normativos",
     "📊 Calificación",
-    "🏙️ Villa María",
+    "🏙️ Villa María – Villa Nueva",
     "ℹ️ Sobre la plataforma",
 ]
 
