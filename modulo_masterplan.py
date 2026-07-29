@@ -138,7 +138,7 @@ ESTRUCTURA OBLIGATORIA DEL MASTERPLAN:
    - Indicador de seguimiento
    - Plazo estimado
 
-5. METAS CUANTIFICABLES 2025–2030
+5. METAS CUANTIFICABLES 2026–2030
    - Tabla con indicador, valor actual, meta 2030, responsable
 
 6. IMPACTO PROYECTADO
@@ -153,7 +153,7 @@ ESTRUCTURA OBLIGATORIA DEL MASTERPLAN:
 
 8. PRESUPUESTO ESTIMADO REFERENCIAL
    - Por línea de acción
-   - Total estimado por año y para el período 2025–2030
+   - Total estimado por año y para el período 2026–2030
    - Fuentes de financiamiento posibles (municipal, provincial, fondos climáticos)
 
 9. GOBERNANZA Y SEGUIMIENTO
@@ -488,7 +488,7 @@ def _render_documento(texto, nombre_municipio, archivo_slug, marco_normativo_loc
                      text-transform:uppercase;'>Ciudad Verde AI Agent · {nombre_municipio}, Córdoba</div>
                 <div style='font-family:"Space Grotesk",sans-serif;font-size:22px;
                      font-weight:700;color:#fff;margin-top:2px;'>
-                     Masterplan Ambiental 2025–2030</div>
+                     Masterplan Ambiental 2026–2030</div>
               </div>
             </div>
             <div style='display:flex;gap:24px;flex-wrap:wrap;
@@ -521,7 +521,7 @@ def _render_documento(texto, nombre_municipio, archivo_slug, marco_normativo_loc
             var w = window.open('', '_blank', 'width=960,height=750,scrollbars=yes');
             w.document.write(`<!DOCTYPE html><html><head>
             <meta charset="utf-8">
-            <title>Masterplan Ambiental · {nombre_municipio} 2025-2030</title>
+            <title>Masterplan Ambiental · {nombre_municipio} 2026-2030</title>
             <style>
               * {{ box-sizing:border-box; margin:0; padding:0; }}
               body {{
