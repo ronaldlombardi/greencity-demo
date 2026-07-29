@@ -81,6 +81,8 @@ def _cargar_datos_vn():
             'elementos': osm_raw.get('elementos'),
             'areaHa': osm_raw.get('area_ha'),
             'm2Hab': osm_raw.get('m2_hab'),
+            'espacios': osm_raw.get('espacios', []),
+            'top10': osm_raw.get('top10', []),
         },
         'calificacion': 'Calculado',
         'puntaje': None,
@@ -495,6 +497,43 @@ def _render_osm():
             "pastizal catalogado sin uso público confirmado."
         )
 
+        if osm.get('espacios'):
+            st.markdown("---")
+            st.markdown("### 🗺️ Mapa de espacios verdes públicos")
+            st.caption("Cada punto es un espacio catalogado en OpenStreetMap (uso público explícito)")
+
+            lats = [g['lat'] for g in osm['espacios']]
+            lons = [g['lon'] for g in osm['espacios']]
+            centro = [sum(lats) / len(lats), sum(lons) / len(lons)]
+
+            m_osm = folium.Map(location=centro, zoom_start=14, tiles=None)
+            folium.TileLayer(
+                tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+                attr='© Google', name='🌍 Satelital', max_zoom=20, show=True,
+            ).add_to(m_osm)
+            folium.TileLayer(
+                tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                attr='© OpenStreetMap contributors', name='🗺️ OpenStreetMap',
+                max_zoom=19, show=False,
+            ).add_to(m_osm)
+
+            for g in osm['espacios']:
+                area_str = (f"{g['area_m2']/10000:.2f} ha" if g['area_m2'] >= 10000
+                            else f"{g['area_m2']:.0f} m²")
+                folium.CircleMarker(
+                    location=[g['lat'], g['lon']],
+                    radius=5, color='#2e7d32', weight=1.5,
+                    fill=True, fill_color='#2e7d32', fill_opacity=0.75,
+                    tooltip=f"{g['nombre']} — {g['categoria']}",
+                    popup=folium.Popup(
+                        f"<b>{g['nombre']}</b><br>Tipo: {g['categoria']}<br>Área: {area_str}",
+                        max_width=200,
+                    ),
+                ).add_to(m_osm)
+
+            folium.LayerControl(collapsed=False).add_to(m_osm)
+            st_folium(m_osm, width="100%", height=480, returned_objects=[])
+
     st.markdown("---")
     st.markdown("### Lo que ya sabemos por zonificación oficial")
     st.caption(
@@ -560,9 +599,11 @@ def _render_diagnostico():
 
     st.markdown("---")
     st.caption(
-        "El detalle de indicadores ambientales por macro-zona (temperatura, "
-        "cobertura, acceso a verde) se completa cuando esté disponible el "
-        "cálculo real por zona (ver banners de 'datos preliminares')."
+        "Los indicadores ambientales (temperatura, cobertura, acceso a "
+        "verde) ya están calculados a nivel ciudad — ver secciones "
+        "'Indicadores ambientales' y 'Temperatura superficial'. El "
+        "desglose de esos mismos indicadores por macro-zona todavía está "
+        "pendiente."
     )
 
 
@@ -625,8 +666,8 @@ def _render_agenda2030_vn():
     st.markdown("---")
     st.info(
         "👉 El seguimiento cuantitativo de KPIs 2030 (igual que en el módulo "
-        "de Villa María) se activa cuando estén disponibles los indicadores "
-        "ambientales reales calculados por zona."
+        "de Villa María) es el próximo paso, ahora que los indicadores "
+        "ambientales reales de la ciudad ya están disponibles."
     )
 
 
