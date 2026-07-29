@@ -1,0 +1,3213 @@
+{
+  "fecha_calculo": "2026-07-29T11:20:45.311730",
+  "fuente_limite": "Unión de 32 zonas oficiales — Código Urbano Rural 2025",
+  "area_ciudad_km2": 48.5,
+  "cobertura": {
+    "arboles": 7.0,
+    "arbustos": 0.0,
+    "pastizales": 16.0,
+    "cultivos": 60.4,
+    "edificado": 12.0,
+    "suelo": 2.7,
+    "agua": 0.7
+  },
+  "acceso": {
+    "acceso": 100.0,
+    "dist_prom": 36.0,
+    "m2_hab_sat": 248.7,
+    "r_0_100": 97.6,
+    "r_100_300": 2.4,
+    "r_300_500": 0.0,
+    "r_500_mas": 0.0
+  },
+  "lst": {
+    "n_imagenes": 16,
+    "periodo": "2023-12-01 → 2024-03-01",
+    "t_media": 39.4,
+    "t_urbano": 39.5,
+    "t_verde": 38.9,
+    "t_p95": 44.7,
+    "t_p5": 35.2,
+    "delta_uhi": 0.6,
+    "t_ndvi_alto": 36.6,
+    "t_ndvi_bajo": 40.7,
+    "enfriamiento_verde": 4.1
+  },
+  "osm": {
+    "elementos": 57,
+    "area_ha": 57.5,
+    "m2_hab": 25.0,
+    "por_categoria": {
+      "Parques": {
+        "cantidad": 13,
+        "area_m2": 275401.5921405836
+      },
+      "Deportivo": {
+        "cantidad": 40,
+        "area_m2": 200515.2621843153
+      },
+      "Cementerios": {
+        "cantidad": 2,
+        "area_m2": 98534.72099880045
+      },
+      "Plazas / jardines": {
+        "cantidad": 2,
+        "area_m2": 97.69297974388789
+      }
+    },
+    "complementario": {
+      "elementos": 324,
+      "area_ha": 239.0,
+      "m2_hab": 103.9,
+      "por_categoria": {
+        "Naturaleza": {
+          "cantidad": 172,
+          "area_m2": 1251337.7496287995
+        },
+        "Áreas verdes": {
+          "cantidad": 151,
+          "area_m2": 1137755.1541409693
+        },
+        "Otros": {
+          "cantidad": 1,
+          "area_m2": 898.0301797419122
+        }
+      }
+    },
+    "total_combinado_ha": 296.5,
+    "total_combinado_m2_hab": 128.9,
+    "espacios": [
+      {
+        "nombre": "Plaza Capitán de los Andes",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 11959.490199852882,
+        "lat": -32.43547985803079,
+        "lon": -63.24779024720871
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 40706.45156652931,
+        "lat": -32.4254097479601,
+        "lon": -63.236941008774494
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 2028.8367436115313,
+        "lat": -32.421667600000006,
+        "lon": -63.257400350000005
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 10265.587004101035,
+        "lat": -32.422321255973785,
+        "lon": -63.24295324787802
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 46474.14692620305,
+        "lat": -32.42207109414285,
+        "lon": -63.261802446471926
+      },
+      {
+        "nombre": "Prado Español",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 21032.983592648434,
+        "lat": -32.419053036296454,
+        "lon": -63.25693917508271
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 218.73640103661708,
+        "lat": -32.41863894349966,
+        "lon": -63.25787578432767
+      },
+      {
+        "nombre": "tenis",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 2014.6337205722828,
+        "lat": -32.418618819221706,
+        "lon": -63.257446552007984
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 705.6303260438332,
+        "lat": -32.42323715648967,
+        "lon": -63.244759335106
+      },
+      {
+        "nombre": "Paddle",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 198.5657376157861,
+        "lat": -32.423964903182004,
+        "lon": -63.24519641533414
+      },
+      {
+        "nombre": "Paddle",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 216.76778430992402,
+        "lat": -32.423841800000005,
+        "lon": -63.24536180000001
+      },
+      {
+        "nombre": "Bochas",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 399.8422048449062,
+        "lat": -32.423658150690585,
+        "lon": -63.245578901079256
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 418.9526619962374,
+        "lat": -32.423375799999995,
+        "lon": -63.2446359
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 10844.951166130719,
+        "lat": -32.441159396479506,
+        "lon": -63.235198778506955
+      },
+      {
+        "nombre": "Cementerio San Jose",
+        "categoria": "Cementerios",
+        "tipo": "cemetery",
+        "area_m2": 15909.282628361212,
+        "lat": -32.442848342465865,
+        "lon": -63.229338470188054
+      },
+      {
+        "nombre": "Parque La Naturaleza",
+        "categoria": "Cementerios",
+        "tipo": "cemetery",
+        "area_m2": 82625.43837043924,
+        "lat": -32.441405859061646,
+        "lon": -63.23199379421273
+      },
+      {
+        "nombre": "Parque Hipólito Yrigoyen",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 199968.75711353795,
+        "lat": -32.42497320198966,
+        "lon": -63.24947191653573
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 1332.8390677720786,
+        "lat": -32.42481594095477,
+        "lon": -63.251911867873694
+      },
+      {
+        "nombre": "Pista",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 13363.779803883119,
+        "lat": -32.42524903710115,
+        "lon": -63.25091094051592
+      },
+      {
+        "nombre": "Aoita",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 12607.393087652332,
+        "lat": -32.42353132789332,
+        "lon": -63.23990575543755
+      },
+      {
+        "nombre": "Padel",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 217.96559987014632,
+        "lat": -32.4232280599158,
+        "lon": -63.240217982981086
+      },
+      {
+        "nombre": "Padel",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 226.2508980457642,
+        "lat": -32.42317901694325,
+        "lon": -63.24035430047144
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 1384.6438946324581,
+        "lat": -32.4235485,
+        "lon": -63.24035855
+      },
+      {
+        "nombre": "Club Unión Eléctrica",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 18005.678019068895,
+        "lat": -32.423649731180305,
+        "lon": -63.245428181570794
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 2315.4069578721987,
+        "lat": -32.423128924391754,
+        "lon": -63.24496837032852
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 3886.9081886399404,
+        "lat": -32.41824322116154,
+        "lon": -63.25688454752672
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1454.5105317320647,
+        "lat": -32.41969912842083,
+        "lon": -63.256379381512566
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 539.2651094674023,
+        "lat": -32.41945015,
+        "lon": -63.257884049999994
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 1526.0041005577223,
+        "lat": -32.4193963,
+        "lon": -63.257790750000005
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 568.0250830285737,
+        "lat": -32.4193435,
+        "lon": -63.257722900000005
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 116961.04471010016,
+        "lat": -32.417092819536556,
+        "lon": -63.29339289829277
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 9276.918540510726,
+        "lat": -32.42289642704722,
+        "lon": -63.307310125390536
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 28075.93822688008,
+        "lat": -32.441746729913376,
+        "lon": -63.28535233109195
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 56560.883468538465,
+        "lat": -32.42154529438165,
+        "lon": -63.30304868629166
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 6527.93313933144,
+        "lat": -32.41454982619386,
+        "lon": -63.28365076799789
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 959.2440877168464,
+        "lat": -32.420322427066516,
+        "lon": -63.302625473851215
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 55200.23439890956,
+        "lat": -32.43609232967068,
+        "lon": -63.29379420862367
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 23131.343029064526,
+        "lat": -32.4350456264613,
+        "lon": -63.29354545075821
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 6800.808418306895,
+        "lat": -32.43576468033545,
+        "lon": -63.27802316626432
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 12203.590583134519,
+        "lat": -32.42274512635094,
+        "lon": -63.25349314676412
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 25675.49650476327,
+        "lat": -32.42980281257035,
+        "lon": -63.2246206791787
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1148.0704609145125,
+        "lat": -32.43477336026002,
+        "lon": -63.23085417457257
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 94804.9628806085,
+        "lat": -32.43475688728257,
+        "lon": -63.22485853839992
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 3828.0306436582973,
+        "lat": -32.43660527545734,
+        "lon": -63.220952936456904
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 8029.158530503584,
+        "lat": -32.440013850741394,
+        "lon": -63.22202498592205
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 16997.91974781711,
+        "lat": -32.42999438849075,
+        "lon": -63.23054315731323
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 25465.25052853223,
+        "lat": -32.45505865744972,
+        "lon": -63.2676776118199
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 8140.409046391877,
+        "lat": -32.45893664766347,
+        "lon": -63.253543005698205
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 104889.11138056536,
+        "lat": -32.44980706496403,
+        "lon": -63.240883658292795
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 2133.3000057700515,
+        "lat": -32.420674628205205,
+        "lon": -63.28485828976599
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1885.6767931138888,
+        "lat": -32.42001146504164,
+        "lon": -63.28434024447439
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 4948.786948116306,
+        "lat": -32.42076905280976,
+        "lon": -63.304292735791186
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 6426.539788463391,
+        "lat": -32.41858907512566,
+        "lon": -63.259585846906006
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 6110.516299945138,
+        "lat": -32.42205973352622,
+        "lon": -63.25800805571759
+      },
+      {
+        "nombre": "Cancha de Futbol Asociación Española",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 15325.85229307182,
+        "lat": -32.421862723619356,
+        "lon": -63.25791627931458
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 33515.08082203786,
+        "lat": -32.42073126691123,
+        "lon": -63.25982571694172
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 4156.496449924352,
+        "lat": -32.421509190504516,
+        "lon": -63.25860625023772
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1237.2353428240979,
+        "lat": -32.422133831449266,
+        "lon": -63.25775775037287
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 5766.871332688939,
+        "lat": -32.42205849986359,
+        "lon": -63.25935663146046
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 167418.3321181092,
+        "lat": -32.41845393007158,
+        "lon": -63.27293555326293
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 6984.38430622016,
+        "lat": -32.43433523586021,
+        "lon": -63.28462554999951
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1143.8437172717233,
+        "lat": -32.43423838579893,
+        "lon": -63.272223552796916
+      },
+      {
+        "nombre": "Club Leandro N. Alem",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 29210.690588606285,
+        "lat": -32.43351043268472,
+        "lon": -63.26484436811148
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 7092.313966818375,
+        "lat": -32.433264055017084,
+        "lon": -63.264563307671274
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 5283.564706879888,
+        "lat": -32.43319847624551,
+        "lon": -63.260198363686634
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 4462.585167785044,
+        "lat": -32.4324762505837,
+        "lon": -63.26007591048219
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 4539.25114344591,
+        "lat": -32.43355184462219,
+        "lon": -63.26083269149993
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 3775.1525799172728,
+        "lat": -32.43266332306355,
+        "lon": -63.26082754731466
+      },
+      {
+        "nombre": "Cancha Amaya",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 28032.76768655922,
+        "lat": -32.4330744215647,
+        "lon": -63.26046092865078
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 2187.764070431825,
+        "lat": -32.45028787176277,
+        "lon": -63.20548313374259
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1913.4975662235915,
+        "lat": -32.4458980361931,
+        "lon": -63.205254705918705
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 9396.540314487307,
+        "lat": -32.44692227597793,
+        "lon": -63.20827054788363
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 390.3394926957654,
+        "lat": -32.451310832964346,
+        "lon": -63.20541263472271
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 15375.838039767805,
+        "lat": -32.428132710250345,
+        "lon": -63.29198095240309
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 5652.585636107952,
+        "lat": -32.426724618424615,
+        "lon": -63.29169044649611
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 38164.03956552329,
+        "lat": -32.424706684009706,
+        "lon": -63.29116351001199
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 3940.23832959271,
+        "lat": -32.4359349218992,
+        "lon": -63.242248784042445
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 42035.55752922385,
+        "lat": -32.42804861952145,
+        "lon": -63.23190897522416
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 23779.60094781617,
+        "lat": -32.42985846111006,
+        "lon": -63.232077057784146
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 12236.865759692804,
+        "lat": -32.42683885041045,
+        "lon": -63.23171346912372
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 64565.013291567644,
+        "lat": -32.45742615943676,
+        "lon": -63.25506787661922
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 3076.472915328408,
+        "lat": -32.45623805313451,
+        "lon": -63.26667375236669
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 15375.838039767805,
+        "lat": -32.42813271025035,
+        "lon": -63.29198095240311
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 2900.320100149234,
+        "lat": -32.41936327373728,
+        "lon": -63.25629290296126
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 6962.652757260265,
+        "lat": -32.42312195206544,
+        "lon": -63.239612237945074
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 38168.25212261497,
+        "lat": -32.46067400836426,
+        "lon": -63.27706111175092
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 54940.40599376972,
+        "lat": -32.42263208790601,
+        "lon": -63.29850410397993
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 25374.943316219717,
+        "lat": -32.41918268230211,
+        "lon": -63.29423490916048
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 7226.255198366673,
+        "lat": -32.43428102294912,
+        "lon": -63.291001034328175
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 19305.828654396202,
+        "lat": -32.41974483172248,
+        "lon": -63.28878267258476
+      },
+      {
+        "nombre": "Reserva Hidríca Natural \"Aguas Claras\"",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 37239.287805537184,
+        "lat": -32.424698397899974,
+        "lon": -63.26755545453951
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 529.6905189310897,
+        "lat": -32.442898097125166,
+        "lon": -63.23036157050717
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 647.1422799827158,
+        "lat": -32.4434076870733,
+        "lon": -63.231854618100705
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 6943.504889700862,
+        "lat": -32.44287114225199,
+        "lon": -63.23257839596028
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 11517.677424600663,
+        "lat": -32.44361257122344,
+        "lon": -63.23043029230236
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 97.64726760602662,
+        "lat": -32.44305776189031,
+        "lon": -63.23172453124321
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 360.55519949379675,
+        "lat": -32.44285471577347,
+        "lon": -63.231561819755846
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 923.5630867423739,
+        "lat": -32.44331915712813,
+        "lon": -63.23037168881422
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 30277.584284407072,
+        "lat": -32.418059340699564,
+        "lon": -63.28418478880608
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 3684.8862458188855,
+        "lat": -32.426587831431455,
+        "lon": -63.230006158797906
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 6435.191046506306,
+        "lat": -32.42653742993682,
+        "lon": -63.22770396982098
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 1510.1789797801107,
+        "lat": -32.43134836360664,
+        "lon": -63.223536757538795
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 1735.639005362435,
+        "lat": -32.44214517475148,
+        "lon": -63.24857210786957
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 1761.8288009995651,
+        "lat": -32.42661837523862,
+        "lon": -63.239660092592864
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 16454.60412274881,
+        "lat": -32.46629088759252,
+        "lon": -63.24851780690584
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 11648.721610112521,
+        "lat": -32.470211363999574,
+        "lon": -63.24746785672392
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 15174.198660124097,
+        "lat": -32.466375863788585,
+        "lon": -63.24681401903627
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 10730.470693819196,
+        "lat": -32.46260019688898,
+        "lon": -63.24614110130619
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1240.7604313977815,
+        "lat": -32.43427789884595,
+        "lon": -63.30145213331069
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 27883.821315469664,
+        "lat": -32.436345813097205,
+        "lon": -63.29970562755744
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 14282.130551378084,
+        "lat": -32.46205974054526,
+        "lon": -63.24632828141846
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 14076.269314584935,
+        "lat": -32.46373159921634,
+        "lon": -63.247024402300134
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 15194.445878198232,
+        "lat": -32.4601732616797,
+        "lon": -63.24655571392988
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 133.47060669691544,
+        "lat": -32.46225676365353,
+        "lon": -63.246684925840384
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 178.23671056460768,
+        "lat": -32.46184630118642,
+        "lon": -63.247076590009534
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 132.6998580677013,
+        "lat": -32.46151140653678,
+        "lon": -63.24655842789571
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 8689.168461104295,
+        "lat": -32.45966708939421,
+        "lon": -63.24562875655419
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 9807.388530352886,
+        "lat": -32.430536884784324,
+        "lon": -63.30718545015497
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 17063.01419562301,
+        "lat": -32.433470999345175,
+        "lon": -63.301236862803556
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 11920.812006549411,
+        "lat": -32.43449012512431,
+        "lon": -63.292047201014384
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 9409.439228060834,
+        "lat": -32.43453698989251,
+        "lon": -63.28338088683193
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 96643.68196193942,
+        "lat": -32.44519272457693,
+        "lon": -63.21385631391465
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 1196.9995741572718,
+        "lat": -32.45563929199994,
+        "lon": -63.205704153680635
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 1593.8187357043107,
+        "lat": -32.45506724379574,
+        "lon": -63.20573512121555
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 1324.5535068536396,
+        "lat": -32.454053650065504,
+        "lon": -63.20629005089506
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 11904.23631360116,
+        "lat": -32.42669614841386,
+        "lon": -63.24841259177828
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 5906.938568200727,
+        "lat": -32.445386650075555,
+        "lon": -63.226535990055766
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 207.23028888659252,
+        "lat": -32.44381475336022,
+        "lon": -63.22888010820111
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 112.45300776249245,
+        "lat": -32.4439183435057,
+        "lon": -63.22848331791024
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 965.2086280773296,
+        "lat": -32.441133547146926,
+        "lon": -63.232518243484016
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 243.47139485112686,
+        "lat": -32.44193332719759,
+        "lon": -63.23258169962706
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 1441.5695314459595,
+        "lat": -32.44596461750101,
+        "lon": -63.22178316558537
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 688.4863313963972,
+        "lat": -32.446200131942376,
+        "lon": -63.23303705444542
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 1530.847380040902,
+        "lat": -32.44638913928851,
+        "lon": -63.23311212228846
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1504.4516170572774,
+        "lat": -32.442190289672574,
+        "lon": -63.2338314145275
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 15236.10875881011,
+        "lat": -32.44264817494717,
+        "lon": -63.23194777860155
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 367.82800017541575,
+        "lat": -32.444258233674375,
+        "lon": -63.22717583048982
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 932.3741795584126,
+        "lat": -32.44448613691772,
+        "lon": -63.22671350282302
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 105.15614254970397,
+        "lat": -32.44432126207284,
+        "lon": -63.226502412790154
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 657.2138192325497,
+        "lat": -32.44442931888123,
+        "lon": -63.22632174439795
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 21.594097266215705,
+        "lat": -32.423230193741325,
+        "lon": -63.24424930385516
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Plazas / jardines",
+        "tipo": "garden",
+        "area_m2": 40.43595620835674,
+        "lat": -32.423176050087385,
+        "lon": -63.24433554489761
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Plazas / jardines",
+        "tipo": "garden",
+        "area_m2": 57.25702353553114,
+        "lat": -32.423254501796535,
+        "lon": -63.24443679451489
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1713.0216918371102,
+        "lat": -32.423154800693034,
+        "lon": -63.24569448195474
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 32.22600424007026,
+        "lat": -32.42268041230262,
+        "lon": -63.24445264349159
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 163.78952168253034,
+        "lat": -32.42280166850785,
+        "lon": -63.24444808781257
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 141.4945575606012,
+        "lat": -32.42294475533388,
+        "lon": -63.244405732194444
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 114.25800656848243,
+        "lat": -32.42278158858612,
+        "lon": -63.2446212381607
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 71.55483355425228,
+        "lat": -32.42263722794965,
+        "lon": -63.24425922650371
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 24.678720599900906,
+        "lat": -32.42270955252823,
+        "lon": -63.2442458899168
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 385.3526665650474,
+        "lat": -32.423025070191635,
+        "lon": -63.244111883356084
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1306.8331715051072,
+        "lat": -32.42250146888086,
+        "lon": -63.24320083273276
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 25.058341490445898,
+        "lat": -32.42260126094824,
+        "lon": -63.24413684411977
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 106.6352190963912,
+        "lat": -32.42401225211705,
+        "lon": -63.253791711269315
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 3664.440363851772,
+        "lat": -32.44311618459222,
+        "lon": -63.23774987684053
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1762.6617076232758,
+        "lat": -32.46188179927803,
+        "lon": -63.24661822700008
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 93.05855740682696,
+        "lat": -32.42420580982443,
+        "lon": -63.239499702042735
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 289.09089696564246,
+        "lat": -32.42484175131386,
+        "lon": -63.23863006462455
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 11653.991220952674,
+        "lat": -32.4240755868531,
+        "lon": -63.24888734330063
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 12892.927790742588,
+        "lat": -32.42355570962628,
+        "lon": -63.25176038744383
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 254.40011545541034,
+        "lat": -32.423711089847785,
+        "lon": -63.25311142753209
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 114.42341092879023,
+        "lat": -32.423865665547574,
+        "lon": -63.25241321053131
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 188.6459941759959,
+        "lat": -32.424038709582305,
+        "lon": -63.25181946607064
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 267.2237353786732,
+        "lat": -32.42424469979671,
+        "lon": -63.25067132191051
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 79.65943744031527,
+        "lat": -32.42437540766028,
+        "lon": -63.24994798645133
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 154.25670256195727,
+        "lat": -32.424513072931234,
+        "lon": -63.2494903760361
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 328.6012087045174,
+        "lat": -32.42459581573469,
+        "lon": -63.24845843151048
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 82.63892286460771,
+        "lat": -32.42459653855028,
+        "lon": -63.2477412867966
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 24.257538446197195,
+        "lat": -32.42461886160118,
+        "lon": -63.247548283621256
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 18.32068806428431,
+        "lat": -32.424598665619094,
+        "lon": -63.249128929254645
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 364.8135213006487,
+        "lat": -32.424849581927354,
+        "lon": -63.24692388667954
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 2700.5501367472857,
+        "lat": -32.42343374779839,
+        "lon": -63.24846360927284
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 271.5100099088694,
+        "lat": -32.424111461522465,
+        "lon": -63.249598217599846
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 570.5286893773153,
+        "lat": -32.42417945840417,
+        "lon": -63.24937863909407
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 1393.7480705161006,
+        "lat": -32.423911385979956,
+        "lon": -63.24940171596794
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 12002.537212123754,
+        "lat": -32.42609279927857,
+        "lon": -63.24910013422021
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 21696.10583669431,
+        "lat": -32.425125684360985,
+        "lon": -63.24827287875339
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 2253.3479008429513,
+        "lat": -32.42571939436532,
+        "lon": -63.25002375910849
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 570.8559777493851,
+        "lat": -32.42503630782943,
+        "lon": -63.25017064477836
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 4472.293006601057,
+        "lat": -32.424587757008666,
+        "lon": -63.25070419833643
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 915.9736113316679,
+        "lat": -32.424447008739214,
+        "lon": -63.25176088704754
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 7187.161865377793,
+        "lat": -32.424137961389164,
+        "lon": -63.25280796345676
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 3519.6620987271012,
+        "lat": -32.42560632768171,
+        "lon": -63.24688878050307
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 20.947822251216575,
+        "lat": -32.42397709582156,
+        "lon": -63.246855816450875
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 6046.035340432391,
+        "lat": -32.424619273225105,
+        "lon": -63.24666334877513
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 8358.874905186647,
+        "lat": -32.4168167143627,
+        "lon": -63.27156113851172
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 21320.90609798684,
+        "lat": -32.416377365188254,
+        "lon": -63.26927710491958
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 1455.321055193334,
+        "lat": -32.41811870926704,
+        "lon": -63.277231225141534
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 26990.24996048769,
+        "lat": -32.443809530117704,
+        "lon": -63.2699460217224
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 8583.875707831538,
+        "lat": -32.468716540135915,
+        "lon": -63.24761105032457
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 81264.71757996237,
+        "lat": -32.44995060585609,
+        "lon": -63.23660356852028
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 4092.9490162275056,
+        "lat": -32.44796621172325,
+        "lon": -63.235689676633676
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 7875.975852982235,
+        "lat": -32.451650342226905,
+        "lon": -63.23552255022049
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 2758.3905942366755,
+        "lat": -32.43785072460298,
+        "lon": -63.259928238000754
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 7163.671187432066,
+        "lat": -32.433983509435755,
+        "lon": -63.26854452476304
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 5931.274342715235,
+        "lat": -32.41747679666463,
+        "lon": -63.27004463762982
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 8557.639254093772,
+        "lat": -32.41731474732606,
+        "lon": -63.26960778491023
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 63.55563029335909,
+        "lat": -32.42002503647319,
+        "lon": -63.25589664296206
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 146.80383813095895,
+        "lat": -32.43507774838618,
+        "lon": -63.26789468352223
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 191.23645357125582,
+        "lat": -32.42502624921148,
+        "lon": -63.25440194109697
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 703.0943534198441,
+        "lat": -32.42634595689966,
+        "lon": -63.254034454918084
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 147.8262662167951,
+        "lat": -32.42529775667504,
+        "lon": -63.25405496045883
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 161.09008875909495,
+        "lat": -32.42360070219247,
+        "lon": -63.25509342253103
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 145.71294691536605,
+        "lat": -32.426279412215635,
+        "lon": -63.25503548259
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 636.3131277695354,
+        "lat": -32.42706685445299,
+        "lon": -63.25395186298901
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 6312.500569680297,
+        "lat": -32.424098827492884,
+        "lon": -63.24895353445233
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 2877.545526419224,
+        "lat": -32.42338029704009,
+        "lon": -63.24741767421759
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 1337.2685210880616,
+        "lat": -32.422226126831234,
+        "lon": -63.24600635449641
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 1950.475268058867,
+        "lat": -32.42582916691309,
+        "lon": -63.250885888257656
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 1376.8934809587238,
+        "lat": -32.42640374480963,
+        "lon": -63.24932551557832
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 3548.393173894931,
+        "lat": -32.44775228090199,
+        "lon": -63.23430610958666
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 187.0761238791308,
+        "lat": -32.45618889538395,
+        "lon": -63.20567742335394
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 2831.429443380373,
+        "lat": -32.45665793696801,
+        "lon": -63.20607568383911
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 2302.617333058525,
+        "lat": -32.42652039431764,
+        "lon": -63.22689728423615
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 7329.004938566778,
+        "lat": -32.422436325245265,
+        "lon": -63.2451922299433
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 160.99997806340002,
+        "lat": -32.4221366875999,
+        "lon": -63.24506128661621
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 87.79877204820336,
+        "lat": -32.42216501258449,
+        "lon": -63.24483819458148
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 108.59816121989482,
+        "lat": -32.42263649432451,
+        "lon": -63.24401953234327
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 448.3007983544156,
+        "lat": -32.42253409791065,
+        "lon": -63.24330586864102
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1002.8170522895585,
+        "lat": -32.424039753176544,
+        "lon": -63.243494492438344
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 122.85236081090628,
+        "lat": -32.429675649211966,
+        "lon": -63.24275626393721
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1770.4167975591456,
+        "lat": -32.45442818266624,
+        "lon": -63.24471036254795
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 6737.350254736566,
+        "lat": -32.456872394643824,
+        "lon": -63.24513930348056
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 816.4531970441645,
+        "lat": -32.44162989037761,
+        "lon": -63.243009215661836
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 7274.789821156309,
+        "lat": -32.44117377715324,
+        "lon": -63.23492157816679
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 892.8075945642457,
+        "lat": -32.44410176146182,
+        "lon": -63.228473617263596
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 2787.5036546813194,
+        "lat": -32.441750377116755,
+        "lon": -63.235633231864185
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 397.2042469133226,
+        "lat": -32.444261757691955,
+        "lon": -63.22814946662925
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 3.3406638343311683,
+        "lat": -32.44424327176471,
+        "lon": -63.22742469490196
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 10993.445092348382,
+        "lat": -32.450744271789624,
+        "lon": -63.23118329936179
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 16143.711164468428,
+        "lat": -32.46093882425383,
+        "lon": -63.25118551668982
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 13456.154991234018,
+        "lat": -32.47434953925052,
+        "lon": -63.24774664724505
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 29649.367248685227,
+        "lat": -32.471512555789374,
+        "lon": -63.24544334816834
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 1109.6896592691244,
+        "lat": -32.46656817229853,
+        "lon": -63.24750770248098
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 3276.227431157511,
+        "lat": -32.454052887397694,
+        "lon": -63.24369301423537
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "wood",
+        "area_m2": 1323.4581495283678,
+        "lat": -32.45357078120813,
+        "lon": -63.269150626191454
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 26.365130578694526,
+        "lat": -32.42533198211285,
+        "lon": -63.254335712389434
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 31.669577220549694,
+        "lat": -32.425193833212774,
+        "lon": -63.25438303536295
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 176.74013727702712,
+        "lat": -32.42571624859593,
+        "lon": -63.25420569257248
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 333.1222965033972,
+        "lat": -32.43345888226988,
+        "lon": -63.229407862579805
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 284.4171727305397,
+        "lat": -32.433773643579364,
+        "lon": -63.228715085310235
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 528.8671225207793,
+        "lat": -32.4333394991691,
+        "lon": -63.22879777341544
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1137.2696292187375,
+        "lat": -32.432852794101684,
+        "lon": -63.228959843629156
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 317.96909158765806,
+        "lat": -32.432348583535216,
+        "lon": -63.228987382758866
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 452.1969959897492,
+        "lat": -32.43323238542257,
+        "lon": -63.2284946568552
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 3245.1784881350864,
+        "lat": -32.432779222135395,
+        "lon": -63.229227880801055
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 897.2352614796199,
+        "lat": -32.434532406712705,
+        "lon": -63.22912417590031
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 765.8281110627776,
+        "lat": -32.43480710565963,
+        "lon": -63.22852773794411
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 7496.400359533865,
+        "lat": -32.434994506009964,
+        "lon": -63.22701135815905
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 10754.959892929719,
+        "lat": -32.43322592792775,
+        "lon": -63.22524874261227
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 5315.46263460887,
+        "lat": -32.43424289883712,
+        "lon": -63.230089592402926
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 2968.248963107575,
+        "lat": -32.43328999034142,
+        "lon": -63.22975566817954
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 776.7954505303693,
+        "lat": -32.43394121358461,
+        "lon": -63.2285526059894
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 458.839126808559,
+        "lat": -32.43358682698801,
+        "lon": -63.228510064532685
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 2281.8273490130127,
+        "lat": -32.433467806872294,
+        "lon": -63.228175996498926
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 12739.671763598355,
+        "lat": -32.432289468612474,
+        "lon": -63.2267626045007
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 4435.457275072721,
+        "lat": -32.43173353467554,
+        "lon": -63.23001399204929
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 7041.592307423116,
+        "lat": -32.43091327974269,
+        "lon": -63.232146642208214
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 5965.096015743116,
+        "lat": -32.431268687757715,
+        "lon": -63.22879002511762
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 2897.2115173636957,
+        "lat": -32.43178449348079,
+        "lon": -63.22826209563173
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1333.3537233327504,
+        "lat": -32.432660577789115,
+        "lon": -63.22828861831955
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 671.8616686227102,
+        "lat": -32.43252304441782,
+        "lon": -63.2286466831959
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 7206.255403759489,
+        "lat": -32.432659240081776,
+        "lon": -63.231017347782256
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1906.3981038689924,
+        "lat": -32.43516333321965,
+        "lon": -63.22921438608458
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 5221.329106434735,
+        "lat": -32.43116889698707,
+        "lon": -63.22685008472986
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1304.832346108696,
+        "lat": -32.432017921785736,
+        "lon": -63.22718090817743
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 2468.0017878965605,
+        "lat": -32.43128482971906,
+        "lon": -63.22633582029502
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 474.53919597729845,
+        "lat": -32.4319307746702,
+        "lon": -63.22638367476931
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 672.1196006560814,
+        "lat": -32.43150830396897,
+        "lon": -63.225938764788395
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 305.9367644581113,
+        "lat": -32.43297356781061,
+        "lon": -63.227959776856586
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 185.0117218359431,
+        "lat": -32.43271363112501,
+        "lon": -63.227698990523734
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1070.0693231232672,
+        "lat": -32.432409801157426,
+        "lon": -63.22747164610384
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 444.0462596250432,
+        "lat": -32.43281879532015,
+        "lon": -63.22736122292613
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 241.50172727231293,
+        "lat": -32.43309544229909,
+        "lon": -63.22766739102118
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 98.18929793618044,
+        "lat": -32.432934510987586,
+        "lon": -63.227523301188604
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 266.52323633497855,
+        "lat": -32.43350926687375,
+        "lon": -63.227841399640276
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 517.0526373628225,
+        "lat": -32.43226104141584,
+        "lon": -63.22680843504953
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 2992.187042033941,
+        "lat": -32.4341817801068,
+        "lon": -63.22975198948709
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 282.1851595148866,
+        "lat": -32.4339722090223,
+        "lon": -63.23068229033287
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 406.6468501911214,
+        "lat": -32.43377989486189,
+        "lon": -63.23094610026501
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 473.36796700869576,
+        "lat": -32.43354383889074,
+        "lon": -63.230895377416346
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1038.9480813604666,
+        "lat": -32.43253494564493,
+        "lon": -63.230554390345546
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 510.7699510292322,
+        "lat": -32.43237491826621,
+        "lon": -63.230338429877364
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 98.17805380382212,
+        "lat": -32.43228177349734,
+        "lon": -63.2304154856496
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 685.6509180053957,
+        "lat": -32.43224115020106,
+        "lon": -63.23065569097545
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 533.7285292498373,
+        "lat": -32.432094923090716,
+        "lon": -63.23094989330173
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 682.4324684436419,
+        "lat": -32.43091423516727,
+        "lon": -63.22680947550215
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 3724.4259814643065,
+        "lat": -32.43019765789236,
+        "lon": -63.22758252669008
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 4995.991084973978,
+        "lat": -32.429736388445406,
+        "lon": -63.22628249656159
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 5049.650038061286,
+        "lat": -32.428598292084516,
+        "lon": -63.22671411086994
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 15606.54040649008,
+        "lat": -32.43032481206918,
+        "lon": -63.22535915104728
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 681.4251201210132,
+        "lat": -32.429975148984546,
+        "lon": -63.225560797495156
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1186.363831561916,
+        "lat": -32.429518820711955,
+        "lon": -63.22536038746979
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 319.6103148561348,
+        "lat": -32.43025328785023,
+        "lon": -63.225662410572625
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 603.9536651176637,
+        "lat": -32.43078508639132,
+        "lon": -63.225943297747364
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 822.4711733386789,
+        "lat": -32.430509413837285,
+        "lon": -63.22553548457419
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 378.37972700559243,
+        "lat": -32.428919726625566,
+        "lon": -63.226169070460934
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1879.2332210942868,
+        "lat": -32.42845004600869,
+        "lon": -63.22599577679182
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 763.1391341393028,
+        "lat": -32.43359427898603,
+        "lon": -63.22766578693087
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 3774.145441730314,
+        "lat": -32.4331238168022,
+        "lon": -63.226733845706015
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1437.4309544178282,
+        "lat": -32.433562733081835,
+        "lon": -63.22678547678671
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1227.8721839595798,
+        "lat": -32.434025213287555,
+        "lon": -63.22743379466304
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 5049.192706532937,
+        "lat": -32.43307911557975,
+        "lon": -63.22589483781669
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 639.1994024692417,
+        "lat": -32.432535685893676,
+        "lon": -63.22624673177936
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 263.5696019118685,
+        "lat": -32.43214473982994,
+        "lon": -63.22571185306005
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1123.664962273153,
+        "lat": -32.43206583527244,
+        "lon": -63.22587647334872
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 868.7147774700064,
+        "lat": -32.43203970901282,
+        "lon": -63.22469869403428
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 961.0230253533516,
+        "lat": -32.43163366917582,
+        "lon": -63.224356707790434
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 325.6706405529966,
+        "lat": -32.431029916970886,
+        "lon": -63.2255131755316
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 203.8086567843657,
+        "lat": -32.43120396799209,
+        "lon": -63.2256882958108
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 838.4861833423856,
+        "lat": -32.43131173784491,
+        "lon": -63.22450588909371
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 913.8208850318604,
+        "lat": -32.432844962026614,
+        "lon": -63.228150292252614
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 637.3483237349806,
+        "lat": -32.43260822229569,
+        "lon": -63.228456173489825
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 329.1583713548588,
+        "lat": -32.43242671042757,
+        "lon": -63.22806359586815
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1491.5710933987882,
+        "lat": -32.43080666052138,
+        "lon": -63.22946725542603
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 7080.341906217149,
+        "lat": -32.4299875908404,
+        "lon": -63.22949232644332
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 92.89924799097957,
+        "lat": -32.43369967171756,
+        "lon": -63.2280071984736
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 214.0334630525015,
+        "lat": -32.43143049922624,
+        "lon": -63.2254029841482
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 210.09092276813553,
+        "lat": -32.42972693541642,
+        "lon": -63.226676184690014
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 74.11481819654414,
+        "lat": -32.430625515464286,
+        "lon": -63.226825356106666
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 221.59298913222491,
+        "lat": -32.42864820564825,
+        "lon": -63.22648769319602
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 139.73506071140224,
+        "lat": -32.42824649031066,
+        "lon": -63.22681924761298
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 781.9124774249848,
+        "lat": -32.42787514169898,
+        "lon": -63.22734412716511
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 4.95687678772155,
+        "lat": -32.42802926482228,
+        "lon": -63.227009103090246
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 259.62700909181393,
+        "lat": -32.43509258606667,
+        "lon": -63.228831458491676
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 566.3514409239046,
+        "lat": -32.42923772763137,
+        "lon": -63.22771296311235
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 784.5467048646034,
+        "lat": -32.42866630986401,
+        "lon": -63.22739341478344
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1023.7429642499798,
+        "lat": -32.429178720253724,
+        "lon": -63.22713699327525
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1484.8855623228667,
+        "lat": -32.42881943439574,
+        "lon": -63.22841387230389
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 468.298438710045,
+        "lat": -32.42939110631381,
+        "lon": -63.228239662417266
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 302.48528810640795,
+        "lat": -32.429574228587,
+        "lon": -63.2269664548429
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1213.9880424800563,
+        "lat": -32.430048201761174,
+        "lon": -63.22741685523989
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 778.7064279527102,
+        "lat": -32.43025127820044,
+        "lon": -63.228980808118756
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 898.5679015619763,
+        "lat": -32.431382145627005,
+        "lon": -63.22785554149377
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 925.6961620827917,
+        "lat": -32.43192606019725,
+        "lon": -63.227825529267896
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 658.9398989392231,
+        "lat": -32.431342084516835,
+        "lon": -63.22723779921785
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 9.11421155703451,
+        "lat": -32.432194910867054,
+        "lon": -63.23011448312416
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 105.88228244345267,
+        "lat": -32.432247991644445,
+        "lon": -63.23014795101059
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 612.5690889706401,
+        "lat": -32.43201718657594,
+        "lon": -63.22979630032921
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 875.9438626170195,
+        "lat": -32.43135519013367,
+        "lon": -63.230374697703894
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 419.22068222539076,
+        "lat": -32.431690200977386,
+        "lon": -63.23056249251963
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 498.6759388032566,
+        "lat": -32.43063939188331,
+        "lon": -63.23023865417709
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1112.509940347898,
+        "lat": -32.428772452242725,
+        "lon": -63.228998878686255
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1088.5330849057207,
+        "lat": -32.430630676745956,
+        "lon": -63.22956701454789
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1966.1635676891528,
+        "lat": -32.430905750673,
+        "lon": -63.22919616360276
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 1237.7817866549815,
+        "lat": -32.43052214030649,
+        "lon": -63.228562861506845
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1726.5260022850432,
+        "lat": -32.43050677822602,
+        "lon": -63.22783051352855
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 431.9568185962996,
+        "lat": -32.43172158667562,
+        "lon": -63.22698541303855
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 521.313586303215,
+        "lat": -32.43145096345123,
+        "lon": -63.22674183041771
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 334.8664509018322,
+        "lat": -32.431499997117356,
+        "lon": -63.22909370181518
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 363.63824655200546,
+        "lat": -32.431803792195346,
+        "lon": -63.229046444599106
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 339.58168387609794,
+        "lat": -32.431666144774,
+        "lon": -63.22849631054023
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 286.3146992146106,
+        "lat": -32.43140092438077,
+        "lon": -63.22855092624828
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1178.7397830749126,
+        "lat": -32.43420747777519,
+        "lon": -63.22429574344231
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 214.33122243612902,
+        "lat": -32.433917868126755,
+        "lon": -63.22420124672709
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 789.8226733850861,
+        "lat": -32.43344614759806,
+        "lon": -63.223810334097834
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 3620.8051886852977,
+        "lat": -32.43634622942817,
+        "lon": -63.222264248088244
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 912.0982731500166,
+        "lat": -32.43647521969783,
+        "lon": -63.22145371273788
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 2131.359026468547,
+        "lat": -32.43728814514797,
+        "lon": -63.22239634287133
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 534.1482927566386,
+        "lat": -32.437367994719295,
+        "lon": -63.22119021033092
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 2131.085857077208,
+        "lat": -32.43640630654534,
+        "lon": -63.22050219712099
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 728.9641115919851,
+        "lat": -32.431868456798,
+        "lon": -63.225375284753184
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 3278.6185961502074,
+        "lat": -32.43449516500968,
+        "lon": -63.23065456050032
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 1556.0911972037413,
+        "lat": -32.434629026550255,
+        "lon": -63.22796495683066
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 7586.821274228846,
+        "lat": -32.42845244830787,
+        "lon": -63.22771016427531
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 348.9559817053701,
+        "lat": -32.43490840563935,
+        "lon": -63.23016915696956
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 411.17177358008206,
+        "lat": -32.43496896649846,
+        "lon": -63.22989856262658
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 226.21275206312288,
+        "lat": -32.435071875408454,
+        "lon": -63.230608921904455
+      },
+      {
+        "nombre": "Baby Futbol Los Leoncitos",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 3970.9149551958926,
+        "lat": -32.426626175057734,
+        "lon": -63.23975733958868
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 4578.424498967329,
+        "lat": -32.4471920133426,
+        "lon": -63.211784266123594
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 1635.2257857885543,
+        "lat": -32.445159319646194,
+        "lon": -63.212091342622976
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 2560.357061491874,
+        "lat": -32.44439071933369,
+        "lon": -63.21328623038426
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Naturaleza",
+        "tipo": "forest",
+        "area_m2": 8667.320477686904,
+        "lat": -32.44350735416459,
+        "lon": -63.215127588375786
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 12197.764965544342,
+        "lat": -32.45390366344459,
+        "lon": -63.214050151896195
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "meadow",
+        "area_m2": 22556.889243460442,
+        "lat": -32.4521190006525,
+        "lon": -63.21256701867536
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 618.6097111493282,
+        "lat": -32.426270839273215,
+        "lon": -63.26621146989775
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 587.4213198359547,
+        "lat": -32.426344391549826,
+        "lon": -63.26637628924793
+      },
+      {
+        "nombre": "El Club de la Costa",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 3853.503704565575,
+        "lat": -32.42618609533146,
+        "lon": -63.266182857776705
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Áreas verdes",
+        "tipo": "grass",
+        "area_m2": 860.8056323713598,
+        "lat": -32.426289147033444,
+        "lon": -63.26607863669818
+      },
+      {
+        "nombre": "Plazoleta Pablo Granado",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 290.5534751364248,
+        "lat": -32.439714422454,
+        "lon": -63.251513934543176
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Otros",
+        "tipo": "?",
+        "area_m2": 898.0301797419122,
+        "lat": -32.44228818448771,
+        "lon": -63.22552747758491
+      }
+    ],
+    "top10": [
+      {
+        "nombre": "Parque Hipólito Yrigoyen",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 199968.75711353795,
+        "lat": -32.42497320198966,
+        "lon": -63.24947191653573
+      },
+      {
+        "nombre": "Parque La Naturaleza",
+        "categoria": "Cementerios",
+        "tipo": "cemetery",
+        "area_m2": 82625.43837043924,
+        "lat": -32.441405859061646,
+        "lon": -63.23199379421273
+      },
+      {
+        "nombre": "(sin nombre)",
+        "categoria": "Parques",
+        "tipo": "park",
+        "area_m2": 40706.45156652931,
+        "lat": -32.4254097479601,
+        "lon": -63.236941008774494
+      },
+      {
+        "nombre": "Club Leandro N. Alem",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 29210.690588606285,
+        "lat": -32.43351043268472,
+        "lon": -63.26484436811148
+      },
+      {
+        "nombre": "Cancha Amaya",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 28032.76768655922,
+        "lat": -32.4330744215647,
+        "lon": -63.26046092865078
+      },
+      {
+        "nombre": "Prado Español",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 21032.983592648434,
+        "lat": -32.419053036296454,
+        "lon": -63.25693917508271
+      },
+      {
+        "nombre": "Club Unión Eléctrica",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 18005.678019068895,
+        "lat": -32.423649731180305,
+        "lon": -63.245428181570794
+      },
+      {
+        "nombre": "Cementerio San Jose",
+        "categoria": "Cementerios",
+        "tipo": "cemetery",
+        "area_m2": 15909.282628361212,
+        "lat": -32.442848342465865,
+        "lon": -63.229338470188054
+      },
+      {
+        "nombre": "Cancha de Futbol Asociación Española",
+        "categoria": "Deportivo",
+        "tipo": "sports_centre",
+        "area_m2": 15325.85229307182,
+        "lat": -32.421862723619356,
+        "lon": -63.25791627931458
+      },
+      {
+        "nombre": "Pista",
+        "categoria": "Deportivo",
+        "tipo": "pitch",
+        "area_m2": 13363.779803883119,
+        "lat": -32.42524903710115,
+        "lon": -63.25091094051592
+      }
+    ],
+    "error": null
+  }
+}

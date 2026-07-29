@@ -30,27 +30,68 @@ RUTA_ZONIFICACION = os.path.join(os.path.dirname(__file__), 'data', 'zonificacio
 # y validar la interfaz. Se reemplazan por cálculo real en el
 # siguiente paso del plan (ver conversación de proyecto).
 
-DATOS_VN = {
-    'cobertura': {
-        'arboles': 15.0, 'arbustos': 0, 'pastizales': 18.0,
-        'cultivos': 20.0, 'edificado': 38.0, 'suelo': 1.5, 'agua': 7.5
-    },
-    'acceso': {
-        'acceso': 100.0, 'dist_prom': 40, 'm2_hab_sat': 95.0,
-        'r_0_100': 92.0, 'r_100_300': 8.0, 'r_300_500': 0.0, 'r_500_mas': 0.0
-    },
-    'lst': {
-        'tMedia': 39.55, 'tUrbano': 39.30, 'tVerde': 38.20,
-        'tP95': 44.00, 'tP5': 36.80, 'deltaUHI': 0.10,
-        'tNdviAlto': 38.00, 'tNdviBajo': 39.60, 'enfriamiento': 1.70,
-    },
-    'osm': {'elementos': None, 'areaHa': None, 'm2Hab': None},
-    'calificacion': 'Por calcular',
-    'puntaje': None,
-    'poblacion_vn': 23000,
-    'area_vn_km2': 13.6,
-    'datos_preliminares': True,
-}
+RUTA_INDICADORES = os.path.join(os.path.dirname(__file__), 'data', 'indicadores_villanueva.json')
+
+
+def _cargar_datos_vn():
+    """Carga los indicadores reales calculados con
+    exportar_indicadores_villanueva.py (data/indicadores_villanueva.json).
+    Si el archivo no existe todavía, devuelve valores preliminares en
+    cero para no romper la app (mismo criterio que tenía el módulo
+    antes del cálculo real)."""
+    if not os.path.exists(RUTA_INDICADORES):
+        return {
+            'cobertura': {'arboles': 0, 'arbustos': 0, 'pastizales': 0,
+                          'cultivos': 0, 'edificado': 0, 'suelo': 0, 'agua': 0},
+            'acceso': {'acceso': 0, 'dist_prom': None, 'm2_hab_sat': 0,
+                       'r_0_100': 0, 'r_100_300': 0, 'r_300_500': 0, 'r_500_mas': 0},
+            'lst': {'tMedia': None, 'tUrbano': None, 'tVerde': None, 'tP95': None,
+                    'tP5': None, 'deltaUHI': None, 'tNdviAlto': None,
+                    'tNdviBajo': None, 'enfriamiento': None, 'nImagenes': None},
+            'osm': {'elementos': None, 'areaHa': None, 'm2Hab': None},
+            'calificacion': 'Por calcular',
+            'puntaje': None,
+            'poblacion_vn': 23000,
+            'area_vn_km2': 13.6,
+            'datos_preliminares': True,
+        }
+
+    with open(RUTA_INDICADORES, encoding='utf-8') as f:
+        d = json.load(f)
+
+    lst_raw = d.get('lst') or {}
+    osm_raw = d.get('osm') or {}
+
+    return {
+        'cobertura': d.get('cobertura', {}),
+        'acceso': d.get('acceso', {}),
+        'lst': {
+            'tMedia': lst_raw.get('t_media'),
+            'tUrbano': lst_raw.get('t_urbano'),
+            'tVerde': lst_raw.get('t_verde'),
+            'tP95': lst_raw.get('t_p95'),
+            'tP5': lst_raw.get('t_p5'),
+            'deltaUHI': lst_raw.get('delta_uhi'),
+            'tNdviAlto': lst_raw.get('t_ndvi_alto'),
+            'tNdviBajo': lst_raw.get('t_ndvi_bajo'),
+            'enfriamiento': lst_raw.get('enfriamiento_verde'),
+            'nImagenes': lst_raw.get('n_imagenes'),
+        },
+        'osm': {
+            'elementos': osm_raw.get('elementos'),
+            'areaHa': osm_raw.get('area_ha'),
+            'm2Hab': osm_raw.get('m2_hab'),
+        },
+        'calificacion': 'Calculado',
+        'puntaje': None,
+        'poblacion_vn': 23000,
+        'area_vn_km2': d.get('area_ciudad_km2', 13.6),
+        'fecha_calculo': d.get('fecha_calculo'),
+        'datos_preliminares': False,
+    }
+
+
+DATOS_VN = _cargar_datos_vn()
 
 # ============================================================
 # ZONIFICACIÓN — macro-categorías agrupando las 32 zonas oficiales
@@ -353,14 +394,15 @@ def _render_indicadores():
 
     st.markdown("---")
     st.markdown("### Verde público accesible (OpenStreetMap)")
-    st.caption("Pendiente de cálculo — requiere consulta a la API Overpass para el ejido de Villa Nueva.")
+    st.caption("Espacios de uso público explícito, zona urbana de Villa Nueva.")
     c4, c5, c6 = st.columns(3)
     with c4:
-        _card_indicador("Verde público / habitante", osm['m2Hab'], "m²/hab", "OMS mínimo: 9 m²/hab", "#757575")
+        color_osm = _semaforo(osm['m2Hab'], 15, 9) if osm['m2Hab'] is not None else "#757575"
+        _card_indicador("Verde público / habitante", osm['m2Hab'], "m²/hab", "OMS mínimo: 9 m²/hab", color_osm)
     with c5:
-        _card_indicador("Área verde pública total", osm['areaHa'], "ha", "Catalogada en OSM", "#757575")
+        _card_indicador("Área verde pública total", osm['areaHa'], "ha", "Catalogada en OSM", "#2e7d32")
     with c6:
-        _card_indicador("Espacios catalogados", osm['elementos'], "", "Plazas, parques, arbolado", "#757575")
+        _card_indicador("Espacios catalogados", osm['elementos'], "", "Plazas, parques, arbolado", "#1565c0")
 
     st.markdown("---")
     st.markdown("### Cobertura del suelo")
@@ -388,17 +430,18 @@ def _render_indicadores():
 
 def _render_temperatura():
     st.title("🌡️ Temperatura superficial")
-    st.caption("Villa Nueva · Datos: Landsat 8/9 — banda térmica")
+    d = DATOS_VN['lst']
+    n_img = d.get('nImagenes')
+    st.caption(
+        f"Villa Nueva · Datos: Landsat 8/9 — banda térmica"
+        + (f" · {n_img} imágenes" if n_img else "")
+    )
 
     if DATOS_VN.get('datos_preliminares'):
         st.warning(
-            "⚠️ **Datos preliminares** — no se corrió aún el análisis de "
-            "temperatura superficial (LST) específico para Villa Nueva. "
-            "Los valores de referencia usados abajo son estimativos, "
-            "tomados como punto de partida del conglomerado VM+VN."
+            "⚠️ **Datos preliminares** — todavía no se corrió el análisis "
+            "de temperatura superficial (LST) específico para Villa Nueva."
         )
-
-    d = DATOS_VN['lst']
     c1, c2, c3 = st.columns(3)
     with c1:
         _card_indicador("Temperatura media", d['tMedia'], "°C", "Superficie terrestre (LST)", "#f57c00")
@@ -417,10 +460,9 @@ def _render_temperatura():
 
     st.markdown("---")
     st.info(
-        "👉 Próximo paso: correr el análisis LST específico de Villa Nueva "
-        "(13 imágenes Landsat, mismo método usado en el conglomerado VM+VN) "
-        "y cruzarlo con las 32 zonas oficiales de zonificación para "
-        "identificar puntos calientes por tipo de uso de suelo."
+        "👉 Próximo paso: cruzar el mapa de temperatura superficial con "
+        "las 32 zonas oficiales de zonificación para identificar puntos "
+        "calientes por tipo de uso de suelo."
     )
 
 
@@ -430,21 +472,34 @@ def _render_temperatura():
 
 def _render_osm():
     st.title("🏛️ Verde público (OpenStreetMap)")
-    st.caption("Villa Nueva · Espacios verdes catalogados por la comunidad OSM")
+    st.caption("Villa Nueva · Espacios verdes catalogados por la comunidad OSM (zona urbana)")
 
-    st.warning(
-        "⚠️ **Pendiente de cálculo.** Todavía no se corrió la consulta a la "
-        "API Overpass de OpenStreetMap acotada al ejido de Villa Nueva. "
-        "Esta sección va a mostrar plazas, parques y arbolado catalogado, "
-        "igual que en el módulo de Villa María."
-    )
+    osm = DATOS_VN['osm']
+    if DATOS_VN.get('datos_preliminares') or osm.get('elementos') is None:
+        st.warning(
+            "⚠️ **Pendiente de cálculo.** Todavía no se corrió la consulta a "
+            "la API Overpass de OpenStreetMap para Villa Nueva."
+        )
+    else:
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            color = _semaforo(osm['m2Hab'], 15, 9)
+            _card_indicador("Verde público / habitante", osm['m2Hab'], "m²/hab", "OMS mínimo: 9 m²/hab", color)
+        with c2:
+            _card_indicador("Área verde pública", osm['areaHa'], "ha", "Parques, deportivo, plazas, cementerios", "#2e7d32")
+        with c3:
+            _card_indicador("Espacios catalogados", osm['elementos'], "", "Uso público explícito (OSM)", "#1565c0")
+        st.caption(
+            "Incluye solo espacios de uso público explícito (parques, "
+            "polideportivos, plazas, cementerios). No incluye bosque/"
+            "pastizal catalogado sin uso público confirmado."
+        )
 
     st.markdown("---")
     st.markdown("### Lo que ya sabemos por zonificación oficial")
     st.caption(
-        "Aunque no tenemos el conteo OSM todavía, la zonificación del "
-        "Código Urbano Rural 2025 ya identifica formalmente las áreas "
-        "verdes/recreativas de la ciudad:"
+        "La zonificación del Código Urbano Rural 2025 identifica "
+        "formalmente las áreas verdes/recreativas de la ciudad:"
     )
 
     verdes = ZONAS_VN['VerdeRecreativa']['zonas_oficiales']
