@@ -10,7 +10,7 @@ Registra consumo en PostgreSQL.
 import os
 import requests
 import streamlit as st
-from modulo_db import registrar_consumo, guardar_masterplan, obtener_masteplans
+from modulo_db import registrar_consumo, guardar_masterplan, obtener_masteplans, eliminar_masterplan
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_URL           = "https://api.anthropic.com/v1/messages"
@@ -250,6 +250,23 @@ def _render_historial(ciudad: str):
                         st.session_state["mp_tok_out"]        = mp["tok_output"] or 0
                         st.session_state["mp_id_guardado"]    = mp["id"]
                         st.session_state["mp_fecha_guardado"] = fecha_str
+                        st.rerun()
+
+                confirmando = st.session_state.get("mp_confirmar_borrar") == mp["id"]
+                if confirmando:
+                    col_conf1, col_conf2 = st.columns(2)
+                    with col_conf1:
+                        if st.button("✅ Confirmar borrado", key=f"mp_del_confirm_{mp['id']}", use_container_width=True):
+                            eliminar_masterplan(mp["id"])
+                            st.session_state.pop("mp_confirmar_borrar", None)
+                            st.rerun()
+                    with col_conf2:
+                        if st.button("✕ Cancelar", key=f"mp_del_cancel_{mp['id']}", use_container_width=True):
+                            st.session_state.pop("mp_confirmar_borrar", None)
+                            st.rerun()
+                else:
+                    if st.button("🗑️ Borrar", key=f"mp_del_{mp['id']}", use_container_width=True):
+                        st.session_state["mp_confirmar_borrar"] = mp["id"]
                         st.rerun()
     return masteplans_guardados
 

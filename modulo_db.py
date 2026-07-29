@@ -209,6 +209,19 @@ def obtener_masterplan_por_id(masterplan_id: int):
         return None
 
 
+def eliminar_masterplan(masterplan_id: int) -> bool:
+    """Borra un masterplan guardado por id. Devuelve True si borró algo."""
+    conn = _conn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("DELETE FROM cv_masteplans WHERE id = %s", (masterplan_id,))
+            borrado = cur.rowcount > 0
+        conn.commit()
+        return borrado
+    finally:
+        conn.close()
+
+
 def obtener_totales():
     """Devuelve totales globales."""
     if not DB_URL:
