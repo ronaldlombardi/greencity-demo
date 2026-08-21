@@ -450,11 +450,13 @@ def _render_indicadores():
     st.caption("% del área edificada por rango · Referencia OMS: 100% a menos de 300 m")
 
     rangos = [
-        ("0 – 100 m",   acc['r_0_100'],   "#2e7d32", "Verde inmediato · máxima accesibilidad"),
+        ("0 – 100 m",   acc['r_0_100'],    "#2e7d32", "Dentro del estándar OMS · a pasos"),
         ("100 – 300 m", acc['r_100_300'],  "#66bb6a", "Dentro del estándar OMS · ~4 min caminando"),
-        ("300 – 500 m", acc['r_300_500'],  "#f57c00", "Por encima del umbral OMS"),
-        ("> 500 m",     acc['r_500_mas'],  "#c62828", "Déficit · intervención recomendada"),
     ]
+    if round(acc['r_300_500'], 1) > 0:
+        rangos.append(("300 – 500 m", acc['r_300_500'], "#f57c00", "Por encima del umbral OMS"))
+    if round(acc['r_500_mas'], 1) > 0:
+        rangos.append(("> 500 m", max(acc['r_500_mas'], 0), "#c62828", "Déficit · intervención recomendada"))
     pct_oms = acc['r_0_100'] + acc['r_100_300']
 
     for label, pct, color, desc in rangos:
@@ -501,82 +503,7 @@ def _render_indicadores():
         unsafe_allow_html=True,
     )
 
-    # --- Mapa de accesibilidad por zonas ---
-    st.markdown("#### 🗺️ Mapa de accesibilidad por zona")
-    st.caption("Cada zona muestra el % de área edificada con acceso a verde en menos de 300 m · Hacé clic para ver detalle")
-
-    lst_media = DATOS_VM['lst']['tMedia']
-    m_acc = folium.Map(location=[-32.415, -63.242], zoom_start=13, tiles=None)
-    folium.TileLayer(
-        tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
-        attr='© Google', name='🌍 Híbrido Google', max_zoom=20, show=True,
-    ).add_to(m_acc)
-    folium.TileLayer(
-        tiles='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        attr='© OpenStreetMap', name='🗺️ OpenStreetMap', max_zoom=19, show=False,
-    ).add_to(m_acc)
-
-    zonas_acc = {
-        'Noroeste': {'poly': [[-32.390,-63.280],[-32.390,-63.248],[-32.415,-63.248],[-32.415,-63.280]], 'z': ZONAS['Noroeste']},
-        'Noreste':  {'poly': [[-32.390,-63.248],[-32.390,-63.200],[-32.415,-63.200],[-32.415,-63.248]], 'z': ZONAS['Noreste']},
-        'Suroeste': {'poly': [[-32.415,-63.280],[-32.415,-63.248],[-32.440,-63.248],[-32.440,-63.280]], 'z': ZONAS['Suroeste']},
-        'Sureste':  {'poly': [[-32.415,-63.248],[-32.415,-63.200],[-32.440,-63.200],[-32.440,-63.248]], 'z': ZONAS['Sureste']},
-    }
-
-    for nom, d_z in zonas_acc.items():
-        z   = d_z['z']
-        acc_z = z['acceso_pct']
-        temp_diff = z['temp'] - lst_media
-        color_z = '#2e7d32' if acc_z >= 98 else '#f57c00' if acc_z >= 85 else '#c62828'
-        estado  = 'Excelente ✅' if acc_z >= 98 else 'Mejorable ⚠️' if acc_z >= 85 else 'Crítico 🔴'
-        popup_html = (
-            f"<b>{z['label']}</b><br>"
-            f"<b>{z['municipio']}</b><br><br>"
-            f"Acceso &lt;300m: <b style='color:{color_z}'>{acc_z}%</b> — {estado}<br>"
-            f"Dist. promedio: <b>{z['dist_prom']} m</b><br>"
-            f"Temp. sup.: <b>{z['temp']}°C</b> ({'+' if temp_diff>0 else ''}{temp_diff:.2f}°C)<br>"
-            f"Área edificada: <b>{z['ha_edif']} ha</b>"
-        )
-
-        # Polígono con relleno suave
-        folium.Polygon(
-            locations=d_z['poly'],
-            color=color_z, weight=2.5,
-            fill=True, fill_color=color_z, fill_opacity=0.12,
-            tooltip=f"{nom} ({z['municipio']}) — Acceso: {acc_z}%",
-            popup=folium.Popup(popup_html, max_width=230),
-        ).add_to(m_acc)
-
-        # Círculo central con porcentaje visible
-        centro = [
-            (d_z['poly'][0][0] + d_z['poly'][2][0]) / 2,
-            (d_z['poly'][0][1] + d_z['poly'][2][1]) / 2,
-        ]
-        folium.CircleMarker(
-            location=centro,
-            radius=28,
-            color=color_z, weight=2.5,
-            fill=True, fill_color=color_z, fill_opacity=0.85,
-            tooltip=f"{nom} — {acc_z}%",
-            popup=folium.Popup(popup_html, max_width=230),
-        ).add_to(m_acc)
-        folium.Marker(
-            location=centro,
-            icon=folium.DivIcon(
-                html=(
-                    f"<div style='text-align:center;line-height:1.2;"
-                    f"font-family:Arial,sans-serif;'>"
-                    f"<div style='font-size:12px;font-weight:700;color:#fff;'>{acc_z}%</div>"
-                    f"<div style='font-size:9px;color:rgba(255,255,255,0.85);'>{nom}</div>"
-                    f"</div>"
-                ),
-                icon_size=(60, 32), icon_anchor=(30, 16),
-            ),
-        ).add_to(m_acc)
-
-    folium.LayerControl(position='topright', collapsed=False).add_to(m_acc)
-    st_folium(m_acc, width="100%", height=420, returned_objects=[], key="mapa_accesibilidad_vm")
-
+    
     # Leyenda accesibilidad
     st.markdown(
         "<div style='display:flex;gap:20px;font-size:12px;margin-top:4px;'>"
@@ -984,9 +911,11 @@ def _render_agenda2030():
     st.caption("Metodología: USDA Forest Service · Nowak et al. 2013 · 28 ciudades")
 
     st.markdown(f"""
-    El USDA Forest Service estableció, con datos de campo de 28 ciudades, que la densidad
-    de secuestro de carbono del arbolado urbano promedia **0.28 kg C/m²/año** de cobertura arbórea.
-    Aplicamos esta metodología estandarizada al {arb_pct}% de cobertura arbórea de Villa María.
+    El USDA Forest Service estableció, con datos de campo de 28 ciudades, una densidad
+    bruta de secuestro de carbono del arbolado urbano de **0.28 kg C/m²/año**. Nowak et al. (2013)
+    reportan que, descontando pérdidas por respiración y recambio de hojas, la tasa **neta** efectiva
+    es de **0.205 kg C/m²/año** (~74% de la bruta) — es la que usamos en este cálculo, aplicada al
+    {arb_pct}% de cobertura arbórea de Villa María.
     """)
 
     # Cálculos de CO₂
@@ -1055,7 +984,8 @@ def _render_agenda2030():
             max_value=100000,
             value=5000,
             step=500,
-            help="Un árbol urbano adulto cubre ~25 m² de copa"
+            help="Proyección a largo plazo: asume que cada árbol alcanza ~25 m² de copa "
+                 "en su etapa adulta (15-20 años desde la plantación)."
         )
 
     with col_res:
@@ -1081,7 +1011,8 @@ def _render_agenda2030():
                     <td style='font-weight:700;color:#66bb6a;text-align:right'>{autos_obj:.0f} vehículos</td></tr>
               </table>
               <div style='margin-top:14px;border-top:1px solid rgba(200,230,201,0.3);padding-top:10px;font-size:0.85em;color:#aaa'>
-                🌱 <b>{arboles_nuevos:,} árboles nuevos</b> capturarían adicionalmente
+                🌱 <b>{arboles_nuevos:,} árboles nuevos</b>, cuando alcancen tamaño adulto
+                (~15-20 años), capturarían adicionalmente
                 <b>{co2_nuevos:.1f} ton CO₂/año</b>
                 (≈ {co2_nuevos/2.1:.0f} autos fuera de circulación)
               </div>
