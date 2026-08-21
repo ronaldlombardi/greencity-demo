@@ -6,70 +6,92 @@ Módulo específico para el conglomerado Villa María / Villa Nueva.
 - Estrategias y políticas públicas: exclusivamente Villa María
 """
 
+import os
+import json
 import streamlit as st
 import folium
 from streamlit_folium import st_folium
 from folium import FeatureGroup
 
+RUTA_INDICADORES = os.path.join(os.path.dirname(__file__), 'data', 'indicadores_villamaria.json')
+
 # ============================================================
-# DATOS DEL CONGLOMERADO
+# DATOS DEL CONGLOMERADO — cargados desde cálculo real (GEE/OSM)
 # ============================================================
 
-DATOS_VM = {
-    'cobertura': {
-        'arboles': 8.2, 'arbustos': 0, 'pastizales': 14.2,
-        'cultivos': 23.9, 'edificado': 50.6, 'suelo': 1.6, 'agua': 1.3
-    },
-    'acceso': {
-        'acceso': 100.0, 'dist_prom': 48, 'm2_hab_sat': 93.2,
-        'r_0_100': 91.1, 'r_100_300': 8.9, 'r_300_500': 0.0, 'r_500_mas': 0.0
-    },
-    'lst': {
-        'tMedia': 39.97, 'tUrbano': 39.51, 'tVerde': 39.34,
-        'tP95': 44.56, 'tP5': 37.07, 'deltaUHI': 0.17,
-        'tNdviAlto': 38.21, 'tNdviBajo': 39.88, 'enfriamiento': 1.67,
-        'zonas': [
-            {'nombre': 'Noroeste (VM centro-N)', 'temp': 40.76},
-            {'nombre': 'Noreste (VN norte)',      'temp': 39.85},
-            {'nombre': 'Suroeste (VM sur)',        'temp': 39.73},
-            {'nombre': 'Sureste (VN sur)',         'temp': 39.55},
-        ]
-    },
-    'osm': {'elementos': 1027, 'areaHa': 784.7, 'm2Hab': 65.4},
-    'calificacion': 'A - Excelente',
-    'puntaje': 7,
-    'poblacion_vm': 97000,
-    'poblacion_vn': 23000,
-    'area_vm_km2': 36.0,
-    'area_vn_km2': 13.6,
-}
 
-ZONAS = {
-    'Noroeste': {
-        'label': 'Noroeste — VM centro-norte',
-        'municipio': 'Villa María',
-        'acceso_pct': 88.3, 'dist_prom': 62, 'ha_edif': 18.4,
-        'temp': 40.76, 'color_muni': '#1565c0',
-    },
-    'Noreste': {
-        'label': 'Noreste — VN norte',
-        'municipio': 'Villa Nueva',
-        'acceso_pct': 96.1, 'dist_prom': 41, 'ha_edif': 12.1,
-        'temp': 39.85, 'color_muni': '#6a1b9a',
-    },
-    'Suroeste': {
-        'label': 'Suroeste — VM sur',
-        'municipio': 'Villa María',
-        'acceso_pct': 100.0, 'dist_prom': 38, 'ha_edif': 21.7,
-        'temp': 39.73, 'color_muni': '#1565c0',
-    },
-    'Sureste': {
-        'label': 'Sureste — VN sur',
-        'municipio': 'Villa Nueva',
-        'acceso_pct': 100.0, 'dist_prom': 35, 'ha_edif': 9.8,
-        'temp': 39.55, 'color_muni': '#6a1b9a',
-    },
-}
+def _cargar_datos_vm():
+    """Carga los indicadores reales calculados con
+    exportar_indicadores_villamaria.py (data/indicadores_villamaria.json).
+    Si el archivo no existe todavía, devuelve valores en cero explícitos
+    y datos_preliminares=True — nunca un número inventado. Mismo criterio
+    que _cargar_datos_vn() en modulo_villanueva.py."""
+    if not os.path.exists(RUTA_INDICADORES):
+        return {
+            'cobertura': {'arboles': 0, 'arbustos': 0, 'pastizales': 0,
+                          'cultivos': 0, 'edificado': 0, 'suelo': 0, 'agua': 0},
+            'acceso': {'acceso': 0, 'dist_prom': None, 'm2_hab_sat': 0,
+                       'r_0_100': 0, 'r_100_300': 0, 'r_300_500': 0, 'r_500_mas': 0},
+            'lst': {'tMedia': None, 'tUrbano': None, 'tVerde': None, 'tP95': None,
+                    'tP5': None, 'deltaUHI': None, 'tNdviAlto': None,
+                    'tNdviBajo': None, 'enfriamiento': None, 'nImagenes': None,
+                    'zonas': []},
+            'osm': {'elementos': None, 'areaHa': None, 'm2Hab': None},
+            'calificacion': 'Por calcular',
+            'puntaje': None,
+            'poblacion_vm': 96061,   # INDEC Censo 2022, resultados definitivos
+            'poblacion_vn': 23000,
+            'area_vm_km2': None,
+            'area_vn_km2': 13.6,
+            'fecha_calculo': None,
+            'datos_preliminares': True,
+        }
+
+    with open(RUTA_INDICADORES, encoding='utf-8') as f:
+        d = json.load(f)
+
+    lst_raw = d.get('lst') or {}
+    osm_raw = d.get('osm') or {}
+
+    return {
+        'cobertura': d.get('cobertura', {}),
+        'acceso': d.get('acceso', {}),
+        'lst': {
+            'tMedia': lst_raw.get('t_media'),
+            'tUrbano': lst_raw.get('t_urbano'),
+            'tVerde': lst_raw.get('t_verde'),
+            'tP95': lst_raw.get('t_p95'),
+            'tP5': lst_raw.get('t_p5'),
+            'deltaUHI': lst_raw.get('delta_uhi'),
+            'tNdviAlto': lst_raw.get('t_ndvi_alto'),
+            'tNdviBajo': lst_raw.get('t_ndvi_bajo'),
+            'enfriamiento': lst_raw.get('enfriamiento_verde'),
+            'nImagenes': lst_raw.get('n_imagenes'),
+            # ⚠️ Sin desglose por zona todavía — no hay script real que lo
+            # calcule por barrio/zona. Se deja vacío a propósito, no se
+            # inventa. Ver Paso 2 del plan: sacar secciones que dependían
+            # de esto (rectángulos a mano, sin respaldo).
+            'zonas': [],
+        },
+        'osm': {
+            'elementos': osm_raw.get('elementos'),
+            'areaHa': osm_raw.get('area_ha'),
+            'm2Hab': osm_raw.get('m2_hab'),
+            'espacios': osm_raw.get('espacios', []),
+            'top10': osm_raw.get('top10', []),
+        },
+        'calificacion': 'Calculado',
+        'puntaje': None,
+        'poblacion_vm': d.get('poblacion', 96061),
+        'poblacion_vn': 23000,
+        'area_vm_km2': d.get('area_ciudad_km2'),
+        'area_vn_km2': 13.6,
+        'fecha_calculo': d.get('fecha_calculo'),
+        'datos_preliminares': False,
+    }
+
+
+DATOS_VM = _cargar_datos_vm()
 
 from modulo_masterplan import render_masterplan
 from modulo_censo_arboreo import render_censo_arboreo
@@ -81,7 +103,6 @@ SECCIONES_VM = [
     ("🌡️", "Temperatura superficial"),
     ("🏛️", "Verde público (OSM)"),
     ("🌳", "Censo Arbóreo"),
-    ("📋", "Diagnóstico por zonas"),
     ("🎯", "Estrategias · Villa María"),
     ("🌍", "Agenda 2030 · C40"),
     ("📄", "Masterplan · Opus 4.7"),
@@ -183,52 +204,6 @@ def _mapa_conglomerado(zoom=14):
     ).add_to(grupo_vn)
     grupo_vn.add_to(m)
 
-    # --- Zonas de análisis: solo polígonos coloreados, sin texto flotante ---
-    grupo_zonas = FeatureGroup(name='📍 Zonas de análisis', show=True)
-    zonas_def = {
-        'Noroeste': {
-            'poly': [[-32.390, -63.280], [-32.390, -63.248], [-32.415, -63.248], [-32.415, -63.280]],
-            'z': ZONAS['Noroeste'],
-        },
-        'Noreste': {
-            'poly': [[-32.390, -63.248], [-32.390, -63.200], [-32.415, -63.200], [-32.415, -63.248]],
-            'z': ZONAS['Noreste'],
-        },
-        'Suroeste': {
-            'poly': [[-32.415, -63.280], [-32.415, -63.248], [-32.440, -63.248], [-32.440, -63.280]],
-            'z': ZONAS['Suroeste'],
-        },
-        'Sureste': {
-            'poly': [[-32.415, -63.248], [-32.415, -63.200], [-32.440, -63.200], [-32.440, -63.248]],
-            'z': ZONAS['Sureste'],
-        },
-    }
-    lst_media = DATOS_VM['lst']['tMedia']
-
-    for nom, d in zonas_def.items():
-        z   = d['z']
-        acc = z['acceso_pct']
-        temp_diff = z['temp'] - lst_media
-        color_z = '#2e7d32' if acc >= 98 else '#f57c00' if acc >= 85 else '#c62828'
-        estado  = 'Excelente ✅' if acc >= 98 else 'Mejorable ⚠️' if acc >= 85 else 'Crítico 🔴'
-
-        folium.Polygon(
-            locations=d['poly'],
-            color=color_z, weight=1.5, dash_array='5 4',
-            fill=True, fill_color=color_z, fill_opacity=0.15,
-            tooltip=f"{nom} ({z['municipio']}) — Acceso: {acc}% · {estado}",
-            popup=folium.Popup(
-                f"<b>{z['label']}</b><br>"
-                f"<b>{z['municipio']}</b><br><br>"
-                f"Acceso &lt;300m: <b style='color:{color_z}'>{acc}%</b> — {estado}<br>"
-                f"Dist. promedio: <b>{z['dist_prom']} m</b><br>"
-                f"Temp. sup.: <b>{z['temp']}°C</b> ({'+' if temp_diff>0 else ''}{temp_diff:.2f}°C)<br>"
-                f"Área edificada: <b>{z['ha_edif']} ha</b>",
-                max_width=230,
-            ),
-        ).add_to(grupo_zonas)
-
-    grupo_zonas.add_to(m)
     folium.LayerControl(position='topright', collapsed=False).add_to(m)
     return m
 
@@ -246,32 +221,53 @@ def _render_inicio():
     )
     st.markdown("---")
 
+    acc = DATOS_VM['acceso']
+    osm = DATOS_VM['osm']
+    cob = DATOS_VM['cobertura']
+    lst = DATOS_VM['lst']
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric("Acceso <300m", "100%", "✅ Meta OMS cumplida")
+        st.metric("Acceso <300m", f"{acc['acceso']:.0f}%" if acc['acceso'] is not None else "—",
+                   "✅ Meta OMS cumplida" if acc['acceso'] == 100 else None)
     with col2:
-        st.metric("Verde público/hab", "65.4 m²", "OMS: mín. 9 m²")
+        st.metric("Verde público/hab", f"{osm['m2Hab']} m²" if osm['m2Hab'] is not None else "—",
+                   "OMS: mín. 9 m²")
     with col3:
-        st.metric("Arbolado urbano", "8.2%", "Referencia: >15%")
+        st.metric("Arbolado urbano", f"{cob['arboles']}%" if cob.get('arboles') is not None else "—",
+                   "Referencia: >15%")
     with col4:
-        st.metric("Isla de calor ΔT", "+0.17°C", "Muy baja ✅", delta_color="inverse")
+        st.metric("Isla de calor ΔT", f"+{lst['deltaUHI']}°C" if lst['deltaUHI'] is not None else "—",
+                   "Muy baja ✅" if (lst['deltaUHI'] or 99) < 0.5 else None, delta_color="inverse")
+
+    if DATOS_VM.get('datos_preliminares'):
+        st.warning(
+            "⚠️ Todavía no se corrió el cálculo real de indicadores para Villa María "
+            "(`exportar_indicadores_villamaria.py`). Los valores en cero son un placeholder, "
+            "no una medición."
+        )
 
     st.markdown("---")
+    poblacion_vm = DATOS_VM.get('poblacion_vm')
+    area_vm = DATOS_VM.get('area_vm_km2')
+    fecha_calc = DATOS_VM.get('fecha_calculo')
+    fecha_str = fecha_calc[:10] if fecha_calc else "sin calcular"
+
     col_a, col_b = st.columns(2)
     with col_a:
-        st.markdown("""
+        st.markdown(f"""
         ### 🔵 Villa María
-        - **Población:** ~97.000 hab
-        - **Área analizada:** 36 km²
+        - **Población:** {poblacion_vm:,.0f} hab (INDEC Censo 2022)
+        - **Área analizada:** {f"{area_vm:.1f} km²" if area_vm else "—"} (38 barrios oficiales)
         - **Depto.:** General San Martín
-        - **Calificación:** A - Excelente
+        - **Última actualización de indicadores:** {fecha_str}
         - **Normativa clave:** Ordenanza 7209 — Ruralidad Urbana
         """)
     with col_b:
-        st.markdown("""
+        st.markdown(f"""
         ### 🟣 Villa Nueva _(contexto ecosistémico)_
-        - **Población:** ~23.000 hab
-        - **Área analizada:** 13.6 km²
+        - **Población:** {DATOS_VM.get('poblacion_vn', 0):,.0f} hab
+        - **Área analizada:** {DATOS_VM.get('area_vn_km2', '—')} km²
         - **Relación:** comparte corredor verde del Ctalamochita
         - **Nota:** las políticas públicas de esta plataforma
           corresponden al municipio de Villa María
@@ -302,6 +298,9 @@ def _render_mapa():
     st.caption("Villa María · Villa Nueva · Río Ctalamochita — conglomerado urbano")
     st.markdown("---")
 
+    poblacion_vm = DATOS_VM.get('poblacion_vm', 0)
+    poblacion_vn = DATOS_VM.get('poblacion_vn', 0)
+
     # --- Explicación del mapa ---
     st.markdown("""
     Este mapa muestra el **conglomerado urbano Villa María – Villa Nueva** como una unidad de análisis ambiental.
@@ -313,61 +312,16 @@ def _render_mapa():
         "<div style='background:rgba(30,40,80,0.5);border:1px solid rgba(120,140,255,0.2);"
         "border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:0.88em;line-height:1.8;'>"
         "<b>Cómo leer el mapa:</b><br>"
-        "<span style='color:#1565c0;font-size:15px;font-weight:700;'>▬</span> "
-        "<b>Borde azul sólido</b> = Villa María (oeste del río) · ~97.000 hab<br>"
-        "<span style='color:#7b1fa2;font-size:15px;font-weight:700;'>╌</span> "
-        "<b>Borde violeta punteado</b> = Villa Nueva (este del río) · ~23.000 hab<br>"
-        "<span style='color:#2e7d32;font-size:15px;'>▬</span> "
-        "<b>Zona verde</b> = acceso al verde &ge;98% de la población — Excelente<br>"
-        "<span style='color:#f57c00;font-size:15px;'>▬</span> "
-        "<b>Zona naranja</b> = acceso al verde 85% a &lt;98% — Mejorable<br>"
-        "<span style='color:#c62828;font-size:15px;'>▬</span> "
-        "<b>Zona roja</b> = acceso al verde &lt;85% — Crítico<br>"
-        "<i style='color:#aaa;font-size:0.9em;'>Hacé clic en cualquier zona para ver sus indicadores detallados.</i>"
+        f"<span style='color:#1565c0;font-size:15px;font-weight:700;'>▬</span> "
+        f"<b>Borde azul sólido</b> = Villa María (oeste del río) · ~{poblacion_vm:,.0f} hab<br>"
+        f"<span style='color:#7b1fa2;font-size:15px;font-weight:700;'>╌</span> "
+        f"<b>Borde violeta punteado</b> = Villa Nueva (este del río) · ~{poblacion_vn:,.0f} hab<br>"
         "</div>",
         unsafe_allow_html=True,
     )
 
     m = _mapa_conglomerado(zoom=14)
     st_folium(m, width="100%", height=540, returned_objects=[])
-
-    # --- Cards de zonas debajo del mapa ---
-    st.markdown("---")
-    st.markdown("### Diagnóstico por zonas")
-    st.caption("Hacé clic en el mapa sobre cada zona para ver el popup · Los datos se resumen acá:")
-
-    lst_media = DATOS_VM['lst']['tMedia']
-    cols = st.columns(4)
-    for i, (nom, z) in enumerate(ZONAS.items()):
-        acc  = z['acceso_pct']
-        temp_diff = z['temp'] - lst_media
-        color_acc = '#2e7d32' if acc >= 98 else '#f57c00' if acc >= 85 else '#c62828'
-        estado    = 'Excelente ✅' if acc >= 98 else 'Mejorable ⚠️' if acc >= 85 else 'Crítico 🔴'
-        color_t   = '#c62828' if temp_diff > 0.3 else '#2196f3' if temp_diff < -0.1 else '#888'
-        badge_muni = '#1565c0' if z['municipio'] == 'Villa María' else '#7b1fa2'
-
-        with cols[i]:
-            st.markdown(
-                f"<div style='border:2px solid {color_acc};border-radius:10px;"
-                f"padding:14px 12px;height:100%;'>"
-                f"<div style='font-size:0.7em;font-weight:700;color:{badge_muni};"
-                f"letter-spacing:0.05em;margin-bottom:4px;'>{z['municipio'].upper()}</div>"
-                f"<div style='font-size:1em;font-weight:700;margin-bottom:10px;'>{nom}</div>"
-                f"<div style='font-size:0.82em;margin-bottom:4px;'>"
-                f"<span style='color:{color_acc};font-weight:700;'>●</span> "
-                f"Acceso &lt;300m: <b>{acc}%</b></div>"
-                f"<div style='font-size:0.78em;color:#aaa;margin-bottom:2px;'>{estado}</div>"
-                f"<hr style='border-color:rgba(255,255,255,0.1);margin:8px 0;'>"
-                f"<div style='font-size:0.8em;margin-bottom:3px;'>"
-                f"📏 Dist. media: <b>{z['dist_prom']} m</b></div>"
-                f"<div style='font-size:0.8em;margin-bottom:3px;color:{color_t};'>"
-                f"🌡️ Temp: <b>{z['temp']}°C</b> "
-                f"<span style='font-size:0.85em;'>({'+' if temp_diff>0 else ''}{temp_diff:.2f}°C)</span></div>"
-                f"<div style='font-size:0.8em;color:#aaa;'>"
-                f"🏗️ Área edif.: {z['ha_edif']} ha</div>"
-                f"</div>",
-                unsafe_allow_html=True,
-            )
 
     st.markdown("---")
     st.markdown(
@@ -653,29 +607,8 @@ def _render_temperatura():
         _card_indicador("Suelo/asfalto (NDVI<0.2)", lst['tNdviBajo'], "°C", "Zonas sin vegetación", "#c62828")
 
     st.markdown("---")
-    st.markdown("### Temperatura por zona del conglomerado")
-    cols = st.columns(4)
-    zonas_lst = lst['zonas']
-    for i, z in enumerate(zonas_lst):
-        with cols[i]:
-            diff = z['temp'] - lst['tMedia']
-            color = "#c62828" if diff > 0.5 else "#2196f3" if diff < -0.2 else "#555"
-            municipio = "Villa María" if "VM" in z['nombre'] else "Villa Nueva"
-            badge_color = "#1565c0" if municipio == "Villa María" else "#6a1b9a"
-            st.markdown(
-                f"""<div style='border:1.5px solid {color};border-radius:10px;
-                    padding:14px;text-align:center;background:{color}09'>
-                  <div style='font-size:0.84em;color:#ddd;font-weight:500'>{z['nombre']}</div>
-                  <div style='font-size:1.6em;font-weight:700;color:{color}'>{z['temp']}°C</div>
-                  <div style='font-size:0.84em;color:{color}'>{'+' if diff>0 else ''}{diff:.2f}°C vs media</div>
-                  <div style='margin-top:6px'><span style='background:{badge_color}22;border:1px solid {badge_color};
-                    color:#fff;border-radius:5px;padding:2px 9px;font-size:0.8em;font-weight:500'>{municipio}</span></div>
-                </div>""",
-                unsafe_allow_html=True
-            )
-
-    st.markdown("---")
     st.markdown("### Potencial de enfriamiento por arbolado")
+
     enf = lst['enfriamiento']
     st.markdown(f"""
     | Cobertura | Temperatura |
@@ -788,67 +721,6 @@ def _render_osm():
     - Incorporar espacios privados mediante convenios de servidumbre ambiental
     - Aplicar la Ordenanza 7209 de Ruralidad Urbana en el periurbano
     """)
-
-
-def _render_diagnostico_zonas():
-    st.title("📋 Diagnóstico por zonas")
-    st.caption("Conglomerado Villa María – Villa Nueva · 4 zonas de análisis")
-    st.markdown("---")
-
-    lst_media = DATOS_VM['lst']['tMedia']
-
-    cols = st.columns(4)
-    zonas_orden = ['Noroeste', 'Noreste', 'Suroeste', 'Sureste']
-
-    for i, nom in enumerate(zonas_orden):
-        z = ZONAS[nom]
-        with cols[i]:
-            acc = z['acceso_pct']
-            temp_diff = z['temp'] - lst_media
-            color_acc = '#2e7d32' if acc >= 98 else '#f57c00' if acc >= 85 else '#c62828'
-            color_t = '#c62828' if temp_diff > 0.3 else '#2196f3' if temp_diff < -0.1 else '#555'
-            badge_color = '#1565c0' if z['municipio'] == 'Villa María' else '#6a1b9a'
-
-            st.markdown(
-                f"""<div style='border:1.5px solid #ddd;border-radius:12px;padding:16px;'>
-                  <div style='font-size:0.78em;font-weight:600;color:{badge_color};margin-bottom:4px'>
-                    {z['municipio']}
-                  </div>
-                  <div style='font-size:1em;font-weight:700;margin-bottom:10px'>{z['label']}</div>
-                  <div style='font-size:0.82em;color:#ccc;margin-bottom:4px'>
-                    <span style='color:{color_acc};font-weight:700'>●</span>
-                    Acceso <300m: <b>{acc}%</b>
-                  </div>
-                  <div style='font-size:0.82em;color:#ccc;margin-bottom:4px'>
-                    📏 Dist. media: <b>{z['dist_prom']} m</b>
-                  </div>
-                  <div style='font-size:0.82em;color:#ccc;margin-bottom:4px'>
-                    🏗️ Área edificada: <b>{z['ha_edif']} ha</b>
-                  </div>
-                  <div style='font-size:0.82em;color:{color_t};margin-bottom:4px'>
-                    🌡️ Temp: <b>{z['temp']}°C</b>
-                    ({'+' if temp_diff > 0 else ''}{temp_diff:.2f}°C)
-                  </div>
-                </div>""",
-                unsafe_allow_html=True
-            )
-
-    st.markdown("---")
-    st.markdown("### Resumen comparativo")
-    import pandas as pd
-    df = pd.DataFrame([
-        {
-            'Zona': ZONAS[n]['label'],
-            'Municipio': ZONAS[n]['municipio'],
-            'Acceso <300m (%)': ZONAS[n]['acceso_pct'],
-            'Dist. media (m)': ZONAS[n]['dist_prom'],
-            'Temp. sup. (°C)': ZONAS[n]['temp'],
-            'Área edif. (ha)': ZONAS[n]['ha_edif'],
-        }
-        for n in zonas_orden
-    ]).set_index('Zona')
-    st.dataframe(df, use_container_width=True)
-
 
 def _render_estrategias():
     st.title("🎯 Estrategias de política pública")
@@ -1543,8 +1415,6 @@ def render_modulo_villamaria():
         _render_osm()
     elif "Censo Arbóreo" in seccion:
         render_censo_arboreo()
-    elif "Diagnóstico" in seccion:
-        _render_diagnostico_zonas()
     elif "Estrategias" in seccion:
         _render_estrategias()
     elif "Agenda" in seccion:
