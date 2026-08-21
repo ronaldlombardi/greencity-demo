@@ -428,6 +428,40 @@ def render_censo_arboreo():
                 ).add_to(m_censo)
 
                 st_folium(m_censo, width="100%", height=520, returned_objects=[], key="mapa_censo_vm")
+
+            # --- Fix: bug conocido de Streamlit (issue #7376) donde el iframe
+            # del mapa a veces queda con altura 0 tras un cambio de sección.
+            # Se acota solo a este mapa buscando el último iframe insertado.
+            import streamlit.components.v1 as components
+            components.html(
+                """
+                <script>
+                (function() {
+                    let intentos = 0;
+                    const maxIntentos = 20;
+                    const intervalo = setInterval(function() {
+                        intentos++;
+                        const parentDoc = window.parent.document;
+                        const iframes = parentDoc.querySelectorAll(
+                            'iframe[title="streamlit_folium.st_folium"]'
+                        );
+                        if (iframes.length > 0) {
+                            const mapa = iframes[iframes.length - 1];
+                            if (mapa.getAttribute('height') === '0' ||
+                                mapa.style.height === '0px') {
+                                mapa.style.height = '520px';
+                                mapa.setAttribute('height', '520');
+                            }
+                        }
+                        if (intentos >= maxIntentos) {
+                            clearInterval(intervalo);
+                        }
+                    }, 200);
+                })();
+                </script>
+                """,
+                height=0,
+            )
             st.caption(
                 "🟢 Alta densidad (≥40 árb/ha) · 🟩 Media (20-39) · 🟡 Baja (8-19) · "
                 "⚪ Muy baja (1-7) · ⚫ Sin datos/error"
