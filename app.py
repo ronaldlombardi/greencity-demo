@@ -667,7 +667,7 @@ elif "Área" in seccion:
 
     folium.LayerControl(position='topright', collapsed=False).add_to(m)
 
-    st_folium(m, width="100%", height=520, returned_objects=[])
+    st_folium(m, width="100%", height=520, returned_objects=[], key="mapa_provincia")
 
     # Leyenda de colores de calificación
     st.markdown(
@@ -761,7 +761,7 @@ elif "Cobertura" in seccion:
             color="#fff", weight=1.5, fill=False,
         ).add_to(m_cob)
         folium.LayerControl(position='topright', collapsed=False).add_to(m_cob)
-        st_folium(m_cob, width="100%", height=460, returned_objects=[])
+        st_folium(m_cob, width="100%", height=460, returned_objects=[], key="mapa_cobertura_provincia")
     except Exception as e:
         st.info(f"Mapa WorldCover no disponible en este momento: {e}")
 

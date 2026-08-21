@@ -237,7 +237,7 @@ def render_censo_arboreo_villanueva():
                 tooltip=tooltip,
             ).add_to(m_censo)
 
-        st_folium(m_censo, width="100%", height=520, returned_objects=[])
+        st_folium(m_censo, width="100%", height=520, returned_objects=[], key="mapa_censo_vn")
         st.caption(
             "🟢 Alta densidad (≥40 árb/ha) · 🟩 Media (20-39) · 🟡 Baja (8-19) · "
             "⚪ Muy baja (1-7) · ⚫ Sin datos/error"

@@ -321,7 +321,7 @@ def _render_mapa():
     )
 
     m = _mapa_conglomerado(zoom=14)
-    st_folium(m, width="100%", height=540, returned_objects=[])
+    st_folium(m, width="100%", height=540, returned_objects=[], key="mapa_conglomerado_vm")
 
     st.markdown("---")
     st.markdown(
@@ -441,7 +441,7 @@ def _render_indicadores():
             tooltip='Área de análisis VM+VN',
         ).add_to(m_wc)
         folium.LayerControl(position='topright', collapsed=False).add_to(m_wc)
-        st_folium(m_wc, width="100%", height=440, returned_objects=[])
+        st_folium(m_wc, width="100%", height=440, returned_objects=[], key="mapa_cobertura_vm")
     except Exception as e:
         st.info(f"Mapa WorldCover no disponible en este momento: {e}")
 
@@ -575,7 +575,7 @@ def _render_indicadores():
         ).add_to(m_acc)
 
     folium.LayerControl(position='topright', collapsed=False).add_to(m_acc)
-    st_folium(m_acc, width="100%", height=420, returned_objects=[])
+    st_folium(m_acc, width="100%", height=420, returned_objects=[], key="mapa_accesibilidad_vm")
 
     # Leyenda accesibilidad
     st.markdown(
@@ -699,7 +699,7 @@ def _render_osm():
         for grupo in grupos.values():
             grupo.add_to(m_osm)
         folium.LayerControl(position='topright', collapsed=False).add_to(m_osm)
-        st_folium(m_osm, width="100%", height=500, returned_objects=[])
+        st_folium(m_osm, width="100%", height=500, returned_objects=[], key="mapa_osm_vm")
 
         # Leyenda fuera del iframe
         items = " &nbsp;&nbsp; ".join(

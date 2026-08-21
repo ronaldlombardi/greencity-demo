@@ -261,7 +261,7 @@ def render_censo_arboreo():
     st.markdown("---")
 
     # ---- Censo completo por barrio (precalculado, lee JSON local) ----
-    st.markdown("### 🌳 Censo Arbóreo Completo — por barrio")
+    st.markdown("### 🌳 Base satelital por barrio")
     st.caption(
         "38 barrios oficiales (fuente: datos.villamaria.gob.ar). "
         "Precalculado localmente — ver exportar_censo_json.py."
@@ -427,7 +427,7 @@ def render_censo_arboreo():
                     tooltip=tooltip,
                 ).add_to(m_censo)
 
-            st_folium(m_censo, width="100%", height=520, returned_objects=[])
+                st_folium(m_censo, width="100%", height=520, returned_objects=[], key="mapa_censo_vm")
             st.caption(
                 "🟢 Alta densidad (≥40 árb/ha) · 🟩 Media (20-39) · 🟡 Baja (8-19) · "
                 "⚪ Muy baja (1-7) · ⚫ Sin datos/error"

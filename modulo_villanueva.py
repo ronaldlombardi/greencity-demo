@@ -340,7 +340,7 @@ def _render_mapa():
     grupo_otras.add_to(m)
     folium.LayerControl(collapsed=False).add_to(m)
 
-    st_folium(m, width="100%", height=560, returned_objects=[])
+    st_folium(m, width="100%", height=560, returned_objects=[], key="mapa_conglomerado_vn")
 
     # Leyenda fuera del iframe (dentro nunca renderiza bien en modo oscuro)
     st.markdown("#### Referencias")
@@ -532,7 +532,7 @@ def _render_osm():
                 ).add_to(m_osm)
 
             folium.LayerControl(collapsed=False).add_to(m_osm)
-            st_folium(m_osm, width="100%", height=480, returned_objects=[])
+            st_folium(m_osm, width="100%", height=480, returned_objects=[], key="mapa_osm_vn")
 
     st.markdown("---")
     st.markdown("### Lo que ya sabemos por zonificación oficial")

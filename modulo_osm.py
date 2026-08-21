@@ -433,7 +433,7 @@ def render_osm(datos_osm, m2_hab_satelital=None, poblacion=None):
             grupo.add_to(m_osm)
 
         folium.LayerControl(position='topright', collapsed=False).add_to(m_osm)
-        st_folium(m_osm, width="100%", height=480, returned_objects=[])
+        st_folium(m_osm, width="100%", height=480, returned_objects=[], key="mapa_osm_generico")
 
         # Leyenda fuera del iframe
         items_leyenda = " &nbsp; ".join(
