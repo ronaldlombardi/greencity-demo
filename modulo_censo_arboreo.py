@@ -1,7 +1,7 @@
 """
 modulo_censo_arboreo.py — Ciudad Verde AI Agent
 ================================================
-Censo Arbóreo — Villa María.
+Plan de Forestación — Villa María.
 Objetivo municipal: 1 árbol por vivienda.
 
 Este módulo se construye paso a paso:
@@ -12,9 +12,12 @@ Este módulo se construye paso a paso:
        - Conteo piloto en zona chica (validación de método) ✅
        - Censo completo POR BARRIO REAL — precalculado local ✅
          (ver convertir_barrios.py + exportar_censo_json.py)
-  3. Denominador — Catastro IDECOR (parcelas edificadas por manzana)
-  4. Cruce numerador/denominador → ratio árboles/vivienda por barrio
-  5. Margen de error validado — comparar conteo automático vs conteo
+  3. Calculadora — satelital (base) + plantaciones desde 2021 cargadas
+     a mano por barrio, para aproximar el total actual sin duplicar lo
+     que el satélite ya cuenta ✅
+  4. Denominador — Catastro IDECOR (parcelas edificadas por manzana)
+  5. Cruce numerador/denominador → ratio árboles/vivienda por barrio
+  6. Margen de error validado — comparar conteo automático vs conteo
      manual en muestra de manzanas (pendiente, próximo paso)
 
 Uso en dashboard:
@@ -214,7 +217,7 @@ _LABEL_ESTADO = {
 def render_censo_arboreo():
     """Punto de entrada. Llamar desde render_modulo_villamaria()."""
 
-    st.title("🌳 Censo Arbóreo · Villa María")
+    st.title("🌳 Plan de Forestación · Villa María")
 
     # ---- Banner de objetivo ----
     st.markdown(
@@ -323,6 +326,69 @@ def render_censo_arboreo():
 
         st.markdown("---")
 
+        # ---- Calculadora: satelital + plantaciones recientes cargadas a mano ----
+        st.markdown("### 🧮 Calculadora de forestación — satelital + plantado reciente")
+        st.caption(
+            "El satélite (Meta/WRI Canopy Height) usa fotos de entre 2009 y 2020 — no puede ver "
+            "plantaciones posteriores a esa fecha, ni árboles jóvenes que todavía no alcanzaron los "
+            f"{ALTURA_MIN_ARBOL}m de altura mínima. Cargá acá, por barrio, los árboles plantados y "
+            "registrados por la Municipalidad **desde 2021 en adelante** — así se suman sin repetir "
+            "los que el satélite ya cuenta."
+        )
+
+        import pandas as pd
+
+        barrios_nombres = [b['nombre'] for b in censo['barrios']]
+        base_por_barrio = {b['nombre']: b['n_arboles'] or 0 for b in censo['barrios']}
+
+        if ('plantaciones_input' not in st.session_state
+                or set(st.session_state['plantaciones_input']['Barrio']) != set(barrios_nombres)):
+            st.session_state['plantaciones_input'] = pd.DataFrame({
+                'Barrio': barrios_nombres,
+                'Árboles satelitales (base)': [base_por_barrio[n] for n in barrios_nombres],
+                'Plantados desde 2021 (cargar)': [0] * len(barrios_nombres),
+            })
+
+        editado = st.data_editor(
+            st.session_state['plantaciones_input'],
+            column_config={
+                'Barrio': st.column_config.TextColumn(disabled=True),
+                'Árboles satelitales (base)': st.column_config.NumberColumn(disabled=True),
+                'Plantados desde 2021 (cargar)': st.column_config.NumberColumn(min_value=0, step=1),
+            },
+            hide_index=True,
+            use_container_width=True,
+            key='editor_plantaciones_forestacion',
+        )
+        st.session_state['plantaciones_input'] = editado
+
+        editado = editado.copy()
+        editado['Total estimado'] = (
+            editado['Árboles satelitales (base)'] + editado['Plantados desde 2021 (cargar)']
+        )
+
+        total_satelital = int(editado['Árboles satelitales (base)'].sum())
+        total_plantado = int(editado['Plantados desde 2021 (cargar)'].sum())
+        total_estimado = int(editado['Total estimado'].sum())
+
+        cc1, cc2, cc3 = st.columns(3)
+        with cc1:
+            st.metric("Base satelital (2009–2020)", f"{total_satelital:,}".replace(",", "."))
+        with cc2:
+            st.metric("Plantados desde 2021 (cargado)", f"{total_plantado:,}".replace(",", "."))
+        with cc3:
+            st.metric("Total estimado hoy", f"{total_estimado:,}".replace(",", "."))
+
+        st.info(
+            "ℹ️ Este total es una **aproximación**, no un censo validado: la base satelital tiene "
+            "su propio margen de error (ver la sección de validación más abajo) y el resultado "
+            "depende de que lo cargado sea preciso y no incluya árboles plantados antes de 2021 "
+            "(que ya podrían estar en la base satelital). **No se guarda entre sesiones** — es una "
+            "calculadora de trabajo, no un registro oficial."
+        )
+
+        st.markdown("---")
+
         # ---- Mapa por barrio (polígonos reales, coloreados por densidad) ----
         st.markdown("#### 🗺️ Mapa por barrio — densidad arbórea")
 
@@ -427,6 +493,6 @@ def render_censo_arboreo():
 
     st.markdown("---")
     st.caption(
-        "Ciudad Verde AI Agent · Villa María · Censo Arbóreo · "
+        "Ciudad Verde AI Agent · Villa María · Plan de Forestación · "
         "En desarrollo — Canopy Height (GEE) + Barrios (Municipalidad) + Catastro IDECOR"
     )

@@ -102,7 +102,7 @@ SECCIONES_VM = [
     ("📊", "Indicadores ambientales"),
     ("🌡️", "Temperatura superficial"),
     ("🏛️", "Verde público (OSM)"),
-    ("🌳", "Censo Arbóreo"),
+    ("🌳", "Plan de Forestación"),
     ("🎯", "Estrategias · Villa María"),
     ("🌍", "Agenda 2030 · C40"),
     ("📄", "Masterplan · Opus 4.7"),
@@ -1428,7 +1428,7 @@ def render_modulo_villamaria():
         _render_temperatura()
     elif "OSM" in seccion:
         _render_osm()
-    elif "Censo Arbóreo" in seccion:
+    elif "Forestación" in seccion:
         render_censo_arboreo()
     elif "Estrategias" in seccion:
         _render_estrategias()
