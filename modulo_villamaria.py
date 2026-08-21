@@ -40,7 +40,7 @@ def _cargar_datos_vm():
             'calificacion': 'Por calcular',
             'puntaje': None,
             'poblacion_vm': 96061,   # INDEC Censo 2022, resultados definitivos
-            'poblacion_vn': 23000,
+            'poblacion_vn': 26260,  # INDEC Censo 2022, vía Wikipedia (actualizado con datos definitivos)
             'area_vm_km2': None,
             'area_vn_km2': 13.6,
             'fecha_calculo': None,
@@ -83,7 +83,7 @@ def _cargar_datos_vm():
         'calificacion': 'Calculado',
         'puntaje': None,
         'poblacion_vm': d.get('poblacion', 96061),
-        'poblacion_vn': 23000,
+        'poblacion_vn': 26260,  # INDEC Censo 2022, vía Wikipedia (actualizado con datos definitivos)
         'area_vm_km2': d.get('area_ciudad_km2'),
         'area_vn_km2': 13.6,
         'fecha_calculo': d.get('fecha_calculo'),
@@ -886,15 +886,25 @@ def _render_agenda2030():
     # ============================================================
     st.markdown("## 🎯 Targets C40 Urban Nature Declaration 2030")
 
-    # Datos de VM
-    arb_pct   = 8.2    # % cobertura arbórea (WorldCover clase 10)
-    past_pct  = 14.2   # pastizales
-    agua_pct  = 1.3    # agua
-    # Verde total = árboles + pastizales + agua (clases naturales)
-    verde_total_pct = arb_pct + past_pct + agua_pct   # 23.7%
-    acceso_300m     = 100.0   # % área edificada con verde a <300m
-    poblacion_vm    = 97000
-    area_vm_ha      = 3600    # 36 km²
+    # Datos de VM — todos desde DATOS_VM (cálculo real), no hardcodeados
+    cob = DATOS_VM['cobertura']
+    acc = DATOS_VM['acceso']
+    arb_pct   = cob.get('arboles') or 0
+    past_pct  = cob.get('pastizales') or 0
+    agua_pct  = cob.get('agua') or 0
+    verde_total_pct = round(arb_pct + past_pct + agua_pct, 1)
+    acceso_300m     = acc.get('acceso') or 0
+    poblacion_vm    = DATOS_VM.get('poblacion_vm', 96061)
+    area_vm_km2     = DATOS_VM.get('area_vm_km2')
+    area_vm_ha      = area_vm_km2 * 100 if area_vm_km2 else None
+
+    if DATOS_VM.get('datos_preliminares') or area_vm_ha is None:
+        st.warning(
+            "⚠️ No hay indicadores calculados todavía para Villa María "
+            "(`exportar_indicadores_villamaria.py`). Esta sección no puede mostrarse "
+            "sin datos reales de base."
+        )
+        return
 
     # Target 1: QTC — 30% superficie verde
     meta_qtc = 30.0
@@ -902,10 +912,9 @@ def _render_agenda2030():
     color_qtc = "#2e7d32" if verde_total_pct >= meta_qtc else "#f57c00" if verde_total_pct >= 20 else "#c62828"
 
     # Target 2: ESD — 70% población con acceso a verde/azul en 15 min
-    # VM cumple 100% a <300m (equivalente a ~4 min caminando) → cumple ampliamente
     meta_esd = 70.0
-    esd_vm   = 100.0
-    color_esd = "#2e7d32"
+    esd_vm   = acceso_300m
+    color_esd = "#2e7d32" if esd_vm >= meta_esd else "#f57c00" if esd_vm >= 40 else "#c62828"
 
     col1, col2 = st.columns(2)
 
@@ -974,10 +983,10 @@ def _render_agenda2030():
     st.markdown("## 🌳 Captura de CO₂ por el arbolado urbano")
     st.caption("Metodología: USDA Forest Service · Nowak et al. 2013 · 28 ciudades")
 
-    st.markdown("""
+    st.markdown(f"""
     El USDA Forest Service estableció, con datos de campo de 28 ciudades, que la densidad
     de secuestro de carbono del arbolado urbano promedia **0.28 kg C/m²/año** de cobertura arbórea.
-    Aplicamos esta metodología estandarizada al 8.2% de cobertura arbórea de Villa María.
+    Aplicamos esta metodología estandarizada al {arb_pct}% de cobertura arbórea de Villa María.
     """)
 
     # Cálculos de CO₂
@@ -1002,7 +1011,7 @@ def _render_agenda2030():
     c1, c2, c3 = st.columns(3)
     with c1:
         _card_indicador(
-            "CO₂ capturado hoy (8.2% arbolado)",
+            f"CO₂ capturado hoy ({arb_pct}% arbolado)",
             f"{seq_ton_co2_anual:.0f}",
             "ton CO₂/año",
             f"Equivale a sacar {autos_equiv:.0f} autos de circulación",
@@ -1092,22 +1101,28 @@ def _render_agenda2030():
     )
 
     st.markdown("""
-    Un estudio publicado en **The Lancet Planetary Health** (2025) cuantificó que cada punto
-    porcentual adicional de verde urbano produce una reducción anual de **53 muertes prematuras
-    evitadas** por ciudad analizada (mediana global, 96 ciudades C40). Aplicamos esta metodología
-    a Villa María, escalada por población.
+    Un estudio publicado en **The Lancet Planetary Health** (2025) — *"A health impact
+    assessment of progress towards urban nature targets in the 96 C40 cities"* — encontró que
+    aumentar el verde urbano un 1% se asocia a una mediana de **1.77 muertes prematuras evitadas
+    por año cada 100.000 habitantes** (rango observado entre ciudades: 0.65 a 3.52), en el
+    escenario de distribución uniforme del nuevo verde. Aplicamos esa tasa a la población de
+    Villa María.
     """)
 
-    # Escalar por población: las ciudades C40 tienen en promedio ~3.5M hab
-    # Factor de escala proporcional a la población
-    poblacion_c40_media = 3_500_000
-    factor_escala       = poblacion_vm / poblacion_c40_media
-    muertes_por_punto   = 53 * factor_escala   # muertes evitadas por 1% de verde adicional en VM
+    # Tasa real del estudio: 1.77 muertes evitadas / 100.000 hab / punto % de verde adicional
+    # (mediana, escenario uniforme; rango 0.65–3.52 entre las 96 ciudades C40)
+    TASA_MUERTES_100K_POR_PUNTO = 1.77
+    TASA_MUERTES_100K_RANGO = (0.65, 3.52)
+    muertes_por_punto = TASA_MUERTES_100K_POR_PUNTO * (poblacion_vm / 100_000)
+    muertes_rango_bajo = TASA_MUERTES_100K_RANGO[0] * (poblacion_vm / 100_000)
+    muertes_rango_alto = TASA_MUERTES_100K_RANGO[1] * (poblacion_vm / 100_000)
 
-    # Escenarios
-    delta_1pct  = muertes_por_punto
-    delta_5pct  = muertes_por_punto * 5
-    delta_meta  = muertes_por_punto * (meta_qtc - verde_total_pct)
+        # Escenarios — con rango, no solo el punto medio
+    delta_1pct       = muertes_por_punto
+    delta_1pct_bajo  = muertes_rango_bajo
+    delta_1pct_alto  = muertes_rango_alto
+    delta_5pct       = muertes_por_punto * 5
+    delta_meta       = muertes_por_punto * (meta_qtc - verde_total_pct)
 
     col_a, col_b, col_c = st.columns(3)
     with col_a:
@@ -1115,7 +1130,7 @@ def _render_agenda2030():
             "Muertes evitadas por +1% verde",
             f"{delta_1pct:.1f}",
             "por año",
-            "Mediana global C40 escalada a VM",
+            f"Mediana C40, rango {delta_1pct_bajo:.1f}–{delta_1pct_alto:.1f} según ciudad",
             "#c62828"
         )
     with col_b:
@@ -1123,7 +1138,7 @@ def _render_agenda2030():
             "Muertes evitadas por +5% verde",
             f"{delta_5pct:.1f}",
             "por año",
-            "Forestación equivalente a ~1.800 ha",
+            "Escala lineal del punto medio — no valida más allá del rango citado",
             "#f57c00"
         )
     with col_c:
@@ -1184,7 +1199,7 @@ def _render_agenda2030():
 | Verde total | {verde_total_pct:.1f}% | 30% | {gap_qtc:.1f}% |
 | Hectáreas verdes | {ha_actuales_verde:.0f} ha | {ha_meta_verde:.0f} ha | {ha_a_sumar:.0f} ha |
 | Arbolado | {arb_pct}% | 15% | {15-arb_pct:.1f}% |
-| Acceso <300m | 100% | 70% | ✅ cumplido |
+| Acceso <300m | {acceso_300m:.0f}% | 70% | ✅ cumplido |
 | CO₂ capturado | {seq_ton_co2_anual:.0f} t/año | {seq_meta_ton_co2:.0f} t/año | +{ganancia_co2:.0f} t/año |
 """
         )
@@ -1228,8 +1243,8 @@ def _render_agenda2030():
          "Estándar europeo de restauración de ecosistemas urbanos. Establece metas de cobertura arbórea "
          "para ciudades >20.000 hab — referencia de primer nivel para benchmarking internacional."),
         ("🏥", "OMS — Espacios Verdes Urbanos",
-         "Mínimo 9 m²/hab de verde público (VM: 65.4 m²/hab ✅) y acceso a 0.5 ha "
-         "de espacio verde dentro de 300m (VM: 100% ✅)."),
+         f"Mínimo 9 m²/hab de verde público (VM: {DATOS_VM['osm'].get('m2Hab', '—')} m²/hab ✅) y acceso a 0.5 ha "
+         f"de espacio verde dentro de 300m (VM: {acceso_300m:.0f}% ✅)."),
         ("🌿", "Ordenanza 7209 — Ruralidad Urbana (2017)",
          "Marco local que reconoce los servicios ambientales del periurbano y establece "
          "mecanismos de gestión del territorio rural-urbano en Villa María."),

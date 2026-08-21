@@ -456,38 +456,14 @@ with st.sidebar:
     st.markdown("---")
 
     if modulo == "🌍 Provincia de Córdoba":
-        # Excluir Villa María y Villa Nueva del selector provincial
-        ciudades_prov = {
-            k: v for k, v in CIUDADES.items()
-            if k not in ('villamaria',)
-        }
-        ciudades_ord = sorted(ciudades_prov.keys(), key=lambda k: -ciudades_prov[k]['poblacion'])
-        ciudad_key = st.selectbox(
-            "Ciudad",
-            ciudades_ord,
-            format_func=lambda k: f"{CIUDADES[k]['emoji']} {CIUDADES[k]['nombre']} ({CIUDADES[k]['poblacion']:,} hab)",
-        )
-        ciudad = CIUDADES[ciudad_key]
-
-        cal = ciudad.get('calificacion', 'Sin datos')
-        if cal not in ('Sin datos', 'Pendiente'):
-            st.success(f"✅ Datos completos · {cal}")
-        elif cal == 'Pendiente':
-            st.warning("⏳ Datos parciales — análisis GEE disponible")
-        else:
-            st.info("🔄 Sin análisis previo — datos se calcularán en vivo")
-
-        st.markdown("---")
-        seccion = st.radio(
-            "Sección",
-            [f"{e} {n}" for e, n in SECCIONES],
-            label_visibility="collapsed",
-            key="seccion_provincia",
-        )
-        st.markdown("---")
-        st.caption(f"📍 {ciudad['nombre']}")
-        st.caption(f"👥 {ciudad['poblacion']:,} hab · {ciudad['area_km2']} km²")
-        st.caption(f"⭐ {ciudad['calificacion']}")
+        # Módulo en pausa: solo Villa María y Villa Nueva tienen indicadores
+        # auditados y con cálculo de respaldo trazable. El resto de las 19
+        # ciudades de datos_ciudades.json queda oculto hasta que pasen el
+        # mismo proceso de validación.
+        seccion = None
+        ciudad_key = None
+        ciudad = None
+        st.info("🚧 Este módulo está en desarrollo.")
     elif modulo == "🏙️ Villa María":
         # Módulo Villa María — el sidebar lo completa render_modulo_villamaria()
         ciudad_key = 'villamaria'
@@ -529,6 +505,17 @@ if modulo == "🏙️ Villa Nueva":
 if modulo == "🔐 Administración":
     render_asistente_panel()
     render_admin()
+    st.stop()
+
+if modulo == "🌍 Provincia de Córdoba":
+    render_asistente_panel()
+    st.title("🌍 Provincia de Córdoba")
+    st.info(
+        "🚧 **Módulo en desarrollo.** Los indicadores de esta sección todavía no "
+        "pasaron por el proceso de validación con cálculo de respaldo trazable "
+        "que sí tienen Villa María y Villa Nueva. Va a habilitarse ciudad por "
+        "ciudad a medida que se audite cada una."
+    )
     st.stop()
 
 # ── Panel flotante asistente (Provincia) ──
