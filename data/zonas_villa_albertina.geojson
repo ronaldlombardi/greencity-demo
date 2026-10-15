@@ -40,9 +40,9 @@
       "properties": {
         "barrio": "VILLA ALBERTINA",
         "zona_id": 1,
-        "tipo": "industrial",
-        "tipo_nombre": "Industrial / gran predio",
-        "lcz": "LCZ 8/10",
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
         "forestacion_incipiente": false,
         "n_arboles": 962,
         "area_ha": 121.41,

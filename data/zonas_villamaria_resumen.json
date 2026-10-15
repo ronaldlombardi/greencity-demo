@@ -2,14 +2,41 @@
   "municipio": "Villa María",
   "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m, umbral 2 m",
   "metodo": "Conteo por punto dentro de polígono y superficie en EPSG:22174, recalculados en Python",
-  "generado": "2026-10-15T18:58:34",
+  "metodo_lotes": {
+    "estado": "Estimación provisoria — reemplazar por el catastro municipal",
+    "cuadra_eje_m": 130.0,
+    "ancho_calle_m": 19.0,
+    "frente_lote_m": 10.0,
+    "lotes_por_manzana": 44.4,
+    "lotes_por_ha": 26.27,
+    "factor_ocupacion": {
+      "urbana_residencial": 1.0,
+      "urbana_centrica": 1.0,
+      "urbana_mixta": 0.5,
+      "bosque_autoctono": 0.0,
+      "riberena": 0.5,
+      "industrial": 0.0
+    },
+    "formula": "lotes = área_ha × lotes_por_ha × factor_ocupacion; lotes_por_ha = 4 × (cuadra − calle) / frente ÷ (cuadra² / 10000)",
+    "fuentes": [
+      "Cuadra de 150 varas ≈ 130 m (vara cordobesa 0,867 m, ley de 1864)",
+      "Ancho medio de calles 19,07 m — Área Metropolitana de Mendoza (referencia)"
+    ]
+  },
+  "generado": "2026-10-15T20:47:18",
   "ciudad": {
     "n_barrios": 38,
     "n_zonas": 82,
     "total_arboles": 31665,
     "arboles_en_zonas": 30256,
     "arboles_sin_zona": 1409,
-    "area_zonas_ha": 2745.87
+    "area_zonas_ha": 2745.87,
+    "meta_1_arbol_por_casa": {
+      "lotes_estimados": 36217,
+      "arboles_zonas_casas": 24392,
+      "cumplimiento_pct": 67.3,
+      "deficit_arboles": 12996
+    }
   },
   "por_tipo": [
     {
@@ -19,16 +46,18 @@
       "n_zonas": 8,
       "n_arboles": 1975,
       "area_ha": 139.16,
+      "lotes_estimados": 0,
       "arboles_ha": 14.2
     },
     {
       "tipo": "industrial",
       "tipo_nombre": "Industrial / gran predio",
       "lcz": "LCZ 8/10",
-      "n_zonas": 34,
-      "n_arboles": 4851,
-      "area_ha": 820.99,
-      "arboles_ha": 5.9
+      "n_zonas": 33,
+      "n_arboles": 3889,
+      "area_ha": 699.93,
+      "lotes_estimados": 0,
+      "arboles_ha": 5.6
     },
     {
       "tipo": "riberena",
@@ -37,6 +66,7 @@
       "n_zonas": 3,
       "n_arboles": 3211,
       "area_ha": 178.39,
+      "lotes_estimados": 2344,
       "arboles_ha": 18.0
     },
     {
@@ -46,16 +76,18 @@
       "n_zonas": 8,
       "n_arboles": 7000,
       "area_ha": 513.49,
+      "lotes_estimados": 13490,
       "arboles_ha": 13.6
     },
     {
       "tipo": "urbana_mixta",
       "tipo_nombre": "Urbana mixta",
       "lcz": "LCZ 9 + D",
-      "n_zonas": 19,
-      "n_arboles": 8689,
-      "area_ha": 756.98,
-      "arboles_ha": 11.5
+      "n_zonas": 20,
+      "n_arboles": 9651,
+      "area_ha": 878.04,
+      "lotes_estimados": 11534,
+      "arboles_ha": 11.0
     },
     {
       "tipo": "urbana_residencial",
@@ -64,6 +96,7 @@
       "n_zonas": 10,
       "n_arboles": 4530,
       "area_ha": 336.86,
+      "lotes_estimados": 8849,
       "arboles_ha": 13.4
     }
   ],
@@ -75,6 +108,12 @@
       "arboles_en_zonas": 369,
       "arboles_sin_zona": 225,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 753,
+        "arboles_zonas_casas": 369,
+        "cumplimiento_pct": 49.0,
+        "deficit_arboles": 384
+      },
       "fecha_edicion": "2026-10-14T23:48:29.517Z",
       "notas": "",
       "zonas": [
@@ -87,7 +126,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 369,
           "area_ha": 28.65,
-          "arboles_ha": 12.9
+          "arboles_ha": 12.9,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 753,
+          "cumplimiento_pct": 49.0,
+          "deficit_arboles": 384
         }
       ]
     },
@@ -98,6 +141,12 @@
       "arboles_en_zonas": 582,
       "arboles_sin_zona": 541,
       "n_zonas": 10,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 515,
+        "arboles_zonas_casas": 316,
+        "cumplimiento_pct": 61.4,
+        "deficit_arboles": 199
+      },
       "fecha_edicion": "2026-10-14T23:57:30.375Z",
       "notas": "",
       "zonas": [
@@ -110,7 +159,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 316,
           "area_ha": 19.62,
-          "arboles_ha": 16.1
+          "arboles_ha": 16.1,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 515,
+          "cumplimiento_pct": 61.4,
+          "deficit_arboles": 199
         },
         {
           "barrio": "BARRANCAS DEL RIO",
@@ -121,7 +174,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 18,
           "area_ha": 9.74,
-          "arboles_ha": 1.8
+          "arboles_ha": 1.8,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "BARRANCAS DEL RIO",
@@ -132,7 +189,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 13,
           "area_ha": 13.76,
-          "arboles_ha": 0.9
+          "arboles_ha": 0.9,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "BARRANCAS DEL RIO",
@@ -143,7 +204,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 28,
           "area_ha": 10.55,
-          "arboles_ha": 2.7
+          "arboles_ha": 2.7,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "BARRANCAS DEL RIO",
@@ -154,7 +219,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 55,
           "area_ha": 15.22,
-          "arboles_ha": 3.6
+          "arboles_ha": 3.6,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "BARRANCAS DEL RIO",
@@ -165,7 +234,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 138,
           "area_ha": 11.92,
-          "arboles_ha": 11.6
+          "arboles_ha": 11.6,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "BARRANCAS DEL RIO",
@@ -176,7 +249,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 3,
           "area_ha": 1.96,
-          "arboles_ha": 1.5
+          "arboles_ha": 1.5,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "BARRANCAS DEL RIO",
@@ -187,7 +264,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 2,
           "area_ha": 0.9,
-          "arboles_ha": 2.2
+          "arboles_ha": 2.2,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "BARRANCAS DEL RIO",
@@ -198,7 +279,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 1,
           "area_ha": 0.65,
-          "arboles_ha": 1.5
+          "arboles_ha": 1.5,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "BARRANCAS DEL RIO",
@@ -209,7 +294,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 8,
           "area_ha": 1.9,
-          "arboles_ha": 4.2
+          "arboles_ha": 4.2,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -220,6 +309,12 @@
       "arboles_en_zonas": 535,
       "arboles_sin_zona": 24,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1084,
+        "arboles_zonas_casas": 535,
+        "cumplimiento_pct": 49.4,
+        "deficit_arboles": 549
+      },
       "fecha_edicion": "2026-10-14T23:59:23.727Z",
       "notas": "",
       "zonas": [
@@ -232,7 +327,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 0,
           "area_ha": 2.1,
-          "arboles_ha": 0.0
+          "arboles_ha": 0.0,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 28,
+          "cumplimiento_pct": 0.0,
+          "deficit_arboles": 28
         },
         {
           "barrio": "BELLO HORIZONTE",
@@ -243,7 +342,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 535,
           "area_ha": 40.19,
-          "arboles_ha": 13.3
+          "arboles_ha": 13.3,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 1056,
+          "cumplimiento_pct": 50.7,
+          "deficit_arboles": 521
         }
       ]
     },
@@ -254,6 +357,12 @@
       "arboles_en_zonas": 866,
       "arboles_sin_zona": 38,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1558,
+        "arboles_zonas_casas": 866,
+        "cumplimiento_pct": 55.6,
+        "deficit_arboles": 692
+      },
       "fecha_edicion": "2026-10-15T00:00:28.150Z",
       "notas": "",
       "zonas": [
@@ -266,7 +375,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 866,
           "area_ha": 59.29,
-          "arboles_ha": 14.6
+          "arboles_ha": 14.6,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 1558,
+          "cumplimiento_pct": 55.6,
+          "deficit_arboles": 692
         }
       ]
     },
@@ -277,6 +390,12 @@
       "arboles_en_zonas": 689,
       "arboles_sin_zona": 24,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 829,
+        "arboles_zonas_casas": 689,
+        "cumplimiento_pct": 83.1,
+        "deficit_arboles": 140
+      },
       "fecha_edicion": "2026-10-15T00:01:24.794Z",
       "notas": "",
       "zonas": [
@@ -289,7 +408,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 689,
           "area_ha": 63.11,
-          "arboles_ha": 10.9
+          "arboles_ha": 10.9,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 829,
+          "cumplimiento_pct": 83.1,
+          "deficit_arboles": 140
         }
       ]
     },
@@ -300,6 +423,12 @@
       "arboles_en_zonas": 700,
       "arboles_sin_zona": 37,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1598,
+        "arboles_zonas_casas": 700,
+        "cumplimiento_pct": 43.8,
+        "deficit_arboles": 898
+      },
       "fecha_edicion": "2026-10-15T00:02:12.470Z",
       "notas": "",
       "zonas": [
@@ -312,7 +441,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 700,
           "area_ha": 60.81,
-          "arboles_ha": 11.5
+          "arboles_ha": 11.5,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 1598,
+          "cumplimiento_pct": 43.8,
+          "deficit_arboles": 898
         }
       ]
     },
@@ -323,6 +456,12 @@
       "arboles_en_zonas": 869,
       "arboles_sin_zona": 5,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1861,
+        "arboles_zonas_casas": 869,
+        "cumplimiento_pct": 46.7,
+        "deficit_arboles": 992
+      },
       "fecha_edicion": "2026-10-15T00:03:06.726Z",
       "notas": "",
       "zonas": [
@@ -335,7 +474,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 869,
           "area_ha": 70.84,
-          "arboles_ha": 12.3
+          "arboles_ha": 12.3,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 1861,
+          "cumplimiento_pct": 46.7,
+          "deficit_arboles": 992
         }
       ]
     },
@@ -346,6 +489,12 @@
       "arboles_en_zonas": 798,
       "arboles_sin_zona": 29,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1567,
+        "arboles_zonas_casas": 798,
+        "cumplimiento_pct": 50.9,
+        "deficit_arboles": 769
+      },
       "fecha_edicion": "2026-10-15T00:03:53.066Z",
       "notas": "",
       "zonas": [
@@ -358,7 +507,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 798,
           "area_ha": 59.66,
-          "arboles_ha": 13.4
+          "arboles_ha": 13.4,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 1567,
+          "cumplimiento_pct": 50.9,
+          "deficit_arboles": 769
         }
       ]
     },
@@ -369,6 +522,12 @@
       "arboles_en_zonas": 894,
       "arboles_sin_zona": 121,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1534,
+        "arboles_zonas_casas": 894,
+        "cumplimiento_pct": 58.3,
+        "deficit_arboles": 640
+      },
       "fecha_edicion": "2026-10-15T00:05:08.181Z",
       "notas": "",
       "zonas": [
@@ -381,7 +540,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 894,
           "area_ha": 58.4,
-          "arboles_ha": 15.3
+          "arboles_ha": 15.3,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 1534,
+          "cumplimiento_pct": 58.3,
+          "deficit_arboles": 640
         }
       ]
     },
@@ -392,6 +555,12 @@
       "arboles_en_zonas": 164,
       "arboles_sin_zona": 2,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 142,
+        "arboles_zonas_casas": 164,
+        "cumplimiento_pct": 115.5,
+        "deficit_arboles": 0
+      },
       "fecha_edicion": "2026-10-15T00:06:07.885Z",
       "notas": "",
       "zonas": [
@@ -404,7 +573,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 164,
           "area_ha": 10.78,
-          "arboles_ha": 15.2
+          "arboles_ha": 15.2,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 142,
+          "cumplimiento_pct": 115.5,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -415,6 +588,12 @@
       "arboles_en_zonas": 29,
       "arboles_sin_zona": 4,
       "n_zonas": 3,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 309,
+        "arboles_zonas_casas": 29,
+        "cumplimiento_pct": 9.4,
+        "deficit_arboles": 280
+      },
       "fecha_edicion": "2026-10-15T00:07:49.480Z",
       "notas": "",
       "zonas": [
@@ -427,7 +606,11 @@
           "forestacion_incipiente": true,
           "n_arboles": 29,
           "area_ha": 23.54,
-          "arboles_ha": 1.2
+          "arboles_ha": 1.2,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 309,
+          "cumplimiento_pct": 9.4,
+          "deficit_arboles": 280
         },
         {
           "barrio": "DR. RAMON CARRILLO",
@@ -438,7 +621,11 @@
           "forestacion_incipiente": true,
           "n_arboles": 0,
           "area_ha": 6.23,
-          "arboles_ha": 0.0
+          "arboles_ha": 0.0,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "DR. RAMON CARRILLO",
@@ -449,7 +636,11 @@
           "forestacion_incipiente": true,
           "n_arboles": 0,
           "area_ha": 5.87,
-          "arboles_ha": 0.0
+          "arboles_ha": 0.0,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -460,6 +651,12 @@
       "arboles_en_zonas": 742,
       "arboles_sin_zona": 34,
       "n_zonas": 4,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 732,
+        "arboles_zonas_casas": 283,
+        "cumplimiento_pct": 38.7,
+        "deficit_arboles": 449
+      },
       "fecha_edicion": "2026-10-15T00:10:13.903Z",
       "notas": "",
       "zonas": [
@@ -472,7 +669,11 @@
           "forestacion_incipiente": true,
           "n_arboles": 278,
           "area_ha": 13.54,
-          "arboles_ha": 20.5
+          "arboles_ha": 20.5,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "EVITA",
@@ -483,7 +684,11 @@
           "forestacion_incipiente": true,
           "n_arboles": 46,
           "area_ha": 16.75,
-          "arboles_ha": 2.7
+          "arboles_ha": 2.7,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "EVITA",
@@ -494,7 +699,11 @@
           "forestacion_incipiente": true,
           "n_arboles": 135,
           "area_ha": 8.21,
-          "arboles_ha": 16.4
+          "arboles_ha": 16.4,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "EVITA",
@@ -505,7 +714,11 @@
           "forestacion_incipiente": true,
           "n_arboles": 283,
           "area_ha": 27.86,
-          "arboles_ha": 10.2
+          "arboles_ha": 10.2,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 732,
+          "cumplimiento_pct": 38.7,
+          "deficit_arboles": 449
         }
       ]
     },
@@ -516,6 +729,12 @@
       "arboles_en_zonas": 640,
       "arboles_sin_zona": 5,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 623,
+        "arboles_zonas_casas": 338,
+        "cumplimiento_pct": 54.3,
+        "deficit_arboles": 285
+      },
       "fecha_edicion": "2026-10-15T21:06:39.619Z",
       "notas": "",
       "zonas": [
@@ -528,7 +747,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 338,
           "area_ha": 23.73,
-          "arboles_ha": 14.2
+          "arboles_ha": 14.2,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 623,
+          "cumplimiento_pct": 54.3,
+          "deficit_arboles": 285
         },
         {
           "barrio": "FELIPE BOTTA",
@@ -539,7 +762,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 302,
           "area_ha": 7.94,
-          "arboles_ha": 38.0
+          "arboles_ha": 38.0,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -550,6 +777,12 @@
       "arboles_en_zonas": 1502,
       "arboles_sin_zona": 13,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 2565,
+        "arboles_zonas_casas": 1502,
+        "cumplimiento_pct": 58.6,
+        "deficit_arboles": 1063
+      },
       "fecha_edicion": "2026-10-15T21:07:18.705Z",
       "notas": "",
       "zonas": [
@@ -562,7 +795,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 1502,
           "area_ha": 97.64,
-          "arboles_ha": 15.4
+          "arboles_ha": 15.4,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 2565,
+          "cumplimiento_pct": 58.6,
+          "deficit_arboles": 1063
         }
       ]
     },
@@ -573,6 +810,12 @@
       "arboles_en_zonas": 676,
       "arboles_sin_zona": 19,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1238,
+        "arboles_zonas_casas": 652,
+        "cumplimiento_pct": 52.7,
+        "deficit_arboles": 586
+      },
       "fecha_edicion": "2026-10-15T21:08:36.433Z",
       "notas": "",
       "zonas": [
@@ -585,7 +828,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 652,
           "area_ha": 47.13,
-          "arboles_ha": 13.8
+          "arboles_ha": 13.8,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 1238,
+          "cumplimiento_pct": 52.7,
+          "deficit_arboles": 586
         },
         {
           "barrio": "GENERAL GUEMES",
@@ -596,7 +843,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 24,
           "area_ha": 2.05,
-          "arboles_ha": 11.7
+          "arboles_ha": 11.7,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -607,6 +858,12 @@
       "arboles_en_zonas": 1033,
       "arboles_sin_zona": 3,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 2184,
+        "arboles_zonas_casas": 1033,
+        "cumplimiento_pct": 47.3,
+        "deficit_arboles": 1151
+      },
       "fecha_edicion": "2026-10-15T21:09:08.708Z",
       "notas": "",
       "zonas": [
@@ -619,7 +876,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 1033,
           "area_ha": 83.12,
-          "arboles_ha": 12.4
+          "arboles_ha": 12.4,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 2184,
+          "cumplimiento_pct": 47.3,
+          "deficit_arboles": 1151
         }
       ]
     },
@@ -630,6 +891,12 @@
       "arboles_en_zonas": 584,
       "arboles_sin_zona": 37,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 953,
+        "arboles_zonas_casas": 584,
+        "cumplimiento_pct": 61.3,
+        "deficit_arboles": 369
+      },
       "fecha_edicion": "2026-10-15T21:09:59.236Z",
       "notas": "",
       "zonas": [
@@ -642,7 +909,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 584,
           "area_ha": 36.26,
-          "arboles_ha": 16.1
+          "arboles_ha": 16.1,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 953,
+          "cumplimiento_pct": 61.3,
+          "deficit_arboles": 369
         }
       ]
     },
@@ -653,6 +924,12 @@
       "arboles_en_zonas": 852,
       "arboles_sin_zona": 8,
       "n_zonas": 6,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 838,
+        "arboles_zonas_casas": 812,
+        "cumplimiento_pct": 96.9,
+        "deficit_arboles": 69
+      },
       "fecha_edicion": "2026-10-15T21:14:05.008Z",
       "notas": "",
       "zonas": [
@@ -665,7 +942,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 389,
           "area_ha": 34.83,
-          "arboles_ha": 11.2
+          "arboles_ha": 11.2,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 458,
+          "cumplimiento_pct": 84.9,
+          "deficit_arboles": 69
         },
         {
           "barrio": "GENERAL SAN MARTIN",
@@ -676,7 +957,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 423,
           "area_ha": 28.9,
-          "arboles_ha": 14.6
+          "arboles_ha": 14.6,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 380,
+          "cumplimiento_pct": 111.3,
+          "deficit_arboles": 0
         },
         {
           "barrio": "GENERAL SAN MARTIN",
@@ -687,7 +972,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 17,
           "area_ha": 4.7,
-          "arboles_ha": 3.6
+          "arboles_ha": 3.6,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "GENERAL SAN MARTIN",
@@ -698,7 +987,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 13,
           "area_ha": 2.44,
-          "arboles_ha": 5.3
+          "arboles_ha": 5.3,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "GENERAL SAN MARTIN",
@@ -709,7 +1002,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 10,
           "area_ha": 6.16,
-          "arboles_ha": 1.6
+          "arboles_ha": 1.6,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "GENERAL SAN MARTIN",
@@ -720,7 +1017,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 0,
           "area_ha": 0.78,
-          "arboles_ha": 0.0
+          "arboles_ha": 0.0,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -731,6 +1032,12 @@
       "arboles_en_zonas": 914,
       "arboles_sin_zona": 16,
       "n_zonas": 4,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 157,
+        "arboles_zonas_casas": 99,
+        "cumplimiento_pct": 63.1,
+        "deficit_arboles": 58
+      },
       "fecha_edicion": "2026-10-15T21:16:31.145Z",
       "notas": "",
       "zonas": [
@@ -743,7 +1050,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 607,
           "area_ha": 69.65,
-          "arboles_ha": 8.7
+          "arboles_ha": 8.7,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "INDUSTRIAL",
@@ -754,7 +1065,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 99,
           "area_ha": 11.96,
-          "arboles_ha": 8.3
+          "arboles_ha": 8.3,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 157,
+          "cumplimiento_pct": 63.1,
+          "deficit_arboles": 58
         },
         {
           "barrio": "INDUSTRIAL",
@@ -765,7 +1080,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 123,
           "area_ha": 12.8,
-          "arboles_ha": 9.6
+          "arboles_ha": 9.6,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "INDUSTRIAL",
@@ -776,7 +1095,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 85,
           "area_ha": 10.59,
-          "arboles_ha": 8.0
+          "arboles_ha": 8.0,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -787,6 +1110,12 @@
       "arboles_en_zonas": 680,
       "arboles_sin_zona": 25,
       "n_zonas": 3,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 235,
+        "arboles_zonas_casas": 270,
+        "cumplimiento_pct": 114.9,
+        "deficit_arboles": 0
+      },
       "fecha_edicion": "2026-10-15T21:18:04.729Z",
       "notas": "",
       "zonas": [
@@ -799,7 +1128,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 250,
           "area_ha": 16.03,
-          "arboles_ha": 15.6
+          "arboles_ha": 15.6,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "LA CALERA",
@@ -810,7 +1143,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 270,
           "area_ha": 17.87,
-          "arboles_ha": 15.1
+          "arboles_ha": 15.1,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 235,
+          "cumplimiento_pct": 114.9,
+          "deficit_arboles": 0
         },
         {
           "barrio": "LA CALERA",
@@ -821,7 +1158,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 160,
           "area_ha": 12.71,
-          "arboles_ha": 12.6
+          "arboles_ha": 12.6,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -832,6 +1173,12 @@
       "arboles_en_zonas": 1105,
       "arboles_sin_zona": 13,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 285,
+        "arboles_zonas_casas": 256,
+        "cumplimiento_pct": 89.8,
+        "deficit_arboles": 29
+      },
       "fecha_edicion": "2026-10-15T21:19:37.741Z",
       "notas": "",
       "zonas": [
@@ -844,7 +1191,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 256,
           "area_ha": 21.68,
-          "arboles_ha": 11.8
+          "arboles_ha": 11.8,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 285,
+          "cumplimiento_pct": 89.8,
+          "deficit_arboles": 29
         },
         {
           "barrio": "LAS ACACIAS",
@@ -855,7 +1206,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 849,
           "area_ha": 183.54,
-          "arboles_ha": 4.6
+          "arboles_ha": 4.6,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -866,6 +1221,12 @@
       "arboles_en_zonas": 1848,
       "arboles_sin_zona": 34,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1085,
+        "arboles_zonas_casas": 943,
+        "cumplimiento_pct": 86.9,
+        "deficit_arboles": 142
+      },
       "fecha_edicion": "2026-10-15T21:20:43.333Z",
       "notas": "",
       "zonas": [
@@ -878,7 +1239,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 943,
           "area_ha": 82.63,
-          "arboles_ha": 11.4
+          "arboles_ha": 11.4,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 1085,
+          "cumplimiento_pct": 86.9,
+          "deficit_arboles": 142
         },
         {
           "barrio": "LAS PLAYAS",
@@ -889,7 +1254,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 905,
           "area_ha": 159.19,
-          "arboles_ha": 5.7
+          "arboles_ha": 5.7,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -900,6 +1269,12 @@
       "arboles_en_zonas": 1085,
       "arboles_sin_zona": 23,
       "n_zonas": 4,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 928,
+        "arboles_zonas_casas": 723,
+        "cumplimiento_pct": 77.9,
+        "deficit_arboles": 205
+      },
       "fecha_edicion": "2026-10-15T21:22:22.914Z",
       "notas": "",
       "zonas": [
@@ -912,7 +1287,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 98,
           "area_ha": 30.42,
-          "arboles_ha": 3.2
+          "arboles_ha": 3.2,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "LOS OLMOS",
@@ -923,7 +1302,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 224,
           "area_ha": 11.19,
-          "arboles_ha": 20.0
+          "arboles_ha": 20.0,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "LOS OLMOS",
@@ -934,7 +1317,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 40,
           "area_ha": 16.09,
-          "arboles_ha": 2.5
+          "arboles_ha": 2.5,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "LOS OLMOS",
@@ -945,7 +1332,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 723,
           "area_ha": 70.68,
-          "arboles_ha": 10.2
+          "arboles_ha": 10.2,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 928,
+          "cumplimiento_pct": 77.9,
+          "deficit_arboles": 205
         }
       ]
     },
@@ -956,6 +1347,12 @@
       "arboles_en_zonas": 1117,
       "arboles_sin_zona": 5,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 488,
+        "arboles_zonas_casas": 253,
+        "cumplimiento_pct": 51.8,
+        "deficit_arboles": 235
+      },
       "fecha_edicion": "2026-10-15T21:23:47.369Z",
       "notas": "",
       "zonas": [
@@ -968,7 +1365,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 864,
           "area_ha": 39.98,
-          "arboles_ha": 21.6
+          "arboles_ha": 21.6,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "MALVINAS ARGENTINAS",
@@ -979,7 +1380,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 253,
           "area_ha": 37.16,
-          "arboles_ha": 6.8
+          "arboles_ha": 6.8,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 488,
+          "cumplimiento_pct": 51.8,
+          "deficit_arboles": 235
         }
       ]
     },
@@ -990,6 +1395,12 @@
       "arboles_en_zonas": 512,
       "arboles_sin_zona": 1,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 485,
+        "arboles_zonas_casas": 399,
+        "cumplimiento_pct": 82.3,
+        "deficit_arboles": 86
+      },
       "fecha_edicion": "2026-10-15T21:24:48.092Z",
       "notas": "",
       "zonas": [
@@ -1002,7 +1413,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 113,
           "area_ha": 19.52,
-          "arboles_ha": 5.8
+          "arboles_ha": 5.8,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "MANUEL BELGARANO",
@@ -1013,7 +1428,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 399,
           "area_ha": 36.9,
-          "arboles_ha": 10.8
+          "arboles_ha": 10.8,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 485,
+          "cumplimiento_pct": 82.3,
+          "deficit_arboles": 86
         }
       ]
     },
@@ -1024,6 +1443,12 @@
       "arboles_en_zonas": 1224,
       "arboles_sin_zona": 8,
       "n_zonas": 4,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1234,
+        "arboles_zonas_casas": 1081,
+        "cumplimiento_pct": 87.6,
+        "deficit_arboles": 153
+      },
       "fecha_edicion": "2026-10-15T21:29:01.433Z",
       "notas": "",
       "zonas": [
@@ -1036,7 +1461,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 140,
           "area_ha": 15.58,
-          "arboles_ha": 9.0
+          "arboles_ha": 9.0,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "MARIANO MORENO",
@@ -1047,7 +1476,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 277,
           "area_ha": 13.14,
-          "arboles_ha": 21.1
+          "arboles_ha": 21.1,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 345,
+          "cumplimiento_pct": 80.3,
+          "deficit_arboles": 68
         },
         {
           "barrio": "MARIANO MORENO",
@@ -1058,7 +1491,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 3,
           "area_ha": 4.13,
-          "arboles_ha": 0.7
+          "arboles_ha": 0.7,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "MARIANO MORENO",
@@ -1069,7 +1506,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 804,
           "area_ha": 67.7,
-          "arboles_ha": 11.9
+          "arboles_ha": 11.9,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 889,
+          "cumplimiento_pct": 90.4,
+          "deficit_arboles": 85
         }
       ]
     },
@@ -1080,6 +1521,12 @@
       "arboles_en_zonas": 820,
       "arboles_sin_zona": 2,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 704,
+        "arboles_zonas_casas": 696,
+        "cumplimiento_pct": 98.9,
+        "deficit_arboles": 8
+      },
       "fecha_edicion": "2026-10-15T21:30:06.285Z",
       "notas": "",
       "zonas": [
@@ -1092,7 +1539,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 696,
           "area_ha": 53.61,
-          "arboles_ha": 13.0
+          "arboles_ha": 13.0,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 704,
+          "cumplimiento_pct": 98.9,
+          "deficit_arboles": 8
         },
         {
           "barrio": "NICOLAS AVELLANEDA",
@@ -1103,7 +1554,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 124,
           "area_ha": 29.34,
-          "arboles_ha": 4.2
+          "arboles_ha": 4.2,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -1114,6 +1569,12 @@
       "arboles_en_zonas": 1135,
       "arboles_sin_zona": 22,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 859,
+        "arboles_zonas_casas": 1135,
+        "cumplimiento_pct": 132.1,
+        "deficit_arboles": 0
+      },
       "fecha_edicion": "2026-10-15T21:34:26.761Z",
       "notas": "",
       "zonas": [
@@ -1126,7 +1587,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 1135,
           "area_ha": 65.41,
-          "arboles_ha": 17.4
+          "arboles_ha": 17.4,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 859,
+          "cumplimiento_pct": 132.1,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -1137,6 +1602,12 @@
       "arboles_en_zonas": 930,
       "arboles_sin_zona": 12,
       "n_zonas": 4,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1912,
+        "arboles_zonas_casas": 810,
+        "cumplimiento_pct": 42.4,
+        "deficit_arboles": 1102
+      },
       "fecha_edicion": "2026-10-15T21:33:23.020Z",
       "notas": "",
       "zonas": [
@@ -1149,7 +1620,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 810,
           "area_ha": 72.79,
-          "arboles_ha": 11.1
+          "arboles_ha": 11.1,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 1912,
+          "cumplimiento_pct": 42.4,
+          "deficit_arboles": 1102
         },
         {
           "barrio": "PARQUE NORTE",
@@ -1160,7 +1635,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 45,
           "area_ha": 9.45,
-          "arboles_ha": 4.8
+          "arboles_ha": 4.8,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "PARQUE NORTE",
@@ -1171,7 +1650,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 38,
           "area_ha": 12.95,
-          "arboles_ha": 2.9
+          "arboles_ha": 2.9,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "PARQUE NORTE",
@@ -1182,7 +1665,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 37,
           "area_ha": 13.74,
-          "arboles_ha": 2.7
+          "arboles_ha": 2.7,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -1193,6 +1680,12 @@
       "arboles_en_zonas": 685,
       "arboles_sin_zona": 17,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 674,
+        "arboles_zonas_casas": 672,
+        "cumplimiento_pct": 99.7,
+        "deficit_arboles": 2
+      },
       "fecha_edicion": "2026-10-15T21:35:44.228Z",
       "notas": "",
       "zonas": [
@@ -1205,7 +1698,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 13,
           "area_ha": 7.24,
-          "arboles_ha": 1.8
+          "arboles_ha": 1.8,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "ROQUE SAENZ PEÑA",
@@ -1216,7 +1713,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 672,
           "area_ha": 51.31,
-          "arboles_ha": 13.1
+          "arboles_ha": 13.1,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 674,
+          "cumplimiento_pct": 99.7,
+          "deficit_arboles": 2
         }
       ]
     },
@@ -1227,6 +1728,12 @@
       "arboles_en_zonas": 658,
       "arboles_sin_zona": 4,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 821,
+        "arboles_zonas_casas": 629,
+        "cumplimiento_pct": 76.6,
+        "deficit_arboles": 192
+      },
       "fecha_edicion": "2026-10-15T21:37:05.103Z",
       "notas": "",
       "zonas": [
@@ -1239,7 +1746,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 29,
           "area_ha": 10.21,
-          "arboles_ha": 2.8
+          "arboles_ha": 2.8,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         },
         {
           "barrio": "SAN JUAN BAUTISTA",
@@ -1250,7 +1761,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 629,
           "area_ha": 62.49,
-          "arboles_ha": 10.1
+          "arboles_ha": 10.1,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 821,
+          "cumplimiento_pct": 76.6,
+          "deficit_arboles": 192
         }
       ]
     },
@@ -1261,6 +1776,12 @@
       "arboles_en_zonas": 991,
       "arboles_sin_zona": 6,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 920,
+        "arboles_zonas_casas": 991,
+        "cumplimiento_pct": 107.7,
+        "deficit_arboles": 0
+      },
       "fecha_edicion": "2026-10-15T21:37:40.525Z",
       "notas": "",
       "zonas": [
@@ -1273,7 +1794,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 991,
           "area_ha": 70.07,
-          "arboles_ha": 14.1
+          "arboles_ha": 14.1,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 920,
+          "cumplimiento_pct": 107.7,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -1284,6 +1809,12 @@
       "arboles_en_zonas": 307,
       "arboles_sin_zona": 5,
       "n_zonas": 2,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 150,
+        "arboles_zonas_casas": 281,
+        "cumplimiento_pct": 187.3,
+        "deficit_arboles": 0
+      },
       "fecha_edicion": "2026-10-15T21:38:45.934Z",
       "notas": "",
       "zonas": [
@@ -1296,7 +1827,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 281,
           "area_ha": 11.39,
-          "arboles_ha": 24.7
+          "arboles_ha": 24.7,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 150,
+          "cumplimiento_pct": 187.3,
+          "deficit_arboles": 0
         },
         {
           "barrio": "SAN NICOLAS",
@@ -1307,7 +1842,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 26,
           "area_ha": 13.47,
-          "arboles_ha": 1.9
+          "arboles_ha": 1.9,
+          "factor_ocupacion": 0.0,
+          "lotes_estimados": 0,
+          "cumplimiento_pct": null,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -1318,6 +1857,12 @@
       "arboles_en_zonas": 524,
       "arboles_sin_zona": 7,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1093,
+        "arboles_zonas_casas": 524,
+        "cumplimiento_pct": 47.9,
+        "deficit_arboles": 569
+      },
       "fecha_edicion": "2026-10-15T21:40:14.072Z",
       "notas": "",
       "zonas": [
@@ -1330,7 +1875,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 524,
           "area_ha": 41.62,
-          "arboles_ha": 12.6
+          "arboles_ha": 12.6,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 1093,
+          "cumplimiento_pct": 47.9,
+          "deficit_arboles": 569
         }
       ]
     },
@@ -1341,6 +1890,12 @@
       "arboles_en_zonas": 143,
       "arboles_sin_zona": 2,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 119,
+        "arboles_zonas_casas": 143,
+        "cumplimiento_pct": 120.2,
+        "deficit_arboles": 0
+      },
       "fecha_edicion": "2026-10-15T21:40:46.894Z",
       "notas": "",
       "zonas": [
@@ -1353,7 +1908,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 143,
           "area_ha": 9.05,
-          "arboles_ha": 15.8
+          "arboles_ha": 15.8,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 119,
+          "cumplimiento_pct": 120.2,
+          "deficit_arboles": 0
         }
       ]
     },
@@ -1364,19 +1923,29 @@
       "arboles_en_zonas": 962,
       "arboles_sin_zona": 4,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1590,
+        "arboles_zonas_casas": 962,
+        "cumplimiento_pct": 60.5,
+        "deficit_arboles": 628
+      },
       "fecha_edicion": "2026-10-15T21:41:22.696Z",
       "notas": "",
       "zonas": [
         {
           "barrio": "VILLA ALBERTINA",
           "zona_id": 1,
-          "tipo": "industrial",
-          "tipo_nombre": "Industrial / gran predio",
-          "lcz": "LCZ 8/10",
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
           "forestacion_incipiente": false,
           "n_arboles": 962,
           "area_ha": 121.06,
-          "arboles_ha": 7.9
+          "arboles_ha": 7.9,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 1590,
+          "cumplimiento_pct": 60.5,
+          "deficit_arboles": 628
         }
       ]
     },
@@ -1387,6 +1956,12 @@
       "arboles_en_zonas": 180,
       "arboles_sin_zona": 1,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 252,
+        "arboles_zonas_casas": 180,
+        "cumplimiento_pct": 71.4,
+        "deficit_arboles": 72
+      },
       "fecha_edicion": "2026-10-15T21:41:55.500Z",
       "notas": "",
       "zonas": [
@@ -1399,7 +1974,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 180,
           "area_ha": 9.6,
-          "arboles_ha": 18.8
+          "arboles_ha": 18.8,
+          "factor_ocupacion": 1.0,
+          "lotes_estimados": 252,
+          "cumplimiento_pct": 71.4,
+          "deficit_arboles": 72
         }
       ]
     },
@@ -1410,6 +1989,12 @@
       "arboles_en_zonas": 1912,
       "arboles_sin_zona": 33,
       "n_zonas": 1,
+      "meta_1_arbol_por_casa": {
+        "lotes_estimados": 1343,
+        "arboles_zonas_casas": 1912,
+        "cumplimiento_pct": 142.4,
+        "deficit_arboles": 0
+      },
       "fecha_edicion": "2026-10-15T21:43:03.626Z",
       "notas": "",
       "zonas": [
@@ -1422,7 +2007,11 @@
           "forestacion_incipiente": false,
           "n_arboles": 1912,
           "area_ha": 102.2,
-          "arboles_ha": 18.7
+          "arboles_ha": 18.7,
+          "factor_ocupacion": 0.5,
+          "lotes_estimados": 1343,
+          "cumplimiento_pct": 142.4,
+          "deficit_arboles": 0
         }
       ]
     }
