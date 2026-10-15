@@ -95,6 +95,7 @@ DATOS_VM = _cargar_datos_vm()
 
 from modulo_masterplan import render_masterplan
 from modulo_censo_arboreo import render_censo_arboreo
+from modulo_barrios import render_diagnostico_barrios
 
 SECCIONES_VM = [
     ("🏠", "Inicio"),
@@ -103,6 +104,7 @@ SECCIONES_VM = [
     ("🌡️", "Temperatura superficial"),
     ("🏛️", "Verde público (OSM)"),
     ("🌳", "Plan de Forestación"),
+    ("🏘️", "Diagnóstico por barrio"),
     ("🎯", "Estrategias · Villa María"),
     ("🌍", "Agenda 2030 · C40"),
     ("📄", "Masterplan · Opus 4.7"),
@@ -1361,6 +1363,8 @@ def render_modulo_villamaria():
         _render_osm()
     elif "Forestación" in seccion:
         render_censo_arboreo()
+    elif "barrio" in seccion:
+        render_diagnostico_barrios()
     elif "Estrategias" in seccion:
         _render_estrategias()
     elif "Agenda" in seccion:
