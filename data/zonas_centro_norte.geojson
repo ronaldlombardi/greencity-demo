@@ -1,0 +1,57 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "CENTRO NORTE",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 874,
+  "arboles_sin_zona": 5,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T00:03:06.726Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.24509,
+              -32.401577
+            ],
+            [
+              -63.238866,
+              -32.40837
+            ],
+            [
+              -63.245133,
+              -32.412174
+            ],
+            [
+              -63.248932,
+              -32.408207
+            ],
+            [
+              -63.252066,
+              -32.406033
+            ],
+            [
+              -63.24509,
+              -32.401577
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "CENTRO NORTE",
+        "zona_id": 1,
+        "tipo": "urbana_centrica",
+        "tipo_nombre": "Urbana céntrica",
+        "lcz": "LCZ 2-3",
+        "forestacion_incipiente": false,
+        "n_arboles": 869,
+        "area_ha": 71.04,
+        "arboles_ha": 12.2
+      }
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "GENERAL PAZ",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 621,
+  "arboles_sin_zona": 37,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:09:59.236Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.250734,
+              -32.415852
+            ],
+            [
+              -63.254812,
+              -32.418352
+            ],
+            [
+              -63.253932,
+              -32.420507
+            ],
+            [
+              -63.2523,
+              -32.421938
+            ],
+            [
+              -63.250819,
+              -32.422499
+            ],
+            [
+              -63.248909,
+              -32.422553
+            ],
+            [
+              -63.247471,
+              -32.422173
+            ],
+            [
+              -63.24569,
+              -32.421503
+            ],
+            [
+              -63.250734,
+              -32.415852
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "GENERAL PAZ",
+        "zona_id": 1,
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
+        "forestacion_incipiente": false,
+        "n_arboles": 584,
+        "area_ha": 36.37,
+        "arboles_ha": 16.1
+      }
+    }
+  ]
+}

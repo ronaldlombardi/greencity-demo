@@ -1,0 +1,122 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "ROQUE SAENZ PEÑA",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 702,
+  "arboles_sin_zona": 17,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:35:44.228Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.267108,
+              -32.401722
+            ],
+            [
+              -63.263008,
+              -32.405617
+            ],
+            [
+              -63.261828,
+              -32.405073
+            ],
+            [
+              -63.264833,
+              -32.401831
+            ],
+            [
+              -63.267108,
+              -32.401722
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "ROQUE SAENZ PEÑA",
+        "zona_id": 1,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 13,
+        "area_ha": 7.26,
+        "arboles_ha": 1.8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.263008,
+              -32.405617
+            ],
+            [
+              -63.260797,
+              -32.406849
+            ],
+            [
+              -63.260991,
+              -32.409873
+            ],
+            [
+              -63.258136,
+              -32.409674
+            ],
+            [
+              -63.25644,
+              -32.408895
+            ],
+            [
+              -63.251976,
+              -32.405997
+            ],
+            [
+              -63.256033,
+              -32.403968
+            ],
+            [
+              -63.258565,
+              -32.403026
+            ],
+            [
+              -63.26157,
+              -32.402338
+            ],
+            [
+              -63.264833,
+              -32.401831
+            ],
+            [
+              -63.261828,
+              -32.405073
+            ],
+            [
+              -63.263008,
+              -32.405617
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "ROQUE SAENZ PEÑA",
+        "zona_id": 2,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 672,
+        "area_ha": 51.46,
+        "arboles_ha": 13.1
+      }
+    }
+  ]
+}

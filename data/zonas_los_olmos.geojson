@@ -1,0 +1,196 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "LOS OLMOS",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 1108,
+  "arboles_sin_zona": 23,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:22:22.914Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.207538,
+              -32.412519
+            ],
+            [
+              -63.20404,
+              -32.412465
+            ],
+            [
+              -63.203997,
+              -32.42076
+            ],
+            [
+              -63.207538,
+              -32.420796
+            ],
+            [
+              -63.207538,
+              -32.412519
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "LOS OLMOS",
+        "zona_id": 1,
+        "tipo": "bosque_autoctono",
+        "tipo_nombre": "Bosque autóctono / rural",
+        "lcz": "LCZ A",
+        "forestacion_incipiente": false,
+        "n_arboles": 98,
+        "area_ha": 30.51,
+        "arboles_ha": 3.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.211101,
+              -32.408679
+            ],
+            [
+              -63.211101,
+              -32.411523
+            ],
+            [
+              -63.207667,
+              -32.411523
+            ],
+            [
+              -63.207646,
+              -32.408136
+            ],
+            [
+              -63.211101,
+              -32.408679
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "LOS OLMOS",
+        "zona_id": 2,
+        "tipo": "bosque_autoctono",
+        "tipo_nombre": "Bosque autóctono / rural",
+        "lcz": "LCZ A",
+        "forestacion_incipiente": false,
+        "n_arboles": 224,
+        "area_ha": 11.22,
+        "arboles_ha": 20
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.207646,
+              -32.408136
+            ],
+            [
+              -63.204061,
+              -32.408136
+            ],
+            [
+              -63.20404,
+              -32.412465
+            ],
+            [
+              -63.207538,
+              -32.412519
+            ],
+            [
+              -63.207646,
+              -32.408136
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "LOS OLMOS",
+        "zona_id": 3,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 40,
+        "area_ha": 16.14,
+        "arboles_ha": 2.5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.211101,
+              -32.408679
+            ],
+            [
+              -63.213892,
+              -32.408552
+            ],
+            [
+              -63.213913,
+              -32.41261
+            ],
+            [
+              -63.216145,
+              -32.41779
+            ],
+            [
+              -63.210994,
+              -32.419456
+            ],
+            [
+              -63.210994,
+              -32.420687
+            ],
+            [
+              -63.207538,
+              -32.420796
+            ],
+            [
+              -63.207667,
+              -32.411523
+            ],
+            [
+              -63.211101,
+              -32.411523
+            ],
+            [
+              -63.211101,
+              -32.408679
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "LOS OLMOS",
+        "zona_id": 4,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 723,
+        "area_ha": 70.89,
+        "arboles_ha": 10.2
+      }
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "BELLO HORIZONTE",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 559,
+  "arboles_sin_zona": 24,
+  "notas": "",
+  "fecha_edicion": "2026-10-14T23:59:23.727Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.211851,
+              -32.40616
+            ],
+            [
+              -63.210971,
+              -32.406214
+            ],
+            [
+              -63.211035,
+              -32.408569
+            ],
+            [
+              -63.211872,
+              -32.408479
+            ],
+            [
+              -63.211851,
+              -32.40616
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BELLO HORIZONTE",
+        "zona_id": 1,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 0,
+        "area_ha": 2.1,
+        "arboles_ha": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.211121,
+              -32.401432
+            ],
+            [
+              -63.222432,
+              -32.408442
+            ],
+            [
+              -63.211872,
+              -32.408479
+            ],
+            [
+              -63.211851,
+              -32.40616
+            ],
+            [
+              -63.210971,
+              -32.406214
+            ],
+            [
+              -63.211121,
+              -32.401432
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BELLO HORIZONTE",
+        "zona_id": 2,
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
+        "forestacion_incipiente": false,
+        "n_arboles": 535,
+        "area_ha": 40.31,
+        "arboles_ha": 13.3
+      }
+    }
+  ]
+}

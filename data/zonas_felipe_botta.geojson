@@ -1,0 +1,98 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "FELIPE BOTTA",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 645,
+  "arboles_sin_zona": 5,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:06:39.619Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.234533,
+              -32.394673
+            ],
+            [
+              -63.236551,
+              -32.392644
+            ],
+            [
+              -63.235349,
+              -32.388459
+            ],
+            [
+              -63.230477,
+              -32.390489
+            ],
+            [
+              -63.23082,
+              -32.392318
+            ],
+            [
+              -63.234533,
+              -32.394673
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "FELIPE BOTTA",
+        "zona_id": 1,
+        "tipo": "urbana_centrica",
+        "tipo_nombre": "Urbana céntrica",
+        "lcz": "LCZ 2-3",
+        "forestacion_incipiente": false,
+        "n_arboles": 338,
+        "area_ha": 23.8,
+        "arboles_ha": 14.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.23507,
+              -32.387608
+            ],
+            [
+              -63.229919,
+              -32.38855
+            ],
+            [
+              -63.230477,
+              -32.390489
+            ],
+            [
+              -63.235349,
+              -32.388459
+            ],
+            [
+              -63.23507,
+              -32.387608
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "FELIPE BOTTA",
+        "zona_id": 2,
+        "tipo": "bosque_autoctono",
+        "tipo_nombre": "Bosque autóctono / rural",
+        "lcz": "LCZ A",
+        "forestacion_incipiente": false,
+        "n_arboles": 302,
+        "area_ha": 7.97,
+        "arboles_ha": 37.9
+      }
+    }
+  ]
+}

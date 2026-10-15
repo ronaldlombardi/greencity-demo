@@ -1,0 +1,138 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "LAS ACACIAS",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 1118,
+  "arboles_sin_zona": 13,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:19:37.741Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.271095,
+              -32.410562
+            ],
+            [
+              -63.271868,
+              -32.403933
+            ],
+            [
+              -63.2741,
+              -32.404911
+            ],
+            [
+              -63.275216,
+              -32.406324
+            ],
+            [
+              -63.275002,
+              -32.409638
+            ],
+            [
+              -63.273714,
+              -32.410635
+            ],
+            [
+              -63.271095,
+              -32.410562
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "LAS ACACIAS",
+        "zona_id": 1,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 256,
+        "area_ha": 21.74,
+        "arboles_ha": 11.8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.293993,
+              -32.413513
+            ],
+            [
+              -63.273714,
+              -32.410635
+            ],
+            [
+              -63.275002,
+              -32.409638
+            ],
+            [
+              -63.275216,
+              -32.406324
+            ],
+            [
+              -63.2741,
+              -32.404911
+            ],
+            [
+              -63.271868,
+              -32.403933
+            ],
+            [
+              -63.271095,
+              -32.410562
+            ],
+            [
+              -63.260767,
+              -32.409855
+            ],
+            [
+              -63.260939,
+              -32.406739
+            ],
+            [
+              -63.266949,
+              -32.401559
+            ],
+            [
+              -63.272272,
+              -32.401993
+            ],
+            [
+              -63.276951,
+              -32.403008
+            ],
+            [
+              -63.280686,
+              -32.404493
+            ],
+            [
+              -63.293993,
+              -32.413513
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "LAS ACACIAS",
+        "zona_id": 2,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 849,
+        "area_ha": 184.06,
+        "arboles_ha": 4.6
+      }
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "LAS PLAYAS",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 1882,
+  "arboles_sin_zona": 34,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:20:43.333Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.210993,
+              -32.420652
+            ],
+            [
+              -63.204039,
+              -32.420688
+            ],
+            [
+              -63.203824,
+              -32.431083
+            ],
+            [
+              -63.207001,
+              -32.432279
+            ],
+            [
+              -63.208975,
+              -32.432206
+            ],
+            [
+              -63.21095,
+              -32.431699
+            ],
+            [
+              -63.210993,
+              -32.420652
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "LAS PLAYAS",
+        "zona_id": 1,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 943,
+        "area_ha": 82.87,
+        "arboles_ha": 11.4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.21095,
+              -32.431699
+            ],
+            [
+              -63.211079,
+              -32.43322
+            ],
+            [
+              -63.197771,
+              -32.440536
+            ],
+            [
+              -63.190044,
+              -32.430178
+            ],
+            [
+              -63.194552,
+              -32.428005
+            ],
+            [
+              -63.203947,
+              -32.425147
+            ],
+            [
+              -63.203481,
+              -32.431844
+            ],
+            [
+              -63.207001,
+              -32.432279
+            ],
+            [
+              -63.208975,
+              -32.432206
+            ],
+            [
+              -63.21095,
+              -32.431699
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "LAS PLAYAS",
+        "zona_id": 2,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 905,
+        "area_ha": 159.64,
+        "arboles_ha": 5.7
+      }
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "MALVINAS ARGENTINAS",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 1122,
+  "arboles_sin_zona": 5,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:23:47.369Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.213074,
+              -32.400526
+            ],
+            [
+              -63.218139,
+              -32.394928
+            ],
+            [
+              -63.21917,
+              -32.395436
+            ],
+            [
+              -63.222217,
+              -32.397465
+            ],
+            [
+              -63.219449,
+              -32.40058
+            ],
+            [
+              -63.218332,
+              -32.401287
+            ],
+            [
+              -63.21595,
+              -32.39982
+            ],
+            [
+              -63.215886,
+              -32.404421
+            ],
+            [
+              -63.211807,
+              -32.401812
+            ],
+            [
+              -63.213074,
+              -32.400526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "MALVINAS ARGENTINAS",
+        "zona_id": 1,
+        "tipo": "bosque_autoctono",
+        "tipo_nombre": "Bosque autóctono / rural",
+        "lcz": "LCZ A",
+        "forestacion_incipiente": false,
+        "n_arboles": 864,
+        "area_ha": 40.09,
+        "arboles_ha": 21.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.222217,
+              -32.397465
+            ],
+            [
+              -63.224407,
+              -32.399004
+            ],
+            [
+              -63.220114,
+              -32.40375
+            ],
+            [
+              -63.220951,
+              -32.40433
+            ],
+            [
+              -63.220157,
+              -32.4052
+            ],
+            [
+              -63.221058,
+              -32.405779
+            ],
+            [
+              -63.219878,
+              -32.406938
+            ],
+            [
+              -63.215886,
+              -32.404421
+            ],
+            [
+              -63.21595,
+              -32.39982
+            ],
+            [
+              -63.218332,
+              -32.401287
+            ],
+            [
+              -63.219449,
+              -32.40058
+            ],
+            [
+              -63.222217,
+              -32.397465
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "MALVINAS ARGENTINAS",
+        "zona_id": 2,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 253,
+        "area_ha": 37.27,
+        "arboles_ha": 6.8
+      }
+    }
+  ]
+}

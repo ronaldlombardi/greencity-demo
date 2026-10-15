@@ -1,0 +1,1435 @@
+{
+  "municipio": "Villa María",
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m, umbral 2 m",
+  "metodo": "Conteo por punto dentro de polígono y superficie en EPSG:22174, recalculados en Python",
+  "generado": "2026-10-15T18:58:34",
+  "ciudad": {
+    "n_barrios": 38,
+    "n_zonas": 82,
+    "total_arboles": 31665,
+    "arboles_en_zonas": 30256,
+    "arboles_sin_zona": 1409,
+    "area_zonas_ha": 2745.87
+  },
+  "por_tipo": [
+    {
+      "tipo": "bosque_autoctono",
+      "tipo_nombre": "Bosque autóctono / rural",
+      "lcz": "LCZ A",
+      "n_zonas": 8,
+      "n_arboles": 1975,
+      "area_ha": 139.16,
+      "arboles_ha": 14.2
+    },
+    {
+      "tipo": "industrial",
+      "tipo_nombre": "Industrial / gran predio",
+      "lcz": "LCZ 8/10",
+      "n_zonas": 34,
+      "n_arboles": 4851,
+      "area_ha": 820.99,
+      "arboles_ha": 5.9
+    },
+    {
+      "tipo": "riberena",
+      "tipo_nombre": "Ribereña",
+      "lcz": "LCZ A/B + G",
+      "n_zonas": 3,
+      "n_arboles": 3211,
+      "area_ha": 178.39,
+      "arboles_ha": 18.0
+    },
+    {
+      "tipo": "urbana_centrica",
+      "tipo_nombre": "Urbana céntrica",
+      "lcz": "LCZ 2-3",
+      "n_zonas": 8,
+      "n_arboles": 7000,
+      "area_ha": 513.49,
+      "arboles_ha": 13.6
+    },
+    {
+      "tipo": "urbana_mixta",
+      "tipo_nombre": "Urbana mixta",
+      "lcz": "LCZ 9 + D",
+      "n_zonas": 19,
+      "n_arboles": 8689,
+      "area_ha": 756.98,
+      "arboles_ha": 11.5
+    },
+    {
+      "tipo": "urbana_residencial",
+      "tipo_nombre": "Urbana residencial",
+      "lcz": "LCZ 6",
+      "n_zonas": 10,
+      "n_arboles": 4530,
+      "area_ha": 336.86,
+      "arboles_ha": 13.4
+    }
+  ],
+  "barrios": [
+    {
+      "barrio": "ALMIRANTE BROWN",
+      "slug": "almirante_brown",
+      "total_arboles": 594,
+      "arboles_en_zonas": 369,
+      "arboles_sin_zona": 225,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-14T23:48:29.517Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "ALMIRANTE BROWN",
+          "zona_id": 1,
+          "tipo": "urbana_residencial",
+          "tipo_nombre": "Urbana residencial",
+          "lcz": "LCZ 6",
+          "forestacion_incipiente": false,
+          "n_arboles": 369,
+          "area_ha": 28.65,
+          "arboles_ha": 12.9
+        }
+      ]
+    },
+    {
+      "barrio": "BARRANCAS DEL RIO",
+      "slug": "barrancas_del_rio",
+      "total_arboles": 1123,
+      "arboles_en_zonas": 582,
+      "arboles_sin_zona": 541,
+      "n_zonas": 10,
+      "fecha_edicion": "2026-10-14T23:57:30.375Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "BARRANCAS DEL RIO",
+          "zona_id": 1,
+          "tipo": "urbana_residencial",
+          "tipo_nombre": "Urbana residencial",
+          "lcz": "LCZ 6",
+          "forestacion_incipiente": false,
+          "n_arboles": 316,
+          "area_ha": 19.62,
+          "arboles_ha": 16.1
+        },
+        {
+          "barrio": "BARRANCAS DEL RIO",
+          "zona_id": 2,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 18,
+          "area_ha": 9.74,
+          "arboles_ha": 1.8
+        },
+        {
+          "barrio": "BARRANCAS DEL RIO",
+          "zona_id": 3,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 13,
+          "area_ha": 13.76,
+          "arboles_ha": 0.9
+        },
+        {
+          "barrio": "BARRANCAS DEL RIO",
+          "zona_id": 4,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 28,
+          "area_ha": 10.55,
+          "arboles_ha": 2.7
+        },
+        {
+          "barrio": "BARRANCAS DEL RIO",
+          "zona_id": 5,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 55,
+          "area_ha": 15.22,
+          "arboles_ha": 3.6
+        },
+        {
+          "barrio": "BARRANCAS DEL RIO",
+          "zona_id": 6,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 138,
+          "area_ha": 11.92,
+          "arboles_ha": 11.6
+        },
+        {
+          "barrio": "BARRANCAS DEL RIO",
+          "zona_id": 7,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 3,
+          "area_ha": 1.96,
+          "arboles_ha": 1.5
+        },
+        {
+          "barrio": "BARRANCAS DEL RIO",
+          "zona_id": 8,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 2,
+          "area_ha": 0.9,
+          "arboles_ha": 2.2
+        },
+        {
+          "barrio": "BARRANCAS DEL RIO",
+          "zona_id": 9,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 1,
+          "area_ha": 0.65,
+          "arboles_ha": 1.5
+        },
+        {
+          "barrio": "BARRANCAS DEL RIO",
+          "zona_id": 10,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 8,
+          "area_ha": 1.9,
+          "arboles_ha": 4.2
+        }
+      ]
+    },
+    {
+      "barrio": "BELLO HORIZONTE",
+      "slug": "bello_horizonte",
+      "total_arboles": 559,
+      "arboles_en_zonas": 535,
+      "arboles_sin_zona": 24,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-14T23:59:23.727Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "BELLO HORIZONTE",
+          "zona_id": 1,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 0,
+          "area_ha": 2.1,
+          "arboles_ha": 0.0
+        },
+        {
+          "barrio": "BELLO HORIZONTE",
+          "zona_id": 2,
+          "tipo": "urbana_residencial",
+          "tipo_nombre": "Urbana residencial",
+          "lcz": "LCZ 6",
+          "forestacion_incipiente": false,
+          "n_arboles": 535,
+          "area_ha": 40.19,
+          "arboles_ha": 13.3
+        }
+      ]
+    },
+    {
+      "barrio": "BERNARDINO RIVADAVIA",
+      "slug": "bernardino_rivadavia",
+      "total_arboles": 904,
+      "arboles_en_zonas": 866,
+      "arboles_sin_zona": 38,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T00:00:28.150Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "BERNARDINO RIVADAVIA",
+          "zona_id": 1,
+          "tipo": "urbana_centrica",
+          "tipo_nombre": "Urbana céntrica",
+          "lcz": "LCZ 2-3",
+          "forestacion_incipiente": false,
+          "n_arboles": 866,
+          "area_ha": 59.29,
+          "arboles_ha": 14.6
+        }
+      ]
+    },
+    {
+      "barrio": "CARLOS PELLEGRINI",
+      "slug": "carlos_pellegrini",
+      "total_arboles": 713,
+      "arboles_en_zonas": 689,
+      "arboles_sin_zona": 24,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T00:01:24.794Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "CARLOS PELLEGRINI",
+          "zona_id": 1,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 689,
+          "area_ha": 63.11,
+          "arboles_ha": 10.9
+        }
+      ]
+    },
+    {
+      "barrio": "CENTRO ESTE",
+      "slug": "centro_este",
+      "total_arboles": 737,
+      "arboles_en_zonas": 700,
+      "arboles_sin_zona": 37,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T00:02:12.470Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "CENTRO ESTE",
+          "zona_id": 1,
+          "tipo": "urbana_centrica",
+          "tipo_nombre": "Urbana céntrica",
+          "lcz": "LCZ 2-3",
+          "forestacion_incipiente": false,
+          "n_arboles": 700,
+          "area_ha": 60.81,
+          "arboles_ha": 11.5
+        }
+      ]
+    },
+    {
+      "barrio": "CENTRO NORTE",
+      "slug": "centro_norte",
+      "total_arboles": 874,
+      "arboles_en_zonas": 869,
+      "arboles_sin_zona": 5,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T00:03:06.726Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "CENTRO NORTE",
+          "zona_id": 1,
+          "tipo": "urbana_centrica",
+          "tipo_nombre": "Urbana céntrica",
+          "lcz": "LCZ 2-3",
+          "forestacion_incipiente": false,
+          "n_arboles": 869,
+          "area_ha": 70.84,
+          "arboles_ha": 12.3
+        }
+      ]
+    },
+    {
+      "barrio": "CENTRO OESTE",
+      "slug": "centro_oeste",
+      "total_arboles": 827,
+      "arboles_en_zonas": 798,
+      "arboles_sin_zona": 29,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T00:03:53.066Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "CENTRO OESTE",
+          "zona_id": 1,
+          "tipo": "urbana_centrica",
+          "tipo_nombre": "Urbana céntrica",
+          "lcz": "LCZ 2-3",
+          "forestacion_incipiente": false,
+          "n_arboles": 798,
+          "area_ha": 59.66,
+          "arboles_ha": 13.4
+        }
+      ]
+    },
+    {
+      "barrio": "CENTRO SUR",
+      "slug": "centro_sur",
+      "total_arboles": 1015,
+      "arboles_en_zonas": 894,
+      "arboles_sin_zona": 121,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T00:05:08.181Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "CENTRO SUR",
+          "zona_id": 1,
+          "tipo": "urbana_centrica",
+          "tipo_nombre": "Urbana céntrica",
+          "lcz": "LCZ 2-3",
+          "forestacion_incipiente": false,
+          "n_arboles": 894,
+          "area_ha": 58.4,
+          "arboles_ha": 15.3
+        }
+      ]
+    },
+    {
+      "barrio": "DOMINGO F. SARMIENTO",
+      "slug": "domingo_f__sarmiento",
+      "total_arboles": 166,
+      "arboles_en_zonas": 164,
+      "arboles_sin_zona": 2,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T00:06:07.885Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "DOMINGO F. SARMIENTO",
+          "zona_id": 1,
+          "tipo": "riberena",
+          "tipo_nombre": "Ribereña",
+          "lcz": "LCZ A/B + G",
+          "forestacion_incipiente": false,
+          "n_arboles": 164,
+          "area_ha": 10.78,
+          "arboles_ha": 15.2
+        }
+      ]
+    },
+    {
+      "barrio": "DR. RAMON CARRILLO",
+      "slug": "dr__ramon_carrillo",
+      "total_arboles": 33,
+      "arboles_en_zonas": 29,
+      "arboles_sin_zona": 4,
+      "n_zonas": 3,
+      "fecha_edicion": "2026-10-15T00:07:49.480Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "DR. RAMON CARRILLO",
+          "zona_id": 1,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": true,
+          "n_arboles": 29,
+          "area_ha": 23.54,
+          "arboles_ha": 1.2
+        },
+        {
+          "barrio": "DR. RAMON CARRILLO",
+          "zona_id": 2,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": true,
+          "n_arboles": 0,
+          "area_ha": 6.23,
+          "arboles_ha": 0.0
+        },
+        {
+          "barrio": "DR. RAMON CARRILLO",
+          "zona_id": 3,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": true,
+          "n_arboles": 0,
+          "area_ha": 5.87,
+          "arboles_ha": 0.0
+        }
+      ]
+    },
+    {
+      "barrio": "EVITA",
+      "slug": "evita",
+      "total_arboles": 776,
+      "arboles_en_zonas": 742,
+      "arboles_sin_zona": 34,
+      "n_zonas": 4,
+      "fecha_edicion": "2026-10-15T00:10:13.903Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "EVITA",
+          "zona_id": 1,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": true,
+          "n_arboles": 278,
+          "area_ha": 13.54,
+          "arboles_ha": 20.5
+        },
+        {
+          "barrio": "EVITA",
+          "zona_id": 2,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": true,
+          "n_arboles": 46,
+          "area_ha": 16.75,
+          "arboles_ha": 2.7
+        },
+        {
+          "barrio": "EVITA",
+          "zona_id": 3,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": true,
+          "n_arboles": 135,
+          "area_ha": 8.21,
+          "arboles_ha": 16.4
+        },
+        {
+          "barrio": "EVITA",
+          "zona_id": 4,
+          "tipo": "urbana_residencial",
+          "tipo_nombre": "Urbana residencial",
+          "lcz": "LCZ 6",
+          "forestacion_incipiente": true,
+          "n_arboles": 283,
+          "area_ha": 27.86,
+          "arboles_ha": 10.2
+        }
+      ]
+    },
+    {
+      "barrio": "FELIPE BOTTA",
+      "slug": "felipe_botta",
+      "total_arboles": 645,
+      "arboles_en_zonas": 640,
+      "arboles_sin_zona": 5,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-15T21:06:39.619Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "FELIPE BOTTA",
+          "zona_id": 1,
+          "tipo": "urbana_centrica",
+          "tipo_nombre": "Urbana céntrica",
+          "lcz": "LCZ 2-3",
+          "forestacion_incipiente": false,
+          "n_arboles": 338,
+          "area_ha": 23.73,
+          "arboles_ha": 14.2
+        },
+        {
+          "barrio": "FELIPE BOTTA",
+          "zona_id": 2,
+          "tipo": "bosque_autoctono",
+          "tipo_nombre": "Bosque autóctono / rural",
+          "lcz": "LCZ A",
+          "forestacion_incipiente": false,
+          "n_arboles": 302,
+          "area_ha": 7.94,
+          "arboles_ha": 38.0
+        }
+      ]
+    },
+    {
+      "barrio": "FLORENTINO AMEGHINO",
+      "slug": "florentino_ameghino",
+      "total_arboles": 1515,
+      "arboles_en_zonas": 1502,
+      "arboles_sin_zona": 13,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T21:07:18.705Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "FLORENTINO AMEGHINO",
+          "zona_id": 1,
+          "tipo": "urbana_centrica",
+          "tipo_nombre": "Urbana céntrica",
+          "lcz": "LCZ 2-3",
+          "forestacion_incipiente": false,
+          "n_arboles": 1502,
+          "area_ha": 97.64,
+          "arboles_ha": 15.4
+        }
+      ]
+    },
+    {
+      "barrio": "GENERAL GUEMES",
+      "slug": "general_guemes",
+      "total_arboles": 695,
+      "arboles_en_zonas": 676,
+      "arboles_sin_zona": 19,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-15T21:08:36.433Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "GENERAL GUEMES",
+          "zona_id": 1,
+          "tipo": "urbana_residencial",
+          "tipo_nombre": "Urbana residencial",
+          "lcz": "LCZ 6",
+          "forestacion_incipiente": false,
+          "n_arboles": 652,
+          "area_ha": 47.13,
+          "arboles_ha": 13.8
+        },
+        {
+          "barrio": "GENERAL GUEMES",
+          "zona_id": 2,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 24,
+          "area_ha": 2.05,
+          "arboles_ha": 11.7
+        }
+      ]
+    },
+    {
+      "barrio": "GENERAL LAMADRID",
+      "slug": "general_lamadrid",
+      "total_arboles": 1036,
+      "arboles_en_zonas": 1033,
+      "arboles_sin_zona": 3,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T21:09:08.708Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "GENERAL LAMADRID",
+          "zona_id": 1,
+          "tipo": "urbana_centrica",
+          "tipo_nombre": "Urbana céntrica",
+          "lcz": "LCZ 2-3",
+          "forestacion_incipiente": false,
+          "n_arboles": 1033,
+          "area_ha": 83.12,
+          "arboles_ha": 12.4
+        }
+      ]
+    },
+    {
+      "barrio": "GENERAL PAZ",
+      "slug": "general_paz",
+      "total_arboles": 621,
+      "arboles_en_zonas": 584,
+      "arboles_sin_zona": 37,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T21:09:59.236Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "GENERAL PAZ",
+          "zona_id": 1,
+          "tipo": "urbana_residencial",
+          "tipo_nombre": "Urbana residencial",
+          "lcz": "LCZ 6",
+          "forestacion_incipiente": false,
+          "n_arboles": 584,
+          "area_ha": 36.26,
+          "arboles_ha": 16.1
+        }
+      ]
+    },
+    {
+      "barrio": "GENERAL SAN MARTIN",
+      "slug": "general_san_martin",
+      "total_arboles": 860,
+      "arboles_en_zonas": 852,
+      "arboles_sin_zona": 8,
+      "n_zonas": 6,
+      "fecha_edicion": "2026-10-15T21:14:05.008Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "GENERAL SAN MARTIN",
+          "zona_id": 1,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 389,
+          "area_ha": 34.83,
+          "arboles_ha": 11.2
+        },
+        {
+          "barrio": "GENERAL SAN MARTIN",
+          "zona_id": 2,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 423,
+          "area_ha": 28.9,
+          "arboles_ha": 14.6
+        },
+        {
+          "barrio": "GENERAL SAN MARTIN",
+          "zona_id": 3,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 17,
+          "area_ha": 4.7,
+          "arboles_ha": 3.6
+        },
+        {
+          "barrio": "GENERAL SAN MARTIN",
+          "zona_id": 4,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 13,
+          "area_ha": 2.44,
+          "arboles_ha": 5.3
+        },
+        {
+          "barrio": "GENERAL SAN MARTIN",
+          "zona_id": 5,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 10,
+          "area_ha": 6.16,
+          "arboles_ha": 1.6
+        },
+        {
+          "barrio": "GENERAL SAN MARTIN",
+          "zona_id": 6,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 0,
+          "area_ha": 0.78,
+          "arboles_ha": 0.0
+        }
+      ]
+    },
+    {
+      "barrio": "INDUSTRIAL",
+      "slug": "industrial",
+      "total_arboles": 930,
+      "arboles_en_zonas": 914,
+      "arboles_sin_zona": 16,
+      "n_zonas": 4,
+      "fecha_edicion": "2026-10-15T21:16:31.145Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "INDUSTRIAL",
+          "zona_id": 1,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 607,
+          "area_ha": 69.65,
+          "arboles_ha": 8.7
+        },
+        {
+          "barrio": "INDUSTRIAL",
+          "zona_id": 2,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 99,
+          "area_ha": 11.96,
+          "arboles_ha": 8.3
+        },
+        {
+          "barrio": "INDUSTRIAL",
+          "zona_id": 3,
+          "tipo": "bosque_autoctono",
+          "tipo_nombre": "Bosque autóctono / rural",
+          "lcz": "LCZ A",
+          "forestacion_incipiente": false,
+          "n_arboles": 123,
+          "area_ha": 12.8,
+          "arboles_ha": 9.6
+        },
+        {
+          "barrio": "INDUSTRIAL",
+          "zona_id": 4,
+          "tipo": "bosque_autoctono",
+          "tipo_nombre": "Bosque autóctono / rural",
+          "lcz": "LCZ A",
+          "forestacion_incipiente": false,
+          "n_arboles": 85,
+          "area_ha": 10.59,
+          "arboles_ha": 8.0
+        }
+      ]
+    },
+    {
+      "barrio": "LA CALERA",
+      "slug": "la_calera",
+      "total_arboles": 705,
+      "arboles_en_zonas": 680,
+      "arboles_sin_zona": 25,
+      "n_zonas": 3,
+      "fecha_edicion": "2026-10-15T21:18:04.729Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "LA CALERA",
+          "zona_id": 1,
+          "tipo": "bosque_autoctono",
+          "tipo_nombre": "Bosque autóctono / rural",
+          "lcz": "LCZ A",
+          "forestacion_incipiente": false,
+          "n_arboles": 250,
+          "area_ha": 16.03,
+          "arboles_ha": 15.6
+        },
+        {
+          "barrio": "LA CALERA",
+          "zona_id": 2,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 270,
+          "area_ha": 17.87,
+          "arboles_ha": 15.1
+        },
+        {
+          "barrio": "LA CALERA",
+          "zona_id": 3,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 160,
+          "area_ha": 12.71,
+          "arboles_ha": 12.6
+        }
+      ]
+    },
+    {
+      "barrio": "LAS ACACIAS",
+      "slug": "las_acacias",
+      "total_arboles": 1118,
+      "arboles_en_zonas": 1105,
+      "arboles_sin_zona": 13,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-15T21:19:37.741Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "LAS ACACIAS",
+          "zona_id": 1,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 256,
+          "area_ha": 21.68,
+          "arboles_ha": 11.8
+        },
+        {
+          "barrio": "LAS ACACIAS",
+          "zona_id": 2,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 849,
+          "area_ha": 183.54,
+          "arboles_ha": 4.6
+        }
+      ]
+    },
+    {
+      "barrio": "LAS PLAYAS",
+      "slug": "las_playas",
+      "total_arboles": 1882,
+      "arboles_en_zonas": 1848,
+      "arboles_sin_zona": 34,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-15T21:20:43.333Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "LAS PLAYAS",
+          "zona_id": 1,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 943,
+          "area_ha": 82.63,
+          "arboles_ha": 11.4
+        },
+        {
+          "barrio": "LAS PLAYAS",
+          "zona_id": 2,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 905,
+          "area_ha": 159.19,
+          "arboles_ha": 5.7
+        }
+      ]
+    },
+    {
+      "barrio": "LOS OLMOS",
+      "slug": "los_olmos",
+      "total_arboles": 1108,
+      "arboles_en_zonas": 1085,
+      "arboles_sin_zona": 23,
+      "n_zonas": 4,
+      "fecha_edicion": "2026-10-15T21:22:22.914Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "LOS OLMOS",
+          "zona_id": 1,
+          "tipo": "bosque_autoctono",
+          "tipo_nombre": "Bosque autóctono / rural",
+          "lcz": "LCZ A",
+          "forestacion_incipiente": false,
+          "n_arboles": 98,
+          "area_ha": 30.42,
+          "arboles_ha": 3.2
+        },
+        {
+          "barrio": "LOS OLMOS",
+          "zona_id": 2,
+          "tipo": "bosque_autoctono",
+          "tipo_nombre": "Bosque autóctono / rural",
+          "lcz": "LCZ A",
+          "forestacion_incipiente": false,
+          "n_arboles": 224,
+          "area_ha": 11.19,
+          "arboles_ha": 20.0
+        },
+        {
+          "barrio": "LOS OLMOS",
+          "zona_id": 3,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 40,
+          "area_ha": 16.09,
+          "arboles_ha": 2.5
+        },
+        {
+          "barrio": "LOS OLMOS",
+          "zona_id": 4,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 723,
+          "area_ha": 70.68,
+          "arboles_ha": 10.2
+        }
+      ]
+    },
+    {
+      "barrio": "MALVINAS ARGENTINAS",
+      "slug": "malvinas_argentinas",
+      "total_arboles": 1122,
+      "arboles_en_zonas": 1117,
+      "arboles_sin_zona": 5,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-15T21:23:47.369Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "MALVINAS ARGENTINAS",
+          "zona_id": 1,
+          "tipo": "bosque_autoctono",
+          "tipo_nombre": "Bosque autóctono / rural",
+          "lcz": "LCZ A",
+          "forestacion_incipiente": false,
+          "n_arboles": 864,
+          "area_ha": 39.98,
+          "arboles_ha": 21.6
+        },
+        {
+          "barrio": "MALVINAS ARGENTINAS",
+          "zona_id": 2,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 253,
+          "area_ha": 37.16,
+          "arboles_ha": 6.8
+        }
+      ]
+    },
+    {
+      "barrio": "MANUEL BELGARANO",
+      "slug": "manuel_belgarano",
+      "total_arboles": 513,
+      "arboles_en_zonas": 512,
+      "arboles_sin_zona": 1,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-15T21:24:48.092Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "MANUEL BELGARANO",
+          "zona_id": 1,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 113,
+          "area_ha": 19.52,
+          "arboles_ha": 5.8
+        },
+        {
+          "barrio": "MANUEL BELGARANO",
+          "zona_id": 2,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 399,
+          "area_ha": 36.9,
+          "arboles_ha": 10.8
+        }
+      ]
+    },
+    {
+      "barrio": "MARIANO MORENO",
+      "slug": "mariano_moreno",
+      "total_arboles": 1232,
+      "arboles_en_zonas": 1224,
+      "arboles_sin_zona": 8,
+      "n_zonas": 4,
+      "fecha_edicion": "2026-10-15T21:29:01.433Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "MARIANO MORENO",
+          "zona_id": 1,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 140,
+          "area_ha": 15.58,
+          "arboles_ha": 9.0
+        },
+        {
+          "barrio": "MARIANO MORENO",
+          "zona_id": 2,
+          "tipo": "urbana_residencial",
+          "tipo_nombre": "Urbana residencial",
+          "lcz": "LCZ 6",
+          "forestacion_incipiente": false,
+          "n_arboles": 277,
+          "area_ha": 13.14,
+          "arboles_ha": 21.1
+        },
+        {
+          "barrio": "MARIANO MORENO",
+          "zona_id": 3,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 3,
+          "area_ha": 4.13,
+          "arboles_ha": 0.7
+        },
+        {
+          "barrio": "MARIANO MORENO",
+          "zona_id": 4,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 804,
+          "area_ha": 67.7,
+          "arboles_ha": 11.9
+        }
+      ]
+    },
+    {
+      "barrio": "NICOLAS AVELLANEDA",
+      "slug": "nicolas_avellaneda",
+      "total_arboles": 822,
+      "arboles_en_zonas": 820,
+      "arboles_sin_zona": 2,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-15T21:30:06.285Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "NICOLAS AVELLANEDA",
+          "zona_id": 1,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 696,
+          "area_ha": 53.61,
+          "arboles_ha": 13.0
+        },
+        {
+          "barrio": "NICOLAS AVELLANEDA",
+          "zona_id": 2,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 124,
+          "area_ha": 29.34,
+          "arboles_ha": 4.2
+        }
+      ]
+    },
+    {
+      "barrio": "PALERMO",
+      "slug": "palermo",
+      "total_arboles": 1157,
+      "arboles_en_zonas": 1135,
+      "arboles_sin_zona": 22,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T21:34:26.761Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "PALERMO",
+          "zona_id": 1,
+          "tipo": "riberena",
+          "tipo_nombre": "Ribereña",
+          "lcz": "LCZ A/B + G",
+          "forestacion_incipiente": false,
+          "n_arboles": 1135,
+          "area_ha": 65.41,
+          "arboles_ha": 17.4
+        }
+      ]
+    },
+    {
+      "barrio": "PARQUE NORTE",
+      "slug": "parque_norte",
+      "total_arboles": 942,
+      "arboles_en_zonas": 930,
+      "arboles_sin_zona": 12,
+      "n_zonas": 4,
+      "fecha_edicion": "2026-10-15T21:33:23.020Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "PARQUE NORTE",
+          "zona_id": 1,
+          "tipo": "urbana_residencial",
+          "tipo_nombre": "Urbana residencial",
+          "lcz": "LCZ 6",
+          "forestacion_incipiente": false,
+          "n_arboles": 810,
+          "area_ha": 72.79,
+          "arboles_ha": 11.1
+        },
+        {
+          "barrio": "PARQUE NORTE",
+          "zona_id": 2,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 45,
+          "area_ha": 9.45,
+          "arboles_ha": 4.8
+        },
+        {
+          "barrio": "PARQUE NORTE",
+          "zona_id": 3,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 38,
+          "area_ha": 12.95,
+          "arboles_ha": 2.9
+        },
+        {
+          "barrio": "PARQUE NORTE",
+          "zona_id": 4,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 37,
+          "area_ha": 13.74,
+          "arboles_ha": 2.7
+        }
+      ]
+    },
+    {
+      "barrio": "ROQUE SAENZ PEÑA",
+      "slug": "roque_saenz_peña",
+      "total_arboles": 702,
+      "arboles_en_zonas": 685,
+      "arboles_sin_zona": 17,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-15T21:35:44.228Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "ROQUE SAENZ PEÑA",
+          "zona_id": 1,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 13,
+          "area_ha": 7.24,
+          "arboles_ha": 1.8
+        },
+        {
+          "barrio": "ROQUE SAENZ PEÑA",
+          "zona_id": 2,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 672,
+          "area_ha": 51.31,
+          "arboles_ha": 13.1
+        }
+      ]
+    },
+    {
+      "barrio": "SAN JUAN BAUTISTA",
+      "slug": "san_juan_bautista",
+      "total_arboles": 662,
+      "arboles_en_zonas": 658,
+      "arboles_sin_zona": 4,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-15T21:37:05.103Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "SAN JUAN BAUTISTA",
+          "zona_id": 1,
+          "tipo": "bosque_autoctono",
+          "tipo_nombre": "Bosque autóctono / rural",
+          "lcz": "LCZ A",
+          "forestacion_incipiente": false,
+          "n_arboles": 29,
+          "area_ha": 10.21,
+          "arboles_ha": 2.8
+        },
+        {
+          "barrio": "SAN JUAN BAUTISTA",
+          "zona_id": 2,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 629,
+          "area_ha": 62.49,
+          "arboles_ha": 10.1
+        }
+      ]
+    },
+    {
+      "barrio": "SAN JUSTO",
+      "slug": "san_justo",
+      "total_arboles": 997,
+      "arboles_en_zonas": 991,
+      "arboles_sin_zona": 6,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T21:37:40.525Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "SAN JUSTO",
+          "zona_id": 1,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 991,
+          "area_ha": 70.07,
+          "arboles_ha": 14.1
+        }
+      ]
+    },
+    {
+      "barrio": "SAN NICOLAS",
+      "slug": "san_nicolas",
+      "total_arboles": 312,
+      "arboles_en_zonas": 307,
+      "arboles_sin_zona": 5,
+      "n_zonas": 2,
+      "fecha_edicion": "2026-10-15T21:38:45.934Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "SAN NICOLAS",
+          "zona_id": 1,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 281,
+          "area_ha": 11.39,
+          "arboles_ha": 24.7
+        },
+        {
+          "barrio": "SAN NICOLAS",
+          "zona_id": 2,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 26,
+          "area_ha": 13.47,
+          "arboles_ha": 1.9
+        }
+      ]
+    },
+    {
+      "barrio": "SANTA ANA",
+      "slug": "santa_ana",
+      "total_arboles": 531,
+      "arboles_en_zonas": 524,
+      "arboles_sin_zona": 7,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T21:40:14.072Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "SANTA ANA",
+          "zona_id": 1,
+          "tipo": "urbana_residencial",
+          "tipo_nombre": "Urbana residencial",
+          "lcz": "LCZ 6",
+          "forestacion_incipiente": false,
+          "n_arboles": 524,
+          "area_ha": 41.62,
+          "arboles_ha": 12.6
+        }
+      ]
+    },
+    {
+      "barrio": "TRINITARIOS",
+      "slug": "trinitarios",
+      "total_arboles": 145,
+      "arboles_en_zonas": 143,
+      "arboles_sin_zona": 2,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T21:40:46.894Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "TRINITARIOS",
+          "zona_id": 1,
+          "tipo": "urbana_mixta",
+          "tipo_nombre": "Urbana mixta",
+          "lcz": "LCZ 9 + D",
+          "forestacion_incipiente": false,
+          "n_arboles": 143,
+          "area_ha": 9.05,
+          "arboles_ha": 15.8
+        }
+      ]
+    },
+    {
+      "barrio": "VILLA ALBERTINA",
+      "slug": "villa_albertina",
+      "total_arboles": 966,
+      "arboles_en_zonas": 962,
+      "arboles_sin_zona": 4,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T21:41:22.696Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "VILLA ALBERTINA",
+          "zona_id": 1,
+          "tipo": "industrial",
+          "tipo_nombre": "Industrial / gran predio",
+          "lcz": "LCZ 8/10",
+          "forestacion_incipiente": false,
+          "n_arboles": 962,
+          "area_ha": 121.06,
+          "arboles_ha": 7.9
+        }
+      ]
+    },
+    {
+      "barrio": "VILLA DEL SUR",
+      "slug": "villa_del_sur",
+      "total_arboles": 181,
+      "arboles_en_zonas": 180,
+      "arboles_sin_zona": 1,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T21:41:55.500Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "VILLA DEL SUR",
+          "zona_id": 1,
+          "tipo": "urbana_residencial",
+          "tipo_nombre": "Urbana residencial",
+          "lcz": "LCZ 6",
+          "forestacion_incipiente": false,
+          "n_arboles": 180,
+          "area_ha": 9.6,
+          "arboles_ha": 18.8
+        }
+      ]
+    },
+    {
+      "barrio": "VISTA VERDE",
+      "slug": "vista_verde",
+      "total_arboles": 1945,
+      "arboles_en_zonas": 1912,
+      "arboles_sin_zona": 33,
+      "n_zonas": 1,
+      "fecha_edicion": "2026-10-15T21:43:03.626Z",
+      "notas": "",
+      "zonas": [
+        {
+          "barrio": "VISTA VERDE",
+          "zona_id": 1,
+          "tipo": "riberena",
+          "tipo_nombre": "Ribereña",
+          "lcz": "LCZ A/B + G",
+          "forestacion_incipiente": false,
+          "n_arboles": 1912,
+          "area_ha": 102.2,
+          "arboles_ha": 18.7
+        }
+      ]
+    }
+  ],
+  "avisos": {
+    "MARIANO MORENO": [
+      "14 árboles en zonas superpuestas (zonas [1, 2, 4]); se asignan a la de menor zona_id"
+    ]
+  }
+}

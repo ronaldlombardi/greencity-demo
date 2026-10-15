@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "SAN JUSTO",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 997,
+  "arboles_sin_zona": 6,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:37:40.525Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.23284,
+              -32.414982
+            ],
+            [
+              -63.225306,
+              -32.410327
+            ],
+            [
+              -63.219253,
+              -32.416739
+            ],
+            [
+              -63.220756,
+              -32.419927
+            ],
+            [
+              -63.231359,
+              -32.416558
+            ],
+            [
+              -63.231917,
+              -32.416087
+            ],
+            [
+              -63.23284,
+              -32.414982
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "SAN JUSTO",
+        "zona_id": 1,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 991,
+        "area_ha": 70.27,
+        "arboles_ha": 14.1
+      }
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "CENTRO OESTE",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 827,
+  "arboles_sin_zona": 29,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T00:03:53.066Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.252064,
+              -32.406016
+            ],
+            [
+              -63.256722,
+              -32.409077
+            ],
+            [
+              -63.250712,
+              -32.415779
+            ],
+            [
+              -63.245024,
+              -32.412229
+            ],
+            [
+              -63.248866,
+              -32.408208
+            ],
+            [
+              -63.252064,
+              -32.406016
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "CENTRO OESTE",
+        "zona_id": 1,
+        "tipo": "urbana_centrica",
+        "tipo_nombre": "Urbana céntrica",
+        "lcz": "LCZ 2-3",
+        "forestacion_incipiente": false,
+        "n_arboles": 798,
+        "area_ha": 59.83,
+        "arboles_ha": 13.3
+      }
+    }
+  ]
+}

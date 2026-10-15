@@ -1,0 +1,53 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "VILLA DEL SUR",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 181,
+  "arboles_sin_zona": 1,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:41:55.500Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.216371,
+              -32.438356
+            ],
+            [
+              -63.214096,
+              -32.438157
+            ],
+            [
+              -63.214118,
+              -32.442385
+            ],
+            [
+              -63.216296,
+              -32.442394
+            ],
+            [
+              -63.216371,
+              -32.438356
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "VILLA DEL SUR",
+        "zona_id": 1,
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
+        "forestacion_incipiente": false,
+        "n_arboles": 180,
+        "area_ha": 9.63,
+        "arboles_ha": 18.7
+      }
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "DOMINGO F. SARMIENTO",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 166,
+  "arboles_sin_zona": 2,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T00:06:07.885Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.23859,
+              -32.418443
+            ],
+            [
+              -63.242357,
+              -32.420833
+            ],
+            [
+              -63.241219,
+              -32.421132
+            ],
+            [
+              -63.240082,
+              -32.421268
+            ],
+            [
+              -63.238762,
+              -32.421993
+            ],
+            [
+              -63.238086,
+              -32.422735
+            ],
+            [
+              -63.237442,
+              -32.421712
+            ],
+            [
+              -63.237206,
+              -32.420689
+            ],
+            [
+              -63.237409,
+              -32.419991
+            ],
+            [
+              -63.237688,
+              -32.419403
+            ],
+            [
+              -63.238182,
+              -32.418787
+            ],
+            [
+              -63.23859,
+              -32.418443
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "DOMINGO F. SARMIENTO",
+        "zona_id": 1,
+        "tipo": "riberena",
+        "tipo_nombre": "Ribereña",
+        "lcz": "LCZ A/B + G",
+        "forestacion_incipiente": false,
+        "n_arboles": 164,
+        "area_ha": 10.82,
+        "arboles_ha": 15.2
+      }
+    }
+  ]
+}

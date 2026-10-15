@@ -1,0 +1,306 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "GENERAL SAN MARTIN",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 860,
+  "arboles_sin_zona": 8,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:14:05.008Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.228118,
+              -32.40136
+            ],
+            [
+              -63.231423,
+              -32.403533
+            ],
+            [
+              -63.225328,
+              -32.410326
+            ],
+            [
+              -63.223288,
+              -32.409022
+            ],
+            [
+              -63.224877,
+              -32.407265
+            ],
+            [
+              -63.223439,
+              -32.405925
+            ],
+            [
+              -63.228118,
+              -32.40136
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "GENERAL SAN MARTIN",
+        "zona_id": 1,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 389,
+        "area_ha": 34.93,
+        "arboles_ha": 11.1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.224297,
+              -32.39886
+            ],
+            [
+              -63.225928,
+              -32.399929
+            ],
+            [
+              -63.224812,
+              -32.400889
+            ],
+            [
+              -63.225993,
+              -32.401613
+            ],
+            [
+              -63.224233,
+              -32.403461
+            ],
+            [
+              -63.225321,
+              -32.404089
+            ],
+            [
+              -63.222838,
+              -32.406522
+            ],
+            [
+              -63.22243,
+              -32.406305
+            ],
+            [
+              -63.221292,
+              -32.407899
+            ],
+            [
+              -63.219854,
+              -32.406885
+            ],
+            [
+              -63.220047,
+              -32.4052
+            ],
+            [
+              -63.220863,
+              -32.404258
+            ],
+            [
+              -63.220026,
+              -32.403678
+            ],
+            [
+              -63.224297,
+              -32.39886
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "GENERAL SAN MARTIN",
+        "zona_id": 2,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 423,
+        "area_ha": 28.98,
+        "arboles_ha": 14.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.225928,
+              -32.399929
+            ],
+            [
+              -63.228118,
+              -32.40136
+            ],
+            [
+              -63.224233,
+              -32.403461
+            ],
+            [
+              -63.225993,
+              -32.401613
+            ],
+            [
+              -63.224812,
+              -32.400889
+            ],
+            [
+              -63.225928,
+              -32.399929
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "GENERAL SAN MARTIN",
+        "zona_id": 3,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 17,
+        "area_ha": 4.72,
+        "arboles_ha": 3.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.224233,
+              -32.403461
+            ],
+            [
+              -63.225349,
+              -32.404061
+            ],
+            [
+              -63.228118,
+              -32.40136
+            ],
+            [
+              -63.224233,
+              -32.403461
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "GENERAL SAN MARTIN",
+        "zona_id": 4,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 13,
+        "area_ha": 2.45,
+        "arboles_ha": 5.3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.223439,
+              -32.405925
+            ],
+            [
+              -63.224877,
+              -32.407265
+            ],
+            [
+              -63.223288,
+              -32.409022
+            ],
+            [
+              -63.221292,
+              -32.407899
+            ],
+            [
+              -63.22243,
+              -32.406305
+            ],
+            [
+              -63.222838,
+              -32.406522
+            ],
+            [
+              -63.223439,
+              -32.405925
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "GENERAL SAN MARTIN",
+        "zona_id": 5,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 10,
+        "area_ha": 6.18,
+        "arboles_ha": 1.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.220047,
+              -32.4052
+            ],
+            [
+              -63.220863,
+              -32.40587
+            ],
+            [
+              -63.219854,
+              -32.406885
+            ],
+            [
+              -63.220047,
+              -32.4052
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "GENERAL SAN MARTIN",
+        "zona_id": 6,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 0,
+        "area_ha": 0.79,
+        "arboles_ha": 0
+      }
+    }
+  ]
+}

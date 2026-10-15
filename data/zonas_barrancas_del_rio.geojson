@@ -1,0 +1,454 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "BARRANCAS DEL RIO",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 1123,
+  "arboles_sin_zona": 541,
+  "notas": "",
+  "fecha_edicion": "2026-10-14T23:57:30.375Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.227859,
+              -32.424383
+            ],
+            [
+              -63.218887,
+              -32.428983
+            ],
+            [
+              -63.22142,
+              -32.432315
+            ],
+            [
+              -63.22245,
+              -32.431373
+            ],
+            [
+              -63.222965,
+              -32.43007
+            ],
+            [
+              -63.223137,
+              -32.429454
+            ],
+            [
+              -63.223824,
+              -32.428766
+            ],
+            [
+              -63.224339,
+              -32.427607
+            ],
+            [
+              -63.22494,
+              -32.426556
+            ],
+            [
+              -63.225541,
+              -32.426049
+            ],
+            [
+              -63.226915,
+              -32.425651
+            ],
+            [
+              -63.228632,
+              -32.425687
+            ],
+            [
+              -63.227859,
+              -32.424383
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BARRANCAS DEL RIO",
+        "zona_id": 1,
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
+        "forestacion_incipiente": false,
+        "n_arboles": 316,
+        "area_ha": 19.68,
+        "arboles_ha": 16.1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.21086,
+              -32.433981
+            ],
+            [
+              -63.207469,
+              -32.435575
+            ],
+            [
+              -63.207297,
+              -32.437204
+            ],
+            [
+              -63.210903,
+              -32.437711
+            ],
+            [
+              -63.21086,
+              -32.433981
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BARRANCAS DEL RIO",
+        "zona_id": 2,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 18,
+        "area_ha": 9.77,
+        "arboles_ha": 1.8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.213951,
+              -32.432315
+            ],
+            [
+              -63.21086,
+              -32.433981
+            ],
+            [
+              -63.210876,
+              -32.435397
+            ],
+            [
+              -63.215367,
+              -32.435575
+            ],
+            [
+              -63.215196,
+              -32.437204
+            ],
+            [
+              -63.217041,
+              -32.436045
+            ],
+            [
+              -63.213951,
+              -32.432315
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BARRANCAS DEL RIO",
+        "zona_id": 3,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 13,
+        "area_ha": 13.8,
+        "arboles_ha": 0.9
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.210903,
+              -32.437711
+            ],
+            [
+              -63.214857,
+              -32.43802
+            ],
+            [
+              -63.215367,
+              -32.435575
+            ],
+            [
+              -63.210876,
+              -32.435394
+            ],
+            [
+              -63.210903,
+              -32.437711
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BARRANCAS DEL RIO",
+        "zona_id": 4,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 28,
+        "area_ha": 10.58,
+        "arboles_ha": 2.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.219245,
+              -32.429453
+            ],
+            [
+              -63.215973,
+              -32.431103
+            ],
+            [
+              -63.219107,
+              -32.434779
+            ],
+            [
+              -63.22142,
+              -32.432315
+            ],
+            [
+              -63.219245,
+              -32.429453
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BARRANCAS DEL RIO",
+        "zona_id": 5,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 55,
+        "area_ha": 15.26,
+        "arboles_ha": 3.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.215973,
+              -32.431103
+            ],
+            [
+              -63.213951,
+              -32.432315
+            ],
+            [
+              -63.217041,
+              -32.436045
+            ],
+            [
+              -63.219107,
+              -32.434779
+            ],
+            [
+              -63.215973,
+              -32.431103
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BARRANCAS DEL RIO",
+        "zona_id": 6,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 138,
+        "area_ha": 11.95,
+        "arboles_ha": 11.5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.219622,
+              -32.436409
+            ],
+            [
+              -63.218506,
+              -32.43697
+            ],
+            [
+              -63.218634,
+              -32.437912
+            ],
+            [
+              -63.220373,
+              -32.43793
+            ],
+            [
+              -63.219622,
+              -32.436409
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BARRANCAS DEL RIO",
+        "zona_id": 7,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 3,
+        "area_ha": 1.96,
+        "arboles_ha": 1.5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.219085,
+              -32.435178
+            ],
+            [
+              -63.215196,
+              -32.437204
+            ],
+            [
+              -63.219386,
+              -32.435467
+            ],
+            [
+              -63.219085,
+              -32.435178
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BARRANCAS DEL RIO",
+        "zona_id": 8,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 2,
+        "area_ha": 0.91,
+        "arboles_ha": 2.2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.2193,
+              -32.438437
+            ],
+            [
+              -63.217304,
+              -32.43831
+            ],
+            [
+              -63.217432,
+              -32.438057
+            ],
+            [
+              -63.218634,
+              -32.437912
+            ],
+            [
+              -63.2193,
+              -32.438437
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BARRANCAS DEL RIO",
+        "zona_id": 9,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 1,
+        "area_ha": 0.65,
+        "arboles_ha": 1.5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.207133,
+              -32.435893
+            ],
+            [
+              -63.204514,
+              -32.437161
+            ],
+            [
+              -63.207297,
+              -32.437204
+            ],
+            [
+              -63.207133,
+              -32.435893
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BARRANCAS DEL RIO",
+        "zona_id": 10,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 8,
+        "area_ha": 1.9,
+        "arboles_ha": 4.2
+      }
+    }
+  ]
+}

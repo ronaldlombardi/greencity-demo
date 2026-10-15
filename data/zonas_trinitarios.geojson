@@ -1,0 +1,49 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "TRINITARIOS",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 145,
+  "arboles_sin_zona": 2,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:40:46.894Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.243654,
+              -32.396224
+            ],
+            [
+              -63.24756,
+              -32.398597
+            ],
+            [
+              -63.245038,
+              -32.401504
+            ],
+            [
+              -63.243654,
+              -32.396224
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "TRINITARIOS",
+        "zona_id": 1,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 143,
+        "area_ha": 9.07,
+        "arboles_ha": 15.8
+      }
+    }
+  ]
+}

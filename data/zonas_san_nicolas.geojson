@@ -1,0 +1,110 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "SAN NICOLAS",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 312,
+  "arboles_sin_zona": 5,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:38:45.934Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.221939,
+              -32.393107
+            ],
+            [
+              -63.224407,
+              -32.39462
+            ],
+            [
+              -63.222165,
+              -32.397464
+            ],
+            [
+              -63.21946,
+              -32.395825
+            ],
+            [
+              -63.221939,
+              -32.393107
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "SAN NICOLAS",
+        "zona_id": 1,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 281,
+        "area_ha": 11.42,
+        "arboles_ha": 24.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.222165,
+              -32.397464
+            ],
+            [
+              -63.223012,
+              -32.398053
+            ],
+            [
+              -63.225824,
+              -32.394865
+            ],
+            [
+              -63.220898,
+              -32.391884
+            ],
+            [
+              -63.218129,
+              -32.39491
+            ],
+            [
+              -63.21946,
+              -32.395825
+            ],
+            [
+              -63.221939,
+              -32.393107
+            ],
+            [
+              -63.224407,
+              -32.39462
+            ],
+            [
+              -63.222165,
+              -32.397464
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "SAN NICOLAS",
+        "zona_id": 2,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 26,
+        "area_ha": 13.51,
+        "arboles_ha": 1.9
+      }
+    }
+  ]
+}

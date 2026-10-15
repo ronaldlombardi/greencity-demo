@@ -1,0 +1,138 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "SAN JUAN BAUTISTA",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 662,
+  "arboles_sin_zona": 4,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:37:05.103Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.219341,
+              -32.416848
+            ],
+            [
+              -63.216808,
+              -32.415091
+            ],
+            [
+              -63.218032,
+              -32.413388
+            ],
+            [
+              -63.21698,
+              -32.412881
+            ],
+            [
+              -63.217559,
+              -32.412338
+            ],
+            [
+              -63.219555,
+              -32.413551
+            ],
+            [
+              -63.220285,
+              -32.413986
+            ],
+            [
+              -63.221208,
+              -32.414547
+            ],
+            [
+              -63.219341,
+              -32.416848
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "SAN JUAN BAUTISTA",
+        "zona_id": 1,
+        "tipo": "bosque_autoctono",
+        "tipo_nombre": "Bosque autóctono / rural",
+        "lcz": "LCZ A",
+        "forestacion_incipiente": false,
+        "n_arboles": 29,
+        "area_ha": 10.24,
+        "arboles_ha": 2.8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.2252,
+              -32.410219
+            ],
+            [
+              -63.222367,
+              -32.408462
+            ],
+            [
+              -63.213911,
+              -32.408588
+            ],
+            [
+              -63.213825,
+              -32.412519
+            ],
+            [
+              -63.216164,
+              -32.417771
+            ],
+            [
+              -63.219341,
+              -32.416848
+            ],
+            [
+              -63.216808,
+              -32.415091
+            ],
+            [
+              -63.218032,
+              -32.413388
+            ],
+            [
+              -63.21698,
+              -32.412881
+            ],
+            [
+              -63.217559,
+              -32.412338
+            ],
+            [
+              -63.221208,
+              -32.414547
+            ],
+            [
+              -63.2252,
+              -32.410219
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "SAN JUAN BAUTISTA",
+        "zona_id": 2,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 629,
+        "area_ha": 62.67,
+        "arboles_ha": 10
+      }
+    }
+  ]
+}

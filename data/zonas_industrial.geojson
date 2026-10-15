@@ -1,0 +1,248 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "INDUSTRIAL",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 930,
+  "arboles_sin_zona": 16,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:16:31.145Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.219105,
+              -32.427299
+            ],
+            [
+              -63.224063,
+              -32.4246
+            ],
+            [
+              -63.224792,
+              -32.423387
+            ],
+            [
+              -63.22535,
+              -32.422572
+            ],
+            [
+              -63.223912,
+              -32.421521
+            ],
+            [
+              -63.22432,
+              -32.420181
+            ],
+            [
+              -63.222839,
+              -32.419149
+            ],
+            [
+              -63.220907,
+              -32.420018
+            ],
+            [
+              -63.220135,
+              -32.41837
+            ],
+            [
+              -63.213996,
+              -32.420127
+            ],
+            [
+              -63.213438,
+              -32.418805
+            ],
+            [
+              -63.210991,
+              -32.419421
+            ],
+            [
+              -63.211013,
+              -32.422988
+            ],
+            [
+              -63.215348,
+              -32.421558
+            ],
+            [
+              -63.216207,
+              -32.423785
+            ],
+            [
+              -63.217001,
+              -32.423405
+            ],
+            [
+              -63.219105,
+              -32.427299
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "INDUSTRIAL",
+        "zona_id": 1,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 607,
+        "area_ha": 69.84,
+        "arboles_ha": 8.7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.22432,
+              -32.420181
+            ],
+            [
+              -63.226789,
+              -32.421558
+            ],
+            [
+              -63.229343,
+              -32.423043
+            ],
+            [
+              -63.225136,
+              -32.424908
+            ],
+            [
+              -63.224384,
+              -32.424065
+            ],
+            [
+              -63.22535,
+              -32.422572
+            ],
+            [
+              -63.223912,
+              -32.421521
+            ],
+            [
+              -63.22432,
+              -32.420181
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "INDUSTRIAL",
+        "zona_id": 2,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 99,
+        "area_ha": 11.99,
+        "arboles_ha": 8.3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.229343,
+              -32.423043
+            ],
+            [
+              -63.229708,
+              -32.423369
+            ],
+            [
+              -63.219791,
+              -32.42853
+            ],
+            [
+              -63.219105,
+              -32.427299
+            ],
+            [
+              -63.224063,
+              -32.4246
+            ],
+            [
+              -63.224384,
+              -32.424065
+            ],
+            [
+              -63.225136,
+              -32.424908
+            ],
+            [
+              -63.229343,
+              -32.423043
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "INDUSTRIAL",
+        "zona_id": 3,
+        "tipo": "bosque_autoctono",
+        "tipo_nombre": "Bosque autóctono / rural",
+        "lcz": "LCZ A",
+        "forestacion_incipiente": false,
+        "n_arboles": 123,
+        "area_ha": 12.84,
+        "arboles_ha": 9.6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.219448,
+              -32.41674
+            ],
+            [
+              -63.220135,
+              -32.41837
+            ],
+            [
+              -63.213996,
+              -32.420127
+            ],
+            [
+              -63.213438,
+              -32.418805
+            ],
+            [
+              -63.219448,
+              -32.41674
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "INDUSTRIAL",
+        "zona_id": 4,
+        "tipo": "bosque_autoctono",
+        "tipo_nombre": "Bosque autóctono / rural",
+        "lcz": "LCZ A",
+        "forestacion_incipiente": false,
+        "n_arboles": 85,
+        "area_ha": 10.62,
+        "arboles_ha": 8
+      }
+    }
+  ]
+}

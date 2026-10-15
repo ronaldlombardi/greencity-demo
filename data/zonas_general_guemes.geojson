@@ -1,0 +1,126 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "GENERAL GUEMES",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 695,
+  "arboles_sin_zona": 19,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:08:36.433Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.261957,
+              -32.409983
+            ],
+            [
+              -63.257922,
+              -32.409603
+            ],
+            [
+              -63.256806,
+              -32.409059
+            ],
+            [
+              -63.250668,
+              -32.415779
+            ],
+            [
+              -63.252578,
+              -32.416993
+            ],
+            [
+              -63.253415,
+              -32.416413
+            ],
+            [
+              -63.254982,
+              -32.417482
+            ],
+            [
+              -63.255239,
+              -32.416395
+            ],
+            [
+              -63.256248,
+              -32.415272
+            ],
+            [
+              -63.257472,
+              -32.414421
+            ],
+            [
+              -63.258673,
+              -32.414964
+            ],
+            [
+              -63.261915,
+              -32.411505
+            ],
+            [
+              -63.261957,
+              -32.409983
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "GENERAL GUEMES",
+        "zona_id": 1,
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
+        "forestacion_incipiente": false,
+        "n_arboles": 652,
+        "area_ha": 47.27,
+        "arboles_ha": 13.8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.254724,
+              -32.418315
+            ],
+            [
+              -63.254982,
+              -32.417482
+            ],
+            [
+              -63.253415,
+              -32.416413
+            ],
+            [
+              -63.252578,
+              -32.416993
+            ],
+            [
+              -63.254724,
+              -32.418315
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "GENERAL GUEMES",
+        "zona_id": 2,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 24,
+        "area_ha": 2.06,
+        "arboles_ha": 11.7
+      }
+    }
+  ]
+}

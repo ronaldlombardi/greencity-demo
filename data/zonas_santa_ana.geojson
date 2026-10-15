@@ -1,0 +1,81 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "SANTA ANA",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 531,
+  "arboles_sin_zona": 7,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:40:14.072Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.238247,
+              -32.418261
+            ],
+            [
+              -63.238676,
+              -32.418587
+            ],
+            [
+              -63.237324,
+              -32.420127
+            ],
+            [
+              -63.237302,
+              -32.421159
+            ],
+            [
+              -63.238032,
+              -32.422699
+            ],
+            [
+              -63.237452,
+              -32.423948
+            ],
+            [
+              -63.235263,
+              -32.425578
+            ],
+            [
+              -63.233031,
+              -32.425958
+            ],
+            [
+              -63.230799,
+              -32.426013
+            ],
+            [
+              -63.22876,
+              -32.425741
+            ],
+            [
+              -63.22788,
+              -32.424347
+            ],
+            [
+              -63.238247,
+              -32.418261
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "SANTA ANA",
+        "zona_id": 1,
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
+        "forestacion_incipiente": false,
+        "n_arboles": 524,
+        "area_ha": 41.74,
+        "arboles_ha": 12.6
+      }
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "BERNARDINO RIVADAVIA",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 904,
+  "arboles_sin_zona": 38,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T00:00:28.150Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.238204,
+              -32.418243
+            ],
+            [
+              -63.232946,
+              -32.414892
+            ],
+            [
+              -63.230928,
+              -32.41683
+            ],
+            [
+              -63.22303,
+              -32.419221
+            ],
+            [
+              -63.229791,
+              -32.423278
+            ],
+            [
+              -63.238204,
+              -32.418243
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "BERNARDINO RIVADAVIA",
+        "zona_id": 1,
+        "tipo": "urbana_centrica",
+        "tipo_nombre": "Urbana céntrica",
+        "lcz": "LCZ 2-3",
+        "forestacion_incipiente": false,
+        "n_arboles": 866,
+        "area_ha": 59.46,
+        "arboles_ha": 14.6
+      }
+    }
+  ]
+}

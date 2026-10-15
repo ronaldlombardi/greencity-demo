@@ -1,0 +1,53 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "GENERAL LAMADRID",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 1036,
+  "arboles_sin_zona": 3,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:09:08.708Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.238977,
+              -32.408352
+            ],
+            [
+              -63.231507,
+              -32.40357
+            ],
+            [
+              -63.225369,
+              -32.410399
+            ],
+            [
+              -63.23301,
+              -32.415054
+            ],
+            [
+              -63.238977,
+              -32.408352
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "GENERAL LAMADRID",
+        "zona_id": 1,
+        "tipo": "urbana_centrica",
+        "tipo_nombre": "Urbana céntrica",
+        "lcz": "LCZ 2-3",
+        "forestacion_incipiente": false,
+        "n_arboles": 1033,
+        "area_ha": 83.36,
+        "arboles_ha": 12.4
+      }
+    }
+  ]
+}

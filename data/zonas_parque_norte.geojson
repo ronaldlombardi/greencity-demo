@@ -1,0 +1,200 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "PARQUE NORTE",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 942,
+  "arboles_sin_zona": 12,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:33:23.020Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.247382,
+              -32.398694
+            ],
+            [
+              -63.243476,
+              -32.396049
+            ],
+            [
+              -63.241888,
+              -32.389527
+            ],
+            [
+              -63.245021,
+              -32.387426
+            ],
+            [
+              -63.247726,
+              -32.386194
+            ],
+            [
+              -63.250473,
+              -32.388078
+            ],
+            [
+              -63.249786,
+              -32.388984
+            ],
+            [
+              -63.247683,
+              -32.391303
+            ],
+            [
+              -63.251504,
+              -32.393658
+            ],
+            [
+              -63.247382,
+              -32.398694
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "PARQUE NORTE",
+        "zona_id": 1,
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
+        "forestacion_incipiente": false,
+        "n_arboles": 810,
+        "area_ha": 73,
+        "arboles_ha": 11.1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.241888,
+              -32.389527
+            ],
+            [
+              -63.245021,
+              -32.387426
+            ],
+            [
+              -63.241116,
+              -32.385287
+            ],
+            [
+              -63.240644,
+              -32.386084
+            ],
+            [
+              -63.241374,
+              -32.388585
+            ],
+            [
+              -63.241888,
+              -32.389527
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "PARQUE NORTE",
+        "zona_id": 2,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 45,
+        "area_ha": 9.48,
+        "arboles_ha": 4.7
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.247726,
+              -32.386194
+            ],
+            [
+              -63.250473,
+              -32.388078
+            ],
+            [
+              -63.252621,
+              -32.385831
+            ],
+            [
+              -63.251462,
+              -32.382932
+            ],
+            [
+              -63.247726,
+              -32.386194
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "PARQUE NORTE",
+        "zona_id": 3,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 38,
+        "area_ha": 12.99,
+        "arboles_ha": 2.9
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.249786,
+              -32.388984
+            ],
+            [
+              -63.253479,
+              -32.391737
+            ],
+            [
+              -63.251504,
+              -32.393658
+            ],
+            [
+              -63.247683,
+              -32.391303
+            ],
+            [
+              -63.249786,
+              -32.388984
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "PARQUE NORTE",
+        "zona_id": 4,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 37,
+        "area_ha": 13.78,
+        "arboles_ha": 2.7
+      }
+    }
+  ]
+}

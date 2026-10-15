@@ -1,0 +1,126 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "NICOLAS AVELLANEDA",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 822,
+  "arboles_sin_zona": 2,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:30:06.285Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.230542,
+              -32.392084
+            ],
+            [
+              -63.236466,
+              -32.395979
+            ],
+            [
+              -63.230327,
+              -32.402935
+            ],
+            [
+              -63.227473,
+              -32.400815
+            ],
+            [
+              -63.228331,
+              -32.39991
+            ],
+            [
+              -63.2267,
+              -32.398768
+            ],
+            [
+              -63.230113,
+              -32.395508
+            ],
+            [
+              -63.228567,
+              -32.394004
+            ],
+            [
+              -63.230542,
+              -32.392084
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "NICOLAS AVELLANEDA",
+        "zona_id": 1,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 696,
+        "area_ha": 53.77,
+        "arboles_ha": 12.9
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.230542,
+              -32.392084
+            ],
+            [
+              -63.229083,
+              -32.391214
+            ],
+            [
+              -63.22303,
+              -32.39808
+            ],
+            [
+              -63.227473,
+              -32.400815
+            ],
+            [
+              -63.228331,
+              -32.39991
+            ],
+            [
+              -63.2267,
+              -32.398768
+            ],
+            [
+              -63.230113,
+              -32.395508
+            ],
+            [
+              -63.228567,
+              -32.394004
+            ],
+            [
+              -63.230542,
+              -32.392084
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "NICOLAS AVELLANEDA",
+        "zona_id": 2,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 124,
+        "area_ha": 29.42,
+        "arboles_ha": 4.2
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "ALMIRANTE BROWN",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 594,
+  "arboles_sin_zona": 225,
+  "notas": "",
+  "fecha_edicion": "2026-10-14T23:48:29.517Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.251145,
+              -32.405419
+            ],
+            [
+              -63.244949,
+              -32.401576
+            ],
+            [
+              -63.247454,
+              -32.398697
+            ],
+            [
+              -63.25365,
+              -32.40254
+            ],
+            [
+              -63.251145,
+              -32.405419
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "ALMIRANTE BROWN",
+        "zona_id": 1,
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
+        "forestacion_incipiente": false,
+        "n_arboles": 369,
+        "area_ha": 28.74,
+        "arboles_ha": 12.8
+      }
+    }
+  ]
+}

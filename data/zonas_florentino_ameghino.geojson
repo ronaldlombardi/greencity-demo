@@ -1,0 +1,53 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "FLORENTINO AMEGHINO",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 1515,
+  "arboles_sin_zona": 13,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:07:18.705Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.245071,
+              -32.401541
+            ],
+            [
+              -63.236356,
+              -32.395834
+            ],
+            [
+              -63.230325,
+              -32.402827
+            ],
+            [
+              -63.238997,
+              -32.408297
+            ],
+            [
+              -63.245071,
+              -32.401541
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "FLORENTINO AMEGHINO",
+        "zona_id": 1,
+        "tipo": "urbana_centrica",
+        "tipo_nombre": "Urbana céntrica",
+        "lcz": "LCZ 2-3",
+        "forestacion_incipiente": false,
+        "n_arboles": 1502,
+        "area_ha": 97.92,
+        "arboles_ha": 15.3
+      }
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "type": "FeatureCollection",
+  "barrio": "MANUEL BELGARANO",
+  "provisoria": true,
+  "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
+  "total_arboles_barrio": 513,
+  "arboles_sin_zona": 1,
+  "notas": "",
+  "fecha_edicion": "2026-10-15T21:24:48.092Z",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.253458,
+              -32.391576
+            ],
+            [
+              -63.259597,
+              -32.395471
+            ],
+            [
+              -63.25803,
+              -32.397446
+            ],
+            [
+              -63.251784,
+              -32.393623
+            ],
+            [
+              -63.253458,
+              -32.391576
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "MANUEL BELGARANO",
+        "zona_id": 1,
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
+        "forestacion_incipiente": false,
+        "n_arboles": 113,
+        "area_ha": 19.57,
+        "arboles_ha": 5.8
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.25803,
+              -32.397446
+            ],
+            [
+              -63.254961,
+              -32.401232
+            ],
+            [
+              -63.248629,
+              -32.397192
+            ],
+            [
+              -63.251784,
+              -32.393623
+            ],
+            [
+              -63.25803,
+              -32.397446
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "MANUEL BELGARANO",
+        "zona_id": 2,
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
+        "forestacion_incipiente": false,
+        "n_arboles": 399,
+        "area_ha": 37,
+        "arboles_ha": 10.8
+      }
+    }
+  ]
+}
