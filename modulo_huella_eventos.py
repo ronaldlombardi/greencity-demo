@@ -24,7 +24,7 @@ import pandas as pd
 import streamlit as st
 
 from modulo_db import guardar_evento_huella, obtener_eventos_huella, eliminar_evento_huella, DB_URL
-from modulo_agenda2030 import _cargar_censo, TASA_SECUESTRO_NETA, C_A_CO2
+from modulo_agenda2030 import _cargar_censo, calcular_agenda2030, TASA_SECUESTRO_NETA, C_A_CO2
 
 RUTA_HUELLA = os.path.join(os.path.dirname(__file__), 'data', 'huella_eventos.json')
 CIUDAD = "Villa María"
@@ -432,6 +432,101 @@ def _render_guardar(p, res, mit, acciones_ids):
             st.error("No se pudo guardar el evento. Revisá la conexión a la base de datos.")
 
 
+# Huella por habitante de Argentina: INDEC, Cuenta de emisiones al aire (2022):
+# 401,2 MtCO₂e / 46.044.703 habitantes (Censo 2022). Sectores urbanos: se descuenta
+# agricultura, ganadería y uso del suelo (39 % del inventario nacional, INGEI 2018).
+HUELLA_HAB_TOTAL_T = 401.2e6 / 46_044_703
+PARTE_AGRO = 0.39
+META_COPA_PCT = 30.0
+
+
+def _tiempo(dias):
+    """Texto legible para un plazo expresado en días."""
+    if dias >= 10:
+        return f"{_num(dias)} días"
+    if dias >= 1:
+        return f"{_dec(dias, 1)} días"
+    horas = dias * 24
+    return f"{_num(horas)} horas" if horas >= 1 else "menos de 1 hora"
+
+
+def _render_balance(res, mit, captura_kg):
+    """¿Puede Villa María absorber el evento con sus propios árboles? Tres escenarios."""
+    a = calcular_agenda2030()
+    if not a or not captura_kg:
+        return
+    st.markdown("### ⚖️ ¿Puede Villa María absorber este evento con sus árboles?")
+
+    captura_hoy = a['co2_meta_t']
+    deficit = a['meta_municipal']['deficit_arboles'] if a.get('meta_municipal') else 0
+    captura_meta = captura_hoy + deficit * captura_kg / 1000
+    copa_30_m2 = a['area_ha'] * META_COPA_PCT / 100 * 10_000
+    captura_30 = max(captura_hoy, copa_30_m2 * TASA_SECUESTRO_NETA / 1000 * C_A_CO2)
+
+    huella = res['total_kg'] / 1000
+    huella_mit = mit['total_kg'] / 1000
+    hay_mit = huella_mit < huella - 0.001
+
+    escenarios = [
+        ("Hoy", f"{_num(a['total_arboles'])} árboles · {_dec(a['copa_pct'])} % de copa", captura_hoy),
+        ("Meta municipal: 1 árbol por casa", f"+{_num(deficit)} árboles", captura_meta),
+        ("Camino C40 / regla 3-30-300", f"{_dec(META_COPA_PCT, 0)} % de copa", captura_30),
+    ]
+    ref = huella_mit if hay_mit else huella
+    evento_chico = ref <= captura_hoy   # el arbolado actual ya lo absorbe en menos de un año
+    cols = st.columns(3)
+    for col, (titulo, detalle, captura) in zip(cols, escenarios):
+        pct = captura / ref * 100 if ref else 0
+        if evento_chico:
+            dias = ref / captura * 365 if captura else 0
+            valor = _tiempo(dias)
+            estado, color = "✅ para absorberlo", "#2e7d32"
+        else:
+            valor = f"{_dec(pct, 0)} %"
+            color = "#2e7d32" if pct >= 100 else "#f57c00"
+            estado = "✅ autosuficiente" if pct >= 100 else "absorbe en un año"
+        with col:
+            _card(titulo, valor, f"{estado} · captura {_num(captura)} t CO₂/año · {detalle}", color)
+
+    filas = [{
+        'Escenario': t,
+        'Captura anual (t CO₂)': round(c),
+        'Cubre del evento (%)': round(c / huella * 100) if huella else 0,
+        **({'Cubre del evento con mitigación (%)': round(c / huella_mit * 100) if huella_mit else 0} if hay_mit else {}),
+    } for t, _, c in escenarios]
+    st.dataframe(pd.DataFrame(filas), hide_index=True, use_container_width=True)
+
+    ref_txt = "con mitigación" if hay_mit else "sin mitigación"
+    pct_hoy = captura_hoy / ref * 100 if ref else 0
+    if evento_chico:
+        dias_hoy = ref / captura_hoy * 365 if captura_hoy else 0
+        mensaje = (f"Los árboles de Villa María absorben la huella de este evento ({ref_txt}) en "
+                   f"{_tiempo(dias_hoy)}.")
+    elif captura_meta >= ref:
+        mensaje = (f"Hoy los árboles de Villa María absorben el {_dec(pct_hoy, 0)} % de la huella de este evento "
+                   f"({ref_txt}). Con la meta de 1 árbol por casa, la ciudad lo absorbería con sus propios árboles.")
+    elif captura_30 >= ref:
+        mensaje = (f"Hoy los árboles de Villa María absorben el {_dec(pct_hoy, 0)} % de la huella de este evento "
+                   f"({ref_txt}). Con 30 % de copa, la ciudad lo absorbería con sus propios árboles.")
+    else:
+        mensaje = (f"Hoy los árboles de Villa María absorben el {_dec(pct_hoy, 0)} % de la huella de este evento "
+                   f"({ref_txt}). Cada árbol que se planta acerca a la ciudad a absorberlo con sus propios árboles.")
+    st.success(f"🌳 {mensaje}")
+
+    poblacion = a['poblacion']
+    huella_ciudad_urbana = poblacion * HUELLA_HAB_TOTAL_T * (1 - PARTE_AGRO)
+    huella_ciudad_total = poblacion * HUELLA_HAB_TOTAL_T
+    st.caption(
+        "Captura = copa × 0,205 kg C/m² por año × 44/12 (Nowak et al. 2013); los árboles nuevos suman la copa media "
+        "medida en la ciudad. Un árbol recién plantado tarda 15 a 20 años en llegar a esa captura. "
+        "'Autosuficiente' significa que el arbolado captura en un año al menos lo que emite el evento. "
+        f"Es un balance del evento, no de toda la ciudad: la huella estimada de Villa María es de ≈ "
+        f"{_num(huella_ciudad_urbana / 1000)} mil t CO₂e por año en sectores urbanos (≈ "
+        f"{_num(huella_ciudad_total / 1000)} mil t con todos los sectores), con el promedio nacional por habitante "
+        "(INDEC, Cuenta de emisiones al aire 2022; Censo 2022)."
+    )
+
+
 def _render_registro(captura_kg):
     st.markdown("### 📅 Registro anual de eventos")
     if not DB_URL:
@@ -579,6 +674,8 @@ def render_huella_eventos():
     st.markdown("---")
     mit, acciones_ids = _render_mitigacion(datos, p, res, captura_kg)
     _render_guardar(p, res, mit, acciones_ids)
+    st.markdown("---")
+    _render_balance(res, mit, captura_kg)
     st.markdown("---")
     _render_registro(captura_kg)
     st.markdown("---")
