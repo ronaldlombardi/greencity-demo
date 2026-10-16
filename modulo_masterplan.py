@@ -378,7 +378,7 @@ Prepará el Masterplan Ejecutivo incorporando el foco en los programas prioritar
         "tools":       [{"name": "entregar_masterplan",
                          "description": "Entrega el Masterplan Ejecutivo completo con la estructura fija.",
                          "input_schema": ESQUEMA}],
-        "tool_choice": {"type": "tool", "name": "entregar_masterplan"},
+        "tool_choice": {"type": "auto"},
     }
     try:
         r = requests.post(API_URL, headers=headers, json=payload, timeout=TIMEOUT_S)
