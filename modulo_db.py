@@ -54,8 +54,20 @@ def inicializar_db():
                         texto       TEXT,
                         tok_input   INTEGER,
                         tok_output  INTEGER,
-                        costo_usd   NUMERIC(10,6),
+                                                costo_usd   NUMERIC(10,6),
                         palabras    INTEGER
+                    );
+                """)
+                cur.execute("""
+                    CREATE TABLE IF NOT EXISTS cv_decisiones_c40 (
+                        id          SERIAL PRIMARY KEY,
+                        ciudad      VARCHAR(80)  NOT NULL DEFAULT 'Villa María',
+                        id_linea    VARCHAR(60)  NOT NULL,
+                        prioridad   VARCHAR(20)  NOT NULL,
+                        nota        TEXT,
+                        usuario     VARCHAR(80),
+                        fecha       TIMESTAMP DEFAULT NOW(),
+                        UNIQUE (ciudad, id_linea)
                     );
                 """)
             conn.commit()
@@ -240,4 +252,51 @@ def obtener_totales():
                 return dict(cur.fetchone() or {})
     except Exception as e:
         print(f"[cv_db] Error leyendo totales: {e}")
+        return {}
+
+
+# ============================================================
+# DECISIONES PARA VILLA MARÍA EN LÍNEA CON C40
+# ============================================================
+
+def guardar_decision(ciudad: str, id_linea: str, prioridad: str,
+                     nota: str, usuario: str) -> bool:
+    """Guarda (o actualiza) la prioridad de una línea de acción C40 para una ciudad."""
+    if not DB_URL:
+        return False
+    try:
+        with _conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO cv_decisiones_c40
+                        (ciudad, id_linea, prioridad, nota, usuario, fecha)
+                    VALUES (%s, %s, %s, %s, %s, NOW())
+                    ON CONFLICT (ciudad, id_linea) DO UPDATE SET
+                        prioridad = EXCLUDED.prioridad,
+                        nota      = EXCLUDED.nota,
+                        usuario   = EXCLUDED.usuario,
+                        fecha     = NOW()
+                """, (ciudad, id_linea, prioridad, (nota or "")[:1000], usuario))
+            conn.commit()
+        return True
+    except Exception as e:
+        print(f"[cv_db] Error guardando decisión C40: {e}")
+        return False
+
+
+def obtener_decisiones(ciudad: str = "Villa María") -> dict:
+    """Devuelve las decisiones C40 guardadas para una ciudad, como {id_linea: fila}."""
+    if not DB_URL:
+        return {}
+    try:
+        with _conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("""
+                    SELECT id_linea, prioridad, nota, usuario, fecha
+                    FROM cv_decisiones_c40
+                    WHERE ciudad = %s
+                """, (ciudad,))
+                return {fila["id_linea"]: dict(fila) for fila in cur.fetchall()}
+    except Exception as e:
+        print(f"[cv_db] Error leyendo decisiones C40: {e}")
         return {}

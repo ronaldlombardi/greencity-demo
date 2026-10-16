@@ -96,6 +96,7 @@ DATOS_VM = _cargar_datos_vm()
 from modulo_masterplan import render_masterplan
 from modulo_censo_arboreo import render_censo_arboreo
 from modulo_barrios import render_diagnostico_barrios
+from modulo_benchmarking import render_benchmarking_c40
 
 SECCIONES_VM = [
     ("🏠", "Inicio"),
@@ -107,6 +108,7 @@ SECCIONES_VM = [
     ("🏘️", "Diagnóstico por barrio"),
     ("🎯", "Estrategias · Villa María"),
     ("🌍", "Agenda 2030 · C40"),
+    ("🌐", "Benchmarking C40"),
     ("📄", "Masterplan · Opus 4.7"),
     ("🤝", "A Mejorar juntos"),
 ]
@@ -1531,6 +1533,8 @@ def render_modulo_villamaria():
         _render_estrategias()
     elif "Agenda" in seccion:
         _render_agenda2030()
+    elif "Benchmarking" in seccion:
+        render_benchmarking_c40()
     elif "Masterplan" in seccion:
         render_masterplan()
     elif "Mejorar" in seccion:
