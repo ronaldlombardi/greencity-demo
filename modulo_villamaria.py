@@ -737,9 +737,45 @@ def _render_estrategias():
     acciones_criticos.append(
         "Plan de plantación barrio por barrio, empezando por el menor cumplimiento"
     )
+        
     acciones_criticos.append(
         "Registrar lo plantado en la calculadora del Plan de Forestación para medir el avance"
     )
+
+    # Densidad de arbolado en zonas de casas, comparada con el promedio de su tipo
+    TIPOS_CASAS = ('urbana_centrica', 'urbana_residencial', 'urbana_mixta', 'riberena')
+    area_t, arb_t = {}, {}
+    for b in res['barrios']:
+        for z in b['zonas']:
+            if z['tipo'] in TIPOS_CASAS and z['lotes_estimados'] > 0:
+                area_t[z['tipo']] = area_t.get(z['tipo'], 0) + z['area_ha']
+                arb_t[z['tipo']] = arb_t.get(z['tipo'], 0) + z['n_arboles']
+    media_tipo = {t: arb_t[t] / area_t[t] for t in area_t if area_t[t] > 0}
+    area_casas = sum(area_t.values())
+    dens_ciudad = sum(arb_t.values()) / area_casas if area_casas else 0
+    sombra = []
+    for b in res['barrios']:
+        zc = [z for z in b['zonas'] if z['tipo'] in media_tipo and z['lotes_estimados'] > 0]
+        area_b = sum(z['area_ha'] for z in zc)
+        esperado = sum(media_tipo[z['tipo']] * z['area_ha'] for z in zc)
+        if area_b > 0 and esperado > 0:
+            n_b = sum(z['n_arboles'] for z in zc)
+            sombra.append({
+                'barrio': b['barrio'].title(),
+                'dens': n_b / area_b,
+                'indice': n_b / esperado,
+                'faltan': max(0, esperado - n_b),
+            })
+    sombra.sort(key=lambda x: x['indice'])
+    menos_sombra = sombra[:5]
+    faltan_sombra = sum(x['faltan'] for x in menos_sombra)
+    acciones_sombra = [
+        f"{x['barrio']}: {_d(x['dens'])} árb/ha · índice {_d(x['indice'], 2)} respecto de su tipo de zona"
+        for x in menos_sombra
+    ] + [
+        'Priorizar especies nativas de alta copa: espinillo, tala, ombú',
+        'Articular con UNVM para monitoreo satelital anual del impacto térmico',
+    ]
 
     st.markdown("""
     Las siguientes líneas de acción surgen del análisis cuantitativo de los indicadores ambientales
@@ -776,19 +812,15 @@ def _render_estrategias():
             'impacto': f'Plantar {_n(deficit_criticos)} árboles en estos {len(criticos)} barrios '
                        f'lleva a todos a la meta de 1 árbol por casa',
         },
-        {
-            'titulo': 'Forestación urgente en zona Noroeste (VM centro-norte)',
-            'fundamento': 'Es la zona más caliente del conglomerado: 40.76°C, +0.79°C sobre la media '
-                          '*(dato de un análisis anterior por cuadrantes, no vigente)*. '
-                          'El déficit de sombra en el centro-norte de Villa María genera un punto crítico '
-                          'de estrés térmico para los vecinos.',
-            'acciones': [
-                f'Plan de 500 árboles {SUP} en avenidas y espacios públicos del centro-norte en 18 meses',
-                'Priorizar especies nativas de alta copa: espinillo, tala, ombú',
-                'Articular con UNVM para monitoreo satelital anual del impacto térmico',
-            ],
-            'impacto': f'Reducción estimada de hasta {_d(enf, 2)}°C en temperatura local '
-                       f'con cobertura del 15% {SUP}',
+                {
+            'titulo': 'Arbolado para reducir el calor urbano',
+            'fundamento': f'Landsat 8/9 mide hasta {_d(enf, 2)} °C menos en zonas de verde denso que en '
+                          f'suelo/asfalto. En las zonas con casas hay en promedio {_d(dens_ciudad)} árboles '
+                          'por hectárea. Estos barrios tienen menos arbolado que el promedio de su mismo tipo '
+                          'de zona (índice 1,00 = igual al promedio), lo que indica menos sombra.',
+            'acciones': acciones_sombra,
+            'impacto': f'Plantar {_n(faltan_sombra)} árboles lleva a estos {len(menos_sombra)} barrios al '
+                       f'promedio de su tipo de zona, con un enfriamiento local de hasta {_d(enf, 2)} °C {SUP}',
         },
         {
             'titulo': 'Relevamiento y apertura de verde no catalogado',
@@ -906,11 +938,10 @@ def _render_estrategias():
     st.info(
         f"- **Lotes estimados:** {res['metodo_lotes']['estado']}. Los porcentajes de cumplimiento "
         "de la meta 1 árbol por casa dependen de esta estimación (ver Diagnóstico por barrio → Metodología).\n"
-        "- **Zona Noroeste (40.76°C, +0.79°C):** dato de un análisis anterior por cuadrantes, "
-        "que ya no se calcula en la app.\n"
-        "- **500 árboles en 18 meses:** meta de referencia propuesta, sin cálculo de respaldo.\n"
-        "- **Cobertura del 15%:** referencia de arbolado; la reducción de temperatura usa la diferencia "
-        "medida entre verde denso y suelo/asfalto (Landsat 8/9).\n"
+        "- **Densidad de arbolado como indicador de sombra:** se compara la cantidad de árboles por "
+        "hectárea con el promedio de su tipo de zona, sin medir la temperatura barrio por barrio.\n"
+        "- **Enfriamiento local:** la diferencia medida entre verde denso y suelo/asfalto (Landsat 8/9) "
+        "se usa como referencia máxima, no como una medición por barrio.\n"
         "- **~8 km de parque lineal:** longitud aproximada del corredor, sin medición.\n"
         "- **Reconversión del 5–10% de cultivos:** rango propuesto, sin cálculo de respaldo.\n"
         "- **Distancia media <40 m:** meta propuesta, sin cálculo de respaldo."

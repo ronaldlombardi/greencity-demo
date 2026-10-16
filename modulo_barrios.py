@@ -197,7 +197,11 @@ def _render_mapa(res):
         for tipo, color in COLOR_TIPO.items() if tipo == t['tipo']
     )
     st.markdown(f"<div style='font-size:0.82em;margin-top:4px'>{leyenda}</div>", unsafe_allow_html=True)
-    st.caption("Fuera de las zonas quedan plazas, parques y espacios sin casas (no cuentan para la meta).")
+    st.caption(
+        "Solo las zonas con casas (céntrica, residencial, mixta y ribereña) cuentan para la meta. "
+        "Parques, bosques, predios sin urbanizar e industriales suman árboles al barrio pero no lotes; "
+        "lo que queda fuera de toda zona tampoco cuenta para la meta."
+    )
 
 
 def _render_barrio(res):
@@ -210,8 +214,8 @@ def _render_barrio(res):
 
     c1, c2, c3, c4 = st.columns(4)
     with c1:
-        _card("Árboles en el barrio", _num(b['total_arboles']),
-              f"{_num(b['arboles_sin_zona'])} fuera de zonas (plazas, parques)", "#2e7d32")
+            _card("Árboles en el barrio", _num(b['total_arboles']),
+              f"{_num(b['arboles_sin_zona'])} fuera de toda zona", "#2e7d32")
     with c2:
         _card("Lotes estimados", _num(m['lotes_estimados']),
               f"{b['n_zonas']} zona(s) dibujada(s)", "#1e88e5")
