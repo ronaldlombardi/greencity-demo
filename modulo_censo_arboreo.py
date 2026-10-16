@@ -274,7 +274,8 @@ def render_censo_arboreo():
     calc = editado.copy()
     calc[col_plant] = calc[col_plant].fillna(0).astype(int)
     calc['Total'] = calc['Árboles en zonas de casas (satélite)'] + calc[col_plant]
-    calc['Faltan'] = (calc['Lotes estimados'] - calc['Total']).clip(lower=0)
+    deficit_base = {b['barrio']: b['meta_1_arbol_por_casa']['deficit_arboles'] for b in barrios}
+    calc['Faltan'] = (calc['Barrio'].map(deficit_base) - calc[col_plant]).clip(lower=0)
 
     total_sat = int(calc['Árboles en zonas de casas (satélite)'].sum())
     total_plant = int(calc[col_plant].sum())
@@ -298,7 +299,8 @@ def render_censo_arboreo():
         "ℹ️ Es una **aproximación de trabajo**, no un censo validado: la base satelital tiene su propio "
         "margen de error, los lotes son una estimación provisoria hasta contar con el catastro, y el "
         f"resultado depende de que lo cargado no incluya árboles plantados antes de {CORTE_PLANTACIONES}. "
-        "Los faltantes se suman barrio por barrio (el excedente de un barrio no compensa a otro). "
+        "Los faltantes parten del déficit zona por zona (igual que en el Diagnóstico por barrio) y "
+        "las plantaciones cargadas se descuentan del faltante de su barrio. "
         "**No se guarda entre sesiones.**"
     )
 
