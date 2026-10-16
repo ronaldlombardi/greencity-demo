@@ -27,6 +27,16 @@ import datetime
 CANOPY_ASSET = 'projects/meta-forest-monitoring-okw37/assets/CanopyHeight'
 ALTURA_MIN_ARBOL = 2
 
+# Conteo por detección de cimas (máximos locales) — radio validado visualmente
+# en Palermo (arbolado denso) y Dr. Ramón Carrillo (arboleda), octubre 2026.
+RADIO_CIMA_M = 2
+
+# Fecha de la imagen satelital usada por Meta/WRI sobre Villa María
+# (metadata dataforgood-fb-data, tile 210320110). ~92% de la ciudad: 2018-03-16;
+# franja oeste (lon -63.281 a -63.265): 2019-10-09.
+FECHA_IMAGEN = '2018-03-16'
+FECHA_IMAGEN_FRANJA_OESTE = '2019-10-09'
+
 RUTA_BARRIOS = os.path.join(os.path.dirname(__file__), 'data', 'barrios_villamaria.geojson')
 SALIDA_JSON = os.path.join(os.path.dirname(__file__), 'data', 'censo_arboreo_villamaria.json')
 
@@ -58,16 +68,27 @@ def _procesar_barrio(geometry_geojson):
     """Conteo + área de copa para UN barrio (geometría GeoJSON real)."""
     try:
         area = ee.Geometry(geometry_geojson)
-        canopy = ee.ImageCollection(CANOPY_ASSET).mosaic().rename('altura').clip(area)
+        coleccion = ee.ImageCollection(CANOPY_ASSET)
+        proj = coleccion.first().projection()
+        canopy = coleccion.mosaic().setDefaultProjection(proj).rename('altura').clip(area)
         mask_arbol = canopy.gte(ALTURA_MIN_ARBOL).selfMask()
 
-        conectados = mask_arbol.connectedComponents(
-            connectedness=ee.Kernel.plus(1), maxSize=256
+        # Conteo por detección de cimas (máximos locales de altura).
+        # Suavizado leve para que una copa con varios píxeles de igual altura
+        # no genere varias cimas (las alturas del asset son valores enteros).
+        suave = canopy.toFloat().convolve(
+            ee.Kernel.gaussian(radius=1.5, sigma=1, units='meters')
+        ).reproject(proj)
+        maximo_local = suave.focalMax(radius=RADIO_CIMA_M, kernelType='circle', units='meters')
+        cimas = suave.eq(maximo_local).And(canopy.gte(ALTURA_MIN_ARBOL)).selfMask()
+                # Una cima = una región de píxeles de cima conectados: las copas de altura
+        # pareja forman "mesetas" de varios píxeles que no deben contarse por separado.
+        # Mismo criterio que los puntos exportados para el visor.
+        regiones_cima = cimas.toInt().reduceToVectors(
+            geometry=area, scale=proj.nominalScale(), geometryType='centroid',
+            eightConnected=True, labelProperty='cima', maxPixels=1e9, tileScale=8,
         )
-        conteo = conectados.select('labels').reduceRegion(
-            reducer=ee.Reducer.countDistinctNonNull(),
-            geometry=area, scale=1, maxPixels=1e9, bestEffort=True, tileScale=8,
-        ).getInfo()
+        n_cimas = regiones_cima.size().getInfo()
 
         area_stats = mask_arbol.multiply(ee.Image.pixelArea()).reduceRegion(
             reducer=ee.Reducer.sum(), geometry=area, scale=1,
@@ -76,7 +97,7 @@ def _procesar_barrio(geometry_geojson):
 
         area_barrio_m2 = area.area(1).getInfo()
 
-        n = conteo.get('labels') if conteo else 0
+        n = n_cimas
         area_copa_m2 = list(area_stats.values())[0] if area_stats else 0
 
         return {
@@ -141,6 +162,10 @@ def main():
     salida = {
         'fecha_calculo': datetime.datetime.now().isoformat(),
         'metodo': 'por_barrio_real',
+        'metodo_conteo': 'cimas_maximos_locales_regiones_conectadas',
+        'radio_cima_m': RADIO_CIMA_M,
+        'fecha_imagen': FECHA_IMAGEN,
+        'fecha_imagen_franja_oeste': FECHA_IMAGEN_FRANJA_OESTE,
         'fuente_barrios': 'datos.villamaria.gob.ar — Barrios 2021',
         'altura_min_arbol_m': ALTURA_MIN_ARBOL,
         'total_arboles': sum(r['n_arboles'] for r in validos),

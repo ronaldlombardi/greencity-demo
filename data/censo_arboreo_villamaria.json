@@ -1,10 +1,14 @@
 {
-  "fecha_calculo": "2026-07-25T19:18:19.176660",
+  "fecha_calculo": "2026-10-14T19:26:10.415886",
   "metodo": "por_barrio_real",
+  "metodo_conteo": "cimas_maximos_locales_regiones_conectadas",
+  "radio_cima_m": 2,
+  "fecha_imagen": "2018-03-16",
+  "fecha_imagen_franja_oeste": "2019-10-09",
   "fuente_barrios": "datos.villamaria.gob.ar — Barrios 2021",
   "altura_min_arbol_m": 2,
-  "total_arboles": 16066,
-  "total_area_copa_ha": 296.3,
+  "total_arboles": 31665,
+  "total_area_copa_ha": 296.4,
   "barrios_procesados": 38,
   "barrios_totales": 38,
   "ciudad_area_copa_ha": 296.2,
@@ -12,8 +16,8 @@
   "ciudad_altura_max_m": 34,
   "barrios": [
     {
-      "n_arboles": 526,
-      "area_copa_ha": 21.005,
+      "n_arboles": 1945,
+      "area_copa_ha": 21.017,
       "area_barrio_ha": 101.16,
       "error": null,
       "nombre": "VISTA VERDE",
@@ -23,8 +27,8 @@
       ]
     },
     {
-      "n_arboles": 646,
-      "area_copa_ha": 11.192,
+      "n_arboles": 1232,
+      "area_copa_ha": 11.178,
       "area_barrio_ha": 97.92,
       "error": null,
       "nombre": "MARIANO MORENO",
@@ -34,8 +38,8 @@
       ]
     },
     {
-      "n_arboles": 470,
-      "area_copa_ha": 14.232,
+      "n_arboles": 1118,
+      "area_copa_ha": 14.297,
       "area_barrio_ha": 196.8,
       "error": null,
       "nombre": "LAS ACACIAS",
@@ -45,8 +49,8 @@
       ]
     },
     {
-      "n_arboles": 481,
-      "area_copa_ha": 5.153,
+      "n_arboles": 702,
+      "area_copa_ha": 5.165,
       "area_barrio_ha": 58.93,
       "error": null,
       "nombre": "ROQUE SAENZ PEÑA",
@@ -56,8 +60,8 @@
       ]
     },
     {
-      "n_arboles": 514,
-      "area_copa_ha": 11.968,
+      "n_arboles": 1157,
+      "area_copa_ha": 11.949,
       "area_barrio_ha": 63.44,
       "error": null,
       "nombre": "PALERMO",
@@ -67,8 +71,8 @@
       ]
     },
     {
-      "n_arboles": 408,
-      "area_copa_ha": 5.568,
+      "n_arboles": 695,
+      "area_copa_ha": 5.577,
       "area_barrio_ha": 48.71,
       "error": null,
       "nombre": "GENERAL GUEMES",
@@ -78,8 +82,8 @@
       ]
     },
     {
-      "n_arboles": 388,
-      "area_copa_ha": 10.956,
+      "n_arboles": 1122,
+      "area_copa_ha": 10.959,
       "area_barrio_ha": 76.08,
       "error": null,
       "nombre": "MALVINAS ARGENTINAS",
@@ -89,7 +93,7 @@
       ]
     },
     {
-      "n_arboles": 102,
+      "n_arboles": 145,
       "area_copa_ha": 0.846,
       "area_barrio_ha": 9.19,
       "error": null,
@@ -100,8 +104,8 @@
       ]
     },
     {
-      "n_arboles": 288,
-      "area_copa_ha": 7.463,
+      "n_arboles": 705,
+      "area_copa_ha": 7.473,
       "area_barrio_ha": 46.36,
       "error": null,
       "nombre": "LA CALERA",
@@ -111,8 +115,8 @@
       ]
     },
     {
-      "n_arboles": 16,
-      "area_copa_ha": 0.244,
+      "n_arboles": 33,
+      "area_copa_ha": 0.242,
       "area_barrio_ha": 36.27,
       "error": null,
       "nombre": "DR. RAMON CARRILLO",
@@ -122,8 +126,8 @@
       ]
     },
     {
-      "n_arboles": 296,
-      "area_copa_ha": 6.878,
+      "n_arboles": 594,
+      "area_copa_ha": 6.9,
       "area_barrio_ha": 42.66,
       "error": null,
       "nombre": "ALMIRANTE BROWN",
@@ -133,8 +137,8 @@
       ]
     },
     {
-      "n_arboles": 317,
-      "area_copa_ha": 4.597,
+      "n_arboles": 513,
+      "area_copa_ha": 4.592,
       "area_barrio_ha": 56.89,
       "error": null,
       "nombre": "MANUEL BELGARANO",
@@ -144,8 +148,8 @@
       ]
     },
     {
-      "n_arboles": 594,
-      "area_copa_ha": 6.814,
+      "n_arboles": 942,
+      "area_copa_ha": 6.832,
       "area_barrio_ha": 108.3,
       "error": null,
       "nombre": "PARQUE NORTE",
@@ -155,7 +159,7 @@
       ]
     },
     {
-      "n_arboles": 394,
+      "n_arboles": 713,
       "area_copa_ha": 6.279,
       "area_barrio_ha": 63.73,
       "error": null,
@@ -166,8 +170,8 @@
       ]
     },
     {
-      "n_arboles": 245,
-      "area_copa_ha": 6.081,
+      "n_arboles": 645,
+      "area_copa_ha": 6.072,
       "area_barrio_ha": 31.66,
       "error": null,
       "nombre": "FELIPE BOTTA",
@@ -177,8 +181,8 @@
       ]
     },
     {
-      "n_arboles": 524,
-      "area_copa_ha": 7.192,
+      "n_arboles": 827,
+      "area_copa_ha": 7.172,
       "area_barrio_ha": 60.12,
       "error": null,
       "nombre": "CENTRO OESTE",
@@ -188,8 +192,8 @@
       ]
     },
     {
-      "n_arboles": 380,
-      "area_copa_ha": 4.351,
+      "n_arboles": 621,
+      "area_copa_ha": 4.342,
       "area_barrio_ha": 36.45,
       "error": null,
       "nombre": "GENERAL PAZ",
@@ -199,8 +203,8 @@
       ]
     },
     {
-      "n_arboles": 510,
-      "area_copa_ha": 9.698,
+      "n_arboles": 1015,
+      "area_copa_ha": 9.684,
       "area_barrio_ha": 63.14,
       "error": null,
       "nombre": "CENTRO SUR",
@@ -210,8 +214,8 @@
       ]
     },
     {
-      "n_arboles": 116,
-      "area_copa_ha": 1.045,
+      "n_arboles": 166,
+      "area_copa_ha": 1.044,
       "area_barrio_ha": 10.73,
       "error": null,
       "nombre": "DOMINGO F. SARMIENTO",
@@ -221,8 +225,8 @@
       ]
     },
     {
-      "n_arboles": 344,
-      "area_copa_ha": 4.153,
+      "n_arboles": 531,
+      "area_copa_ha": 4.163,
       "area_barrio_ha": 39.74,
       "error": null,
       "nombre": "SANTA ANA",
@@ -232,8 +236,8 @@
       ]
     },
     {
-      "n_arboles": 334,
-      "area_copa_ha": 14.429,
+      "n_arboles": 1123,
+      "area_copa_ha": 14.42,
       "area_barrio_ha": 110.96,
       "error": null,
       "nombre": "BARRANCAS DEL RIO",
@@ -243,8 +247,8 @@
       ]
     },
     {
-      "n_arboles": 45,
-      "area_copa_ha": 2.448,
+      "n_arboles": 181,
+      "area_copa_ha": 2.445,
       "area_barrio_ha": 9.56,
       "error": null,
       "nombre": "VILLA DEL SUR",
@@ -254,8 +258,8 @@
       ]
     },
     {
-      "n_arboles": 258,
-      "area_copa_ha": 11.812,
+      "n_arboles": 966,
+      "area_copa_ha": 11.809,
       "area_barrio_ha": 120.66,
       "error": null,
       "nombre": "VILLA ALBERTINA",
@@ -265,8 +269,8 @@
       ]
     },
     {
-      "n_arboles": 848,
-      "area_copa_ha": 18.968,
+      "n_arboles": 1882,
+      "area_copa_ha": 18.974,
       "area_barrio_ha": 243.33,
       "error": null,
       "nombre": "LAS PLAYAS",
@@ -276,8 +280,8 @@
       ]
     },
     {
-      "n_arboles": 586,
-      "area_copa_ha": 11.217,
+      "n_arboles": 1108,
+      "area_copa_ha": 11.203,
       "area_barrio_ha": 129.81,
       "error": null,
       "nombre": "LOS OLMOS",
@@ -287,8 +291,8 @@
       ]
     },
     {
-      "n_arboles": 576,
-      "area_copa_ha": 6.401,
+      "n_arboles": 904,
+      "area_copa_ha": 6.397,
       "area_barrio_ha": 61.38,
       "error": null,
       "nombre": "BERNARDINO RIVADAVIA",
@@ -298,8 +302,8 @@
       ]
     },
     {
-      "n_arboles": 466,
-      "area_copa_ha": 7.985,
+      "n_arboles": 822,
+      "area_copa_ha": 7.992,
       "area_barrio_ha": 82.41,
       "error": null,
       "nombre": "NICOLAS AVELLANEDA",
@@ -309,8 +313,8 @@
       ]
     },
     {
-      "n_arboles": 490,
-      "area_copa_ha": 7.737,
+      "n_arboles": 874,
+      "area_copa_ha": 7.745,
       "area_barrio_ha": 70.38,
       "error": null,
       "nombre": "CENTRO NORTE",
@@ -320,8 +324,8 @@
       ]
     },
     {
-      "n_arboles": 426,
-      "area_copa_ha": 6.547,
+      "n_arboles": 737,
+      "area_copa_ha": 6.534,
       "area_barrio_ha": 62.56,
       "error": null,
       "nombre": "CENTRO ESTE",
@@ -331,8 +335,8 @@
       ]
     },
     {
-      "n_arboles": 179,
-      "area_copa_ha": 2.109,
+      "n_arboles": 312,
+      "area_copa_ha": 2.108,
       "area_barrio_ha": 24.51,
       "error": null,
       "nombre": "SAN NICOLAS",
@@ -342,8 +346,8 @@
       ]
     },
     {
-      "n_arboles": 1019,
-      "area_copa_ha": 10.319,
+      "n_arboles": 1515,
+      "area_copa_ha": 10.325,
       "area_barrio_ha": 97.17,
       "error": null,
       "nombre": "FLORENTINO AMEGHINO",
@@ -353,8 +357,8 @@
       ]
     },
     {
-      "n_arboles": 300,
-      "area_copa_ha": 7.374,
+      "n_arboles": 776,
+      "area_copa_ha": 7.388,
       "area_barrio_ha": 66.26,
       "error": null,
       "nombre": "EVITA",
@@ -364,7 +368,7 @@
       ]
     },
     {
-      "n_arboles": 383,
+      "n_arboles": 930,
       "area_copa_ha": 11.766,
       "area_barrio_ha": 105.71,
       "error": null,
@@ -375,8 +379,8 @@
       ]
     },
     {
-      "n_arboles": 430,
-      "area_copa_ha": 5.386,
+      "n_arboles": 662,
+      "area_copa_ha": 5.398,
       "area_barrio_ha": 72.58,
       "error": null,
       "nombre": "SAN JUAN BAUTISTA",
@@ -386,8 +390,8 @@
       ]
     },
     {
-      "n_arboles": 656,
-      "area_copa_ha": 7.528,
+      "n_arboles": 1036,
+      "area_copa_ha": 7.531,
       "area_barrio_ha": 83.45,
       "error": null,
       "nombre": "GENERAL LAMADRID",
@@ -397,8 +401,8 @@
       ]
     },
     {
-      "n_arboles": 538,
-      "area_copa_ha": 7.691,
+      "n_arboles": 860,
+      "area_copa_ha": 7.716,
       "area_barrio_ha": 75.97,
       "error": null,
       "nombre": "GENERAL SAN MARTIN",
@@ -408,8 +412,8 @@
       ]
     },
     {
-      "n_arboles": 342,
-      "area_copa_ha": 4.072,
+      "n_arboles": 559,
+      "area_copa_ha": 4.071,
       "area_barrio_ha": 43.32,
       "error": null,
       "nombre": "BELLO HORIZONTE",
@@ -419,8 +423,8 @@
       ]
     },
     {
-      "n_arboles": 631,
-      "area_copa_ha": 6.809,
+      "n_arboles": 997,
+      "area_copa_ha": 6.811,
       "area_barrio_ha": 70.01,
       "error": null,
       "nombre": "SAN JUSTO",
