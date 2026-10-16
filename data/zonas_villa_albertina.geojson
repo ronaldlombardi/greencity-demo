@@ -4,9 +4,9 @@
   "provisoria": true,
   "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
   "total_arboles_barrio": 966,
-  "arboles_sin_zona": 4,
+  "arboles_sin_zona": 8,
   "notas": "",
-  "fecha_edicion": "2026-10-15T21:41:22.696Z",
+  "fecha_edicion": "2026-10-16T14:40:37.596Z",
   "features": [
     {
       "type": "Feature",
@@ -15,24 +15,32 @@
         "coordinates": [
           [
             [
-              -63.190048,
-              -32.430324
+              -63.188648,
+              -32.431149
             ],
             [
-              -63.197818,
-              -32.440537
+              -63.190322,
+              -32.43343
             ],
             [
-              -63.189533,
-              -32.444991
+              -63.189528,
+              -32.433928
             ],
             [
-              -63.182192,
-              -32.434742
+              -63.189839,
+              -32.434345
             ],
             [
-              -63.190048,
-              -32.430324
+              -63.189217,
+              -32.434716
+            ],
+            [
+              -63.187188,
+              -32.431864
+            ],
+            [
+              -63.188648,
+              -32.431149
             ]
           ]
         ]
@@ -40,13 +48,123 @@
       "properties": {
         "barrio": "VILLA ALBERTINA",
         "zona_id": 1,
-        "tipo": "urbana_mixta",
-        "tipo_nombre": "Urbana mixta",
-        "lcz": "LCZ 9 + D",
+        "tipo": "industrial",
+        "tipo_nombre": "Industrial / gran predio",
+        "lcz": "LCZ 8/10",
         "forestacion_incipiente": false,
-        "n_arboles": 962,
-        "area_ha": 121.41,
-        "arboles_ha": 7.9
+        "n_arboles": 26,
+        "area_ha": 5.33,
+        "arboles_ha": 4.9
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.187188,
+              -32.431864
+            ],
+            [
+              -63.183411,
+              -32.434028
+            ],
+            [
+              -63.185396,
+              -32.436726
+            ],
+            [
+              -63.189217,
+              -32.434716
+            ],
+            [
+              -63.187188,
+              -32.431864
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "VILLA ALBERTINA",
+        "zona_id": 2,
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
+        "forestacion_incipiente": false,
+        "n_arboles": 217,
+        "area_ha": 15.41,
+        "arboles_ha": 14.1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.188648,
+              -32.431149
+            ],
+            [
+              -63.190182,
+              -32.430297
+            ],
+            [
+              -63.197843,
+              -32.440411
+            ],
+            [
+              -63.189536,
+              -32.444956
+            ],
+            [
+              -63.182174,
+              -32.434671
+            ],
+            [
+              -63.183411,
+              -32.434028
+            ],
+            [
+              -63.185396,
+              -32.436726
+            ],
+            [
+              -63.189217,
+              -32.434716
+            ],
+            [
+              -63.189839,
+              -32.434345
+            ],
+            [
+              -63.189528,
+              -32.433928
+            ],
+            [
+              -63.190322,
+              -32.43343
+            ],
+            [
+              -63.188648,
+              -32.431149
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "VILLA ALBERTINA",
+        "zona_id": 3,
+        "tipo": "predio_sin_urbanizar",
+        "tipo_nombre": "Predio sin urbanizar / loteo en desarrollo",
+        "lcz": "LCZ D/F",
+        "forestacion_incipiente": false,
+        "n_arboles": 715,
+        "area_ha": 101.39,
+        "arboles_ha": 7.1
       }
     }
   ]

@@ -4,9 +4,9 @@
   "provisoria": true,
   "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
   "total_arboles_barrio": 1108,
-  "arboles_sin_zona": 23,
+  "arboles_sin_zona": null,
   "notas": "",
-  "fecha_edicion": "2026-10-15T21:22:22.914Z",
+  "fecha_edicion": "2026-10-16T15:04:28.774766+00:00",
   "features": [
     {
       "type": "Feature",
@@ -15,24 +15,24 @@
         "coordinates": [
           [
             [
-              -63.207538,
-              -32.412519
+              -63.20391099999999,
+              -32.42068700000001
             ],
             [
-              -63.20404,
-              -32.412465
+              -63.207453,
+              -32.420759999999994
+            ],
+            [
+              -63.207538,
+              -32.41257300000001
             ],
             [
               -63.203997,
-              -32.42076
+              -32.412501000000006
             ],
             [
-              -63.207538,
-              -32.420796
-            ],
-            [
-              -63.207538,
-              -32.412519
+              -63.20391099999999,
+              -32.42068700000001
             ]
           ]
         ]
@@ -40,40 +40,94 @@
       "properties": {
         "barrio": "LOS OLMOS",
         "zona_id": 1,
-        "tipo": "bosque_autoctono",
-        "tipo_nombre": "Bosque autóctono / rural",
-        "lcz": "LCZ A",
+        "tipo": "predio_sin_urbanizar",
+        "tipo_nombre": "Predio sin urbanizar / loteo en desarrollo",
+        "lcz": "LCZ D/F",
         "forestacion_incipiente": false,
-        "n_arboles": 98,
-        "area_ha": 30.51,
-        "arboles_ha": 3.2
+        "n_arboles": null,
+        "area_ha": 30.25,
+        "arboles_ha": null
       }
     },
     {
       "type": "Feature",
       "geometry": {
-        "type": "Polygon",
+        "type": "MultiPolygon",
         "coordinates": [
           [
             [
-              -63.211101,
-              -32.408679
-            ],
+              [
+                -63.210994,
+                -32.41951
+              ],
+              [
+                -63.21623100000001,
+                -32.41793400000002
+              ],
+              [
+                -63.213956,
+                -32.412465
+              ],
+              [
+                -63.213978000000004,
+                -32.408552
+              ],
+              [
+                -63.21108000000001,
+                -32.408661000000016
+              ],
+              [
+                -63.211209,
+                -32.411540999999986
+              ],
+              [
+                -63.207646000000004,
+                -32.41146800000001
+              ],
+              [
+                -63.20760307698897,
+                -32.41190716915694
+              ],
+              [
+                -63.207453,
+                -32.420759999999994
+              ],
+              [
+                -63.211015999999994,
+                -32.42072400000002
+              ],
+              [
+                -63.210994,
+                -32.41951
+              ]
+            ]
+          ],
+          [
             [
-              -63.211101,
-              -32.411523
-            ],
-            [
-              -63.207667,
-              -32.411523
-            ],
-            [
-              -63.207646,
-              -32.408136
-            ],
-            [
-              -63.211101,
-              -32.408679
+              [
+                -63.204018,
+                -32.408080999999996
+              ],
+              [
+                -63.203997,
+                -32.412501000000006
+              ],
+              [
+                -63.207538,
+                -32.41257300000001
+              ],
+              [
+                -63.20760307698897,
+                -32.41190716915694
+              ],
+              [
+                -63.207667,
+                -32.408136000000006
+              ],
+              [
+                -63.204018,
+                -32.408080999999996
+              ]
             ]
           ]
         ]
@@ -81,13 +135,13 @@
       "properties": {
         "barrio": "LOS OLMOS",
         "zona_id": 2,
-        "tipo": "bosque_autoctono",
-        "tipo_nombre": "Bosque autóctono / rural",
-        "lcz": "LCZ A",
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
         "forestacion_incipiente": false,
-        "n_arboles": 224,
-        "area_ha": 11.22,
-        "arboles_ha": 20
+        "n_arboles": null,
+        "area_ha": 89.3,
+        "arboles_ha": null
       }
     },
     {
@@ -97,24 +151,24 @@
         "coordinates": [
           [
             [
-              -63.207646,
-              -32.408136
+              -63.21108000000001,
+              -32.408661000000016
             ],
             [
-              -63.204061,
-              -32.408136
+              -63.211209,
+              -32.411540999999986
             ],
             [
-              -63.20404,
-              -32.412465
+              -63.20761100000001,
+              -32.41143200000001
             ],
             [
-              -63.207538,
-              -32.412519
+              -63.207667,
+              -32.408136000000006
             ],
             [
-              -63.207646,
-              -32.408136
+              -63.21108000000001,
+              -32.408661000000016
             ]
           ]
         ]
@@ -122,74 +176,13 @@
       "properties": {
         "barrio": "LOS OLMOS",
         "zona_id": 3,
-        "tipo": "industrial",
-        "tipo_nombre": "Industrial / gran predio",
-        "lcz": "LCZ 8/10",
+        "tipo": "bosque_autoctono",
+        "tipo_nombre": "Bosque autóctono / rural",
+        "lcz": "LCZ A",
         "forestacion_incipiente": false,
-        "n_arboles": 40,
-        "area_ha": 16.14,
-        "arboles_ha": 2.5
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              -63.211101,
-              -32.408679
-            ],
-            [
-              -63.213892,
-              -32.408552
-            ],
-            [
-              -63.213913,
-              -32.41261
-            ],
-            [
-              -63.216145,
-              -32.41779
-            ],
-            [
-              -63.210994,
-              -32.419456
-            ],
-            [
-              -63.210994,
-              -32.420687
-            ],
-            [
-              -63.207538,
-              -32.420796
-            ],
-            [
-              -63.207667,
-              -32.411523
-            ],
-            [
-              -63.211101,
-              -32.411523
-            ],
-            [
-              -63.211101,
-              -32.408679
-            ]
-          ]
-        ]
-      },
-      "properties": {
-        "barrio": "LOS OLMOS",
-        "zona_id": 4,
-        "tipo": "urbana_mixta",
-        "tipo_nombre": "Urbana mixta",
-        "lcz": "LCZ 9 + D",
-        "forestacion_incipiente": false,
-        "n_arboles": 723,
-        "area_ha": 70.89,
-        "arboles_ha": 10.2
+        "n_arboles": null,
+        "area_ha": 11.28,
+        "arboles_ha": null
       }
     }
   ]

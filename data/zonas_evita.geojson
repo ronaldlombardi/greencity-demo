@@ -4,9 +4,9 @@
   "provisoria": true,
   "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
   "total_arboles_barrio": 776,
-  "arboles_sin_zona": 34,
+  "arboles_sin_zona": null,
   "notas": "",
-  "fecha_edicion": "2026-10-15T00:10:13.903Z",
+  "fecha_edicion": "2026-10-16T15:04:28.794722+00:00",
   "features": [
     {
       "type": "Feature",
@@ -15,24 +15,32 @@
         "coordinates": [
           [
             [
-              -63.218977,
-              -32.427372
+              -63.214417,
+              -32.42798799999999
             ],
             [
-              -63.219771,
-              -32.428549
+              -63.212099,
+              -32.427988
             ],
             [
-              -63.210864,
-              -32.433311
+              -63.212121,
+              -32.429011
             ],
             [
-              -63.210971,
-              -32.43179
+              -63.210972,
+              -32.428993
             ],
             [
-              -63.218977,
-              -32.427372
+              -63.21092899999999,
+              -32.431709000000005
+            ],
+            [
+              -63.21477318025136,
+              -32.429666439243654
+            ],
+            [
+              -63.214417,
+              -32.42798799999999
             ]
           ]
         ]
@@ -40,13 +48,13 @@
       "properties": {
         "barrio": "EVITA",
         "zona_id": 1,
-        "tipo": "industrial",
-        "tipo_nombre": "Industrial / gran predio",
-        "lcz": "LCZ 8/10",
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
         "forestacion_incipiente": true,
-        "n_arboles": 278,
-        "area_ha": 13.58,
-        "arboles_ha": 20.5
+        "n_arboles": null,
+        "area_ha": 9.2,
+        "arboles_ha": null
       }
     },
     {
@@ -56,44 +64,24 @@
         "coordinates": [
           [
             [
-              -63.218441,
-              -32.426267
+              -63.210907,
+              -32.433384
             ],
             [
-              -63.217067,
-              -32.426955
+              -63.219922,
+              -32.428504
             ],
             [
-              -63.213525,
-              -32.426846
+              -63.219074,
+              -32.427381000000004
             ],
             [
-              -63.213354,
-              -32.424873
+              -63.21092899999999,
+              -32.431709000000005
             ],
             [
-              -63.214277,
-              -32.424854
-            ],
-            [
-              -63.214191,
-              -32.422102
-            ],
-            [
-              -63.215371,
-              -32.421558
-            ],
-            [
-              -63.21623,
-              -32.423858
-            ],
-            [
-              -63.217045,
-              -32.423478
-            ],
-            [
-              -63.218441,
-              -32.426267
+              -63.210907,
+              -32.433384
             ]
           ]
         ]
@@ -101,13 +89,13 @@
       "properties": {
         "barrio": "EVITA",
         "zona_id": 2,
-        "tipo": "industrial",
-        "tipo_nombre": "Industrial / gran predio",
-        "lcz": "LCZ 8/10",
-        "forestacion_incipiente": true,
-        "n_arboles": 46,
-        "area_ha": 16.8,
-        "arboles_ha": 2.7
+        "tipo": "parque_urbano",
+        "tipo_nombre": "Parque urbano",
+        "lcz": "LCZ B",
+        "forestacion_incipiente": false,
+        "n_arboles": null,
+        "area_ha": 14.5,
+        "arboles_ha": null
       }
     },
     {
@@ -117,32 +105,36 @@
         "coordinates": [
           [
             [
-              -63.213525,
-              -32.426846
+              -63.218463,
+              -32.426276
             ],
             [
-              -63.2121,
-              -32.426892
+              -63.217271,
+              -32.42693700000001
             ],
             [
-              -63.212186,
-              -32.422582
+              -63.215104000000004,
+              -32.426990999999994
             ],
             [
-              -63.214191,
-              -32.422102
+              -63.21540400000001,
+              -32.42796900000001
             ],
             [
-              -63.214277,
-              -32.424854
+              -63.214417,
+              -32.42798799999999
             ],
             [
-              -63.213354,
-              -32.424873
+              -63.21477318025136,
+              -32.429666439243654
             ],
             [
-              -63.213525,
-              -32.426846
+              -63.219074,
+              -32.427381000000004
+            ],
+            [
+              -63.218463,
+              -32.426276
             ]
           ]
         ]
@@ -150,13 +142,13 @@
       "properties": {
         "barrio": "EVITA",
         "zona_id": 3,
-        "tipo": "industrial",
-        "tipo_nombre": "Industrial / gran predio",
-        "lcz": "LCZ 8/10",
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
         "forestacion_incipiente": true,
-        "n_arboles": 135,
-        "area_ha": 8.24,
-        "arboles_ha": 16.4
+        "n_arboles": null,
+        "area_ha": 7.34,
+        "arboles_ha": null
       }
     },
     {
@@ -166,36 +158,60 @@
         "coordinates": [
           [
             [
-              -63.212186,
-              -32.422582
+              -63.218463,
+              -32.426276
             ],
             [
-              -63.21095,
-              -32.422971
+              -63.217271,
+              -32.42693700000001
             ],
             [
-              -63.210971,
-              -32.43179
+              -63.215104000000004,
+              -32.426990999999994
             ],
             [
-              -63.218977,
-              -32.427372
+              -63.21540400000001,
+              -32.42796900000001
             ],
             [
-              -63.218441,
-              -32.426267
+              -63.212099,
+              -32.427988
             ],
             [
-              -63.217067,
-              -32.426955
+              -63.21214199999999,
+              -32.425923000000004
             ],
             [
-              -63.2121,
-              -32.426892
+              -63.215705,
+              -32.42598600000001
             ],
             [
-              -63.212186,
-              -32.422582
+              -63.215383,
+              -32.424917
+            ],
+            [
+              -63.214181,
+              -32.424917000000015
+            ],
+            [
+              -63.21409499999999,
+              -32.42203799999999
+            ],
+            [
+              -63.215393,
+              -32.42162099999999
+            ],
+            [
+              -63.216166,
+              -32.42381300000002
+            ],
+            [
+              -63.217077999999994,
+              -32.42340500000002
+            ],
+            [
+              -63.218463,
+              -32.426276
             ]
           ]
         ]
@@ -203,13 +219,148 @@
       "properties": {
         "barrio": "EVITA",
         "zona_id": 4,
+        "tipo": "predio_sin_urbanizar",
+        "tipo_nombre": "Predio sin urbanizar / loteo en desarrollo",
+        "lcz": "LCZ D/F",
+        "forestacion_incipiente": false,
+        "n_arboles": null,
+        "area_ha": 19.89,
+        "arboles_ha": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.21409499999999,
+              -32.42203799999999
+            ],
+            [
+              -63.214181,
+              -32.424917000000015
+            ],
+            [
+              -63.21433,
+              -32.425960999999994
+            ],
+            [
+              -63.21214199999999,
+              -32.425923000000004
+            ],
+            [
+              -63.21218399999999,
+              -32.42402100000002
+            ],
+            [
+              -63.210950000000004,
+              -32.42403900000002
+            ],
+            [
+              -63.210972,
+              -32.422961
+            ],
+            [
+              -63.21409499999999,
+              -32.42203799999999
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "EVITA",
+        "zona_id": 5,
+        "tipo": "bosque_autoctono",
+        "tipo_nombre": "Bosque autóctono / rural",
+        "lcz": "LCZ A",
+        "forestacion_incipiente": false,
+        "n_arboles": null,
+        "area_ha": 9.15,
+        "arboles_ha": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.210950000000004,
+              -32.42403900000002
+            ],
+            [
+              -63.21218399999999,
+              -32.42402100000002
+            ],
+            [
+              -63.212099,
+              -32.427988
+            ],
+            [
+              -63.21096300000001,
+              -32.42796100000001
+            ],
+            [
+              -63.210950000000004,
+              -32.42403900000002
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "EVITA",
+        "zona_id": 6,
         "tipo": "urbana_residencial",
         "tipo_nombre": "Urbana residencial",
         "lcz": "LCZ 6",
         "forestacion_incipiente": true,
-        "n_arboles": 283,
-        "area_ha": 27.94,
-        "arboles_ha": 10.1
+        "n_arboles": null,
+        "area_ha": 4.88,
+        "arboles_ha": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -63.212099,
+              -32.427988
+            ],
+            [
+              -63.212121,
+              -32.429011
+            ],
+            [
+              -63.210972,
+              -32.428993
+            ],
+            [
+              -63.21096300000001,
+              -32.42796100000001
+            ],
+            [
+              -63.212099,
+              -32.427988
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "barrio": "EVITA",
+        "zona_id": 7,
+        "tipo": "predio_sin_urbanizar",
+        "tipo_nombre": "Predio sin urbanizar / loteo en desarrollo",
+        "lcz": "LCZ D/F",
+        "forestacion_incipiente": false,
+        "n_arboles": null,
+        "area_ha": 1.22,
+        "arboles_ha": null
       }
     }
   ]

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editor de zonas — Ciudad Verde</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2/dist/leaflet-geoman.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2/dist/leaflet-geoman.min.js"></script>
+<script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; font-family: Arial, sans-serif; font-size: 14px; color: #1b1b1b; }
+  #panel {
+    position: absolute; top: 0; left: 0; bottom: 0; width: 360px; overflow-y: auto;
+    background: #ffffff; box-shadow: 2px 0 6px rgba(0,0,0,0.25); z-index: 1000; padding: 12px 14px;
+    box-sizing: border-box;
+  }
+  #mapa { position: absolute; top: 0; bottom: 0; left: 360px; right: 0; }
+  h1 { font-size: 18px; color: #1b5e20; margin: 0 0 4px; }
+  h2 { font-size: 14px; color: #1b5e20; margin: 16px 0 6px; border-bottom: 1px solid #c8e6c9; padding-bottom: 3px; }
+  .ayuda { color: #555; font-size: 12px; margin: 2px 0 6px; }
+  label { display: block; margin: 6px 0 2px; font-weight: bold; }
+  select, textarea, input[type=file] { width: 100%; box-sizing: border-box; }
+  textarea { height: 80px; font-family: inherit; font-size: 13px; }
+  button {
+    background: #2e7d32; color: #fff; border: 0; border-radius: 6px; padding: 8px 10px;
+    font-size: 14px; cursor: pointer; width: 100%; margin-top: 8px;
+  }
+  button:hover { background: #1b5e20; }
+  .dato { background: #e8f5e9; padding: 6px 8px; border-radius: 6px; margin: 4px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+  th, td { border-bottom: 1px solid #e0e0e0; padding: 4px 3px; text-align: right; }
+  th:nth-child(2), td:nth-child(2) { text-align: left; }
+  .muestra { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+  .aviso { background: #fff3e0; color: #e65100; padding: 6px 8px; border-radius: 6px; margin: 6px 0; font-size: 12px; }
+    .oculto { display: none; }
+  .criterio { background: #f1f8e9; border-left: 4px solid #2e7d32; padding: 6px 8px; border-radius: 0 6px 6px 0; margin: 6px 0; font-size: 12px; color: #33691e; }
+</style>
+</head>
+<body>
+
+<div id="panel">
+  <h1>Editor de zonas por barrio</h1>
+  <div class="ayuda">Zonas provisorias, hasta contar con la zonificación oficial (Ord. 7.209).</div>
+
+  <h2>1. Abrir el barrio</h2>
+  <div class="ayuda">Archivo de puntos: data\prueba_cimas_&lt;barrio&gt;_r2.geojson</div>
+  <input type="file" id="archivoPuntos" accept=".geojson,.json">
+  <div class="dato">Barrio: <b id="barrio">—</b></div>
+  <div class="dato">Árboles detectados: <b id="totalPuntos">0</b></div>
+
+  <h2>2. Dibujar zonas</h2>
+  <label for="tipoZona">Tipo de zona para dibujar</label>
+  <select id="tipoZona"></select>
+  <div id="criterioTipo" class="criterio"></div>
+  <label><input type="checkbox" id="incipiente"> Forestación incipiente</label>
+  <div class="ayuda">Forestación incipiente: casas nuevas con árboles recién plantados o todavía sin arbolado.</div>
+  <div class="ayuda">
+    Elegí el tipo y usá la barra de la izquierda del mapa para dibujar (polígono o rectángulo),
+    editar vértices o borrar. Hacé clic en una zona ya dibujada para cambiarle el tipo.
+  </div>
+
+  <h2>3. Resultados por zona</h2>
+  <table>
+    <thead><tr><th>#</th><th>Tipo</th><th>Árboles</th><th>ha</th><th>árb/ha</th></tr></thead>
+    <tbody id="tablaZonas"></tbody>
+  </table>
+  <div class="dato">Árboles fuera de toda zona: <b id="sinZona">0</b></div>
+  <div id="avisoSuperposicion" class="aviso oculto"></div>
+
+  <h2>4. Notas del barrio</h2>
+  <textarea id="notas" placeholder="Conocimiento local: forestación reciente, particularidades, fuentes..."></textarea>
+
+  <h2>5. Guardar o reabrir</h2>
+  <button id="guardar">Guardar zonas del barrio</button>
+  <label for="archivoZonas">Reabrir zonas guardadas (zonas_&lt;barrio&gt;.geojson)</label>
+  <input type="file" id="archivoZonas" accept=".geojson,.json">
+</div>
+<div id="mapa"></div>
+
+<script>
+  // ============================================================
+  // TIPOS DE ZONA (nombres locales + equivalente LCZ)
+  // ============================================================
+    // factor = fracción de la zona ocupada por lotes con casas (debe coincidir
+  // con FACTOR_OCUPACION en consolidar_zonas.py)
+  const TIPOS = {
+    urbana_centrica: {
+      nombre: 'Urbana céntrica', lcz: 'LCZ 2-3', color: '#e53935', factor: 1.0,
+      criterio: 'Manzanas totalmente edificadas, casas entre medianeras o edificios, casi sin patios verdes. Casco céntrico y comercial.'
+    },
+    urbana_residencial: {
+      nombre: 'Urbana residencial', lcz: 'LCZ 6', color: '#fb8c00', factor: 1.0,
+      criterio: 'Manzanas completas de casas con patio y más del 80 % de los lotes edificados.'
+    },
+    urbana_mixta: {
+      nombre: 'Urbana mixta', lcz: 'LCZ 9 + D', color: '#fdd835', factor: 0.5,
+      criterio: 'Casas intercaladas con lotes o terrenos vacíos, con aproximadamente la mitad edificada.'
+    },
+    riberena: {
+      nombre: 'Ribereña', lcz: 'LCZ A/B + G', color: '#1e88e5', factor: 0.5,
+      criterio: 'Franja con casas junto al río. Dibujar solo la parte con casas; la vegetación de la ribera queda fuera o como bosque aparte.'
+    },
+    bosque_autoctono: {
+      nombre: 'Bosque autóctono / rural', lcz: 'LCZ A', color: '#2e7d32', factor: 0,
+      criterio: 'Monte nativo o vegetación densa sin casas. Si hay pocos árboles, usar "Predio sin urbanizar".'
+    },
+    industrial: {
+      nombre: 'Industrial / gran predio', lcz: 'LCZ 8/10', color: '#8e24aa', factor: 0,
+      criterio: 'Naves, depósitos y grandes equipamientos (hospital, universidad, cementerio, playa ferroviaria). Nunca viviendas.'
+    },
+    predio_sin_urbanizar: {
+      nombre: 'Predio sin urbanizar / loteo en desarrollo', lcz: 'LCZ D/F', color: '#8d6e63', factor: 0,
+      criterio: 'Terreno vacío o loteo sin casas todavía.'
+    },
+    parque_urbano: {
+      nombre: 'Parque urbano', lcz: 'LCZ B', color: '#00897b', factor: 0,
+      criterio: 'Parque o plaza de uso público. Suma árboles al barrio pero no a la meta de 1 árbol por casa.'
+    }
+  };
+
+  function textoCriterio(clave) {
+    const t = TIPOS[clave];
+    const factor = String(t.factor).replace('.', ',');
+    return '<b>' + t.nombre + '</b> · factor de ocupación ' + factor + '<br>' + t.criterio;
+  }
+
+  const selectTipo = document.getElementById('tipoZona');
+  Object.keys(TIPOS).forEach(function (clave) {
+    const op = document.createElement('option');
+    op.value = clave;
+    op.textContent = TIPOS[clave].nombre + ' (' + TIPOS[clave].lcz + ')';
+    selectTipo.appendChild(op);
+  });
+
+  const cajaCriterio = document.getElementById('criterioTipo');
+  function mostrarCriterio() { cajaCriterio.innerHTML = textoCriterio(selectTipo.value); }
+  selectTipo.addEventListener('change', mostrarCriterio);
+  mostrarCriterio();
+
+  // ============================================================
+  // MAPA
+  // ============================================================
+  const mapa = L.map('mapa', { preferCanvas: true }).setView([-32.41, -63.24], 14);
+
+  L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { maxZoom: 21, maxNativeZoom: 19, attribution: 'Imagen: Esri, Maxar, Earthstar Geographics' }
+  ).addTo(mapa);
+  const calles = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',
+    { maxZoom: 21, maxNativeZoom: 19 }
+  ).addTo(mapa);
+  L.control.layers(null, { 'Calles': calles }, { collapsed: false, position: 'topright' }).addTo(mapa);
+
+  mapa.pm.addControls({
+    position: 'topleft',
+    drawMarker: false, drawCircleMarker: false, drawPolyline: false, drawCircle: false,
+    drawText: false, cutPolygon: false, rotateMode: true, dragMode: false,
+    drawPolygon: true, drawRectangle: true, editMode: true, removalMode: true
+  });
+  mapa.pm.setLang('es');
+
+  let capaPuntos = null;
+  let capaLimite = null;
+  let puntos = [];          // [[lon, lat], ...]
+  let nombreBarrio = '';
+  let radioM = null;
+  const zonas = [];         // capas de zona dibujadas
+
+  // ============================================================
+  // UTILIDADES
+  // ============================================================
+  function slug(texto) {
+    return texto.toLowerCase().split('').map(function (c) {
+      return /[\p{L}\p{N}]/u.test(c) ? c : '_';
+    }).join('').replace(/^_+|_+$/g, '');
+  }
+
+  function formato(n, dec) {
+    return Number(n).toLocaleString('es-AR', { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 });
+  }
+
+  function estiloZona(zona) {
+    const t = TIPOS[zona.tipo];
+    return {
+      color: t.color, weight: 3, fillColor: t.color, fillOpacity: 0.15,
+      dashArray: zona.incipiente ? '8 6' : null
+    };
+  }
+
+  function leerArchivo(input, alCargar) {
+    const archivo = input.files[0];
+    if (!archivo) return;
+    const lector = new FileReader();
+    lector.onload = function () {
+      try {
+        alCargar(JSON.parse(lector.result));
+      } catch (err) {
+        alert('El archivo no es un GeoJSON válido.');
+      }
+      input.value = '';
+    };
+    lector.readAsText(archivo);
+  }
+
+  // ============================================================
+  // ZONAS
+  // ============================================================
+  function popupZona(capa) {
+    const z = capa.zona;
+    let opciones = '';
+    Object.keys(TIPOS).forEach(function (clave) {
+      opciones += '<option value="' + clave + '"' + (clave === z.tipo ? ' selected' : '') + '>' +
+                  TIPOS[clave].nombre + '</option>';
+    });
+        return '<div style="max-width:260px"><b>Zona ' + (zonas.indexOf(capa) + 1) + '</b><br>' +
+           '<select class="cambiarTipo">' + opciones + '</select>' +
+           '<div class="criterio criterioPopup">' + textoCriterio(z.tipo) + '</div>' +
+           '<label style="font-weight:normal"><input type="checkbox" class="cambiarIncipiente"' +
+           (z.incipiente ? ' checked' : '') + '> Forestación incipiente</label></div>';
+  }
+
+  function registrarZona(capa, tipo, incipiente) {
+    capa.zona = { tipo: tipo, incipiente: incipiente };
+    capa.setStyle(estiloZona(capa.zona));
+    capa.bindPopup(function () { return popupZona(capa); });
+    capa.on('popupopen', function (e) {
+      const nodo = e.popup.getElement();
+      nodo.querySelector('.cambiarTipo').addEventListener('change', function (ev) {
+        capa.zona.tipo = ev.target.value;
+        nodo.querySelector('.criterioPopup').innerHTML = textoCriterio(capa.zona.tipo);
+        capa.setStyle(estiloZona(capa.zona));
+        recalcular();
+      });
+      nodo.querySelector('.cambiarIncipiente').addEventListener('change', function (ev) {
+        capa.zona.incipiente = ev.target.checked;
+        capa.setStyle(estiloZona(capa.zona));
+        recalcular();
+      });
+    });
+    capa.on('pm:edit', recalcular);
+    capa.on('pm:rotateend', recalcular);
+    zonas.push(capa);
+  }
+
+  mapa.on('pm:create', function (e) {
+    registrarZona(e.layer, selectTipo.value, document.getElementById('incipiente').checked);
+    recalcular();
+  });
+
+  mapa.on('pm:remove', function (e) {
+    const i = zonas.indexOf(e.layer);
+    if (i >= 0) zonas.splice(i, 1);
+    recalcular();
+  });
+
+  // ============================================================
+  // CÁLCULO DE RESULTADOS
+  // ============================================================
+  function calcularZonas() {
+    const geos = zonas.map(function (capa) { return capa.toGeoJSON(); });
+    const conteo = zonas.map(function () { return 0; });
+    let sinZona = 0;
+    let superpuestos = 0;
+
+    puntos.forEach(function (p) {
+      const pt = turf.point(p);
+      let dentro = 0;
+      geos.forEach(function (g, i) {
+        if (turf.booleanPointInPolygon(pt, g)) {
+          if (dentro === 0) conteo[i]++;   // se asigna a la primera zona que lo contiene
+          dentro++;
+        }
+      });
+      if (dentro === 0) sinZona++;
+      if (dentro > 1) superpuestos++;
+    });
+
+    return zonas.map(function (capa, i) {
+      const ha = turf.area(geos[i]) / 10000;
+      return {
+        capa: capa, geo: geos[i], n: conteo[i], ha: ha,
+        arbHa: ha > 0 ? conteo[i] / ha : 0
+      };
+    }).concat([{ sinZona: sinZona, superpuestos: superpuestos }]);
+  }
+
+  function recalcular() {
+    const res = calcularZonas();
+    const extra = res.pop();
+    const tbody = document.getElementById('tablaZonas');
+    tbody.innerHTML = '';
+    res.forEach(function (r, i) {
+      const t = TIPOS[r.capa.zona.tipo];
+      const fila = document.createElement('tr');
+      fila.innerHTML =
+        '<td>' + (i + 1) + '</td>' +
+        '<td><span class="muestra" style="background:' + t.color + '"></span>' + t.nombre +
+        (r.capa.zona.incipiente ? ' · incipiente' : '') + '</td>' +
+        '<td>' + formato(r.n) + '</td>' +
+        '<td>' + formato(r.ha, 1) + '</td>' +
+        '<td>' + formato(r.arbHa, 1) + '</td>';
+      tbody.appendChild(fila);
+    });
+    document.getElementById('sinZona').textContent = formato(extra.sinZona);
+    const aviso = document.getElementById('avisoSuperposicion');
+    if (extra.superpuestos > 0) {
+      aviso.textContent = '⚠️ ' + formato(extra.superpuestos) +
+        ' árboles caen en más de una zona (se cuentan en la primera). Conviene que las zonas no se superpongan.';
+      aviso.classList.remove('oculto');
+    } else {
+      aviso.classList.add('oculto');
+    }
+    return res;
+  }
+
+  // ============================================================
+  // ABRIR PUNTOS DEL BARRIO
+  // ============================================================
+  document.getElementById('archivoPuntos').addEventListener('change', function (e) {
+    leerArchivo(e.target, function (datos) {
+      if (capaPuntos) mapa.removeLayer(capaPuntos);
+      if (capaLimite) mapa.removeLayer(capaLimite);
+      zonas.slice().forEach(function (capa) { mapa.removeLayer(capa); });
+      zonas.length = 0;
+      document.getElementById('notas').value = '';
+
+      const featPuntos = (datos.features || []).filter(function (f) {
+        return f.geometry && f.geometry.type === 'Point';
+      });
+      const featLimite = (datos.features || []).filter(function (f) {
+        return f.properties && f.properties.tipo === 'limite';
+      });
+
+      puntos = featPuntos.map(function (f) { return f.geometry.coordinates; });
+      const props = featPuntos.length ? featPuntos[0].properties : (featLimite.length ? featLimite[0].properties : {});
+      nombreBarrio = props.barrio || '';
+      radioM = props.radio_m || null;
+
+      capaPuntos = L.geoJSON({ type: 'FeatureCollection', features: featPuntos }, {
+        pmIgnore: true,
+        pointToLayer: function (f, latlng) {
+          return L.circleMarker(latlng, {
+            radius: 3, color: '#000000', weight: 1, fillColor: '#ffeb3b', fillOpacity: 0.9,
+            interactive: false, pmIgnore: true
+          });
+        }
+      }).addTo(mapa);
+
+      capaLimite = L.geoJSON({ type: 'FeatureCollection', features: featLimite }, {
+        pmIgnore: true, interactive: false,
+        style: { color: '#ff1744', weight: 3, fill: false }
+      }).addTo(mapa);
+
+      document.getElementById('barrio').textContent = nombreBarrio || '—';
+      document.getElementById('totalPuntos').textContent = formato(puntos.length);
+      if (featLimite.length) mapa.fitBounds(capaLimite.getBounds(), { padding: [20, 20] });
+      else if (featPuntos.length) mapa.fitBounds(capaPuntos.getBounds(), { padding: [20, 20] });
+      recalcular();
+    });
+  });
+
+  // ============================================================
+  // GUARDAR ZONAS
+  // ============================================================
+  document.getElementById('guardar').addEventListener('click', function () {
+    if (!nombreBarrio) { alert('Primero abrí el archivo de puntos del barrio.'); return; }
+    if (!zonas.length) { alert('Todavía no hay zonas dibujadas.'); return; }
+    const res = recalcular();
+    const features = res.map(function (r, i) {
+      const t = TIPOS[r.capa.zona.tipo];
+      return {
+        type: 'Feature',
+        geometry: r.geo.geometry,
+        properties: {
+          barrio: nombreBarrio,
+          zona_id: i + 1,
+          tipo: r.capa.zona.tipo,
+          tipo_nombre: t.nombre,
+          lcz: t.lcz,
+          forestacion_incipiente: r.capa.zona.incipiente,
+          n_arboles: r.n,
+          area_ha: Math.round(r.ha * 100) / 100,
+          arboles_ha: Math.round(r.arbHa * 10) / 10
+        }
+      };
+    });
+    const salida = {
+      type: 'FeatureCollection',
+      barrio: nombreBarrio,
+      provisoria: true,
+      fuente_puntos: 'Meta/WRI Canopy Height — cimas radio ' + (radioM || '?') + ' m',
+      total_arboles_barrio: puntos.length,
+      arboles_sin_zona: Number(document.getElementById('sinZona').textContent.replace(/\./g, '')) || 0,
+      notas: document.getElementById('notas').value,
+      fecha_edicion: new Date().toISOString(),
+      features: features
+    };
+    const blob = new Blob([JSON.stringify(salida, null, 2)], { type: 'application/geo+json' });
+    const enlace = document.createElement('a');
+    enlace.href = URL.createObjectURL(blob);
+    enlace.download = 'zonas_' + slug(nombreBarrio) + '.geojson';
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
+  });
+
+  // ============================================================
+  // REABRIR ZONAS GUARDADAS
+  // ============================================================
+  document.getElementById('archivoZonas').addEventListener('change', function (e) {
+    leerArchivo(e.target, function (datos) {
+      if (nombreBarrio && datos.barrio && datos.barrio !== nombreBarrio) {
+        if (!confirm('Estas zonas son de "' + datos.barrio + '" y el barrio abierto es "' +
+                     nombreBarrio + '". ¿Cargarlas igual?')) return;
+      }
+      zonas.slice().forEach(function (capa) { mapa.removeLayer(capa); });
+      zonas.length = 0;
+
+            const desconocidas = [];
+      (datos.features || []).forEach(function (f) {
+        if (!f.geometry || (f.geometry.type !== 'Polygon' && f.geometry.type !== 'MultiPolygon')) return;
+        let tipo = f.properties && f.properties.tipo;
+        if (!TIPOS[tipo]) {
+          // Tipo no reconocido: se carga con factor 0 para no inventar lotes, y se avisa
+          desconocidas.push((zonas.length + 1) + ' (' + (tipo || 'sin tipo') + ')');
+          tipo = 'predio_sin_urbanizar';
+        }
+        const incipiente = !!(f.properties && f.properties.forestacion_incipiente);
+        L.geoJSON(f).eachLayer(function (capa) {
+          capa.addTo(mapa);
+          registrarZona(capa, tipo, incipiente);
+        });
+      });
+      document.getElementById('notas').value = datos.notas || '';
+      recalcular();
+      if (desconocidas.length) {
+        alert('Zonas con tipo no reconocido: ' + desconocidas.join(', ') +
+              '.\nSe cargaron como "Predio sin urbanizar". Revisalas y asignales el tipo correcto.');
+      }
+    });
+  });
+</script>
+</body>
+</html>

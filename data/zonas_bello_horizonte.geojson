@@ -4,9 +4,9 @@
   "provisoria": true,
   "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
   "total_arboles_barrio": 559,
-  "arboles_sin_zona": 24,
+  "arboles_sin_zona": 10,
   "notas": "",
-  "fecha_edicion": "2026-10-14T23:59:23.727Z",
+  "fecha_edicion": "2026-10-16T14:36:05.098Z",
   "features": [
     {
       "type": "Feature",
@@ -15,24 +15,28 @@
         "coordinates": [
           [
             [
-              -63.211851,
-              -32.40616
+              -63.210909,
+              -32.408633
             ],
             [
-              -63.210971,
-              -32.406214
+              -63.211221,
+              -32.408588
             ],
             [
-              -63.211035,
-              -32.408569
+              -63.211907,
+              -32.40857
             ],
             [
-              -63.211872,
-              -32.408479
+              -63.211961,
+              -32.406125
             ],
             [
-              -63.211851,
-              -32.40616
+              -63.21107,
+              -32.40617
+            ],
+            [
+              -63.210909,
+              -32.408633
             ]
           ]
         ]
@@ -40,13 +44,13 @@
       "properties": {
         "barrio": "BELLO HORIZONTE",
         "zona_id": 1,
-        "tipo": "urbana_mixta",
-        "tipo_nombre": "Urbana mixta",
-        "lcz": "LCZ 9 + D",
+        "tipo": "predio_sin_urbanizar",
+        "tipo_nombre": "Predio sin urbanizar / loteo en desarrollo",
+        "lcz": "LCZ D/F",
         "forestacion_incipiente": false,
-        "n_arboles": 0,
-        "area_ha": 2.1,
-        "arboles_ha": 0
+        "n_arboles": 2,
+        "area_ha": 2.41,
+        "arboles_ha": 0.8
       }
     },
     {
@@ -56,28 +60,28 @@
         "coordinates": [
           [
             [
-              -63.211121,
-              -32.401432
+              -63.211907,
+              -32.40857
             ],
             [
-              -63.222432,
-              -32.408442
+              -63.222348,
+              -32.408551
             ],
             [
-              -63.211872,
-              -32.408479
+              -63.211037,
+              -32.401396
             ],
             [
-              -63.211851,
-              -32.40616
+              -63.21107,
+              -32.40617
             ],
             [
-              -63.210971,
-              -32.406214
+              -63.211961,
+              -32.406125
             ],
             [
-              -63.211121,
-              -32.401432
+              -63.211907,
+              -32.40857
             ]
           ]
         ]
@@ -89,9 +93,9 @@
         "tipo_nombre": "Urbana residencial",
         "lcz": "LCZ 6",
         "forestacion_incipiente": false,
-        "n_arboles": 535,
-        "area_ha": 40.31,
-        "arboles_ha": 13.3
+        "n_arboles": 547,
+        "area_ha": 40.1,
+        "arboles_ha": 13.6
       }
     }
   ]

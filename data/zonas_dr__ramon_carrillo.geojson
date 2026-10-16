@@ -4,9 +4,9 @@
   "provisoria": true,
   "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
   "total_arboles_barrio": 33,
-  "arboles_sin_zona": 4,
+  "arboles_sin_zona": null,
   "notas": "",
-  "fecha_edicion": "2026-10-15T00:07:49.480Z",
+  "fecha_edicion": "2026-10-16T15:04:28.798516+00:00",
   "features": [
     {
       "type": "Feature",
@@ -15,32 +15,24 @@
         "coordinates": [
           [
             [
-              -63.257729,
-              -32.388695
+              -63.256658,
+              -32.38797099999999
             ],
             [
-              -63.254423,
-              -32.392355
+              -63.257774,
+              -32.38868600000001
             ],
             [
-              -63.257235,
-              -32.394039
+              -63.254490000000004,
+              -32.39231
             ],
             [
-              -63.258566,
-              -32.392409
+              -63.253406000000005,
+              -32.391576
             ],
             [
-              -63.26097,
-              -32.393949
-            ],
-            [
-              -63.262622,
-              -32.391902
-            ],
-            [
-              -63.257729,
-              -32.388695
+              -63.256658,
+              -32.38797099999999
             ]
           ]
         ]
@@ -48,13 +40,13 @@
       "properties": {
         "barrio": "DR. RAMON CARRILLO",
         "zona_id": 1,
-        "tipo": "urbana_mixta",
-        "tipo_nombre": "Urbana mixta",
-        "lcz": "LCZ 9 + D",
-        "forestacion_incipiente": true,
-        "n_arboles": 29,
-        "area_ha": 23.61,
-        "arboles_ha": 1.2
+        "tipo": "predio_sin_urbanizar",
+        "tipo_nombre": "Predio sin urbanizar / loteo en desarrollo",
+        "lcz": "LCZ D/F",
+        "forestacion_incipiente": false,
+        "n_arboles": null,
+        "area_ha": 6.62,
+        "arboles_ha": null
       }
     },
     {
@@ -64,24 +56,40 @@
         "coordinates": [
           [
             [
-              -63.256655,
-              -32.387988
+              -63.254490000000004,
+              -32.39231
             ],
             [
-              -63.257729,
-              -32.388695
+              -63.257774,
+              -32.38868600000001
             ],
             [
-              -63.254423,
-              -32.392355
+              -63.262721000000006,
+              -32.39192
             ],
             [
-              -63.253522,
-              -32.391576
+              -63.260961,
+              -32.39388600000001
             ],
             [
-              -63.256655,
-              -32.387988
+              -63.258622,
+              -32.39248200000001
+            ],
+            [
+              -63.257259,
+              -32.39408499999999
+            ],
+            [
+              -63.255714,
+              -32.393207000000004
+            ],
+            [
+              -63.255799,
+              -32.39308000000001
+            ],
+            [
+              -63.254490000000004,
+              -32.39231
             ]
           ]
         ]
@@ -89,13 +97,13 @@
       "properties": {
         "barrio": "DR. RAMON CARRILLO",
         "zona_id": 2,
-        "tipo": "industrial",
-        "tipo_nombre": "Industrial / gran predio",
-        "lcz": "LCZ 8/10",
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
         "forestacion_incipiente": true,
-        "n_arboles": 0,
-        "area_ha": 6.25,
-        "arboles_ha": 0
+        "n_arboles": null,
+        "area_ha": 23.78,
+        "arboles_ha": null
       }
     },
     {
@@ -105,24 +113,24 @@
         "coordinates": [
           [
             [
-              -63.26097,
-              -32.393949
+              -63.260961,
+              -32.39388600000001
             ],
             [
-              -63.258566,
-              -32.392409
+              -63.258622,
+              -32.39248200000001
             ],
             [
-              -63.257235,
-              -32.394039
+              -63.257259,
+              -32.39408499999999
             ],
             [
-              -63.259489,
-              -32.395398
+              -63.259545,
+              -32.39548500000001
             ],
             [
-              -63.26097,
-              -32.393949
+              -63.260961,
+              -32.39388600000001
             ]
           ]
         ]
@@ -130,13 +138,13 @@
       "properties": {
         "barrio": "DR. RAMON CARRILLO",
         "zona_id": 3,
-        "tipo": "industrial",
-        "tipo_nombre": "Industrial / gran predio",
-        "lcz": "LCZ 8/10",
+        "tipo": "urbana_mixta",
+        "tipo_nombre": "Urbana mixta",
+        "lcz": "LCZ 9 + D",
         "forestacion_incipiente": true,
-        "n_arboles": 0,
-        "area_ha": 5.88,
-        "arboles_ha": 0
+        "n_arboles": null,
+        "area_ha": 5.9,
+        "arboles_ha": null
       }
     }
   ]

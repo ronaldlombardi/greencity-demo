@@ -48,6 +48,8 @@ FACTOR_OCUPACION = {
     "bosque_autoctono": 0.0,  # sin casas: fuera de la meta
     "riberena": 0.5,          # casas junto a la ribera arbolada (como mixta)
     "industrial": 0.0,
+    "predio_sin_urbanizar": 0.0,  # terreno vacío o loteo sin casas
+    "parque_urbano": 0.0,         # suma árboles al barrio, no a la meta
 }
 
 

@@ -43,6 +43,8 @@ COLOR_TIPO = {
     'riberena':           '#1e88e5',
     'bosque_autoctono':   '#2e7d32',
     'industrial':         '#8e24aa',
+    'predio_sin_urbanizar': '#8d6e63',
+    'parque_urbano':      '#00897b',
 }
 
 NOTA_EXCESO = ("El conteo satelital incluye árboles de patios y, en barrios ribereños, "

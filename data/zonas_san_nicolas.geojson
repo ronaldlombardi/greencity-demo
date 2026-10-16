@@ -4,9 +4,9 @@
   "provisoria": true,
   "fuente_puntos": "Meta/WRI Canopy Height — cimas radio 2 m",
   "total_arboles_barrio": 312,
-  "arboles_sin_zona": 5,
+  "arboles_sin_zona": 2,
   "notas": "",
-  "fecha_edicion": "2026-10-15T21:38:45.934Z",
+  "fecha_edicion": "2026-10-16T14:45:48.915Z",
   "features": [
     {
       "type": "Feature",
@@ -15,24 +15,40 @@
         "coordinates": [
           [
             [
-              -63.221939,
-              -32.393107
+              -63.223045,
+              -32.398026
             ],
             [
-              -63.224407,
-              -32.39462
+              -63.225803,
+              -32.394901
             ],
             [
-              -63.222165,
-              -32.397464
+              -63.220898,
+              -32.391884
             ],
             [
-              -63.21946,
+              -63.218151,
+              -32.394928
+            ],
+            [
+              -63.219471,
               -32.395825
             ],
             [
-              -63.221939,
-              -32.393107
+              -63.222111,
+              -32.39308
+            ],
+            [
+              -63.224579,
+              -32.394692
+            ],
+            [
+              -63.222122,
+              -32.397446
+            ],
+            [
+              -63.223045,
+              -32.398026
             ]
           ]
         ]
@@ -40,13 +56,13 @@
       "properties": {
         "barrio": "SAN NICOLAS",
         "zona_id": 1,
-        "tipo": "urbana_mixta",
-        "tipo_nombre": "Urbana mixta",
-        "lcz": "LCZ 9 + D",
+        "tipo": "predio_sin_urbanizar",
+        "tipo_nombre": "Predio sin urbanizar / loteo en desarrollo",
+        "lcz": "LCZ D/F",
         "forestacion_incipiente": false,
-        "n_arboles": 281,
-        "area_ha": 11.42,
-        "arboles_ha": 24.6
+        "n_arboles": 26,
+        "area_ha": 13.08,
+        "arboles_ha": 2
       }
     },
     {
@@ -56,40 +72,24 @@
         "coordinates": [
           [
             [
-              -63.222165,
-              -32.397464
+              -63.222122,
+              -32.397446
             ],
             [
-              -63.223012,
-              -32.398053
+              -63.224579,
+              -32.394692
             ],
             [
-              -63.225824,
-              -32.394865
+              -63.222111,
+              -32.39308
             ],
             [
-              -63.220898,
-              -32.391884
-            ],
-            [
-              -63.218129,
-              -32.39491
-            ],
-            [
-              -63.21946,
+              -63.219471,
               -32.395825
             ],
             [
-              -63.221939,
-              -32.393107
-            ],
-            [
-              -63.224407,
-              -32.39462
-            ],
-            [
-              -63.222165,
-              -32.397464
+              -63.222122,
+              -32.397446
             ]
           ]
         ]
@@ -97,13 +97,13 @@
       "properties": {
         "barrio": "SAN NICOLAS",
         "zona_id": 2,
-        "tipo": "industrial",
-        "tipo_nombre": "Industrial / gran predio",
-        "lcz": "LCZ 8/10",
+        "tipo": "urbana_residencial",
+        "tipo_nombre": "Urbana residencial",
+        "lcz": "LCZ 6",
         "forestacion_incipiente": false,
-        "n_arboles": 26,
-        "area_ha": 13.51,
-        "arboles_ha": 1.9
+        "n_arboles": 284,
+        "area_ha": 11.67,
+        "arboles_ha": 24.3
       }
     }
   ]
