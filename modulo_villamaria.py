@@ -653,12 +653,99 @@ def _render_osm():
 
 def _render_estrategias():
     st.title("🎯 Estrategias de política pública")
-    st.caption("Exclusivamente para el Municipio de Villa María · basadas en indicadores GEE + OSM + INDEC 2022")
+    st.caption(
+        "Exclusivamente para el Municipio de Villa María · basadas en indicadores GEE + OSM + "
+        "INDEC 2022 + Diagnóstico por barrio"
+    )
     st.markdown("---")
 
+    from modulo_barrios import _cargar_resumen
+    res = _cargar_resumen()
+
+    if DATOS_VM.get('datos_preliminares') or not res:
+        st.warning(
+            "⚠️ Faltan datos calculados para armar las estrategias "
+            "(`data/indicadores_villamaria.json` o `data/zonas_villamaria_resumen.json`)."
+        )
+        return
+
+    def _n(x):
+        """Entero con separador de miles argentino."""
+        return f"{int(round(x)):,}".replace(",", ".")
+
+    def _d(x, dec=1):
+        """Decimal con coma."""
+        return f"{x:.{dec}f}".replace(".", ",")
+
+    SUP = "*(supuesto)*"
+
+    acc = DATOS_VM['acceso']
+    osm = DATOS_VM['osm']
+    cob = DATOS_VM['cobertura']
+    lst = DATOS_VM['lst']
+    poblacion_vm = DATOS_VM.get('poblacion_vm', 96061)
+
+    # --- Brecha satelital vs. OSM (desde indicadores_villamaria.json) ---
+    m2_sat = acc.get('m2_hab_sat') or 0
+    m2_osm = osm.get('m2Hab') or 0
+    brecha_m2 = max(0, m2_sat - m2_osm)
+    brecha_ha = brecha_m2 * poblacion_vm / 10_000
+    enf = lst.get('enfriamiento') or 0
+
+    # --- Diagnóstico por barrio (desde zonas_villamaria_resumen.json) ---
+    meta_c = res['ciudad']['meta_1_arbol_por_casa']
+    lotes_ciudad = meta_c['lotes_estimados']
+    arb_casas_ciudad = meta_c['arboles_zonas_casas']
+    deficit_total = meta_c['deficit_arboles']
+    cumpl_ciudad = meta_c['cumplimiento_pct'] or 0
+
+    # Déficit de las zonas urbanas céntricas
+    deficit_centrica = 0
+    barrios_centricos = []
+    for b in res['barrios']:
+        zonas_c = [z for z in b['zonas'] if z['tipo'] == 'urbana_centrica']
+        if zonas_c:
+            barrios_centricos.append(b['barrio'].title())
+            deficit_centrica += sum(z['deficit_arboles'] for z in zonas_c)
+    pct_centrica = deficit_centrica / deficit_total * 100 if deficit_total else 0
+    cumpl_con_centrica = (
+        (arb_casas_ciudad + deficit_centrica) / lotes_ciudad * 100 if lotes_ciudad else 0
+    )
+
+    # Barrios por debajo del umbral de cumplimiento
+    UMBRAL = 50
+    criticos = sorted(
+        [
+            b for b in res['barrios']
+            if b['meta_1_arbol_por_casa']['cumplimiento_pct'] is not None
+            and b['meta_1_arbol_por_casa']['cumplimiento_pct'] < UMBRAL
+        ],
+        key=lambda b: b['meta_1_arbol_por_casa']['cumplimiento_pct'],
+    )
+    deficit_criticos = sum(b['meta_1_arbol_por_casa']['deficit_arboles'] for b in criticos)
+    acciones_criticos = []
+    for b in criticos:
+        m = b['meta_1_arbol_por_casa']
+        incipiente = (
+            " · forestación incipiente"
+            if any(z.get('forestacion_incipiente') for z in b['zonas']) else ""
+        )
+        acciones_criticos.append(
+            f"{b['barrio'].title()}: {_d(m['cumplimiento_pct'])} % de la meta · "
+            f"faltan {_n(m['deficit_arboles'])} árboles{incipiente}"
+        )
+    acciones_criticos.append(
+        "Plan de plantación barrio por barrio, empezando por el menor cumplimiento"
+    )
+    acciones_criticos.append(
+        "Registrar lo plantado en la calculadora del Plan de Forestación para medir el avance"
+    )
+
     st.markdown("""
-    Las siguientes líneas de acción surgen del análisis cuantitativo de los indicadores ambientales.
+    Las siguientes líneas de acción surgen del análisis cuantitativo de los indicadores ambientales
+    y del Diagnóstico por barrio (meta municipal: 1 árbol por casa).
     Están priorizadas según urgencia e impacto potencial sobre la calidad de vida de los vecinos.
+    Los valores marcados como *(supuesto)* no surgen de un cálculo: se detallan al final de la sección.
     """)
 
     # --- Prioridad ALTA ---
@@ -666,28 +753,54 @@ def _render_estrategias():
 
     estrategias_alta = [
         {
+            'titulo': 'Arbolado de veredas en el área céntrica',
+            'fundamento': f'Los {len(barrios_centricos)} barrios con zona urbana céntrica concentran '
+                          f'{_n(deficit_centrica)} de los {_n(deficit_total)} árboles que faltan para la '
+                          f'meta de 1 árbol por casa ({_d(pct_centrica)} % del déficit de la ciudad). '
+                          'En el centro los lotes son chicos y hay pocos patios: la vereda es el lugar '
+                          'principal de plantación.',
+            'acciones': [
+                'Plan de plantación en veredas, priorizando las cuadras sin arbolado',
+                'Barrios incluidos: ' + ', '.join(barrios_centricos),
+                'Registrar lo plantado en la calculadora del Plan de Forestación para medir el avance',
+            ],
+            'impacto': f'Cubrir el déficit céntrico lleva el cumplimiento de la ciudad del '
+                       f'{_d(cumpl_ciudad)} % al {_d(cumpl_con_centrica)} %',
+        },
+        {
+            'titulo': f'Barrios por debajo del {UMBRAL} % de la meta 1 árbol por casa',
+            'fundamento': f'{len(criticos)} barrios tienen menos del {UMBRAL} % de la meta y suman '
+                          f'{_n(deficit_criticos)} árboles faltantes. El cumplimiento depende de los '
+                          'lotes estimados, que son provisorios hasta contar con el catastro municipal.',
+            'acciones': acciones_criticos,
+            'impacto': f'Plantar {_n(deficit_criticos)} árboles en estos {len(criticos)} barrios '
+                       f'lleva a todos a la meta de 1 árbol por casa',
+        },
+        {
             'titulo': 'Forestación urgente en zona Noroeste (VM centro-norte)',
-            'fundamento': 'Es la zona más caliente del conglomerado: 40.76°C, +0.79°C sobre la media. '
+            'fundamento': 'Es la zona más caliente del conglomerado: 40.76°C, +0.79°C sobre la media '
+                          '*(dato de un análisis anterior por cuadrantes, no vigente)*. '
                           'El déficit de sombra en el centro-norte de Villa María genera un punto crítico '
                           'de estrés térmico para los vecinos.',
             'acciones': [
-                'Plan de 500 árboles en avenidas y espacios públicos del centro-norte en 18 meses',
+                f'Plan de 500 árboles {SUP} en avenidas y espacios públicos del centro-norte en 18 meses',
                 'Priorizar especies nativas de alta copa: espinillo, tala, ombú',
                 'Articular con UNVM para monitoreo satelital anual del impacto térmico',
             ],
-            'impacto': 'Reducción estimada de hasta 1.67°C en temperatura local con cobertura del 15%',
+            'impacto': f'Reducción estimada de hasta {_d(enf, 2)}°C en temperatura local '
+                       f'con cobertura del 15% {SUP}',
         },
         {
             'titulo': 'Relevamiento y apertura de verde no catalogado',
-            'fundamento': f'El satélite detecta 93.2 m²/hab de verde, pero OSM confirma solo 65.4 m²/hab '
-                          f'como público. Hay ~{(93.2-65.4)*97000/10000:.0f} ha de verde que los vecinos '
-                          f'probablemente no pueden usar.',
+            'fundamento': f'El satélite detecta {_d(m2_sat)} m²/hab de verde, pero OSM confirma solo '
+                          f'{_d(m2_osm)} m²/hab como público. Hay ~{_n(brecha_ha)} ha de verde que los '
+                          'vecinos probablemente no pueden usar.',
             'acciones': [
                 'Censo municipal de espacios verdes no catalogados (baldíos, bordes de canales, franjas ferroviarias)',
                 'Acuerdos de acceso público con propietarios privados (servidumbre ambiental)',
                 'Aplicación de la Ordenanza 7209 en zonas periurbanas limítrofes',
             ],
-            'impacto': 'Potencial de sumar hasta 27.8 m²/hab de verde accesible sin nueva infraestructura',
+            'impacto': f'Potencial de sumar hasta {_d(brecha_m2)} m²/hab de verde accesible sin nueva infraestructura',
         },
     ]
 
@@ -714,29 +827,31 @@ def _render_estrategias():
                 'Áreas de picnic y recreación en puntos estratégicos del recorrido',
                 'Señalización ambiental sobre el ecosistema ribereño',
             ],
-            'impacto': 'Corredor verde de ~8 km lineales; beneficio directo para barrios costeros',
+            'impacto': f'Corredor verde de ~8 km lineales {SUP}; beneficio directo para barrios costeros',
         },
         {
             'titulo': 'Programa de agricultura urbana en zonas de cultivo',
-            'fundamento': 'El 23.9% del área analizada son cultivos en zona urbana/periurbana. '
-                          'Representan una oportunidad de transición ordenada hacia verde público.',
+            'fundamento': f'El {_d(cob.get("cultivos") or 0)}% del área analizada son cultivos en zona '
+                          'urbana/periurbana. Representan una oportunidad de transición ordenada hacia verde público.',
             'acciones': [
                 'Identificar parcelas de cultivo con potencial de reconversión a verde público',
                 'Programa de huertas comunitarias en lotes ociosos',
                 'Convenios con propietarios para servicios ambientales (Ord. 7209)',
             ],
-            'impacto': 'Reconversión potencial de hasta 5–10% de la superficie de cultivos en verde público',
+            'impacto': f'Reconversión potencial de hasta 5–10% {SUP} de la superficie de cultivos en verde público',
         },
         {
             'titulo': 'Red de corredores verdes entre barrios',
-            'fundamento': 'El 8.9% del área edificada accede al verde en el rango 100–300m. '
-                          'Conectar parques existentes mediante arbolado de calles mejoraría la accesibilidad peatonal.',
+            'fundamento': f'El {_d(acc.get("r_100_300") or 0)}% del área edificada accede al verde en el '
+                          'rango 100–300m. Conectar parques existentes mediante arbolado de calles '
+                          'mejoraría la accesibilidad peatonal.',
             'acciones': [
                 'Mapeo de rutas peatonales con déficit de sombra entre plazas y parques',
                 'Arbolado sistemático en ejes peatonales prioritarios',
                 'Programa de "calles verdes" con vecinos y juntas de participación',
             ],
-            'impacto': 'Reducir la distancia media al verde de 48m a <40m para el 100% del área',
+            'impacto': f'Reducir la distancia media al verde de {_n(acc.get("dist_prom") or 0)}m '
+                       f'a <40m {SUP} para el 100% del área',
         },
     ]
 
@@ -766,7 +881,7 @@ def _render_estrategias():
         },
         {
             'titulo': 'Fortalecimiento del catálogo OSM de espacios verdes',
-            'fundamento': 'Villa María tiene 1.027 elementos catalogados en OSM. '
+            'fundamento': f'Villa María tiene {_n(osm.get("elementos") or 0)} elementos catalogados en OSM. '
                           'Mantenerlo actualizado es crítico para la planificación.',
             'acciones': [
                 'Mapathon municipal anual con participación ciudadana',
@@ -786,12 +901,28 @@ def _render_estrategias():
             st.success(f"📈 Impacto esperado: {e['impacto']}")
 
     st.markdown("---")
+    # --- Supuestos declarados ---
+    st.markdown("### 📌 Supuestos de esta sección")
+    st.info(
+        f"- **Lotes estimados:** {res['metodo_lotes']['estado']}. Los porcentajes de cumplimiento "
+        "de la meta 1 árbol por casa dependen de esta estimación (ver Diagnóstico por barrio → Metodología).\n"
+        "- **Zona Noroeste (40.76°C, +0.79°C):** dato de un análisis anterior por cuadrantes, "
+        "que ya no se calcula en la app.\n"
+        "- **500 árboles en 18 meses:** meta de referencia propuesta, sin cálculo de respaldo.\n"
+        "- **Cobertura del 15%:** referencia de arbolado; la reducción de temperatura usa la diferencia "
+        "medida entre verde denso y suelo/asfalto (Landsat 8/9).\n"
+        "- **~8 km de parque lineal:** longitud aproximada del corredor, sin medición.\n"
+        "- **Reconversión del 5–10% de cultivos:** rango propuesto, sin cálculo de respaldo.\n"
+        "- **Distancia media <40 m:** meta propuesta, sin cálculo de respaldo."
+    )
+
+    st.markdown("---")
     st.caption(
         "Ciudad Verde AI Agent · Estrategias para Villa María · "
         "Datos: ESA WorldCover 2020 · Landsat 8/9 · OpenStreetMap · INDEC Censo 2022 · "
+        "Meta/WRI Canopy Height (Diagnóstico por barrio) · "
         "Marco: OMS, ODS 11, Ordenanza 7209"
     )
-
 
 # ============================================================
 # SECCIÓN: AGENDA 2030 · C40
