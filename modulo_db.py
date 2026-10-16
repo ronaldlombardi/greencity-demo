@@ -67,7 +67,23 @@ def inicializar_db():
                         nota        TEXT,
                         usuario     VARCHAR(80),
                         fecha       TIMESTAMP DEFAULT NOW(),
-                        UNIQUE (ciudad, id_linea)
+                                                UNIQUE (ciudad, id_linea)
+                    );
+                """)
+                cur.execute("""
+                    CREATE TABLE IF NOT EXISTS cv_eventos_huella (
+                        id                SERIAL PRIMARY KEY,
+                        fecha_registro    TIMESTAMP DEFAULT NOW(),
+                        ciudad            VARCHAR(80)  NOT NULL DEFAULT 'Villa María',
+                        nombre            VARCHAR(200) NOT NULL,
+                        fecha_evento      DATE,
+                        plantilla         VARCHAR(60),
+                        parametros        TEXT,
+                        resultado         TEXT,
+                        acciones          TEXT,
+                        total_t           NUMERIC(12,3),
+                        total_mitigado_t  NUMERIC(12,3),
+                        usuario           VARCHAR(80)
                     );
                 """)
             conn.commit()
@@ -300,3 +316,87 @@ def obtener_decisiones(ciudad: str = "Villa María") -> dict:
     except Exception as e:
         print(f"[cv_db] Error leyendo decisiones C40: {e}")
         return {}
+
+
+# ============================================================
+# HUELLA DE CARBONO DE EVENTOS
+# ============================================================
+
+def guardar_evento_huella(ciudad: str, nombre: str, fecha_evento, plantilla: str,
+                          parametros: dict, resultado: dict, acciones: list,
+                          total_t: float, total_mitigado_t: float, usuario: str):
+    """Guarda un evento con su huella calculada. Devuelve el id o None."""
+    if not DB_URL:
+        return None
+    import json as _json
+    try:
+        with _conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO cv_eventos_huella
+                        (ciudad, nombre, fecha_evento, plantilla, parametros, resultado,
+                         acciones, total_t, total_mitigado_t, usuario)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    RETURNING id
+                """, (ciudad, nombre[:200], fecha_evento, plantilla,
+                      _json.dumps(parametros, ensure_ascii=False),
+                      _json.dumps(resultado, ensure_ascii=False),
+                      _json.dumps(acciones, ensure_ascii=False),
+                      round(total_t, 3), round(total_mitigado_t, 3), usuario))
+                nuevo_id = cur.fetchone()[0]
+            conn.commit()
+        return nuevo_id
+    except Exception as e:
+        print(f"[cv_db] Error guardando evento: {e}")
+        return None
+
+
+def obtener_eventos_huella(ciudad: str = "Villa María", anio: int = None) -> list:
+    """Devuelve los eventos guardados de una ciudad (opcionalmente de un año), por fecha."""
+    if not DB_URL:
+        return []
+    import json as _json
+    try:
+        with _conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                if anio:
+                    cur.execute("""
+                        SELECT * FROM cv_eventos_huella
+                        WHERE ciudad = %s AND EXTRACT(YEAR FROM fecha_evento) = %s
+                        ORDER BY fecha_evento, id
+                    """, (ciudad, anio))
+                else:
+                    cur.execute("""
+                        SELECT * FROM cv_eventos_huella
+                        WHERE ciudad = %s
+                        ORDER BY fecha_evento, id
+                    """, (ciudad,))
+                filas = []
+                for f in cur.fetchall():
+                    f = dict(f)
+                    for campo in ("parametros", "resultado", "acciones"):
+                        try:
+                            f[campo] = _json.loads(f[campo]) if f.get(campo) else None
+                        except Exception:
+                            f[campo] = None
+                    filas.append(f)
+                return filas
+    except Exception as e:
+        print(f"[cv_db] Error leyendo eventos: {e}")
+        return []
+
+
+def eliminar_evento_huella(evento_id: int) -> bool:
+    """Borra un evento guardado. Devuelve True si borró algo."""
+    if not DB_URL:
+        return False
+    try:
+        with _conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM cv_eventos_huella WHERE id = %s", (evento_id,))
+                borrado = cur.rowcount > 0
+            conn.commit()
+        return borrado
+    except Exception as e:
+        print(f"[cv_db] Error borrando evento: {e}")
+        return False

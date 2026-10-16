@@ -1,0 +1,141 @@
+{
+  "titulo": "Huella de carbono de eventos — Villa María",
+  "actualizado": "2026-10-16",
+  "metodo": "Emisiones = cantidad × factor de emisión, por fuente (enfoque del GHG Protocol). Cada asistencia es una persona en un día. Público local y regional: un viaje de ida y vuelta por asistencia. Resto de la provincia y otras provincias: un viaje cada 'estadía' noches, más alojamiento de quienes se hospedan.",
+  "factores": {
+    "electricidad_kwh":   {"valor": 0.283,   "unidad": "kg CO₂ por kWh",                 "nombre": "Electricidad de red (Argentina, 2022)", "fuente": "snigei_2025"},
+    "gasoil_litro":       {"valor": 2.339,   "unidad": "kg CO₂ por litro",               "nombre": "Gasoil con 7,5 % de biodiésel",          "fuente": "snigei_2025"},
+    "nafta_litro":        {"valor": 1.969,   "unidad": "kg CO₂ por litro",               "nombre": "Nafta con 12 % de bioetanol",            "fuente": "snigei_2025"},
+    "residuo_kg":         {"valor": 1.456,   "unidad": "kg CO₂e por kg",                 "nombre": "Residuo a relleno sin captura de metano (0,052 kg CH₄/kg × 28)", "fuente": "snigei_2025"},
+    "auto_km":            {"valor": 0.16272, "unidad": "kg CO₂e por km del vehículo",    "nombre": "Auto promedio a nafta",                  "fuente": "defra_2025"},
+    "moto_km":            {"valor": 0.11367, "unidad": "kg CO₂e por km del vehículo",    "nombre": "Moto promedio",                          "fuente": "defra_2025"},
+    "colectivo_pkm":      {"valor": 0.10385, "unidad": "kg CO₂e por pasajero-km",        "nombre": "Colectivo urbano",                       "fuente": "defra_2025"},
+    "omnibus_pkm":        {"valor": 0.02776, "unidad": "kg CO₂e por pasajero-km",        "nombre": "Ómnibus de larga distancia",             "fuente": "defra_2025"},
+    "avion_pkm":          {"valor": 0.229,   "unidad": "kg CO₂e por pasajero-km",        "nombre": "Avión de cabotaje (con forzamiento radiativo)", "fuente": "defra_2025"},
+    "hotel_noche":        {"valor": 56,      "unidad": "kg CO₂e por habitación por noche", "nombre": "Hotel en Argentina",                   "fuente": "beis_2021"},
+    "carne_vacuna_kg":    {"valor": 99.48,   "unidad": "kg CO₂e por kg",                 "nombre": "Carne vacuna (rodeo de carne)",          "fuente": "poore_2018"},
+    "cerdo_kg":           {"valor": 12.31,   "unidad": "kg CO₂e por kg",                 "nombre": "Carne de cerdo",                         "fuente": "poore_2018"},
+    "pollo_kg":           {"valor": 9.87,    "unidad": "kg CO₂e por kg",                 "nombre": "Carne de pollo",                         "fuente": "poore_2018"},
+    "pan_kg":             {"valor": 1.57,    "unidad": "kg CO₂e por kg",                 "nombre": "Pan (trigo)",                            "fuente": "poore_2018"}
+  },
+  "supuestos_generales": {
+    "personas_por_auto": 2.5,
+    "personas_por_moto": 1.5,
+    "personas_por_habitacion": 2,
+    "estadia_noches": 2,
+    "distancia_ida_km": {"local": 4, "region": 50, "provincia": 150, "otras": 500},
+    "modos_por_origen": {
+      "local":     {"auto": 0.50, "moto": 0.15, "a_pie": 0.25, "colectivo": 0.10},
+      "region":    {"auto": 0.80, "omnibus": 0.20},
+      "provincia": {"auto": 0.70, "omnibus": 0.30},
+      "otras":     {"auto": 0.60, "omnibus": 0.40}
+    },
+    "porcentaje_se_aloja": {"provincia": 0.30, "otras": 0.60}
+  },
+  "perfiles_procedencia": {
+    "festival":       {"nombre": "Festival regional y nacional", "local": 0.60, "region": 0.25, "provincia": 0.10, "otras": 0.05},
+    "local_region":   {"nombre": "Local y región",               "local": 0.70, "region": 0.25, "provincia": 0.05, "otras": 0.00},
+    "local":          {"nombre": "Mayormente local",             "local": 0.90, "region": 0.10, "provincia": 0.00, "otras": 0.00},
+    "visitante":      {"nombre": "Local con público visitante",  "local": 0.75, "region": 0.20, "provincia": 0.05, "otras": 0.00}
+  },
+  "plantillas": [
+    {
+      "id": "festival_penas", "nombre": "Festival Internacional de Peñas", "mes": "Febrero", "lugar": "Anfiteatro Municipal y Recorrido Peñero (costanera)",
+      "sectores": [
+        {"nombre": "Anfiteatro", "asistentes_dia": 14000, "dias": 5},
+        {"nombre": "Recorrido Peñero", "asistentes_dia": 50000, "dias": 5},
+        {"nombre": "Recorrido Peñero — noches adicionales", "asistentes_dia": 15000, "dias": 5}
+      ],
+      "perfil": "festival", "electricidad_kwh_dia": 4000, "generador_litros_dia": 500, "residuos_kg_asistencia": 1.0,
+      "comida": {"pct_consume": 0.5, "carne_vacuna_kg": 0.05, "cerdo_kg": 0.05, "pollo_kg": 0.0, "pan_kg": 0.08},
+      "produccion": {"personas_avion": 50, "km_avion_ida": 650, "litros_camiones": 2000},
+      "fuente_asistencia": "Estimación del equipo Ciudad Verde (16/10/2026): 395.000 asistencias en total"
+    },
+    {
+      "id": "farandula_rivadavia", "nombre": "Farándula del Colegio Rivadavia", "mes": "A definir", "lugar": "Anfiteatro Municipal",
+      "sectores": [{"nombre": "Anfiteatro", "asistentes_dia": 10000, "dias": 1}],
+      "perfil": "local", "electricidad_kwh_dia": 3000, "generador_litros_dia": 0, "residuos_kg_asistencia": 0.5,
+      "comida": {"pct_consume": 0.4, "carne_vacuna_kg": 0.05, "cerdo_kg": 0.05, "pollo_kg": 0.0, "pan_kg": 0.08},
+      "produccion": {"personas_avion": 0, "km_avion_ida": 0, "litros_camiones": 0},
+      "fuente_asistencia": "Estimación del equipo Ciudad Verde"
+    },
+    {
+      "id": "recital", "nombre": "Recital o evento musical", "mes": "Variable", "lugar": "Variable",
+      "sectores": [{"nombre": "Público", "asistentes_dia": 1500, "dias": 1}],
+      "perfil": "local_region", "electricidad_kwh_dia": 1000, "generador_litros_dia": 0, "residuos_kg_asistencia": 0.5,
+      "comida": {"pct_consume": 0.4, "carne_vacuna_kg": 0.05, "cerdo_kg": 0.05, "pollo_kg": 0.0, "pan_kg": 0.08},
+      "produccion": {"personas_avion": 0, "km_avion_ida": 0, "litros_camiones": 200},
+      "fuente_asistencia": "Estimación del equipo Ciudad Verde (rango 500–3.000)"
+    },
+    {
+      "id": "salon_deportes", "nombre": "Evento en el Salón de los Deportes", "mes": "Variable", "lugar": "Salón de los Deportes",
+      "sectores": [{"nombre": "Público", "asistentes_dia": 3000, "dias": 1}],
+      "perfil": "local_region", "electricidad_kwh_dia": 800, "generador_litros_dia": 0, "residuos_kg_asistencia": 0.4,
+      "comida": {"pct_consume": 0.3, "carne_vacuna_kg": 0.05, "cerdo_kg": 0.05, "pollo_kg": 0.0, "pan_kg": 0.08},
+      "produccion": {"personas_avion": 0, "km_avion_ida": 0, "litros_camiones": 0},
+      "fuente_asistencia": "Estimación del equipo Ciudad Verde"
+    },
+    {
+      "id": "futbol", "nombre": "Partido de fútbol", "mes": "Variable", "lugar": "Estadio",
+      "sectores": [{"nombre": "Público", "asistentes_dia": 1500, "dias": 1}],
+      "perfil": "visitante", "electricidad_kwh_dia": 500, "generador_litros_dia": 0, "residuos_kg_asistencia": 0.4,
+      "comida": {"pct_consume": 0.5, "carne_vacuna_kg": 0.05, "cerdo_kg": 0.05, "pollo_kg": 0.0, "pan_kg": 0.08},
+      "produccion": {"personas_avion": 0, "km_avion_ida": 0, "litros_camiones": 0},
+      "fuente_asistencia": "Estimación del equipo Ciudad Verde"
+    },
+    {
+      "id": "religioso", "nombre": "Evento religioso", "mes": "Variable", "lugar": "Variable",
+      "sectores": [{"nombre": "Público", "asistentes_dia": 1000, "dias": 1}],
+      "perfil": "local", "electricidad_kwh_dia": 100, "generador_litros_dia": 0, "residuos_kg_asistencia": 0.2,
+      "comida": {"pct_consume": 0.2, "carne_vacuna_kg": 0.05, "cerdo_kg": 0.05, "pollo_kg": 0.0, "pan_kg": 0.08},
+      "produccion": {"personas_avion": 0, "km_avion_ida": 0, "litros_camiones": 0},
+      "fuente_asistencia": "Estimación del equipo Ciudad Verde (rango 100–2.000)"
+    },
+    {
+      "id": "cine_teatro", "nombre": "Función de cine o teatro", "mes": "Variable", "lugar": "Sala",
+      "sectores": [{"nombre": "Público", "asistentes_dia": 100, "dias": 1}],
+      "perfil": "local", "electricidad_kwh_dia": 50, "generador_litros_dia": 0, "residuos_kg_asistencia": 0.1,
+      "comida": {"pct_consume": 0.0, "carne_vacuna_kg": 0.0, "cerdo_kg": 0.0, "pollo_kg": 0.0, "pan_kg": 0.0},
+      "produccion": {"personas_avion": 0, "km_avion_ida": 0, "litros_camiones": 0},
+      "fuente_asistencia": "Estimación del equipo Ciudad Verde"
+    },
+    {
+      "id": "penas_barriales", "nombre": "De Peñas en tu Barrio", "mes": "Enero y febrero (4 domingos)", "lugar": "San Juan Bautista, Las Acacias, Carlos Pellegrini y Las Playas",
+      "sectores": [{"nombre": "Público", "asistentes_dia": 1000, "dias": 4}],
+      "perfil": "local", "electricidad_kwh_dia": 0, "generador_litros_dia": 100, "residuos_kg_asistencia": 0.5,
+      "comida": {"pct_consume": 0.5, "carne_vacuna_kg": 0.05, "cerdo_kg": 0.05, "pollo_kg": 0.0, "pan_kg": 0.08},
+      "produccion": {"personas_avion": 0, "km_avion_ida": 0, "litros_camiones": 0},
+      "fuente_asistencia": "Estimación del equipo Ciudad Verde: 1.000 por fecha"
+    },
+    {
+      "id": "colectividades", "nombre": "Fiesta de las Colectividades", "mes": "Noviembre", "lugar": "Parque de la Vida",
+      "sectores": [{"nombre": "Público", "asistentes_dia": 1000, "dias": 2}],
+      "perfil": "local_region", "electricidad_kwh_dia": 300, "generador_litros_dia": 0, "residuos_kg_asistencia": 0.6,
+      "comida": {"pct_consume": 0.7, "carne_vacuna_kg": 0.05, "cerdo_kg": 0.05, "pollo_kg": 0.0, "pan_kg": 0.08},
+      "produccion": {"personas_avion": 0, "km_avion_ida": 0, "litros_camiones": 0},
+      "fuente_asistencia": "Estimación del equipo Ciudad Verde: 1.000 por día; 2 días (supuesto)"
+    },
+    {
+      "id": "rally", "nombre": "Rally de Villa María", "mes": "Agosto (21 al 23)", "lugar": "Villa María y alrededores",
+      "sectores": [{"nombre": "Público", "asistentes_dia": 1000, "dias": 3}],
+      "perfil": "visitante", "electricidad_kwh_dia": 0, "generador_litros_dia": 200, "residuos_kg_asistencia": 0.5,
+      "comida": {"pct_consume": 0.5, "carne_vacuna_kg": 0.05, "cerdo_kg": 0.05, "pollo_kg": 0.0, "pan_kg": 0.08},
+      "produccion": {"personas_avion": 0, "km_avion_ida": 0, "litros_camiones": 500},
+      "fuente_asistencia": "Estimación del equipo Ciudad Verde: 1.000 por día"
+    }
+  ],
+  "acciones_mitigacion": [
+    {"id": "colectivos_especiales", "titulo": "Colectivos especiales y traslado compartido", "descripcion": "Pasa el 20 % de los viajes en auto del público local y regional a colectivo.", "efecto": {"tipo": "auto_a_colectivo", "fraccion": 0.20}},
+    {"id": "menos_carne_vacuna", "titulo": "Menú con menos carne vacuna", "descripcion": "Reemplaza la mitad de la carne vacuna por pollo.", "efecto": {"tipo": "vacuna_a_pollo", "fraccion": 0.50}},
+    {"id": "separacion_residuos", "titulo": "Separación, reciclado y compostaje", "descripcion": "Evita que el 50 % de los residuos llegue al relleno sanitario.", "efecto": {"tipo": "residuos_desviados", "fraccion": 0.50}},
+    {"id": "vajilla_reutilizable", "titulo": "Vajilla y vasos reutilizables", "descripcion": "Reduce un 20 % la cantidad de residuos generados.", "efecto": {"tipo": "residuos_reducidos", "fraccion": 0.20}},
+    {"id": "red_en_vez_de_generadores", "titulo": "Conexión a la red en lugar de generadores", "descripcion": "Reemplaza el gasoil de los generadores por electricidad de red (3,3 kWh por litro evitado).", "efecto": {"tipo": "generador_a_red", "kwh_por_litro": 3.3}}
+  ],
+  "fuentes": {
+    "snigei_2025": {"titulo": "Factores de Emisión GEI — SNIGEI-AR 2025, Subsecretaría de Ambiente de la Nación", "url": "https://inventariogei.ambiente.gob.ar/files/Factores_de_Emision_SNIGEIAR_para_HC_2025.pdf"},
+    "defra_2025": {"titulo": "UK Government GHG Conversion Factors 2025 (DEFRA/DESNZ) — resumen de transporte", "url": "https://greencalculus.com/data/business-travel-freight-logistics-emission-factors/"},
+    "beis_2021": {"titulo": "BEIS Greenhouse gas reporting: conversion factors 2021 — Hotel stay, Argentina (vía Climatiq)", "url": "https://www.climatiq.io/data/emission-factor/bea14f97-d65a-497e-88fa-8acaf80c1163"},
+    "poore_2018": {"titulo": "Poore y Nemecek (2018), Science 360(6392) — vía Our World in Data", "url": "https://ourworldindata.org/grapher/ghg-per-kg-poore?tab=table"},
+    "nowak_2013": {"titulo": "Nowak et al. (2013) — captura de carbono del arbolado urbano", "url": "https://research.fs.usda.gov/treesearch/46254"}
+  }
+}
