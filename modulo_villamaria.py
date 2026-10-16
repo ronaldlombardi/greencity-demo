@@ -112,7 +112,7 @@ SECCIONES_VM = [
     ("🌍", "Agenda 2030 · C40"),
     ("🌐", "Benchmarking C40"),
     ("🎪", "Huella de carbono de eventos"),
-    ("📄", "Masterplan · Opus 4.7"),
+        ("📄", "Masterplan · Opus 5.5"),
     ("🤝", "A Mejorar juntos"),
 ]
 

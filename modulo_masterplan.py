@@ -2,192 +2,299 @@
 modulo_masterplan.py — Ciudad Verde AI Agent
 =============================================
 Masterplan ambiental para Villa María.
-- Admin: puede generar con Claude Sonnet 4.6 y ver historial.
-- Usuario: solo puede ver y cargar masteplans guardados.
+- Admin: puede generar con Claude Opus 5.5 y ver historial.
+- Usuario: solo puede ver y cargar masterplans guardados.
+- El contexto que recibe el modelo se arma en el momento con los datos de la app:
+  indicadores, Agenda 2030 / C40, meta municipal 1 árbol por casa,
+  Decisiones para Villa María en línea con C40 y huella de eventos.
 Registra consumo en PostgreSQL.
 """
 
 import os
+import datetime
 import requests
 import streamlit as st
 from modulo_db import registrar_consumo, guardar_masterplan, obtener_masteplans, eliminar_masterplan
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 API_URL           = "https://api.anthropic.com/v1/messages"
-MODEL_SONNET      = "claude-sonnet-4-6"
+MODEL_ID          = "claude-opus-5-5"
+MODEL_NOMBRE      = "Claude Opus 5.5"
+TIPO_CONSUMO      = "opus55"          # clave de COSTOS en modulo_db.py
+PRECIO_INPUT      = 4.00              # USD por millón de tokens — verificar en la facturación
+PRECIO_OUTPUT     = 20.00
+MAX_TOKENS        = 8000
+TIMEOUT_S         = 180
+
+FUENTES_DATOS = ("ESA WorldCover 2020 · Copa Meta/WRI 1 m · Landsat 8/9 · OSM · "
+                 "INDEC 2022 · Zonas por barrio (municipio)")
 
 # ── Municipios soportados ─────────────────────────────────
 MUNICIPIOS = {
     'villamaria': {
         'nombre':  'Villa María',
         'archivo': 'villa_maria',
+        'genera':  True,
     },
     'villanueva': {
         'nombre':  'Villa Nueva',
         'archivo': 'villa_nueva',
+        'genera':  False,   # solo historial: no tiene datos auditados para el contexto
     },
 }
 
-# ── Contexto completo de Villa María ──────────────────────
-CONTEXTO_VM = """
-DATOS REALES DEL SISTEMA — VILLA MARÍA / VILLA NUEVA (Córdoba, Argentina)
-==========================================================================
 
-COBERTURA DEL SUELO (ESA WorldCover 2020, resolución 10m):
-- Arbolado urbano:    8.2%  del área analizada
-- Pastizales:        14.2%
-- Cultivos urbanos:  23.9%  (oportunidad de reconversión)
-- Suelo edificado:   50.6%
-- Agua (río):         1.3%
-- Área total analizada: 49.6 km² (conglomerado VM + VN)
+# ============================================================
+# CONTEXTO DINÁMICO — todos los números salen de la app
+# ============================================================
 
-ACCESIBILIDAD A ESPACIOS VERDES:
-- Acceso a verde <300m:    100% del área edificada ✅ (meta OMS cumplida)
-- Distancia promedio:       48 metros al espacio verde más cercano
-- Verde satelital/hab:      93.2 m²/hab
-- Verde público/hab (OSM):  65.4 m²/hab ✅ (OMS mínimo: 9 m²/hab)
-- Distribución: 91.1% a <100m | 8.9% entre 100–300m
+def _num(n):
+    return f"{int(round(n)):,}".replace(",", ".")
 
-TEMPERATURA SUPERFICIAL (Landsat 8/9, 13 imágenes):
-- Temperatura media:         39.97°C
-- Isla de calor ΔT:         +0.17°C (muy baja — referencia excelente)
-- Verde denso (NDVI >0.4):   38.21°C
-- Suelo/asfalto (NDVI <0.2): 39.88°C
-- Enfriamiento por arbolado:  1.67°C por hectárea
-- Zona más caliente: Noroeste VM centro-norte (40.76°C, +0.79°C sobre media)
-- Zona más fresca:  Sureste VN sur (39.55°C)
 
-CAPTURA DE CO₂ (metodología USDA Forest Service, Nowak et al. 2013):
-- Densidad secuestro neto:   0.205 kg C/m²/año de cobertura arbórea
-- CO₂ capturado actual:      ~556 toneladas CO₂/año
-- Equivalente a:             ~265 autos fuera de circulación
-- Con meta 15% arbolado:     ~1.017 toneladas CO₂/año (+461 t adicionales)
+def _dec(x, d=1):
+    return f"{x:,.{d}f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
-VERDE PÚBLICO — OPENSTREETMAP:
-- Espacios catalogados:    1.027 elementos
-- Área pública total:      784.7 ha
-- Verde público/hab:        65.4 m²/hab
-- Brecha satelital/público: 27.8 m²/hab (~270 ha no accesibles al público)
 
-DATOS POBLACIONALES (INDEC Censo 2022):
-- Población Villa María:   ~97.000 hab (cabecera Depto. General San Martín)
-- Población Villa Nueva:   ~23.000 hab
-- Total conglomerado:     ~120.000 hab
+def _texto_seguro(funcion, *args):
+    """Llama a una función que lee Postgres; si falla, devuelve texto vacío."""
+    try:
+        return funcion(*args) or ""
+    except Exception as e:
+        print(f"[masterplan] Error armando contexto ({funcion.__name__}): {e}")
+        return ""
 
-CALIFICACIÓN GENERAL: A - Excelente (7/7 puntos)
 
-ANÁLISIS POR ZONAS:
-- Noroeste (VM centro-norte): Acceso 88.3% | Temp 40.76°C | 18.4 ha edif. ⚠️ PRIORITARIA
-- Noreste  (VN norte):        Acceso 96.1% | Temp 39.85°C | 12.1 ha edif.
-- Suroeste (VM sur):          Acceso 100%  | Temp 39.73°C | 21.7 ha edif. ✅
-- Sureste  (VN sur):          Acceso 100%  | Temp 39.55°C |  9.8 ha edif. ✅
+def _contexto_vm():
+    """Arma el bloque de datos para el prompt. Devuelve (texto, a) o (None, None)
+    si faltan los datos precalculados."""
+    from modulo_villamaria import DATOS_VM
+    from modulo_agenda2030 import (calcular_agenda2030, TASA_SECUESTRO_NETA, C_A_CO2,
+                                   LANCET_FOCALIZADO, ANIO_INICIO, ANIO_META)
+    from modulo_barrios import _cargar_resumen
+    from modulo_benchmarking import texto_decisiones_para_prompt
+    from modulo_huella_eventos import texto_eventos_para_prompt, HUELLA_HAB_TOTAL_T, PARTE_AGRO
 
-TARGETS C40 URBAN NATURE DECLARATION 2030:
-- QTC (30% superficie verde): VM tiene 23.7% → faltan 6.3 puntos porcentuales (~227 ha)
-- ESD (70% acceso verde/azul): VM tiene 100% → ✅ CUMPLIDO Y SUPERADO
-- Ritmo necesario: 45.4 ha/año de verde adicional hasta 2030
-- Árboles necesarios: ~1.816 árboles/año (copa media 25m²)
+    a = calcular_agenda2030()
+    if not a:
+        return None, None
 
-MARCO NORMATIVO:
-- OMS: 9 m²/hab mínimo (VM: 65.4 m²/hab ✅)
-- ODS 11 — Agenda 2030: ciudades sostenibles
-- C40 Urban Nature Declaration 2030 (Buenos Aires firmante)
-- Acuerdo de París / NDC Argentina: sumideros de carbono urbanos
-- EU Nature Restoration Law Art.8 (referencia internacional)
-- Ordenanza 7209 "Ruralidad Urbana" Villa María (2017)
-- Investigación CONICET/UNVM activa sobre periurbano VM
+    cob = DATOS_VM['cobertura']
+    acc = DATOS_VM['acceso']
+    lst = DATOS_VM['lst']
+    osm = DATOS_VM['osm']
+    m = a['meta_municipal']
+    res = _cargar_resumen()
 
-CORREDOR ECOLÓGICO:
-- Río Ctalamochita: divide VM (oeste) y VN (este)
-- Potencial: parque lineal con ciclovías en ambas márgenes
-- ~8 km de corredor verde posible
-"""
+    # Barrios con menos copa (regla 3-30-300)
+    menos_copa = "; ".join(
+        f"{b['barrio']} {_dec(b['copa_pct'])} %" for b in a['barrios_copa'][:5]
+    )
+    # Barrios con mayor déficit de la meta municipal
+    mayor_deficit = ""
+    if res and res.get('barrios'):
+        ordenados = sorted(
+            (b for b in res['barrios'] if b.get('meta_1_arbol_por_casa')),
+            key=lambda b: b['meta_1_arbol_por_casa']['deficit_arboles'], reverse=True,
+        )[:5]
+        mayor_deficit = "; ".join(
+            f"{b['barrio'].title()} faltan {_num(b['meta_1_arbol_por_casa']['deficit_arboles'])} "
+            f"({_dec(b['meta_1_arbol_por_casa']['cumplimiento_pct'])} % cumplido)"
+            for b in ordenados
+        )
+
+    # Escenario 30 % de copa en toda la ciudad
+    copa_30_m2 = a['area_ha'] * 0.30 * 10_000
+    co2_30 = copa_30_m2 * TASA_SECUESTRO_NETA / 1000 * C_A_CO2
+
+    # Huella anual de la ciudad (promedio nacional, supuesto)
+    huella_total = HUELLA_HAB_TOTAL_T * a['poblacion']
+    huella_urbana = huella_total * (1 - PARTE_AGRO)
+
+    decisiones = _texto_seguro(texto_decisiones_para_prompt, "Villa María")
+    if not decisiones:
+        decisiones = ("DECISIONES DEL MUNICIPIO EN LÍNEA CON C40: el administrador todavía no "
+                      "cargó decisiones. Indicalo en el documento y proponé prioridades "
+                      "a partir de las brechas medidas.")
+    eventos = _texto_seguro(texto_eventos_para_prompt, "Villa María", None)
+    if not eventos:
+        eventos = "HUELLA DE CARBONO DE EVENTOS: no hay eventos registrados todavía."
+
+    lineas = [
+        "DATOS DE LA PLATAFORMA CIUDAD VERDE — VILLA MARÍA (Córdoba, Argentina)",
+        "=" * 70,
+        "",
+        "DATOS GENERALES:",
+        f"- Población: {_num(a['poblacion'])} habitantes (INDEC, Censo 2022)",
+        f"- Área analizada: {_dec(a['area_ha'] / 100)} km² ({_num(a['area_ha'])} ha), "
+        f"{res['ciudad']['n_barrios'] if res else 38} barrios oficiales",
+        "- Villa Nueva está en la margen opuesta del Río Ctalamochita y NO está incluida en estos datos.",
+        "",
+        "COBERTURA DEL SUELO (ESA WorldCover 2020, 10 m):",
+        f"- Árboles {_dec(cob.get('arboles') or 0)} % · Arbustos {_dec(cob.get('arbustos') or 0)} % · "
+        f"Pastizales {_dec(cob.get('pastizales') or 0)} % · Cultivos {_dec(cob.get('cultivos') or 0)} % · "
+        f"Edificado {_dec(cob.get('edificado') or 0)} % · Suelo desnudo {_dec(cob.get('suelo') or 0)} % · "
+        f"Agua {_dec(cob.get('agua') or 0)} %",
+        "",
+        "COPA ARBÓREA (Meta/WRI, 1 m; imagen 2018):",
+        f"- Árboles contados: {_num(a['total_arboles'])}",
+        f"- Superficie de copa: {_dec(a['copa_ha'])} ha = {_dec(a['copa_pct'])} % del área de los barrios",
+        f"- Copa media por árbol: {_dec(a['copa_media_m2'])} m²",
+        f"- Barrios con 30 % de copa o más: {a['barrios_30']} de {len(a['barrios_copa'])}",
+        f"- Barrios con menos copa: {menos_copa}",
+        "",
+        "ACCESO A ESPACIOS VERDES:",
+        f"- Área edificada con verde a menos de 300 m: {_dec(acc.get('acceso') or 0, 0)} % "
+        f"(distancia promedio {_num(acc.get('dist_prom') or 0)} m)",
+        f"- Verde satelital por habitante: {_dec(acc.get('m2_hab_sat') or 0)} m²/hab",
+        f"- Verde público catalogado en OpenStreetMap: {_dec(osm.get('m2Hab') or 0)} m²/hab "
+        f"({_num(osm.get('elementos') or 0)} espacios, {_dec(osm.get('areaHa') or 0)} ha)",
+        "",
+        f"TEMPERATURA SUPERFICIAL (Landsat 8/9, {lst.get('nImagenes') or '—'} imágenes de verano):",
+        f"- Temperatura media: {_dec(lst.get('tMedia') or 0)} °C · Isla de calor ΔT: "
+        f"+{_dec(lst.get('deltaUHI') or 0)} °C",
+        f"- Diferencia entre zonas con vegetación densa y sin vegetación: {_dec(a['enfriamiento'])} °C",
+        "",
+        "C40 URBAN NATURE ACCELERATOR (metas a 2030):",
+        f"- Meta 1 (30–40 % de superficie verde o permeable): {_dec(a['qtc'])} % → "
+        f"{'CUMPLIDA' if a['meta1_cumplida'] else 'NO cumplida'}. "
+        f"Sin contar cultivos sería {_dec(a['qtc_sin_cultivos'])} %: si los cultivos se urbanizan, la meta se pierde.",
+        f"- Meta 2 (70 % de la población a 15 minutos de verde): aproximación de la app "
+        f"{_dec(a['acceso_aprox'], 0)} % (proxy: verde a menos de 300 m del área edificada; "
+        f"no es el cálculo oficial de C40).",
+        "",
+        "REGLA 3-30-300 (Konijnendijk, 2021):",
+        f"- Copa actual {_dec(a['copa_pct'])} % frente a la meta de 30 % por barrio",
+        f"- Para llevar cada barrio al 30 % faltan {_num(a['falta_30_ha'])} ha de copa ≈ "
+        f"{_num(a['arboles_30'])} árboles adultos",
+        "",
+    ]
+    if m:
+        lineas += [
+            "META MUNICIPAL: 1 ÁRBOL POR CASA (zonas con casas: céntrica, residencial, mixta y ribereña):",
+            f"- Lotes estimados: {_num(m['lotes_estimados'])} · árboles en esas zonas: "
+            f"{_num(m['arboles_zonas_casas'])}",
+            f"- Cumplimiento: {_dec(m['cumplimiento_pct'])} % · déficit: {_num(m['deficit_arboles'])} árboles",
+            f"- Ritmo para cumplir en {ANIO_INICIO}–{ANIO_META}: {_num(a['arboles_por_anio_municipal'])} árboles por año",
+            f"- Barrios con mayor déficit: {mayor_deficit}" if mayor_deficit else "",
+            "",
+        ]
+    lineas += [
+        "CAPTURA DE CO₂ DEL ARBOLADO (Nowak et al. 2013, 0,205 kg C/m² de copa/año, neta):",
+        f"- Hoy: {_num(a['co2_meta_t'])} t CO₂/año (equivale a {_num(a['autos_meta'])} autos por año, EPA 4,6 t/auto)",
+        f"- Con 30 % de copa en la ciudad: {_num(co2_30)} t CO₂/año",
+        f"- Huella anual estimada de la ciudad (promedio nacional INDEC 2022 por habitante, supuesto): "
+        f"≈ {_num(huella_total)} t CO₂e en total y ≈ {_num(huella_urbana)} t sin el sector agropecuario. "
+        f"El arbolado actual absorbe ≈ {_dec(a['co2_meta_t'] / huella_urbana * 100, 2)} % de la huella urbana.",
+        "",
+        "SALUD PÚBLICA (Martin et al. 2025, The Lancet Planetary Health, 96 ciudades C40):",
+        f"- Cada punto porcentual de verde adicional evitaría ≈ {_dec(a['muertes_punto'])} muertes "
+        f"prematuras por año en Villa María (rango {_dec(a['muertes_punto_bajo'])}–{_dec(a['muertes_punto_alto'])})",
+        f"- Si el verde se suma en los barrios con menos, el beneficio es {_dec(LANCET_FOCALIZADO[0])} a "
+        f"{_dec(LANCET_FOCALIZADO[1])} veces mayor",
+        "",
+        decisiones,
+        "",
+        eventos,
+        "",
+        "MARCO NORMATIVO Y DE REFERENCIA:",
+        "- Agenda 2030, ODS 11 (meta 11.7: acceso universal a espacios verdes)",
+        "- C40 Urban Nature Accelerator (41 ciudades firmantes, entre ellas Buenos Aires)",
+        "- Regla 3-30-300 (IUCN Urban Alliance)",
+        "- Acuerdo de París / NDC Argentina",
+        "- EU Nature Restoration Law, Art. 8 (referencia internacional)",
+        "- Ordenanza 7209 \"Ruralidad Urbana\" de Villa María (2017)",
+        "",
+        "CORREDOR DEL RÍO CTALAMOCHITA:",
+        "- Separa Villa María de Villa Nueva; potencial de parque lineal en ambas márgenes "
+        "(la extensión del corredor no está medida en la app: tratarla como dato a relevar).",
+    ]
+    return "\n".join(l for l in lineas if l is not None), a
+
 
 def _system_masterplan(nombre_municipio: str) -> str:
     return f"""Sos un experto en planificación urbana ambiental, política pública y desarrollo
 sostenible de ciudades intermedias en Argentina y América Latina.
 
-Tu tarea es generar un MASTERPLAN AMBIENTAL completo, riguroso y accionable para
+Tu tarea es generar un MASTERPLAN AMBIENTAL 2026–2030 completo, riguroso y accionable para
 el Municipio de {nombre_municipio}, Córdoba, Argentina, basado exclusivamente en los datos
-reales provistos por la plataforma Ciudad Verde AI Agent.
+provistos por la plataforma Ciudad Verde AI Agent.
 
-El Masterplan debe ser un documento ejecutivo de alta calidad, listo para ser
-presentado ante autoridades municipales y organismos provinciales o nacionales.
+El documento se presenta ante autoridades municipales: cada número tiene que poder rastrearse
+hasta los datos provistos.
 
-ESTRUCTURA OBLIGATORIA DEL MASTERPLAN:
+REGLAS DE RIGOR (obligatorias):
+- Usá SOLO las cifras del bloque de datos. No inventes cifras, superficies, cantidades ni estudios.
+- Si necesitás un dato que no está, escribí "dato a relevar" en lugar de estimarlo.
+- Todo valor que propongas vos (plazos, porcentajes, costos, cantidades por etapa) va marcado
+  como "(supuesto)". Los montos del presupuesto van marcados como "(supuesto referencial)".
+- Las líneas de acción siguen el orden de las DECISIONES DEL MUNICIPIO EN LÍNEA CON C40:
+  primero las de prioridad Alta, después Media y después Baja. Si no hay decisiones cargadas,
+  decilo en el diagnóstico y ordená las líneas según las brechas medidas.
+- Los datos son de Villa María (38 barrios). Mencioná Villa Nueva solo como vecina del corredor
+  del río, sin atribuirle cifras.
+- Formato de números argentino: punto para miles y coma para decimales (31.665 árboles; 7,5 %).
+
+ESTRUCTURA OBLIGATORIA:
 
 1. RESUMEN EJECUTIVO (3-4 párrafos)
-   - Diagnóstico sintético del estado ambiental actual
-   - Posicionamiento internacional (C40, OMS, ODS)
+   - Diagnóstico sintético, posicionamiento frente a C40, la regla 3-30-300 y la Agenda 2030
    - Objetivo central del plan
 
 2. DIAGNÓSTICO DE BASE
-   - Fortalezas del sistema verde actual (con datos específicos)
-   - Brechas y oportunidades (con datos específicos)
-   - Zona prioritaria de intervención y justificación técnica
+   - Fortalezas (con datos)
+   - Brechas (con datos): copa arbórea, meta 1 árbol por casa, dependencia de los cultivos para la meta 1 de C40
+   - Barrios prioritarios y justificación con los datos de copa y déficit
 
 3. VISIÓN 2030
-   - Enunciado de visión para {nombre_municipio} como ciudad verde líder en ciudades intermedias de Argentina
-   - 3 objetivos estratégicos medibles
+   - Enunciado de visión
+   - 3 objetivos estratégicos medibles, anclados en las metas del bloque de datos
 
-4. LÍNEAS DE ACCIÓN (mínimo 5, priorizadas 🔴🟡🟢)
-   Para cada línea:
-   - Nombre y descripción
-   - Justificación con datos del sistema
-   - Acciones concretas (mínimo 3 por línea)
-   - Indicador de seguimiento
-   - Plazo estimado
+4. LÍNEAS DE ACCIÓN (mínimo 5, priorizadas 🔴 Alta, 🟡 Media, 🟢 Baja, según las decisiones del municipio)
+   Para cada línea: descripción, justificación con datos, al menos 3 acciones concretas,
+   indicador de seguimiento y plazo (supuesto)
 
 5. METAS CUANTIFICABLES 2026–2030
-   - Tabla con indicador, valor actual, meta 2030, responsable
+   - Tabla: indicador | valor actual | meta 2030 | responsable
 
 6. IMPACTO PROYECTADO
-   - Captura de CO₂ adicional al cumplir metas
-   - Reducción de temperatura proyectada
-   - Mejora en salud pública (metodología Lancet)
-   - Equivalencias comprensibles (autos, vuelos, vidas)
+   - CO₂ capturado al cumplir las metas (usar las cifras del bloque)
+   - Enfriamiento: usar solo la diferencia medida entre zonas con y sin vegetación
+   - Salud pública con Martin et al. (2025)
+   - Huella de los eventos registrados y su compensación
 
 7. MARCO NORMATIVO Y ALINEACIÓN INTERNACIONAL
-   - Normativa local aplicable
-   - Alineación con Agenda 2030, C40, Acuerdo de París
 
 8. PRESUPUESTO ESTIMADO REFERENCIAL
-   - Por línea de acción
-   - Total estimado por año y para el período 2026–2030
-   - Fuentes de financiamiento posibles (municipal, provincial, fondos climáticos)
+   - Por línea de acción y total 2026–2030, cada monto marcado "(supuesto referencial)"
+   - Fuentes de financiamiento posibles (municipal, provincial, nacional, fondos climáticos)
 
 9. GOBERNANZA Y SEGUIMIENTO
-   - Estructura de gestión propuesta
-   - Frecuencia de monitoreo con datos satelitales
-   - Indicadores clave de desempeño (KPIs)
+   - Estructura de gestión, monitoreo satelital periódico e indicadores clave
 
-10. CONCLUSIÓN
-    - Síntesis del compromiso climático de {nombre_municipio}
-    - Próximos pasos inmediatos (primeros 90 días)
+10. CONCLUSIÓN Y PRÓXIMOS 90 DÍAS
 
-INSTRUCCIONES:
-- Usá los datos reales del sistema en cada sección donde apliquen
-- Sé específico: no generalices, anclá cada afirmación en los datos provistos
-- Escribí en español formal pero accesible para funcionarios municipales
-- Usá el foco adicional que te provea el usuario para personalizar el plan
-- Formato: texto estructurado con títulos claros, no uses markdown excesivo
-- Extensión: documento completo y sustancioso (2.000-3.500 palabras)
+FORMATO:
+- Títulos de sección con "# ", subtítulos con "## ", listas con "- " y tablas con "|".
+- Español formal pero accesible para funcionarios municipales.
+- Incorporá el foco indicado por el usuario en las líneas de acción prioritarias.
+- Extensión: 3.000 a 4.500 palabras.
 """
 
 
-def _llamar_sonnet(foco: str, usuario: str, nombre_municipio: str) -> tuple[str, int, int]:
-    """Llama a Claude Sonnet 4.6 y devuelve (texto, tok_in, tok_out)."""
+def _llamar_modelo(foco: str, nombre_municipio: str, contexto: str) -> tuple[str, int, int]:
+    """Llama a Claude Opus 5.5 y devuelve (texto, tok_in, tok_out)."""
     if not ANTHROPIC_API_KEY:
         return "⚠️ ANTHROPIC_API_KEY no configurada.", 0, 0
 
     prompt_usuario = f"""
-{CONTEXTO_VM}
+{contexto}
 
 FOCO ESPECÍFICO DEL PLAN (indicado por el usuario):
 {foco}
 
 Generá el Masterplan Ambiental completo para {nombre_municipio} siguiendo la estructura
-indicada, incorporando el foco específico en las líneas de acción prioritarias.
+y las reglas de rigor indicadas, incorporando el foco específico en las líneas de acción prioritarias.
 """
     headers = {
         "x-api-key":         ANTHROPIC_API_KEY,
@@ -195,21 +302,26 @@ indicada, incorporando el foco específico en las líneas de acción prioritaria
         "content-type":      "application/json",
     }
     payload = {
-        "model":      MODEL_SONNET,
-        "max_tokens": 4096,
+        "model":      MODEL_ID,
+        "max_tokens": MAX_TOKENS,
         "system":     _system_masterplan(nombre_municipio),
         "messages":   [{"role": "user", "content": prompt_usuario}],
     }
     try:
-        r = requests.post(API_URL, headers=headers, json=payload, timeout=120)
+        r = requests.post(API_URL, headers=headers, json=payload, timeout=TIMEOUT_S)
         r.raise_for_status()
         data    = r.json()
-        texto   = data["content"][0]["text"]
+        texto   = "".join(b.get("text", "") for b in data.get("content", []) if b.get("type") == "text")
         tok_in  = data.get("usage", {}).get("input_tokens",  0)
         tok_out = data.get("usage", {}).get("output_tokens", 0)
+        if data.get("stop_reason") == "max_tokens":
+            texto += ("\n\n⚠️ El documento se cortó al alcanzar el límite de extensión del modelo. "
+                      "Generalo de nuevo o acotá el foco.")
         return texto, tok_in, tok_out
     except requests.exceptions.Timeout:
-        return "⚠️ Tiempo de espera agotado (120s). Intentá de nuevo.", 0, 0
+        return f"⚠️ Tiempo de espera agotado ({TIMEOUT_S}s). Intentá de nuevo.", 0, 0
+    except requests.exceptions.HTTPError:
+        return f"⚠️ Error de la API ({r.status_code}): {r.text[:300]}", 0, 0
     except Exception as e:
         return f"⚠️ Error: {str(e)}", 0, 0
 
@@ -248,6 +360,8 @@ def _render_historial(ciudad: str):
                         st.session_state["mp_resultado"]      = mp["texto"]
                         st.session_state["mp_tok_in"]         = mp["tok_input"] or 0
                         st.session_state["mp_tok_out"]        = mp["tok_output"] or 0
+                        st.session_state["mp_costo"]          = float(mp.get("costo_usd") or 0)
+                        st.session_state["mp_modelo"]         = "Claude"
                         st.session_state["mp_id_guardado"]    = mp["id"]
                         st.session_state["mp_fecha_guardado"] = fecha_str
                         st.rerun()
@@ -271,13 +385,51 @@ def _render_historial(ciudad: str):
     return masteplans_guardados
 
 
-def _render_formulario_admin():
+
+
+def _focos_sugeridos(a):
+    """Cuatro focos con los números actuales de la app."""
+    from modulo_villamaria import DATOS_VM
+    cob = DATOS_VM['cobertura']
+    m = a['meta_municipal'] if a else None
+    focos = []
+    if m:
+        focos.append(("🌳 Meta 1 árbol por casa", (
+            f"Cerrar el déficit de {_num(m['deficit_arboles'])} árboles de la meta municipal de 1 árbol "
+            f"por casa (hoy {_dec(m['cumplimiento_pct'])} % cumplida), a razón de "
+            f"{_num(a['arboles_por_anio_municipal'])} árboles por año entre 2026 y 2030, empezando por "
+            f"los barrios con mayor déficit."
+        )))
+    if a:
+        menos = ", ".join(b['barrio'] for b in a['barrios_copa'][:3])
+        llegan = ("ningún barrio llega" if a['barrios_30'] == 0 else
+                  "1 barrio llega" if a['barrios_30'] == 1 else f"{a['barrios_30']} barrios llegan")
+        focos.append(("🌿 Regla 3-30-300", (
+            f"Avanzar hacia el 30 % de copa arbórea por barrio de la regla 3-30-300: hoy la ciudad tiene "
+            f"{_dec(a['copa_pct'])} % y {llegan} al 30 %. Priorizar los barrios "
+            f"con menos copa ({menos}) para sumar sombra, enfriamiento y beneficios en salud."
+        )))
+    focos.append(("💧 Corredor Ctalamochita", (
+        "Desarrollo del corredor verde sobre el Río Ctalamochita como parque lineal y corredor "
+        "ecológico de Villa María, con arbolado ribereño nativo, senderos y ciclovías, coordinado "
+        "con Villa Nueva en la margen opuesta."
+    )))
+    if a:
+        focos.append(("🌍 Sostener C40", (
+            f"Mantener la meta 1 de C40 (hoy {_dec(a['qtc'])} % de cobertura verde, meta 30–40 %), "
+            f"asegurando que el verde que aportan cultivos ({_dec(cob.get('cultivos') or 0)} %) y "
+            f"pastizales ({_dec(cob.get('pastizales') or 0)} %) no se pierda con la urbanización: sin "
+            f"cultivos la ciudad quedaría en {_dec(a['qtc_sin_cultivos'])} %."
+        )))
+    return focos
+
+
+def _render_formulario_admin(a):
     """Formulario de generación — solo visible para admin."""
     st.markdown("### ✏️ Foco del plan")
     st.markdown(
-        "Indicá el enfoque prioritario para personalizar el Masterplan. "
-        "Por ejemplo: *forestación del centro-norte*, *parque lineal del Ctalamochita*, "
-        "*cumplimiento del target C40 2030*, *reducción de isla de calor*, etc."
+        "Indicá el enfoque prioritario para personalizar el Masterplan. Las líneas de acción se "
+        "ordenan según las **Decisiones para Villa María en línea con C40** guardadas en Benchmarking C40."
     )
 
     if "mp_foco_set" in st.session_state:
@@ -286,47 +438,28 @@ def _render_formulario_admin():
     foco = st.text_area(
         "Foco y prioridades",
         placeholder=(
-            "Ejemplo: Priorizar la forestación de la zona Noroeste (VM centro-norte) "
-            "que es la más caliente (+0.79°C), junto con el desarrollo del parque lineal "
-            "sobre el Río Ctalamochita como corredor verde y recreativo."
+            "Ejemplo: Priorizar los barrios con menos copa arbórea y el cierre del déficit de la meta "
+            "1 árbol por casa, junto con el corredor verde del Río Ctalamochita."
         ),
         height=120,
         key="mp_foco",
     )
 
     st.markdown("**Focos sugeridos:**")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("🌳 Forestación urbana", key="mp_sug1", use_container_width=True):
-            st.session_state["mp_foco_set"] = (
-                "Forestación masiva del área urbana con foco en la zona Noroeste "
-                "(la más caliente), incremento del arbolado del 8.2% al 15%, "
-                "uso de especies nativas y corredores verdes entre barrios."
-            )
-            st.rerun()
-    with col2:
-        if st.button("💧 Parque Ctalamochita", key="mp_sug2", use_container_width=True):
-            st.session_state["mp_foco_set"] = (
-                "Desarrollo del parque lineal sobre el Río Ctalamochita como "
-                "corredor ecológico y recreativo principal del conglomerado VM-VN, "
-                "con ciclovías, senderos, arbolado ribereño y áreas de picnic."
-            )
-            st.rerun()
-    with col3:
-        if st.button("🌍 Cumplimiento C40 2030", key="mp_sug3", use_container_width=True):
-            st.session_state["mp_foco_set"] = (
-                "Cumplimiento del target C40 Urban Nature Declaration 2030: "
-                "alcanzar el 30% de cobertura verde (QTC) incorporando 227 ha adicionales "
-                "a ritmo de 45.4 ha/año, con énfasis en verde público accesible y captura de CO₂."
-            )
-            st.rerun()
+    focos = _focos_sugeridos(a)
+    cols = st.columns(2)
+    for i, (etiqueta, texto_foco) in enumerate(focos):
+        with cols[i % 2]:
+            if st.button(etiqueta, key=f"mp_sug{i + 1}", use_container_width=True):
+                st.session_state["mp_foco_set"] = texto_foco
+                st.rerun()
 
     st.markdown("---")
 
     col_gen, col_info = st.columns([2, 3])
     with col_gen:
         generar = st.button(
-            "🚀 Generar Masterplan con Sonnet 4.6",
+            f"🚀 Generar Masterplan con {MODEL_NOMBRE}",
             key="mp_generar",
             use_container_width=True,
             type="primary",
@@ -335,9 +468,9 @@ def _render_formulario_admin():
         st.markdown(
             "<div style='padding:9px 0;font-family:\"Space Mono\",monospace;"
             "font-size:10px;color:rgba(170,176,200,0.6);'>"
-            "⏱️ Tiempo estimado: 30–60 segundos · "
-            "Modelo: Claude Sonnet 4.6 · "
-            "Output: 2.000–3.500 palabras</div>",
+            "⏱️ Tiempo estimado: 1–3 minutos · "
+            f"Modelo: {MODEL_NOMBRE} · "
+            "Output: 3.000–4.500 palabras</div>",
             unsafe_allow_html=True,
         )
 
@@ -352,7 +485,8 @@ def _render_documento(texto, nombre_municipio, archivo_slug, marco_normativo_loc
 
     tok_in   = st.session_state.get("mp_tok_in",  0)
     tok_out  = st.session_state.get("mp_tok_out", 0)
-    costo    = (tok_in * 3.0 + tok_out * 15.0) / 1_000_000   # precios Sonnet 4.6
+    costo    = st.session_state.get("mp_costo", 0.0)
+    modelo   = st.session_state.get("mp_modelo", "Claude")
     mp_id    = st.session_state.get("mp_id_guardado", "")
     mp_fecha = st.session_state.get("mp_fecha_guardado", "")
 
@@ -495,8 +629,8 @@ def _render_documento(texto, nombre_municipio, archivo_slug, marco_normativo_loc
                  font-family:"Space Mono",monospace;font-size:10px;
                  color:rgba(160,175,220,0.55);letter-spacing:0.06em;'>
               <span>📅 {fecha_gen}</span>
-              <span>🤖 Claude Sonnet 4.6</span>
-              <span>📡 ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022</span>
+              <span>🤖 {modelo}</span>
+              <span>📡 {FUENTES_DATOS}</span>
             </div>
           </div>
           {documento_inner}
@@ -591,8 +725,8 @@ def _render_documento(texto, nombre_municipio, archivo_slug, marco_normativo_loc
                 <div class="rp-subtitulo">Diagn&#243;stico, objetivos y l&#237;neas de acci&#243;n para la pol&#237;tica p&#250;blica ambiental municipal</div>
                 <div class="rp-meta">
                   <span>&#128197; {fecha_gen_pdf}</span>
-                  <span>&#129302; Claude Sonnet 4.6</span>
-                  <span>&#128225; ESA WorldCover 2020 &middot; Landsat 8/9 &middot; OpenStreetMap &middot; INDEC 2022</span>
+                  <span>&#129302; {modelo}</span>
+                  <span>&#128225; {FUENTES_DATOS}</span>
                 </div>
               </div>
               {documento_print}
@@ -626,10 +760,12 @@ def _render_documento(texto, nombre_municipio, archivo_slug, marco_normativo_loc
         )
     with col_new:
         if st.button("🔄 Nuevo Masterplan", key="mp_nuevo", use_container_width=True):
-            for k in ("mp_resultado", "mp_tok_in", "mp_tok_out",
+            for k in ("mp_resultado", "mp_tok_in", "mp_tok_out", "mp_costo", "mp_modelo",
                       "mp_id_guardado", "mp_fecha_guardado"):
                 st.session_state.pop(k, None)
             st.rerun()
+
+
 
 
 def render_masterplan(municipio: str = 'villamaria'):
@@ -652,7 +788,12 @@ def render_masterplan(municipio: str = 'villamaria'):
     st.markdown("---")
 
     # ── Bloque según rol ──────────────────────────────────────
-    if not es_admin:
+    if es_admin and not info_municipio.get('genera', False):
+        st.info(
+            f"🔒 **Generación no habilitada para {nombre_municipio}** — todavía no tiene datos "
+            "auditados para armar el contexto del Masterplan. El historial de arriba sigue disponible."
+        )
+    elif not es_admin:
         st.info(
             "🔒 **Generación restringida** — Solo los administradores pueden generar "
             "nuevos Masteplans. Si necesitás uno actualizado, contactá al administrador "
@@ -663,12 +804,25 @@ def render_masterplan(municipio: str = 'villamaria'):
         st.markdown(
             "<div style='font-family:\"Space Mono\",monospace;font-size:10px;"
             "color:rgba(120,200,120,0.7);letter-spacing:0.08em;margin-bottom:16px;'>"
-            "🔑 MODO ADMINISTRADOR · Generación habilitada · Claude Sonnet 4.6"
+            f"🔑 MODO ADMINISTRADOR · Generación habilitada · {MODEL_NOMBRE}"
             "</div>",
             unsafe_allow_html=True,
         )
 
-        generar, foco = _render_formulario_admin()
+        contexto, a = _contexto_vm()
+        if not contexto:
+            st.warning(
+                "⚠️ Faltan los datos precalculados de Villa María (indicadores, censo arbóreo o zonas). "
+                "Sin ellos no se puede generar un Masterplan con cifras trazables."
+            )
+            st.stop()
+
+        with st.expander("📋 Datos que recibe el modelo", expanded=False):
+            st.caption("Este bloque se arma en el momento con los datos de la app. "
+                       "El modelo tiene la instrucción de usar solo estas cifras.")
+            st.code(contexto, language=None)
+
+        generar, foco = _render_formulario_admin(a)
 
         if generar:
             foco_final = st.session_state.get("mp_foco", "").strip()
@@ -690,7 +844,7 @@ def render_masterplan(municipio: str = 'villamaria'):
                       </div>
                       <div style='font-family:"Space Mono",monospace;font-size:11px;
                            color:rgba(180,160,255,0.8);letter-spacing:0.06em;'>
-                        ● CLAUDE SONNET 4.6 · GENERANDO MASTERPLAN
+                        ● __MODELO__ · GENERANDO MASTERPLAN
                       </div>
                     </div>
                     <style>
@@ -698,22 +852,22 @@ def render_masterplan(municipio: str = 'villamaria'):
                       0%,100%{box-shadow:0 0 24px rgba(110,45,230,.6);transform:scale(1);}
                       50%{box-shadow:0 0 42px rgba(130,60,255,.85);transform:scale(1.06);}
                     }
-                    </style>""",
+                    </style>""".replace("__MODELO__", MODEL_NOMBRE.upper()),
                     unsafe_allow_html=True,
                 )
 
                 usuario = st.session_state.get("cv_usuario", "admin")
-                texto, tok_in, tok_out = _llamar_sonnet(foco_final, usuario, nombre_municipio)
+                texto, tok_in, tok_out = _llamar_modelo(foco_final, nombre_municipio, contexto)
                 orbe_slot.empty()
 
                 if tok_in > 0:
                     registrar_consumo(
                         usuario=usuario,
-                        tipo="haiku",    # categoría existente en DB
+                        tipo=TIPO_CONSUMO,
                         pregunta=f"[MASTERPLAN] {foco_final[:200]}",
                         tok_input=tok_in,
                         tok_output=tok_out,
-                        modelo=MODEL_SONNET,
+                        modelo=MODEL_ID,
                     )
                     nuevo_id = guardar_masterplan(
                         usuario=usuario,
@@ -729,6 +883,8 @@ def render_masterplan(municipio: str = 'villamaria'):
                 st.session_state["mp_resultado"] = texto
                 st.session_state["mp_tok_in"]    = tok_in
                 st.session_state["mp_tok_out"]   = tok_out
+                st.session_state["mp_costo"]     = (tok_in * PRECIO_INPUT + tok_out * PRECIO_OUTPUT) / 1_000_000
+                st.session_state["mp_modelo"]    = MODEL_NOMBRE
                 st.rerun()
 
     # ── Mostrar documento cargado o recién generado ───────────
@@ -742,7 +898,7 @@ def render_masterplan(municipio: str = 'villamaria'):
 
     st.markdown("---")
     st.caption(
-        f"Ciudad Verde AI Agent · Masterplan generado con Claude Sonnet 4.6 · "
-        f"Datos: ESA WorldCover 2020 · Landsat 8/9 · OSM · INDEC 2022 · "
+        f"Ciudad Verde AI Agent · Masterplan generado con {MODEL_NOMBRE} · "
+        f"Datos: {FUENTES_DATOS} · "
         f"Marco: C40, ODS 11, Acuerdo de París{marco_normativo_local}"
     )

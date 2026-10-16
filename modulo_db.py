@@ -12,10 +12,11 @@ from psycopg2.extras import RealDictCursor
 
 DB_URL = os.environ.get("DB_URL", "")
 
-# Costos por millón de tokens (USD) — precios Anthropic 2025
+# Costos por millón de tokens (USD) — verificar contra la facturación de Anthropic
 COSTOS = {
     "haiku":  {"input": 0.80,  "output": 4.00},   # claude-haiku-4-5
-    "opus":   {"input": 15.00, "output": 75.00},   # claude-opus-4-7
+    "opus":   {"input": 15.00, "output": 75.00},   # claude-opus-4-7 (Asistente)
+    "opus55": {"input": 4.00,  "output": 20.00},  # claude-opus-5-5 (Masterplan)
 }
 
 
@@ -164,7 +165,7 @@ def guardar_masterplan(usuario: str, foco: str, texto: str,
     if not DB_URL:
         return None
     try:
-        costos = COSTOS.get("opus", {"input": 15.0, "output": 75.0})
+        costos = COSTOS.get("opus55", {"input": 4.0, "output": 20.0})
         costo  = (tok_input * costos["input"] + tok_output * costos["output"]) / 1_000_000
         palabras = len(texto.split())
         with _conn() as conn:

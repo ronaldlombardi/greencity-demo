@@ -15,8 +15,9 @@ ADMIN_PASS = os.environ.get("ADMIN_PASSWORD", "admin2025")
 
 # Costo por modelo para display
 MODELO_LABEL = {
-    "haiku": "Claude Haiku 4.5",
-    "opus":  "Claude Opus 4.7",
+    "haiku":  "Claude Haiku 4.5",
+    "opus":   "Claude Opus 4.7",
+    "opus55": "Claude Opus 5.5",
 }
 
 
@@ -201,5 +202,5 @@ def render_admin():
     st.caption(
         "Ciudad Verde AI Agent · Panel Admin · "
         "Datos almacenados en PostgreSQL Railway · "
-        "Costos: Haiku $0.80/$4.00 por MTok · Opus $15/$75 por MTok"
+                "Costos: Haiku $0.80/$4.00 por MTok · Opus 4.7 $15/$75 · Opus 5.5 $4/$20 por MTok"
     )
