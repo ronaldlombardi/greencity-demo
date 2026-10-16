@@ -447,9 +447,17 @@ with st.sidebar:
         "color:rgba(160,175,210,0.5);margin-bottom:6px;'>Módulo</div>",
         unsafe_allow_html=True,
     )
+        # Villa Nueva y Provincia solo visibles para admin
+    if st.session_state.get("cv_admin_auth", False):
+        opciones_modulo = ["🏙️ Villa María", "🏙️ Villa Nueva", "🌍 Provincia de Córdoba", "🔐 Administración"]
+    else:
+        opciones_modulo = ["🏙️ Villa María", "🔐 Administración"]
+    if st.session_state.get("modulo_principal") not in opciones_modulo:
+        st.session_state.pop("modulo_principal", None)
+
     modulo = st.radio(
         "Módulo",
-        ["🏙️ Villa María", "🏙️ Villa Nueva", "🌍 Provincia de Córdoba", "🔐 Administración"],
+        opciones_modulo,
         label_visibility="collapsed",
         key="modulo_principal",
     )
