@@ -84,7 +84,20 @@ def inicializar_db():
                         acciones          TEXT,
                         total_t           NUMERIC(12,3),
                         total_mitigado_t  NUMERIC(12,3),
-                        usuario           VARCHAR(80)
+                                                usuario           VARCHAR(80)
+                    );
+                """)
+                cur.execute("""
+                    CREATE TABLE IF NOT EXISTS cv_requisitos_financiamiento (
+                        id            SERIAL PRIMARY KEY,
+                        ciudad        VARCHAR(80)  NOT NULL DEFAULT 'Villa María',
+                        id_requisito  VARCHAR(60)  NOT NULL,
+                        estado        VARCHAR(20)  NOT NULL,
+                        valor         TEXT,
+                        fuente        TEXT,
+                        usuario       VARCHAR(80),
+                        fecha         TIMESTAMP DEFAULT NOW(),
+                        UNIQUE (ciudad, id_requisito)
                     );
                 """)
             conn.commit()
@@ -398,6 +411,56 @@ def eliminar_evento_huella(evento_id: int) -> bool:
                 borrado = cur.rowcount > 0
             conn.commit()
         return borrado
-    except Exception as e:
+        except Exception as e:
         print(f"[cv_db] Error borrando evento: {e}")
         return False
+
+
+# ============================================================
+# BONOS VERDES — REQUISITOS DE FINANCIAMIENTO (carga del admin)
+# ============================================================
+
+def guardar_requisito(ciudad: str, id_requisito: str, estado: str,
+                      valor: str, fuente: str, usuario: str) -> bool:
+    """Guarda (o actualiza) el estado de un requisito que evalúa el municipio.
+    estado: 'cumple' | 'parcial' | 'falta'. fuente: documento o norma que lo respalda."""
+    if not DB_URL:
+        return False
+    try:
+        with _conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO cv_requisitos_financiamiento
+                        (ciudad, id_requisito, estado, valor, fuente, usuario, fecha)
+                    VALUES (%s, %s, %s, %s, %s, %s, NOW())
+                    ON CONFLICT (ciudad, id_requisito) DO UPDATE SET
+                        estado  = EXCLUDED.estado,
+                        valor   = EXCLUDED.valor,
+                        fuente  = EXCLUDED.fuente,
+                        usuario = EXCLUDED.usuario,
+                        fecha   = NOW()
+                """, (ciudad, id_requisito, estado, (valor or "")[:500],
+                      (fuente or "")[:1000], usuario))
+            conn.commit()
+        return True
+    except Exception as e:
+        print(f"[cv_db] Error guardando requisito: {e}")
+        return False
+
+
+def obtener_requisitos(ciudad: str = "Villa María") -> dict:
+    """Devuelve los requisitos cargados por el admin, como {id_requisito: fila}."""
+    if not DB_URL:
+        return {}
+    try:
+        with _conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("""
+                    SELECT id_requisito, estado, valor, fuente, usuario, fecha
+                    FROM cv_requisitos_financiamiento
+                    WHERE ciudad = %s
+                """, (ciudad,))
+                return {fila["id_requisito"]: dict(fila) for fila in cur.fetchall()}
+    except Exception as e:
+        print(f"[cv_db] Error leyendo requisitos: {e}")
+        return {}
