@@ -1,0 +1,284 @@
+{
+  "version": "1.0",
+  "fecha_verificacion": "2026-10-22",
+  "nota": "Catálogo de fuentes de financiamiento para el Masterplan. Incluye vías no viables hoy. Cada dato tiene su fuente. Revisar fechas antes de usar en presentaciones.",
+  "categorias": {
+    "directa": "Gestión directa del municipio, sin endeudamiento",
+    "provincia": "Vía Provincia de Córdoba",
+    "nacion": "Requiere autorización o garantía de la Nación",
+    "internacional": "Cooperación internacional (asistencia técnica o donación)",
+    "mercado": "Mercados ambientales"
+  },
+  "estados": {
+    "viable_hoy": "Viable hoy",
+    "requiere_gestion": "Requiere gestión previa",
+    "traba_temporal": "No viable hoy (traba temporal o de alcance)"
+  },
+  "marco_legal": [
+    {
+      "id": "ley_25917",
+      "titulo": "Ley 25.917 — Régimen Federal de Responsabilidad Fiscal (art. 25)",
+      "descripcion": "Toda operación de crédito de un municipio requiere autorización previa. El Ministerio del Interior la evalúa junto con el Ministerio de Economía de la Nación; la provincia coordina el trámite. Sigue vigente: caso Malargüe, marzo de 2026.",
+      "url": "https://www.elsol.com.ar/wp-content/uploads/2026/03/pedido_308867_19032026.pdf"
+    },
+    {
+      "id": "ley_25917_art21",
+      "titulo": "Ley 25.917 — límite de servicio de deuda (art. 21)",
+      "descripcion": "Para provincias, los servicios de la deuda no pueden superar el 15 % de los recursos corrientes netos de coparticipación a municipios. Los municipios se rigen por principios similares según la adhesión provincial.",
+      "url": "https://plataformaurbana.cepal.org/es/instrumentos/financiamiento/endeudamiento-publico"
+    },
+    {
+      "id": "bcra_divisas",
+      "titulo": "BCRA — deuda en moneda extranjera",
+      "descripcion": "El endeudamiento financiero con el exterior de gobiernos locales debe liquidarse en el mercado oficial de cambios. El BCRA interviene solo si la deuda es en moneda extranjera.",
+      "url": "https://www.bcra.gob.ar/archivos/Pdfs/PublicacionesEstadisticas/ultimocomunicado2014.pdf"
+    },
+    {
+      "id": "cnv_svs",
+      "titulo": "CNV — Lineamientos para Bonos Sociales, Verdes y Sustentables",
+      "descripcion": "La CNV reconoce los Principios de ICMA como guía de etiquetado y exige verificación independiente de las credenciales verdes.",
+      "url": "https://www.marval.com/publicacion/bonos-sociales-bonos-verdes-y-bonos-sustentables-13260"
+    }
+  ],
+  "fuentes": [
+    {
+      "id": "contribucion_mejoras",
+      "nombre": "Contribución por mejoras",
+      "categoria": "directa",
+      "estado": "viable_hoy",
+      "es_deuda": false,
+      "autorizacion": "Ordenanza o decreto municipal",
+      "descripcion": "La obra la pagan los frentistas que reciben el beneficio directo. Apta para arbolado de veredas y mejoras de espacios verdes por cuadra.",
+      "montos_plazos": "Según cada obra. Villa María ofrece pago en hasta 36 cuotas anticipadas.",
+      "precedente": "Villa María ya ordena obras por 'Contribución de Obra' (decretos de abril de 2026).",
+      "usos_masterplan": ["Arbolado de veredas", "Plazas barriales"],
+      "requisitos": [
+        {"id": "cm_linea_base", "texto": "Línea de base de arbolado de la ciudad", "evalua": "plataforma", "indicador": "cobertura.arboles", "unidad": "%"},
+        {"id": "cm_proyecto", "texto": "Proyecto de obra con frentistas beneficiarios identificados", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "cm_norma", "texto": "Decreto u ordenanza que fije la contribución", "evalua": "municipio", "indicador": null, "unidad": null}
+      ],
+      "referencias": [
+        {"titulo": "Boletín Oficial Villa María — decretos abril 2026", "url": "https://villamaria.gob.ar/boletin/d/b/40430b84-10d5-474b-8ad4-8baa3e93ccc8"}
+      ]
+    },
+    {
+      "id": "cofinanciamiento_privado",
+      "nombre": "Cofinanciamiento con cooperativas y privados",
+      "categoria": "directa",
+      "estado": "viable_hoy",
+      "es_deuda": false,
+      "autorizacion": "Convenio ratificado por el Concejo Deliberante",
+      "descripcion": "Obras financiadas en conjunto con cooperativas de servicios, empresas o instituciones locales.",
+      "montos_plazos": "Según cada convenio.",
+      "precedente": "Obras de drenaje financiadas por el Municipio junto a la Cooperativa 15 de Mayo (2026).",
+      "usos_masterplan": ["Corredores verdes", "Espacios verdes en parques industriales", "Mantenimiento"],
+      "requisitos": [
+        {"id": "cp_linea_base", "texto": "Diagnóstico ambiental para presentar al socio", "evalua": "plataforma", "indicador": "osm.m2_hab", "unidad": "m²/hab"},
+        {"id": "cp_socio", "texto": "Socio identificado y convenio firmado", "evalua": "municipio", "indicador": null, "unidad": null}
+      ],
+      "referencias": [
+        {"titulo": "Villa María Ya — Plan de obras hidráulicas", "url": "https://villamariaya.com/lanzan-un-plan-de-obras-hidraulicas-que-incluye-intervenciones-en-mas-de-20-barrios/"}
+      ]
+    },
+    {
+      "id": "aportes_provinciales",
+      "nombre": "Aportes provinciales no reembolsables",
+      "categoria": "provincia",
+      "estado": "viable_hoy",
+      "es_deuda": false,
+      "autorizacion": "Asignación del Gobierno de Córdoba",
+      "descripcion": "Fondos que la Provincia asigna a municipios para obras. No generan deuda.",
+      "montos_plazos": "Villa María recibió $750 millones en septiembre de 2025.",
+      "precedente": "Pavimento y luminarias LED en Villa María (2025).",
+      "usos_masterplan": ["Obras de infraestructura verde"],
+      "requisitos": [
+        {"id": "ap_proyecto", "texto": "Proyecto de obra presentado a la Provincia", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "ap_poblacion", "texto": "Población beneficiaria", "evalua": "plataforma", "indicador": "poblacion", "unidad": "hab"}
+      ],
+      "referencias": [
+        {"titulo": "Municipalidad de Villa María — aportes provinciales (sep. 2025)", "url": "https://www.villamaria.gob.ar/novedades/2025/9/16/villa-maria-recibio-aportes-economicos-destinados-a-infraestructura-por-parte-del-gobierno-provincial"}
+      ]
+    },
+    {
+      "id": "fondo_permanente",
+      "nombre": "Fondo Permanente para la Financiación de Proyectos y Programas de los Gobiernos Locales",
+      "categoria": "provincia",
+      "estado": "viable_hoy",
+      "es_deuda": true,
+      "autorizacion": "Ordenanza del Concejo (con audiencia pública) y cesión de coparticipación",
+      "descripcion": "Préstamo provincial para obras y bienes de capital, que se paga cediendo coparticipación mensual.",
+      "montos_plazos": "Ejemplo: San Francisco, $1.650 millones a 60 meses (2026).",
+      "precedente": "Villa María tramitó en 2026 un préstamo de este fondo para el Plan de Obras Hídricas y Desagües.",
+      "usos_masterplan": ["Obras de infraestructura verde y azul"],
+      "requisitos": [
+        {"id": "fp_ordenanza", "texto": "Ordenanza que autorice el préstamo y la cesión de coparticipación", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "fp_proyecto", "texto": "Proyecto de obra aprobado", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "fp_capacidad", "texto": "Capacidad de pago (coparticipación disponible para ceder)", "evalua": "municipio", "indicador": null, "unidad": null}
+      ],
+      "referencias": [
+        {"titulo": "Puntal Villa María — audiencia pública Balance 2025 y préstamo", "url": "https://www.puntalvillamaria.com.ar/balance/se-realiza-la-audiencia-publica-el-balance-general-2025-n262941"},
+        {"titulo": "San Francisco — Ordenanza 8084", "url": "https://munilocal.sanfrancisco.gov.ar/digesto/archivos_ordenanzas/pdf/8084.pdf"}
+      ]
+    },
+    {
+      "id": "gap_fund",
+      "nombre": "City Climate Finance Gap Fund (Banco Mundial / BEI)",
+      "categoria": "internacional",
+      "estado": "requiere_gestion",
+      "es_deuda": false,
+      "autorizacion": "Postulación directa del municipio en la web del Gap Fund",
+      "descripcion": "Asistencia técnica no reembolsable para preparar proyectos climáticos en etapa temprana hasta volverlos financiables. No financia obras.",
+      "montos_plazos": "Fondo de 105 millones de euros (asistencia técnica, no dinero para obras).",
+      "precedente": "Diez municipios pequeños y medianos de la RAMCC recibieron asistencia para proyectos solares.",
+      "usos_masterplan": ["Preparar proyectos del Masterplan para multilaterales o bonos"],
+      "requisitos": [
+        {"id": "gf_idea", "texto": "Idea de proyecto de mitigación o adaptación definida", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "gf_calor", "texto": "Evidencia de riesgo climático: isla de calor urbana", "evalua": "plataforma", "indicador": "lst.delta_uhi", "unidad": "°C"},
+        {"id": "gf_arbolado", "texto": "Evidencia de déficit de arbolado", "evalua": "plataforma", "indicador": "cobertura.arboles", "unidad": "%"}
+      ],
+      "referencias": [
+        {"titulo": "BEI — The City Climate Finance Gap Fund", "url": "https://eib.org/en/publications/20230040-the-city-climate-finance-gap-fund?lang=es"},
+        {"titulo": "GCoM — apoyo temprano a ciudades de América Latina (2025)", "url": "https://www.globalcovenantofmayors.org/press/strengthening-early‑stage-support-to-accelerate-urban-climate-finance-latin-america-and-the-caribbean/"}
+      ]
+    },
+    {
+      "id": "c40_cff",
+      "nombre": "C40 Cities Finance Facility (C40 / GIZ)",
+      "categoria": "internacional",
+      "estado": "traba_temporal",
+      "es_deuda": false,
+      "autorizacion": "Convocatoria del CFF",
+      "descripcion": "Asistencia técnica para llevar proyectos a nivel financiable. No financia obras. Está orientado a ciudades de la red C40 de economías emergentes.",
+      "montos_plazos": "20 proyectos apoyados, con inversión potencial de USD 650 millones.",
+      "precedente": "Cali y Cartagena (Colombia).",
+      "usos_masterplan": ["Preparación de proyectos de gran escala"],
+      "requisitos": [
+        {"id": "cff_red", "texto": "Pertenencia a la red C40 o elegibilidad en la convocatoria", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "cff_prioridad", "texto": "Proyecto priorizado formalmente por la ciudad", "evalua": "municipio", "indicador": null, "unidad": null}
+      ],
+      "referencias": [
+        {"titulo": "UNFCCC — C40 Cities Finance Facility", "url": "https://unfccc.int/node/256499"}
+      ]
+    },
+    {
+      "id": "ppd_fmam",
+      "nombre": "Programa de Pequeñas Donaciones (FMAM / PNUD)",
+      "categoria": "internacional",
+      "estado": "requiere_gestion",
+      "es_deuda": false,
+      "autorizacion": "Convocatoria del PPD Argentina; postula una organización de la sociedad civil",
+      "descripcion": "Donaciones para proyectos ambientales comunitarios. El municipio participa como socio de una ONG local, no como beneficiario.",
+      "montos_plazos": "Según convocatoria (verificar convocatoria vigente en Argentina).",
+      "precedente": "Proyectos en Santiago del Estero y Misiones (2025).",
+      "usos_masterplan": ["Viveros comunitarios", "Forestación participativa"],
+      "requisitos": [
+        {"id": "ppd_ong", "texto": "ONG local socia identificada", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "ppd_convocatoria", "texto": "Convocatoria abierta en Argentina", "evalua": "municipio", "indicador": null, "unidad": null}
+      ],
+      "referencias": [
+        {"titulo": "PNUD Argentina — Programa de Pequeñas Donaciones", "url": "https://www.undp.org/es/node/526781"}
+      ]
+    },
+    {
+      "id": "fondo_adaptacion",
+      "nombre": "Fondo de Adaptación (Acuerdo de París)",
+      "categoria": "internacional",
+      "estado": "requiere_gestion",
+      "es_deuda": false,
+      "autorizacion": "A través de una entidad acreditada (implementación directa)",
+      "descripcion": "Donaciones para proyectos concretos de adaptación al cambio climático.",
+      "montos_plazos": "Según proyecto.",
+      "precedente": "Proyectos con financiamiento externo listados por el Ministerio del Interior.",
+      "usos_masterplan": ["Adaptación al calor y drenaje urbano"],
+      "requisitos": [
+        {"id": "fa_entidad", "texto": "Entidad acreditada que presente el proyecto", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "fa_calor", "texto": "Evidencia de vulnerabilidad climática: isla de calor urbana", "evalua": "plataforma", "indicador": "lst.delta_uhi", "unidad": "°C"}
+      ],
+      "referencias": [
+        {"titulo": "Argentina.gob.ar — Proyectos con financiamiento externo", "url": "https://www.argentina.gob.ar/interior/ambiente/articulacion-ambiental/proyectos-con-financiamiento-externo"}
+      ]
+    },
+    {
+      "id": "bono_verde",
+      "nombre": "Bono verde municipal (CNV / BYMA)",
+      "categoria": "nacion",
+      "estado": "requiere_gestion",
+      "es_deuda": true,
+      "autorizacion": "Ordenanza + autorización nacional (Ley 25.917) + CNV/BYMA + revisor externo",
+      "descripcion": "Título de deuda etiquetado como verde según los cuatro componentes de los Principios de Bonos Verdes de ICMA: uso de fondos, evaluación de proyectos, gestión de fondos y reportes.",
+      "montos_plazos": "Precedente: $2.000 millones a 36 meses, tasa Badlar + 7,75 %.",
+      "precedente": "Municipalidad de Córdoba, BAO25 Serie I (2022), primer bono verde de una ciudad en el panel de BYMA: luminarias LED, paneles solares y red cloacal.",
+      "usos_masterplan": ["Programas grandes de forestación, parques y eficiencia energética"],
+      "requisitos": [
+        {"id": "bv_autorizacion", "texto": "Autorización nacional de endeudamiento (Ley 25.917)", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "bv_servicio_deuda", "texto": "Servicio de deuda dentro del límite del régimen de responsabilidad fiscal", "evalua": "municipio", "indicador": null, "unidad": "%"},
+        {"id": "bv_revisor", "texto": "Revisor externo contratado (segunda opinión)", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "bv_uso_fondos", "texto": "Línea de base para medir el impacto del uso de fondos (arbolado)", "evalua": "plataforma", "indicador": "cobertura.arboles", "unidad": "%"},
+        {"id": "bv_reporte", "texto": "Indicador de impacto reportable (verde público por habitante)", "evalua": "plataforma", "indicador": "osm.m2_hab", "unidad": "m²/hab"}
+      ],
+      "referencias": [
+        {"titulo": "Abogados.com.ar — Bonos Verdes de la Municipalidad de Córdoba", "url": "https://abogados.com.ar/index.php/la-municipalidad-de-cordoba-emite-bonos-verdes-svs-y-de-infraestructura/31542"},
+        {"titulo": "BYMA — Informe de uso de fondos BAO25 (2023)", "url": "https://data-widgets.byma.com.ar/wp-content/uploads/2023/03/MUNICIPALIDAD-CORDOBA-Informe_2023.pdf"}
+      ]
+    },
+    {
+      "id": "multilateral_provincial",
+      "nombre": "Préstamo CAF / BID a través de un programa provincial",
+      "categoria": "nacion",
+      "estado": "requiere_gestion",
+      "es_deuda": true,
+      "autorizacion": "Programa de la Provincia con garantía soberana de la Nación (débito de coparticipación ante impago)",
+      "descripcion": "Los multilaterales prestan hoy a provincias con garantía nacional. El municipio accede si la Provincia incluye su proyecto en el programa.",
+      "montos_plazos": "Ejemplos 2026: Entre Ríos USD 280 millones (BID), Chubut USD 150 millones (CAF).",
+      "precedente": "Garantías nacionales aprobadas para Entre Ríos y Chubut (2026).",
+      "usos_masterplan": ["Infraestructura verde de gran escala"],
+      "requisitos": [
+        {"id": "ml_inclusion", "texto": "Proyecto incluido en un programa provincial con multilateral", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "ml_preparacion", "texto": "Proyecto con estudios de factibilidad", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "ml_poblacion", "texto": "Población beneficiaria", "evalua": "plataforma", "indicador": "poblacion", "unidad": "hab"}
+      ],
+      "referencias": [
+        {"titulo": "Rosario Finanzas — garantías para préstamos CAF y BID (2026)", "url": "https://rosariofinanzas.ar/noticias/gobierno-aprobo-garantias-para-prestamos-por-u-s430-millones-de-caf-y-bid-para-chubut-y-entre-rios"},
+        {"titulo": "GCoM — CAF sobre municipios argentinos y negociación provincial", "url": "https://www.globalcovenantofmayors.org/press/strengthening-early‑stage-support-to-accelerate-urban-climate-finance-latin-america-and-the-caribbean/"}
+      ]
+    },
+    {
+      "id": "banco_nacion",
+      "nombre": "Préstamo del Banco de la Nación Argentina",
+      "categoria": "nacion",
+      "estado": "requiere_gestion",
+      "es_deuda": true,
+      "autorizacion": "Autorización de endeudamiento (Ley 25.917) coordinada por la Provincia",
+      "descripcion": "Crédito bancario al municipio para obras.",
+      "montos_plazos": "Según operación.",
+      "precedente": "Municipalidad de Malargüe, Mendoza (marzo de 2026).",
+      "usos_masterplan": ["Obras puntuales"],
+      "requisitos": [
+        {"id": "bn_autorizacion", "texto": "Autorización nacional de endeudamiento", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "bn_ordenanza", "texto": "Ordenanza que autorice el préstamo", "evalua": "municipio", "indicador": null, "unidad": null}
+      ],
+      "referencias": [
+        {"titulo": "Mendoza — autorización préstamo Malargüe (2026)", "url": "https://www.elsol.com.ar/wp-content/uploads/2026/03/pedido_308867_19032026.pdf"}
+      ]
+    },
+    {
+      "id": "creditos_carbono_urbano",
+      "nombre": "Créditos de carbono de arbolado urbano",
+      "categoria": "mercado",
+      "estado": "traba_temporal",
+      "es_deuda": false,
+      "autorizacion": "Registro y certificación por un estándar de carbono",
+      "descripcion": "Venta de créditos por el carbono capturado por árboles urbanos. El registro especializado (City Forest Credits) opera hoy solo en EE. UU.; sirve como referencia metodológica.",
+      "montos_plazos": "Los créditos se entregan escalonados (años 0, 4, 6, 14 y 26) para asegurar el cuidado de los árboles.",
+      "precedente": "Compra de más de USD 1 millón en créditos urbanos en EE. UU. (2022).",
+      "usos_masterplan": ["Financiar el mantenimiento a largo plazo del Plan de Forestación"],
+      "requisitos": [
+        {"id": "cc_registro", "texto": "Estándar o registro que acepte proyectos urbanos en Argentina", "evalua": "municipio", "indicador": null, "unidad": null},
+        {"id": "cc_inventario", "texto": "Línea de base de cobertura arbórea medible", "evalua": "plataforma", "indicador": "cobertura.arboles", "unidad": "%"}
+      ],
+      "referencias": [
+        {"titulo": "Foro Económico Mundial — créditos de carbono de bosques urbanos", "url": "https://weforum.org/agenda/2022/09/urban-forest-carbon-credit-climate-change-trees"}
+      ]
+    }
+  ]
+}
