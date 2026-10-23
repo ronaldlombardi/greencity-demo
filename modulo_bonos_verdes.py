@@ -221,10 +221,62 @@ def _form_requisito_admin(req: dict, actual: dict):
                     st.error("No se pudo guardar. Revisá la conexión a la base.")
 
 
-def _render_elegibilidad(catalogo: dict):
-    es_admin = bool(st.session_state.get("cv_admin_auth"))
+def evaluar_fuentes(catalogo: dict = None) -> list:
+    """Evalúa todas las fuentes para Villa María. Devuelve una lista de
+    (fuente, [(requisito, evaluación)], n_cumple, avance 0–1), de más cerca a más lejos
+    de ser viable. La usan la pestaña de elegibilidad y el Masterplan."""
+    if catalogo is None:
+        catalogo = cargar_catalogo()
     indicadores = _cargar_indicadores()
     cargados = obtener_requisitos(_CIUDAD)
+    evaluadas = []
+    for f in catalogo["fuentes"]:
+        evals = [(r, _evaluar_requisito(r, indicadores, cargados)) for r in f["requisitos"]]
+        puntos = sum(_ESTADOS_REQ[e["estado"]][2] for _, e in evals)
+        n_cumple = sum(1 for _, e in evals if e["estado"] == "cumple")
+        avance = puntos / len(evals) if evals else 0
+        evaluadas.append((f, evals, n_cumple, avance))
+    evaluadas.sort(key=lambda x: x[3], reverse=True)
+    return evaluadas
+
+
+def fichas_financiamiento() -> dict:
+    """Foto de cada fuente para el documento del Masterplan: {id: datos}."""
+    catalogo = cargar_catalogo()
+    return {
+        f["id"]: {
+            "nombre": f["nombre"],
+            "estado": catalogo["estados"].get(f["estado"], f["estado"]),
+            "es_deuda": f["es_deuda"],
+            "cumplidos": n_cumple,
+            "total": len(evals),
+            "avance": round(avance * 100),
+        }
+        for f, evals, n_cumple, avance in evaluar_fuentes(catalogo)
+    }
+
+
+def texto_financiamiento_para_prompt() -> str:
+    """Bloque de fuentes de financiamiento para el contexto del Masterplan."""
+    catalogo = cargar_catalogo()
+    lineas = [
+        "FUENTES DE FINANCIAMIENTO DE VILLA MARÍA (catálogo de la plataforma, con avance de requisitos):",
+        "Para el campo 'financiamiento' de cada programa elegí solo ids de esta lista.",
+    ]
+    for f, evals, n_cumple, avance in evaluar_fuentes(catalogo):
+        estado = catalogo["estados"].get(f["estado"], f["estado"])
+        deuda = "genera deuda" if f["es_deuda"] else "no genera deuda"
+        pendientes = "; ".join(r["texto"] for r, e in evals if e["estado"] != "cumple")
+        lineas.append(
+            f"- id={f['id']} · {f['nombre']} · {estado} · {deuda} · "
+            f"requisitos cumplidos {n_cumple} de {len(evals)} · usos: {', '.join(f['usos_masterplan'])}"
+            + (f" · pendiente: {pendientes}" if pendientes else "")
+        )
+    return "\n".join(lineas)
+
+
+def _render_elegibilidad(catalogo: dict):
+    es_admin = bool(st.session_state.get("cv_admin_auth"))
 
     st.caption(
         "📊 Requisitos de plataforma: se cumplen cuando existe el dato real calculado. "
@@ -234,14 +286,7 @@ def _render_elegibilidad(catalogo: dict):
         st.info("🔐 Modo administrador: podés cargar los requisitos del municipio.")
 
     # Evaluar todas las fuentes y ordenar de más cerca a más lejos de ser viables
-    evaluadas = []
-    for f in catalogo["fuentes"]:
-        evals = [(r, _evaluar_requisito(r, indicadores, cargados)) for r in f["requisitos"]]
-        puntos = sum(_ESTADOS_REQ[e["estado"]][2] for _, e in evals)
-        n_cumple = sum(1 for _, e in evals if e["estado"] == "cumple")
-        avance = puntos / len(evals) if evals else 0
-        evaluadas.append((f, evals, n_cumple, avance))
-    evaluadas.sort(key=lambda x: x[3], reverse=True)
+    evaluadas = evaluar_fuentes(catalogo)
 
     for f, evals, n_cumple, avance in evaluadas:
         color = "#2e7d32" if avance >= 0.99 else "#f57c00" if avance >= 0.5 else "#c62828"
