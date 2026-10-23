@@ -278,7 +278,7 @@ def render_bonos_verdes():
         st.error(f"No se pudo leer el catálogo de fuentes: {e}")
         return
 
-        tab_cat, tab_eleg, tab_legal = st.tabs(
+    tab_cat, tab_eleg, tab_legal = st.tabs(
         ["📚 Catálogo de fuentes", "✅ Elegibilidad Villa María", "⚖️ Marco legal y fuentes"]
     )
     with tab_cat:
