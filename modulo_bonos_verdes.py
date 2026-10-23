@@ -208,17 +208,14 @@ def _form_requisito_admin(req: dict, actual: dict):
         )
         valor = st.text_input("Valor o detalle", value=actual.get("valor", ""),
                               key=f"bv_valor_{req['id']}")
-        fuente = st.text_input("Fuente que lo respalda (documento, norma, enlace)",
+        fuente = st.text_input("Fuente que lo respalda (opcional: documento, norma, enlace)",
                                value=actual.get("fuente", ""), key=f"bv_fuente_{req['id']}")
         if st.form_submit_button("Guardar"):
-            if not fuente.strip():
-                st.warning("Indicá la fuente que respalda el dato.")
+            usuario = st.session_state.get("cv_usuario", "admin")
+            if guardar_requisito(_CIUDAD, req["id"], estado, valor, fuente, usuario):
+                st.rerun()
             else:
-                usuario = st.session_state.get("cv_usuario", "admin")
-                if guardar_requisito(_CIUDAD, req["id"], estado, valor, fuente, usuario):
-                    st.rerun()
-                else:
-                    st.error("No se pudo guardar. Revisá la conexión a la base.")
+                st.error("No se pudo guardar. Revisá la conexión a la base.")
 
 
 def evaluar_fuentes(catalogo: dict = None) -> list:
