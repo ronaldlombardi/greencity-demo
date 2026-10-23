@@ -411,7 +411,7 @@ def eliminar_evento_huella(evento_id: int) -> bool:
                 borrado = cur.rowcount > 0
             conn.commit()
         return borrado
-        except Exception as e:
+    except Exception as e:
         print(f"[cv_db] Error borrando evento: {e}")
         return False
 
