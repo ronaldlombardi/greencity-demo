@@ -311,9 +311,16 @@ ESQUEMA = {
                 "fin": _ANIO,
                 "hitos": {"type": "array", "maxItems": 4, "items": {"type": "object", "properties": {
                     "anio": _ANIO, "texto": _TXT}, "required": ["anio", "texto"]}},
+                "financiamiento": {
+                    "type": "array", "maxItems": 2,
+                    "description": "1 o 2 fuentes de FUENTES DE FINANCIAMIENTO, por id.",
+                    "items": {"type": "object", "properties": {
+                        "fuente_id": {"type": "string", "description": "id exacto de la lista."},
+                        "por_que": {"type": "string", "description": "Máximo 25 palabras, sin montos."}},
+                        "required": ["fuente_id", "por_que"]}},
             }, "required": ["nombre", "emoji", "prioridad", "objetivo", "por_que", "barrios_inicio",
                             "acciones", "primera_accion_visible", "indicador", "meta_2030",
-                            "inicio", "fin", "hitos"]},
+                            "inicio", "fin", "hitos", "financiamiento"]},
         },
         "impacto": {"type": "object", "properties": {
             "arbolado": _TXT, "clima": _TXT, "salud": _TXT, "eventos": _TXT},
@@ -418,9 +425,19 @@ def _validar(doc):
     faltan = [k for k in ESQUEMA["required"] if not doc.get(k)]
     if faltan:
         return f"La respuesta llegó sin: {', '.join(faltan)}. No se guardó; generalo de nuevo."
+    try:
+        from modulo_bonos_verdes import cargar_catalogo
+        ids_validos = {f["id"] for f in cargar_catalogo()["fuentes"]}
+    except Exception:
+        ids_validos = set()
     for p in doc["programas"]:
         p["inicio"] = min(max(int(p.get("inicio") or 2026), 2026), 2030)
         p["fin"] = min(max(int(p.get("fin") or 2030), p["inicio"]), 2030)
+        # Solo fuentes que existen en el catálogo; las demás se descartan
+        p["financiamiento"] = [
+            x for x in (p.get("financiamiento") or [])
+            if isinstance(x, dict) and x.get("fuente_id") in ids_validos
+        ][:2]
     return None
 
 
