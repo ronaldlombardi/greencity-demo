@@ -72,7 +72,7 @@ def _contexto_vm():
     from modulo_barrios import _cargar_resumen
     from modulo_benchmarking import texto_decisiones_para_prompt
     from modulo_huella_eventos import texto_eventos_para_prompt, HUELLA_HAB_TOTAL_T, PARTE_AGRO
-
+    from modulo_bonos_verdes import texto_financiamiento_para_prompt
     a = calcular_agenda2030()
     if not a:
         return None, None
@@ -117,6 +117,10 @@ def _contexto_vm():
     eventos = _texto_seguro(texto_eventos_para_prompt, "Villa María", None)
     if not eventos:
         eventos = "HUELLA DE CARBONO DE EVENTOS: no hay eventos registrados todavía."
+    financiamiento = _texto_seguro(texto_financiamiento_para_prompt)
+    if not financiamiento:
+        financiamiento = ("FUENTES DE FINANCIAMIENTO: no se pudo leer el catálogo. "
+                          "Dejá el campo 'financiamiento' vacío en todos los programas.")
 
     lineas = [
         "DATOS DE LA PLATAFORMA CIUDAD VERDE — VILLA MARÍA (Córdoba, Argentina)",
@@ -194,6 +198,8 @@ def _contexto_vm():
         decisiones,
         "",
         eventos,
+        "",
+        financiamiento,
         "",
         "MARCO NORMATIVO Y DE REFERENCIA:",
         "- Agenda 2030, ODS 11 (meta 11.7: acceso universal a espacios verdes)",
@@ -339,7 +345,11 @@ TONO:
 
 REGLAS (obligatorias):
 - Usá SOLO las cifras del bloque de datos. No inventes cifras, estudios ni superficies.
-- NO menciones montos, costos, inversión, presupuesto ni financiamiento en ningún campo.
+- NO menciones montos, costos, inversión ni presupuesto en ningún campo.
+- El financiamiento va SOLO en el campo "financiamiento" de cada programa: 1 o 2 fuentes
+  elegidas por id de FUENTES DE FINANCIAMIENTO, priorizando las que no generan deuda y
+  las de mayor avance de requisitos. En "por_que" usá el uso previsto o el requisito pendiente;
+  no inventes montos ni plazos de la fuente.
 - No incluyas citas ni frases atribuidas al Intendente ni a otras personas reales.
 - Los programas siguen el orden de las DECISIONES DEL MUNICIPIO EN LÍNEA CON C40
   (Alta, después Media, después Baja). Si no hay decisiones, ordenalos según las brechas medidas.
