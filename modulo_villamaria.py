@@ -99,6 +99,7 @@ from modulo_barrios import render_diagnostico_barrios
 from modulo_benchmarking import render_benchmarking_c40
 from modulo_agenda2030 import render_agenda2030
 from modulo_huella_eventos import render_huella_eventos
+from modulo_bonos_verdes import render_bonos_verdes
 
 SECCIONES_VM = [
     ("🏠", "Inicio"),
@@ -112,7 +113,8 @@ SECCIONES_VM = [
     ("🌍", "Agenda 2030 · C40"),
     ("🌐", "Benchmarking C40"),
     ("🎪", "Huella de carbono de eventos"),
-        ("📄", "Masterplan · Opus 5.5"),
+    ("💚", "Bonos Verdes y Financiamiento"),
+    ("📄", "Masterplan · Opus 5.5"),
     ("🤝", "A Mejorar juntos"),
 ]
 
@@ -1130,6 +1132,8 @@ def render_modulo_villamaria():
         render_benchmarking_c40()
     elif "Huella" in seccion:
         render_huella_eventos()
+    elif "Bonos Verdes" in seccion:
+        render_bonos_verdes()
     elif "Masterplan" in seccion:
         render_masterplan()
     elif "Mejorar" in seccion:
