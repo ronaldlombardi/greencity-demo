@@ -256,7 +256,15 @@ def _datos_documento(a):
     co2 = [{'etiqueta': 'Hoy', 'valor': a['co2_meta_t']}]
     if m and captura_kg:
         co2.append({'etiqueta': '1 árbol por casa', 'valor': a['co2_meta_t'] + m['deficit_arboles'] * captura_kg / 1000})
-    co2.append({'etiqueta': '30 % de copa', 'valor': a['area_ha'] * 0.30 * 10_000 * TASA_SECUESTRO_NETA / 1000 * C_A_CO2})
+        co2.append({'etiqueta': '30 % de copa', 'valor': a['area_ha'] * 0.30 * 10_000 * TASA_SECUESTRO_NETA / 1000 * C_A_CO2})
+
+    # Foto del avance de cada fuente de financiamiento al generar
+    try:
+        from modulo_bonos_verdes import fichas_financiamiento
+        financiamiento = fichas_financiamiento()
+    except Exception as e:
+        print(f"[masterplan] Error leyendo fuentes de financiamiento: {e}")
+        financiamiento = {}
 
     return {
         'fecha': datetime.date.today().isoformat(),
@@ -271,6 +279,7 @@ def _datos_documento(a):
         'focalizado': list(LANCET_FOCALIZADO),
         'anio_inicio': ANIO_INICIO,
         'anio_meta': ANIO_META,
+        'financiamiento': financiamiento,
     }
 
 
@@ -614,6 +623,12 @@ h3 { font-size: 13px; font-weight: 600; color: var(--tinta); margin-bottom: 8px;
 .visible { margin-top: 12px; font-size: 13.5px; padding: 9px 12px; background: var(--suave); border-left: 3px solid var(--acento); }
 .visible b { color: var(--tinta); }
 .hitos { font-size: 12px; color: var(--sec); margin-top: 8px; }
+.finan { margin-top: 10px; font-size: 12.5px; }
+.finan .fin-t { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--sec); font-weight: 600; margin-bottom: 4px; }
+.fin { padding: 6px 0; border-top: 1px solid var(--linea); }
+.fin b { color: var(--tinta); }
+.fin span { color: var(--sec); margin-left: 6px; }
+.fin div { margin-top: 2px; }
 /* Gráficos */
 .graf { padding: 6px 0 18px; break-inside: avoid; }
 .graf h3 { border-top: 2px solid var(--tinta); padding-top: 10px; }
@@ -698,6 +713,16 @@ def _html_documento(doc, nombre_municipio="Villa María"):
         barrios = ", ".join(_e(b) for b in p.get('barrios_inicio') or [])
         acciones = "".join(f"<li>{_e(a)}</li>" for a in p.get('acciones') or [])
         hitos = " · ".join(f"<b>{h.get('anio')}</b> {_e(str(h.get('texto', '')))}" for h in p.get('hitos') or [])
+        financ = ""
+        for x in p.get('financiamiento') or []:
+            fx = (d.get('financiamiento') or {}).get(x.get('fuente_id'))
+            if not fx:
+                continue
+            deuda = "genera deuda" if fx['es_deuda'] else "no genera deuda"
+            financ += (f"<div class='fin'><b>{_e(fx['nombre'])}</b>"
+                       f"<span>{_e(fx['estado'])} · {deuda} · requisitos cumplidos "
+                       f"{fx['cumplidos']} de {fx['total']}</span>"
+                       f"<div>{_e(str(x.get('por_que', '')))}</div></div>")
         programas.append(f"""
         <div class='prog'>
           <div class='pn'>{k + 1:02d}</div>
@@ -717,6 +742,7 @@ def _html_documento(doc, nombre_municipio="Villa María"):
             </div>
             <div class='visible'><b>Primera acción visible:</b> {_e(p['primera_accion_visible'])}</div>
             {f"<div class='hitos'>Hitos: {hitos}</div>" if hitos else ""}
+            {f"<div class='finan'><div class='fin-t'>Financiamiento sugerido</div>{financ}</div>" if financ else ""}
           </div>
         </div>""")
 
@@ -853,7 +879,7 @@ def _html_documento(doc, nombre_municipio="Villa María"):
 
 def _alto_estimado(doc):
     d = doc.get('_datos') or {}
-    return int(1.3 * (3300 + 330 * len(doc.get('programas') or []) + 19 * len(d.get('copa_barrios') or [])
+    return int(1.3 * (3300 + 400 * len(doc.get('programas') or []) + 19 * len(d.get('copa_barrios') or [])
                + 40 * len(doc.get('primeros_90_dias') or [])))
 
 
